@@ -24,9 +24,7 @@ class AppRouter {
             builder: (context) => const DefaultPage(title: 'Configuracoes'));
       default:
         return MaterialPageRoute(
-            builder: (context) => const DefaultPage(
-                  title: 'defaul',
-                ));
+            builder: (context) => const DefaultPage(title: 'Default'));
     }
   }
 }
