@@ -1,16 +1,29 @@
-# nexus_estoque
+# Estoque Protheus
 
-A new Flutter project.
+Aplicativo de Controles de Estoque do ERP Protheus da TOTVS
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+#### Consulta Produto
+* Por Código
+* Descriçao
+---
+#### Endereçamento
+* Endereçar Saldos
+* Listagem de Saldos a endereçar
+---
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+#### Movimentos
+* Movimento de Entradas
+* Movimento de Saidas
+---
+#### Transferencias
+* Transferencias de Endereços
+* Transferencias de Armazem
+* Transferencias Entre Produtos
+---
+#### Consulta de Saldos
+* Consulta por Lote
+* Consulta por Endereços
+* Consulta por Armazem
+* Consulta por Produto

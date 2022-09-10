@@ -19,24 +19,24 @@ final List menuItens = [
     title: "Endereçar Saldos",
     icon: FontAwesomeIcons.warehouse,
     color: Colors.red,
-    route: 'route',
+    route: 'enderecas',
   ),
   MenuItemInfo(
     title: "Movimentos Internos",
     icon: FontAwesomeIcons.boxOpen,
     color: Colors.red,
-    route: 'route',
+    route: 'movimentos',
   ),
   MenuItemInfo(
     title: "Transferencias",
     icon: FontAwesomeIcons.boxesPacking,
     color: Colors.red,
-    route: 'route',
+    route: 'transferencias',
   ),
   MenuItemInfo(
     title: "Consulta Saldos",
     icon: FontAwesomeIcons.clipboardCheck,
     color: Colors.red,
-    route: 'route',
+    route: 'consulta',
   ),
 ];

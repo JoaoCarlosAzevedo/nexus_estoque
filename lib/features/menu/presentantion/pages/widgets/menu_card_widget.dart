@@ -14,32 +14,37 @@ class MenuCard extends StatelessWidget {
     return Card(
       elevation: 5,
       color: Theme.of(context).backgroundColor,
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).secondaryHeaderColor,
-                      borderRadius: BorderRadius.circular(5),
+      child: InkWell(
+        onTap: () {
+          Navigator.pushNamed(context, '/${info.route}');
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).secondaryHeaderColor,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: FaIcon(info.icon),
+                      ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: FaIcon(info.icon),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Text(info.title),
-          ],
+              Text(info.title),
+            ],
+          ),
         ),
       ),
     );
