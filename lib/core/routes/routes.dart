@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nexus_estoque/features/address/presentation/pages/adress_page.dart';
 
 import 'package:nexus_estoque/features/menu/presentantion/pages/menu_page.dart';
 
@@ -8,8 +9,7 @@ class AppRouter {
       case "/":
         return MaterialPageRoute(builder: (context) => const MenuPage());
       case "/enderecas":
-        return MaterialPageRoute(
-            builder: (context) => const DefaultPage(title: 'Enderecas'));
+        return MaterialPageRoute(builder: (context) => AddressPage());
       case "/movimentos":
         return MaterialPageRoute(
             builder: (context) => const DefaultPage(title: 'Movimentos'));
