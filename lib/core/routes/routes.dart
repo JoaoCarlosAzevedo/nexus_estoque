@@ -1,15 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:nexus_estoque/features/address/presentation/pages/adress_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nexus_estoque/features/address/data/repositories/product_address_repository.dart';
+import 'package:nexus_estoque/features/address/presentation/cubit/product_address_cubit.dart';
+import 'package:nexus_estoque/features/address/presentation/pages/address_page.dart';
 
 import 'package:nexus_estoque/features/menu/presentantion/pages/menu_page.dart';
 
 class AppRouter {
+  late ProductAddressRepository productAddressRepository;
+  late ProductAddressCubit productAddresCubit;
+  AppRouter() {
+    productAddressRepository = ProductAddressRepository();
+    productAddresCubit = ProductAddressCubit(productAddressRepository);
+  }
   Route generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case "/":
         return MaterialPageRoute(builder: (context) => const MenuPage());
       case "/enderecas":
-        return MaterialPageRoute(builder: (context) => AddressPage());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: productAddresCubit,
+            child: const AddressPage(),
+          ),
+        );
       case "/movimentos":
         return MaterialPageRoute(
             builder: (context) => const DefaultPage(title: 'Movimentos'));
