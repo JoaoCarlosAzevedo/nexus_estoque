@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nexus_estoque/features/query_address/presentantion/pages/query_address_page.dart';
 
 class AddressForm extends StatefulWidget {
   const AddressForm({super.key});
@@ -51,7 +52,10 @@ class _AddressFormState extends State<AddressForm> {
                             color: Theme.of(context).secondaryHeaderColor,
                           ),
                           child: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              showSearch(
+                                  context: context, delegate: SearchAddress());
+                            },
                             icon:
                                 const FaIcon(FontAwesomeIcons.magnifyingGlass),
                           ),
