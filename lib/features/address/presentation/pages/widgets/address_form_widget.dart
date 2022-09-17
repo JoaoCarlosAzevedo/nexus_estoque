@@ -52,9 +52,10 @@ class _AddressFormState extends State<AddressForm> {
                             color: Theme.of(context).secondaryHeaderColor,
                           ),
                           child: IconButton(
-                            onPressed: () {
-                              showSearch(
+                            onPressed: () async {
+                              var test = await showSearch(
                                   context: context, delegate: SearchAddress());
+                              print(test);
                             },
                             icon:
                                 const FaIcon(FontAwesomeIcons.magnifyingGlass),
