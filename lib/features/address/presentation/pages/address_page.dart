@@ -55,13 +55,13 @@ class _AddressPageState extends State<AddressPage> {
                     }
                     if (state is ProductAddressLoading) {
                       return const Center(
-                        child: Text("State Loading"),
+                        child: CircularProgressIndicator(),
                       );
                     }
 
                     if (state is ProductAddressError) {
-                      return const Center(
-                        child: Text("State Error"),
+                      return Center(
+                        child: Text(state.failure.error),
                       );
                     }
                     if (state is ProductAddressLoaded) {

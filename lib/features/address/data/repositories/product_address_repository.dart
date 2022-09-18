@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
@@ -7,12 +5,23 @@ import 'package:nexus_estoque/core/error/failure.dart';
 import '../model/product_address_model.dart';
 
 class ProductAddressRepository {
-  final dio = Dio();
+  late Dio dio;
+
+  final options = BaseOptions(
+    baseUrl: 'http://10.0.2.2:8090/api/',
+    connectTimeout: 5000,
+    receiveTimeout: 3000,
+  );
+
+  ProductAddressRepository() {
+    dio = Dio(options);
+  }
 
   Future<Either<Failure, List<ProductAddress>>> fetchProductAddress() async {
     try {
-      var response = await dio
-          .get('http://10.0.2.2:8090/api/collections/address_balance/records');
+      var response = await dio.get(
+        'http://10.0.2.2:8090/api/collections/address_balance/records',
+      );
 
       if (response.statusCode != 200) {
         return const Left(Failure("Server Error!"));
@@ -27,7 +36,9 @@ class ProductAddressRepository {
 
       return Right(listProducts);
     } on DioError catch (e) {
-      log(e.type.name);
+      if (e.type.name == "connectTimeout") {
+        return const Left(Failure("Tempo Excedido"));
+      }
       return const Left(Failure("Server Error!"));
     }
   }

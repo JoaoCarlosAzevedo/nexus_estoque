@@ -6,7 +6,16 @@ import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/features/query_address/data/model/query_address_model.dart';
 
 class QueryAddressRepository {
-  final dio = Dio();
+  late Dio dio;
+  final options = BaseOptions(
+    baseUrl: 'http://10.0.2.2:8090/api/',
+    connectTimeout: 5000,
+    receiveTimeout: 3000,
+  );
+
+  QueryAddressRepository() {
+    dio = Dio(options);
+  }
 
   Future<Either<Failure, List<QueryAddressModel>>> fetchAdress(
       String query) async {
@@ -15,12 +24,13 @@ class QueryAddressRepository {
       //response = await dio.get('/test', queryParameters: {'id': 12, 'name': 'wendu'});
       if (query.isEmpty) {
         response = await dio.get(
-            'http://10.0.2.2:8090/api/collections/address_location/records');
+          'http://10.0.2.2:8090/api/collections/address_location/records',
+        );
       } else {
         response = await dio.get(
             'http://10.0.2.2:8090/api/collections/address_location/records',
             queryParameters: {
-              'filter': "(descricao~'${query}'||codigo~'${query}' )"
+              'filter': "(descricao~'$query'||codigo~'$query' )"
             });
       }
 
