@@ -8,3 +8,11 @@ abstract class ProductAddressFormState extends Equatable {
 }
 
 class ProductAddressFormInitial extends ProductAddressFormState {}
+
+class ProductAddressFormLoading extends ProductAddressFormState {}
+
+class ProductAddressFormSuccess extends ProductAddressFormState {}
+
+class ProductAddressFormError extends ProductAddressFormState {}
+
+class ProductAddressFormValidation extends ProductAddressFormState {}

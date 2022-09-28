@@ -43,11 +43,11 @@ class QueryAddressRepository {
       }
 
       if (response.statusCode != 200) {
-        return const Left(Failure("Server Error!"));
+        return const Left(Failure("Server Error!", ErrorType.exception));
       }
 
       if (response.data.isEmpty) {
-        return const Left(Failure("Nao Encontrado!"));
+        return const Left(Failure("Nao Encontrado!", ErrorType.validation));
       }
       final listProducts = (response.data['resultado'] as List).map((item) {
         return QueryAddressModel.fromMap(item);
@@ -56,7 +56,7 @@ class QueryAddressRepository {
       return Right(listProducts);
     } on DioError catch (e) {
       log(e.type.name);
-      return const Left(Failure("Server Error!"));
+      return const Left(Failure("Server Error!", ErrorType.exception));
     }
   }
 }

@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nexus_estoque/features/address/data/model/product_address_model.dart';
 import 'package:nexus_estoque/features/address/data/repositories/product_address_repository.dart';
 import 'package:nexus_estoque/features/address/presentation/pages/address_list_page/address_page.dart';
 import 'package:nexus_estoque/features/address/presentation/pages/address_list_page/cubit/product_address_cubit.dart';
+import 'package:nexus_estoque/features/address/presentation/pages/product_address_form_page/address_form_page.dart';
+import 'package:nexus_estoque/features/address/presentation/pages/product_address_form_page/cubit/cubit/product_address_form_cubit.dart';
 
 import 'package:nexus_estoque/features/menu/presentantion/pages/menu_page.dart';
 
 class AppRouter {
   late ProductAddressRepository productAddressRepository;
   late ProductAddressCubit productAddresCubit;
+  late ProductAddressFormCubit productAddressFormCubit;
+
   AppRouter() {
     productAddressRepository = ProductAddressRepository();
     productAddresCubit = ProductAddressCubit(productAddressRepository);
+    productAddressFormCubit = ProductAddressFormCubit(productAddressRepository);
   }
+
   Route generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case "/":
@@ -24,6 +31,23 @@ class AppRouter {
             child: const AddressPage(),
           ),
         );
+      case "/enderecar/form":
+        if (settings.name == "enderecar/form") {
+          final args = settings.arguments as ProductAddress;
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: productAddressFormCubit,
+              child: AddressForm(
+                productAddress: args,
+              ),
+            ),
+          );
+        } else {
+          return MaterialPageRoute(
+              builder: (context) =>
+                  const DefaultPage(title: 'Error Parametro'));
+        }
+
       case "/movimentos":
         return MaterialPageRoute(
             builder: (context) => const DefaultPage(title: 'Movimentos'));

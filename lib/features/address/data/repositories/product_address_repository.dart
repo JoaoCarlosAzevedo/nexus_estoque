@@ -31,11 +31,11 @@ class ProductAddressRepository {
       });
 
       if (response.statusCode != 200) {
-        return const Left(Failure("Server Error!"));
+        return const Left(Failure("Server Error!", ErrorType.exception));
       }
 
       if (response.data.isEmpty) {
-        return const Left(Failure("Nao Encontrado!"));
+        return const Left(Failure("Nao Encontrado!", ErrorType.validation));
       }
       final listProducts = (response.data['resultado'] as List).map((item) {
         return ProductAddress.fromMap(item);
@@ -44,9 +44,9 @@ class ProductAddressRepository {
       return Right(listProducts);
     } on DioError catch (e) {
       if (e.type.name == "connectTimeout") {
-        return const Left(Failure("Tempo Excedido"));
+        return const Left(Failure("Tempo Excedido", ErrorType.timeout));
       }
-      return const Left(Failure("Server Error!"));
+      return const Left(Failure("Server Error!", ErrorType.exception));
     }
   }
 
@@ -69,24 +69,24 @@ class ProductAddressRepository {
       });
 
       if (response.statusCode != 201) {
-        return const Left(Failure("Server Error!"));
+        return const Left(Failure("Server Error!", ErrorType.exception));
       }
 
       if (response.data.isEmpty) {
-        return const Left(Failure("Nao Encontrado!"));
+        return const Left(Failure("Nao Encontrado!", ErrorType.validation));
       }
 
       return const Right("Created");
     } on DioError catch (e) {
       if (e.type.name == "connectTimeout") {
-        return const Left(Failure("Tempo Excedido"));
+        return const Left(Failure("Tempo Excedido", ErrorType.timeout));
       }
 
       if (e.response!.data["message"] != "") {
-        return Left(Failure(e.response!.data["message"]));
+        return Left(Failure(e.response!.data["message"], ErrorType.validation));
       }
 
-      return const Left(Failure("Server Error!"));
+      return const Left(Failure("Server Error!", ErrorType.exception));
     }
   }
 }
