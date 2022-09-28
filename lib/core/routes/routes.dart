@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nexus_estoque/features/address/data/repositories/product_address_repository.dart';
-import 'package:nexus_estoque/features/address/presentation/cubit/product_address_cubit.dart';
-import 'package:nexus_estoque/features/address/presentation/pages/address_page.dart';
+import 'package:nexus_estoque/features/address/presentation/pages/address_list_page/address_page.dart';
+import 'package:nexus_estoque/features/address/presentation/pages/address_list_page/cubit/product_address_cubit.dart';
 
 import 'package:nexus_estoque/features/menu/presentantion/pages/menu_page.dart';
 

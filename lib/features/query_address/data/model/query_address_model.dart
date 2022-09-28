@@ -1,24 +1,29 @@
 import 'dart:convert';
 
 class QueryAddressModel {
-  final String code;
-  final String description;
+  final String descricao;
+  final String local;
+  final String codigoEndereco;
+
   QueryAddressModel({
-    required this.code,
-    required this.description,
+    required this.descricao,
+    required this.local,
+    required this.codigoEndereco,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'codigo': code,
-      'descricao': description,
+      'descricao': descricao,
+      'local': local,
+      'codigoEndereco': codigoEndereco,
     };
   }
 
   factory QueryAddressModel.fromMap(Map<String, dynamic> map) {
     return QueryAddressModel(
-      code: map['codigo'] ?? '',
-      description: map['descricao'] ?? '',
+      descricao: map['descricao'] ?? '',
+      local: map['local'] ?? '',
+      codigoEndereco: map['codigoEndereco'] ?? '',
     );
   }
 

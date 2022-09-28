@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nexus_estoque/features/address/data/model/product_address_model.dart';
-import 'package:nexus_estoque/features/address/presentation/cubit/product_address_cubit.dart';
-import 'package:nexus_estoque/features/address/presentation/cubit/product_address_state.dart';
-import 'package:nexus_estoque/features/address/presentation/pages/widgets/address_form_widget.dart';
+import 'package:nexus_estoque/features/address/presentation/pages/address_list_page/cubit/product_address_cubit.dart';
+import 'package:nexus_estoque/features/address/presentation/pages/address_list_page/cubit/product_address_state.dart';
+import 'package:nexus_estoque/features/address/presentation/pages/product_address_form_page/address_form_page.dart';
 
 class AddressPage extends StatefulWidget {
   const AddressPage({super.key});
@@ -35,7 +35,7 @@ class _AddressPageState extends State<AddressPage> {
           color: Theme.of(context).selectedRowColor,
           child: Column(
             children: [
-              TextField(
+              /*   TextField(
                 enabled: true,
                 autofocus: false,
                 onSubmitted: (value) {},
@@ -44,7 +44,7 @@ class _AddressPageState extends State<AddressPage> {
                   prefixIcon: Icon(Icons.search),
                   suffixIcon: Icon(Icons.qr_code_scanner_rounded),
                 ),
-              ),
+              ), */
               Expanded(
                 child: BlocBuilder<ProductAddressCubit, ProductAddressState>(
                   builder: (context, state) {
@@ -103,7 +103,11 @@ class AddressCard extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AddressForm()),
+            MaterialPageRoute(
+              builder: (context) => AddressForm(
+                productAddress: data,
+              ),
+            ),
           );
         },
         title: Text(
@@ -186,7 +190,7 @@ class AddressCard extends StatelessWidget {
                         style: Theme.of(context).textTheme.caption,
                       ),
                       Text(
-                        data.local,
+                        data.armazem,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.titleMedium,

@@ -51,12 +51,14 @@ class SearchAddress extends SearchDelegate<String> {
           }
           if (query.isNotEmpty) {
             filteredList = list.where((element) {
-              if (element.description
+              if (element.descricao
                   .toUpperCase()
                   .contains(query.toUpperCase())) {
                 return true;
               }
-              if (element.code.toUpperCase().contains(query.toUpperCase())) {
+              if (element.codigoEndereco
+                  .toUpperCase()
+                  .contains(query.toUpperCase())) {
                 return true;
               }
               return false;
@@ -73,10 +75,10 @@ class SearchAddress extends SearchDelegate<String> {
                 return Card(
                   child: ListTile(
                     onTap: () {
-                      close(context, filteredList[index].code);
+                      close(context, filteredList[index].codigoEndereco);
                     },
                     title: Text(
-                        "${filteredList[index].code} - ${filteredList[index].description} "),
+                        "${filteredList[index].codigoEndereco} - ${filteredList[index].descricao} "),
                   ),
                 );
               },
@@ -111,12 +113,14 @@ class SearchAddress extends SearchDelegate<String> {
           }
           if (query.isNotEmpty) {
             filteredList = list.where((element) {
-              if (element.description
+              if (element.descricao
                   .toUpperCase()
                   .contains(query.toUpperCase())) {
                 return true;
               }
-              if (element.code.toUpperCase().contains(query.toUpperCase())) {
+              if (element.codigoEndereco
+                  .toUpperCase()
+                  .contains(query.toUpperCase())) {
                 return true;
               }
               return false;
@@ -133,10 +137,10 @@ class SearchAddress extends SearchDelegate<String> {
                 return Card(
                   child: ListTile(
                     onTap: () {
-                      close(context, filteredList[index].code);
+                      close(context, filteredList[index].codigoEndereco);
                     },
                     title: Text(
-                        "${filteredList[index].code} - ${filteredList[index].description} "),
+                        "${filteredList[index].codigoEndereco} - ${filteredList[index].descricao} "),
                   ),
                 );
               },
@@ -152,8 +156,6 @@ class SearchAddress extends SearchDelegate<String> {
 
   Future<Either<Failure, List<QueryAddressModel>>> fetchData() async {
     final QueryAddressRepository repository = QueryAddressRepository();
-
-    await Future.delayed(const Duration(milliseconds: 2000));
 
     final result = await repository.fetchAdress(query);
 
