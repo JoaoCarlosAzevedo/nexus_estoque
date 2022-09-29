@@ -59,18 +59,20 @@ class MenuPage extends StatelessWidget {
               ),
               Expanded(
                 flex: 3,
-                child: GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: menuItens.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: crossAxisCount,
-                    crossAxisSpacing: 15,
-                    mainAxisSpacing: 15,
-                    //childAspectRatio: childAspectRatio,
+                child: SingleChildScrollView(
+                  child: GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: menuItens.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      crossAxisSpacing: 15,
+                      mainAxisSpacing: 15,
+                      //childAspectRatio: childAspectRatio,
+                    ),
+                    itemBuilder: (context, index) =>
+                        MenuCard(info: menuItens[index]),
                   ),
-                  itemBuilder: (context, index) =>
-                      MenuCard(info: menuItens[index]),
                 ),
               ),
             ],

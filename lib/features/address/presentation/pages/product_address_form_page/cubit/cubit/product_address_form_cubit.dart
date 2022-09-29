@@ -1,9 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/features/address/data/repositories/product_address_repository.dart';
-
-part 'product_address_form_state.dart';
+import 'package:nexus_estoque/features/address/presentation/pages/product_address_form_page/cubit/cubit/product_address_form_state.dart';
 
 class ProductAddressFormCubit extends Cubit<ProductAddressFormState> {
   final ProductAddressRepository productAddressRepository;
@@ -27,7 +25,7 @@ class ProductAddressFormCubit extends Cubit<ProductAddressFormState> {
     } else {
       result.fold((l) {
         if (l.errorType == ErrorType.validation) {
-          emit(ProductAddressFormValidation());
+          emit(ProductAddressFormValidation(l));
         }
 
         emit(ProductAddressFormError());

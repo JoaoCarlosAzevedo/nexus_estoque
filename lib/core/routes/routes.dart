@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nexus_estoque/core/pages/searches/address/page/address_search_page.dart';
+import 'package:nexus_estoque/core/pages/searches/products/pages/products_search_page.dart';
+import 'package:nexus_estoque/core/pages/searches/warehouses/pages/warehouse_search_page.dart';
 import 'package:nexus_estoque/features/address/data/model/product_address_model.dart';
 import 'package:nexus_estoque/features/address/data/repositories/product_address_repository.dart';
 import 'package:nexus_estoque/features/address/presentation/pages/address_list_page/address_page.dart';
@@ -8,6 +11,7 @@ import 'package:nexus_estoque/features/address/presentation/pages/product_addres
 import 'package:nexus_estoque/features/address/presentation/pages/product_address_form_page/cubit/cubit/product_address_form_cubit.dart';
 
 import 'package:nexus_estoque/features/menu/presentantion/pages/menu_page.dart';
+import 'package:nexus_estoque/features/transactions/presentation/pages/transaction_form/transaction_form_page.dart';
 
 class AppRouter {
   late ProductAddressRepository productAddressRepository;
@@ -32,8 +36,8 @@ class AppRouter {
           ),
         );
       case "/enderecar/form":
-        if (settings.name == "enderecar/form") {
-          final args = settings.arguments as ProductAddress;
+        if (settings.name == "/enderecar/form") {
+          final args = settings.arguments as ProductAddressModel;
           return MaterialPageRoute(
             builder: (_) => BlocProvider.value(
               value: productAddressFormCubit,
@@ -50,13 +54,19 @@ class AppRouter {
 
       case "/movimentos":
         return MaterialPageRoute(
-            builder: (context) => const DefaultPage(title: 'Movimentos'));
+            builder: (context) => const TransctionFormPage());
       case "/transferencias":
         return MaterialPageRoute(
             builder: (context) => const DefaultPage(title: 'Transferencias'));
-      case "/consulta":
+      case "/enderecos":
         return MaterialPageRoute(
-            builder: (context) => const DefaultPage(title: 'Consulta'));
+            builder: (context) => const AddressSearchPage());
+      case "/produtos":
+        return MaterialPageRoute(
+            builder: (context) => const ProductSearchPage());
+      case "/armazem":
+        return MaterialPageRoute(
+            builder: (context) => const WarehouseSearchPage());
       case "/configuracoes":
         return MaterialPageRoute(
             builder: (context) => const DefaultPage(title: 'Configuracoes'));

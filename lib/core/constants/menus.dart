@@ -34,9 +34,21 @@ final List menuItens = [
     route: 'transferencias',
   ),
   MenuItemInfo(
-    title: "Consulta Saldos",
+    title: "Listagem Enderecos",
     icon: FontAwesomeIcons.clipboardCheck,
     color: Colors.red,
-    route: 'consulta',
+    route: 'enderecos',
+  ),
+  MenuItemInfo(
+    title: "Listagem Produtos",
+    icon: FontAwesomeIcons.clipboardCheck,
+    color: Colors.red,
+    route: 'produtos',
+  ),
+  MenuItemInfo(
+    title: "Listagem Armazens",
+    icon: FontAwesomeIcons.clipboardCheck,
+    color: Colors.red,
+    route: 'armazem',
   ),
 ];

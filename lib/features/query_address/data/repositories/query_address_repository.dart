@@ -3,17 +3,14 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:nexus_estoque/core/constants/config.dart';
+import 'package:nexus_estoque/core/constants/dio_config.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/features/query_address/data/model/query_address_model.dart';
 
 class QueryAddressRepository {
   late Dio dio;
   final String url = Config.baseURL!;
-  final options = BaseOptions(
-    baseUrl: Config.baseURL!,
-    connectTimeout: 5000,
-    receiveTimeout: 3000,
-  );
+  final options = DioConfig.dioBaseOption;
 
   QueryAddressRepository() {
     dio = Dio(options);

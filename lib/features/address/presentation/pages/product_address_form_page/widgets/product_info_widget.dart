@@ -4,7 +4,7 @@ import 'package:nexus_estoque/features/address/data/model/product_address_model.
 
 class ProductInfo extends StatelessWidget {
   const ProductInfo({super.key, required this.productAddress});
-  final ProductAddress productAddress;
+  final ProductAddressModel productAddress;
 
   @override
   Widget build(BuildContext context) {

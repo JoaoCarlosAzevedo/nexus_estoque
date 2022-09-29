@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-class ProductAddress {
+class ProductAddressModel {
   final String descricao;
   final String numseq;
   final String clifor;
@@ -12,7 +12,7 @@ class ProductAddress {
   final String armazem;
   final String codigo;
 
-  ProductAddress({
+  ProductAddressModel({
     required this.descricao,
     required this.numseq,
     required this.clifor,
@@ -40,8 +40,8 @@ class ProductAddress {
     };
   }
 
-  factory ProductAddress.fromMap(Map<String, dynamic> map) {
-    return ProductAddress(
+  factory ProductAddressModel.fromMap(Map<String, dynamic> map) {
+    return ProductAddressModel(
       descricao: map['descricao'] ?? '',
       numseq: map['numseq'] ?? '',
       clifor: map['clifor'] ?? '',
@@ -57,6 +57,6 @@ class ProductAddress {
 
   String toJson() => json.encode(toMap());
 
-  factory ProductAddress.fromJson(String source) =>
-      ProductAddress.fromMap(json.decode(source));
+  factory ProductAddressModel.fromJson(String source) =>
+      ProductAddressModel.fromMap(json.decode(source));
 }

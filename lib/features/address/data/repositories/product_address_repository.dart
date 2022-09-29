@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:nexus_estoque/core/constants/config.dart';
+import 'package:nexus_estoque/core/constants/dio_config.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
 
 import '../model/product_address_model.dart';
@@ -11,17 +12,14 @@ class ProductAddressRepository {
   late Dio dio;
   final String url = Config.baseURL!;
 
-  final options = BaseOptions(
-    baseUrl: Config.baseURL!,
-    connectTimeout: 5000,
-    receiveTimeout: 9000,
-  );
+  final options = DioConfig.dioBaseOption;
 
   ProductAddressRepository() {
     dio = Dio(options);
   }
 
-  Future<Either<Failure, List<ProductAddress>>> fetchProductAddress() async {
+  Future<Either<Failure, List<ProductAddressModel>>>
+      fetchProductAddress() async {
     try {
       var response = await dio.get('$url/enderecamentos', queryParameters: {
         'empresa': "01",
@@ -38,7 +36,7 @@ class ProductAddressRepository {
         return const Left(Failure("Nao Encontrado!", ErrorType.validation));
       }
       final listProducts = (response.data['resultado'] as List).map((item) {
-        return ProductAddress.fromMap(item);
+        return ProductAddressModel.fromMap(item);
       }).toList();
 
       return Right(listProducts);

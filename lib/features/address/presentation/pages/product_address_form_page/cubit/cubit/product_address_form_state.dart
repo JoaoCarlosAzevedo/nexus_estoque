@@ -1,18 +1,33 @@
-part of 'product_address_form_cubit.dart';
+import 'package:equatable/equatable.dart';
+import 'package:nexus_estoque/core/error/failure.dart';
 
-abstract class ProductAddressFormState extends Equatable {
-  const ProductAddressFormState();
+abstract class ProductAddressFormState extends Equatable {}
 
+class ProductAddressFormInitial extends ProductAddressFormState {
   @override
   List<Object> get props => [];
 }
 
-class ProductAddressFormInitial extends ProductAddressFormState {}
+class ProductAddressFormLoading extends ProductAddressFormState {
+  @override
+  List<Object> get props => [];
+}
 
-class ProductAddressFormLoading extends ProductAddressFormState {}
+class ProductAddressFormSuccess extends ProductAddressFormState {
+  @override
+  List<Object> get props => [];
+}
 
-class ProductAddressFormSuccess extends ProductAddressFormState {}
+class ProductAddressFormError extends ProductAddressFormState {
+  @override
+  List<Object> get props => [];
+}
 
-class ProductAddressFormError extends ProductAddressFormState {}
+class ProductAddressFormValidation extends ProductAddressFormState {
+  final Failure failure;
 
-class ProductAddressFormValidation extends ProductAddressFormState {}
+  ProductAddressFormValidation(this.failure);
+
+  @override
+  List<Object> get props => [];
+}

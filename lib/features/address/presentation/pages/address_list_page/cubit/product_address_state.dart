@@ -16,7 +16,7 @@ class ProductAddressLoading extends ProductAddressState {
 }
 
 class ProductAddressLoaded extends ProductAddressState {
-  final List<ProductAddress> productAddresList;
+  final List<ProductAddressModel> productAddresList;
 
   ProductAddressLoaded({
     required this.productAddresList,
