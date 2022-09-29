@@ -46,6 +46,7 @@ dependencies:
   flutter_bloc: ^8.1.1
   flutter_dotenv: ^5.0.2
   awesome_dialog: ^3.0.2
+  dio_http_cache: ^0.3.0
 
 dev_dependencies:
   flutter_test:
