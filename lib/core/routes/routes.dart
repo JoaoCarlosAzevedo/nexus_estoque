@@ -12,6 +12,7 @@ import 'package:nexus_estoque/features/address/presentation/pages/product_addres
 
 import 'package:nexus_estoque/features/menu/presentantion/pages/menu_page.dart';
 import 'package:nexus_estoque/features/transactions/presentation/pages/transaction_form/transaction_form_page.dart';
+import 'package:nexus_estoque/features/transfer/presentation/pages/transfer_form/transfer_form_page.dart';
 
 class AppRouter {
   late ProductAddressRepository productAddressRepository;
@@ -57,7 +58,7 @@ class AppRouter {
             builder: (context) => const TransctionFormPage());
       case "/transferencias":
         return MaterialPageRoute(
-            builder: (context) => const DefaultPage(title: 'Transferencias'));
+            builder: (context) => const TransferFormPage());
       case "/enderecos":
         return MaterialPageRoute(
             builder: (context) => const AddressSearchPage());
