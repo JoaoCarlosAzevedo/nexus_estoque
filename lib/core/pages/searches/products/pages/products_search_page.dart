@@ -49,6 +49,9 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
                         itemBuilder: (context, index) {
                           return Card(
                             child: ListTile(
+                              onTap: () {
+                                Navigator.pop(context, list[index].codigo);
+                              },
                               title: Text(list[index].descricao),
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

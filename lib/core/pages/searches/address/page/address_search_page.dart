@@ -49,6 +49,10 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
                         itemBuilder: (context, index) {
                           return Card(
                             child: ListTile(
+                              onTap: () {
+                                Navigator.pop(
+                                    context, list[index].codigoEndereco);
+                              },
                               title: Text(list[index].descricao),
                               subtitle: Text(list[index].codigoEndereco),
                               trailing: Text(list[index].local),

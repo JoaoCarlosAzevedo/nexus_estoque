@@ -6,7 +6,6 @@ import 'package:nexus_estoque/features/address/data/model/product_address_model.
 import 'package:nexus_estoque/features/address/presentation/pages/product_address_form_page/cubit/cubit/product_address_form_cubit.dart';
 import 'package:nexus_estoque/features/address/presentation/pages/product_address_form_page/cubit/cubit/product_address_form_state.dart';
 import 'package:nexus_estoque/features/address/presentation/pages/product_address_form_page/widgets/product_info_widget.dart';
-import 'package:nexus_estoque/features/query_address/presentantion/pages/query_address_page.dart';
 
 class AddressForm extends StatefulWidget {
   const AddressForm({super.key, required this.productAddress});
@@ -92,10 +91,13 @@ class _AddressFormState extends State<AddressForm> {
                                 ),
                                 child: IconButton(
                                   onPressed: () async {
-                                    var test = await showSearch(
-                                        context: context,
-                                        delegate: SearchAddress());
-                                    addressController.text = test!;
+                                    final result = await Navigator.pushNamed(
+                                        context, '/enderecos');
+                                    if (result != null) {
+                                      addressController.text = result as String;
+                                    } else {
+                                      addressController.clear();
+                                    }
                                   },
                                   icon: const FaIcon(
                                       FontAwesomeIcons.magnifyingGlass),

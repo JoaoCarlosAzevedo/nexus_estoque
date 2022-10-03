@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nexus_estoque/core/pages/searches/products/cubit/products_search_cubit.dart';
 import 'package:nexus_estoque/core/pages/searches/warehouses/cubit/products_search_cubit.dart';
 import 'package:nexus_estoque/core/pages/searches/warehouses/cubit/products_search_state.dart';
 import 'package:nexus_estoque/core/pages/searches/warehouses/data/repositories/product_search_repository.dart';

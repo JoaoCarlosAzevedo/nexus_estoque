@@ -4,6 +4,7 @@ class ProductSearchModel {
   String descricao;
   String localPadrao;
   String lote;
+  String codigoBarras;
   String localizacao;
   String tipo;
   double saldoAtual;
@@ -14,6 +15,7 @@ class ProductSearchModel {
     required this.descricao,
     required this.localPadrao,
     required this.lote,
+    required this.codigoBarras,
     required this.localizacao,
     required this.tipo,
     required this.saldoAtual,
@@ -26,6 +28,7 @@ class ProductSearchModel {
       'Descricao': descricao,
       'LocalPadrao': localPadrao,
       'Lote': lote,
+      'CodigoBarras': codigoBarras,
       'Localizacao': localizacao,
       'Tipo': tipo,
       'SaldoAtual': saldoAtual,
@@ -38,6 +41,7 @@ class ProductSearchModel {
     return ProductSearchModel(
       descricao: map['Descricao'] ?? '',
       localPadrao: map['LocalPadrao'] ?? '',
+      codigoBarras: map['CodigoBarras'] ?? '',
       lote: map['Lote'] ?? '',
       localizacao: map['Localizacao'] ?? '',
       tipo: map['Tipo'] ?? '',
