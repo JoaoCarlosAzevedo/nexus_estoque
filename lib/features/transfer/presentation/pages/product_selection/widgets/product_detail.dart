@@ -45,7 +45,7 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
           Expanded(
             flex: 3,
             child: ListView.builder(
-                scrollDirection: Axis.horizontal,
+                scrollDirection: Axis.vertical,
                 itemCount: 14,
                 itemBuilder: (context, index) {
                   return Container(
@@ -58,6 +58,16 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
                     child: Text("Item: ${index}"),
                   );
                 }),
+          ),
+          ElevatedButton(
+            onPressed: () {},
+            child: SizedBox(
+              width: double.infinity,
+              child: const Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Center(child: Text("Confirmar")),
+              ),
+            ),
           ),
         ],
       ),
