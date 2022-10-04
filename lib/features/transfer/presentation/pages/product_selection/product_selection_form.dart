@@ -15,42 +15,43 @@ class ProductSelectionForm extends StatefulWidget {
 class _ProductSelectionFormState extends State<ProductSelectionForm> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Theme.of(context).primaryColor, //change your color here
-        ),
-        backgroundColor: Theme.of(context).secondaryHeaderColor,
-      ),
-      body: BlocProvider(
-        create: (context) => ProductBalanceCubitCubit(
-            ProductBalanceRepository(), widget.barcode),
-        child: BlocBuilder<ProductBalanceCubitCubit, ProductBalanceCubitState>(
-          builder: (context, state) {
-            print(state);
-            if (state is ProductBalanceCubitLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
+    return BlocProvider(
+      create: (context) =>
+          ProductBalanceCubitCubit(ProductBalanceRepository(), widget.barcode),
+      child: BlocBuilder<ProductBalanceCubitCubit, ProductBalanceCubitState>(
+        builder: (context, state) {
+          print(state);
+          if (state is ProductBalanceCubitLoading) {
+            return const Loading();
+          }
 
-            if (state is ProductBalanceCubitError) {
-              return Center(
-                child: Text(state.error.error),
-              );
-            }
+          if (state is ProductBalanceCubitError) {
+            return Center(
+              child: Text(state.error.error),
+            );
+          }
 
-            if (state is ProductBalanceCubitLoaded) {
-              return Center(
-                  child: ProductSelectedDetail(
-                productDetail: state.productBalance,
-              ));
-            }
-            return Container();
-          },
-        ),
+          if (state is ProductBalanceCubitLoaded) {
+            return Center(
+                child: ProductSelectedDetail(
+              productDetail: state.productBalance,
+            ));
+          }
+          return Container();
+        },
       ),
     );
+  }
+}
+
+class Loading extends StatelessWidget {
+  const Loading({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+        body: Center(
+      child: CircularProgressIndicator(),
+    ));
   }
 }
