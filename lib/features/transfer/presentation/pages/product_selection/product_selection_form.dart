@@ -16,7 +16,13 @@ class _ProductSelectionFormState extends State<ProductSelectionForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Theme.of(context).primaryColor, //change your color here
+        ),
+        backgroundColor: Theme.of(context).secondaryHeaderColor,
+      ),
       body: BlocProvider(
         create: (context) => ProductBalanceCubitCubit(
             ProductBalanceRepository(), widget.barcode),
