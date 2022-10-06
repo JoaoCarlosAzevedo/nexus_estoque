@@ -17,9 +17,7 @@ class MenuPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).secondaryHeaderColor,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).secondaryHeaderColor,
         elevation: 0,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.end,
