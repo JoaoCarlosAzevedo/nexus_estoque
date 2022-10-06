@@ -5,11 +5,32 @@ class AppTheme {
   static ThemeData get defaultTheme {
     return ThemeData(
       // Define the default brightness and colors.
-      brightness: Brightness.light,
+      /*   brightness: Brightness.light,
       secondaryHeaderColor: AppColors.primaryGrey,
       primaryColor: AppColors.grey,
       backgroundColor: AppColors.background,
-      canvasColor: AppColors.primaryGrey,
+      canvasColor: AppColors.primaryGrey, */
+      colorScheme: ColorScheme(
+        primaryContainer: AppColors.primaryGrey,
+        background: AppColors.primaryGrey,
+        brightness: Brightness.light,
+        error: AppColors.primaryGrey,
+        onBackground: AppColors.primaryGrey,
+        onError: AppColors.primaryGrey,
+        onPrimary: AppColors.primaryGrey,
+        onSecondary: AppColors.primaryGrey,
+        onSurface: AppColors.primaryGrey,
+        primary: AppColors.primaryGrey,
+        secondary: AppColors.primaryGrey,
+        surface: AppColors.primaryGrey,
+        outline: AppColors.primaryGrey,
+        inversePrimary: AppColors.primaryGrey,
+
+        //hea: AppColors.primaryGrey,
+        //primaryColor: AppColors.grey,
+        //backgroundColor: AppColors.background,
+        //canvasColor: AppColors.primaryGrey,
+      ),
       // Define the default font family.
       fontFamily: 'Nunito Sans',
       scaffoldBackgroundColor: AppColors.primaryGrey,
@@ -102,14 +123,14 @@ class AppTheme {
       bodyText1: TextStyle(
           fontSize: 16.0, fontFamily: 'Nunito Sans', color: AppColors.grey),
       bodyText2: TextStyle(
-          fontSize: 16.0,
+          fontSize: 14.0,
           fontFamily: 'Nunito Sans',
           color: AppColors.grey,
           fontWeight: FontWeight.bold), //TextPadrao
       subtitle1: TextStyle(
           fontSize: 14.0, fontFamily: 'Nunito Sans', color: AppColors.grey),
       caption: TextStyle(
-          fontSize: 14.0, fontFamily: 'Nunito Sans', color: AppColors.grey),
+          fontSize: 12.0, fontFamily: 'Nunito Sans', color: AppColors.grey),
     );
   }
 }

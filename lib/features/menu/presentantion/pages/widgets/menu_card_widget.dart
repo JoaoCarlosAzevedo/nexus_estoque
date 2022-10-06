@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nexus_estoque/core/constants/menus.dart';
+import 'package:nexus_estoque/core/theme/app_colors.dart';
 
 class MenuCard extends StatelessWidget {
   final MenuItemInfo info;
@@ -13,7 +14,6 @@ class MenuCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 5,
-      color: Theme.of(context).backgroundColor,
       child: InkWell(
         onTap: () {
           Navigator.pushNamed(context, '/${info.route}');
@@ -31,7 +31,7 @@ class MenuCard extends StatelessWidget {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: Theme.of(context).secondaryHeaderColor,
+                        color: AppColors.primaryGrey,
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Padding(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nexus_estoque/core/constants/menus.dart';
+import 'package:nexus_estoque/core/theme/app_colors.dart';
 import 'package:nexus_estoque/features/menu/presentantion/pages/widgets/menu_card_widget.dart';
 import 'package:rive/rive.dart';
 
@@ -28,7 +29,7 @@ class MenuPage extends StatelessWidget {
               },
               child: FaIcon(
                 FontAwesomeIcons.gear,
-                color: Theme.of(context).primaryColor,
+                color: AppColors.primary,
               ),
             ),
           ],
@@ -43,7 +44,6 @@ class MenuPage extends StatelessWidget {
                 flex: 1,
                 child: Card(
                   elevation: 5,
-                  color: Theme.of(context).backgroundColor,
                   child: const Center(
                     child: RiveAnimation.asset(
                       fit: BoxFit.scaleDown,
