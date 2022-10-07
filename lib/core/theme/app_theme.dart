@@ -10,7 +10,7 @@ class AppTheme {
       primaryColor: AppColors.grey,
       backgroundColor: AppColors.background,
       canvasColor: AppColors.primaryGrey, */
-      colorScheme: ColorScheme(
+      colorScheme: const ColorScheme(
         primaryContainer: AppColors.primaryGrey,
         background: AppColors.primaryGrey,
         brightness: Brightness.light,
@@ -57,6 +57,13 @@ class AppTheme {
         iconColor: AppColors.grey,
         filled: true,
         enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16.0),
+          borderSide: const BorderSide(
+            width: 0,
+            color: AppColors.background,
+          ),
+        ),
+        disabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16.0),
           borderSide: const BorderSide(
             width: 0,

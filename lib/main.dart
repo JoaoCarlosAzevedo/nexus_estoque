@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:nexus_estoque/core/theme/app_theme.dart';
-import 'package:nexus_estoque/core/theme/theme.dart';
 import 'core/routes/routes.dart';
 
 void main() async {

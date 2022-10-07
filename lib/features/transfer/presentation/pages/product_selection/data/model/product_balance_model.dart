@@ -11,6 +11,10 @@ class ProductBalanceModel {
   List<Armazem> armazem;
   String codigo;
 
+  int get stock {
+    return armazem.fold(0, (sum, element) => sum + element.saldoLocal);
+  }
+
   ProductBalanceModel({
     required this.descricao,
     required this.localPadrao,

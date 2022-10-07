@@ -42,7 +42,7 @@ class _ProductSelectionPageState extends State<ProductSelectionPage> {
                 padding: EdgeInsets.only(top: height / 15, bottom: height / 15),
                 child: SizedBox(
                   height: height / 10,
-                  child: FittedBox(
+                  child: const FittedBox(
                     fit: BoxFit.cover,
                     child: FaIcon(
                       FontAwesomeIcons.boxesPacking,
@@ -57,9 +57,7 @@ class _ProductSelectionPageState extends State<ProductSelectionPage> {
                       enabled: true,
                       autofocus: false,
                       controller: controller,
-                      onSubmitted: (e) {
-                        print("onSubmitted: $e");
-                      },
+                      onSubmitted: (e) {},
                       decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.qr_code),
                         suffixIcon: IconButton(
@@ -71,7 +69,6 @@ class _ProductSelectionPageState extends State<ProductSelectionPage> {
                             } else {
                               controller.clear();
                             }
-                            print(result);
                           },
                           icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
                         ),
@@ -92,7 +89,7 @@ class _ProductSelectionPageState extends State<ProductSelectionPage> {
                 child: SizedBox(
                   height: height / 15,
                   width: double.infinity,
-                  child: Center(child: Text("Confirmar")),
+                  child: const Center(child: Text("Confirmar")),
                 ),
               ),
             ],

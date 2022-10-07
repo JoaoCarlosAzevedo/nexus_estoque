@@ -27,7 +27,7 @@ class MenuPage extends StatelessWidget {
               onTap: () {
                 Navigator.pushNamed(context, '/configuracoes');
               },
-              child: FaIcon(
+              child: const FaIcon(
                 FontAwesomeIcons.gear,
                 color: AppColors.primary,
               ),
@@ -40,11 +40,11 @@ class MenuPage extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Expanded(
+              const Expanded(
                 flex: 1,
                 child: Card(
                   elevation: 5,
-                  child: const Center(
+                  child: Center(
                     child: RiveAnimation.asset(
                       fit: BoxFit.scaleDown,
                       'assets/inventory_app.riv',

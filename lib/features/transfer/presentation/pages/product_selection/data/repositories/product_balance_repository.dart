@@ -47,4 +47,35 @@ class ProductBalanceRepository {
       return const Left(Failure("Server Error!", ErrorType.exception));
     }
   }
+
+  Future<Either<Failure, String>> postTransfer(String json) async {
+    try {
+      late dynamic response;
+      response =
+          await dio.post('$url/transferencias/', data: json, queryParameters: {
+        'empresa': "01",
+        'filial': "01",
+      });
+
+      if (response.statusCode != 200) {
+        return const Left(Failure("Server Error!", ErrorType.exception));
+      }
+
+      if (response.data.isEmpty) {
+        return const Left(
+            Failure("Nenhum registro encontrado.", ErrorType.validation));
+      }
+
+      if (response.data["message"] != null) {
+        return Left(Failure(response.data["message"], ErrorType.validation));
+      }
+
+      final productBalance = ProductBalanceModel.fromMap(response.data);
+
+      return const Right("success");
+    } on DioError catch (e) {
+      log(e.type.name);
+      return const Left(Failure("Server Error!", ErrorType.exception));
+    }
+  }
 }

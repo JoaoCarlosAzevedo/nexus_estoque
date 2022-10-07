@@ -20,7 +20,6 @@ class _ProductSelectionFormState extends State<ProductSelectionForm> {
           ProductBalanceCubitCubit(ProductBalanceRepository(), widget.barcode),
       child: BlocBuilder<ProductBalanceCubitCubit, ProductBalanceCubitState>(
         builder: (context, state) {
-          print(state);
           if (state is ProductBalanceCubitLoading) {
             return const Loading();
           }

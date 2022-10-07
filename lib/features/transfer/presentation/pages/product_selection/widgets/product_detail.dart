@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nexus_estoque/core/theme/app_colors.dart';
-import 'package:nexus_estoque/core/theme/theme.dart';
 import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/data/model/product_balance_model.dart';
+import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/widgets/address_balance_search.dart';
+import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/widgets/warehouse_balance_search.dart';
 
 class ProductSelectedDetail extends StatefulWidget {
   final ProductBalanceModel productDetail;
@@ -14,15 +17,17 @@ class ProductSelectedDetail extends StatefulWidget {
 }
 
 class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
-  static const List<String> _kOptions = <String>[
-    'aardvark',
-    'bobcat',
-    'chameleon',
-  ];
+  final TextEditingController origWarehouseController = TextEditingController();
+  final TextEditingController destWarehouseController = TextEditingController();
+  final TextEditingController origAddressController = TextEditingController();
+  final TextEditingController destAddressController = TextEditingController();
+  final TextEditingController quantityController =
+      TextEditingController(text: '0');
+
+  late Armazem origWarehouse;
 
   @override
   Widget build(BuildContext context) {
-    //final height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.background,
@@ -67,11 +72,11 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
                           widget.productDetail.codigoBarras,
                           style: Theme.of(context).textTheme.caption,
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(right: 10, bottom: 10),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10, bottom: 10),
                           child: Text(
-                            "12312 cx",
-                            style: TextStyle(
+                            "${widget.productDetail.stock} ${widget.productDetail.uM}",
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                             ),
@@ -97,21 +102,61 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
                       ),
                     ),
                   ),
+                  const Divider(),
                   TextField(
                     enabled: true,
                     autofocus: false,
-                    onSubmitted: (e) {
-                      print("onSubmitted: $e");
-                    },
+                    controller: origWarehouseController,
+                    onSubmitted: (e) {},
                     decoration: InputDecoration(
+                      label: const Text("Local"),
                       border: InputBorder.none,
                       prefixIcon: const Icon(Icons.qr_code),
                       suffixIcon: IconButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          final Armazem result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WarehouseBalanceSearch(
+                                      warehouseBalances:
+                                          widget.productDetail.armazem,
+                                    )),
+                          );
+
+                          origWarehouse = result;
+                          origWarehouseController.text = result.armz;
+                          destWarehouseController.text = result.armz;
+                        },
                         icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
                       ),
                       //icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
-                      label: const Text("Local"),
+                    ),
+                  ),
+                  const Divider(),
+                  TextField(
+                    enabled: true,
+                    autofocus: false,
+                    controller: origAddressController,
+                    onSubmitted: (e) {},
+                    decoration: InputDecoration(
+                      label: const Text("Endereços"),
+                      border: InputBorder.none,
+                      prefixIcon: const Icon(Icons.qr_code),
+                      suffixIcon: IconButton(
+                        onPressed: () async {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AddressBalance(
+                                      addressBalance: origWarehouse.enderecos,
+                                    )),
+                          );
+                          origAddressController.text = result;
+                          destAddressController.text = result;
+                        },
+                        icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
+                      ),
+                      //icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
                     ),
                   ),
                   const Divider(),
@@ -125,8 +170,111 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
                       ),
                     ),
                   ),
+                  const Divider(),
+                  TextField(
+                    enabled: false,
+                    autofocus: false,
+                    controller: destWarehouseController,
+                    onSubmitted: (e) {},
+                    decoration: InputDecoration(
+                      label: const Text("Armazem"),
+                      border: InputBorder.none,
+                      prefixIcon: const Icon(Icons.qr_code),
+                      suffixIcon: IconButton(
+                        onPressed: () async {
+                          final Armazem result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WarehouseBalanceSearch(
+                                      warehouseBalances:
+                                          widget.productDetail.armazem,
+                                    )),
+                          );
+                          origWarehouseController.text = result.armz;
+                        },
+                        icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
+                      ),
+                      //icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
+                    ),
+                  ),
+                  const Divider(),
+                  TextField(
+                    enabled: true,
+                    autofocus: false,
+                    controller: destAddressController,
+                    onSubmitted: (e) {},
+                    decoration: InputDecoration(
+                      label: const Text("Endereço"),
+                      border: InputBorder.none,
+                      prefixIcon: const Icon(Icons.qr_code),
+                      suffixIcon: IconButton(
+                        onPressed: () async {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AddressBalance(
+                                      addressBalance: widget
+                                          .productDetail.armazem[1].enderecos,
+                                    )),
+                          );
+                          destAddressController.text = result;
+                        },
+                        icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
+                      ),
+                      //icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
+                    ),
+                  ),
+                  const Divider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      IconButton(
+                        onPressed: () {
+                          _setValue(-1);
+                        },
+                        iconSize: 30,
+                        icon: const Icon(
+                          Icons.remove,
+                          color: AppColors.primaryRed,
+                        ),
+                      ), // decrease qty button
+                      Expanded(
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          controller: quantityController,
+                          keyboardType: TextInputType.number,
+                          onSubmitted: (e) {},
+                          onChanged: (e) {
+                            var intParsed = int.tryParse(e);
+
+                            if (intParsed != null) {
+                              if (int.parse(e) <= 0) {
+                                quantityController.text = '0';
+                                quantityController.selection =
+                                    TextSelection.collapsed(
+                                        offset: quantityController.text.length);
+                              }
+                            }
+                          },
+                        ),
+                      ),
+                      IconButton(
+                        iconSize: 30,
+                        onPressed: () {
+                          _setValue(1);
+                        },
+                        icon: const Icon(
+                          Icons.add,
+                          color: Colors.green,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Divider(),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      creatJson();
+                    },
                     child: const SizedBox(
                       width: double.infinity,
                       child: Padding(
@@ -142,5 +290,40 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
         ),
       ),
     );
+  }
+
+  void creatJson() {
+    final jsonOrig = {
+      'produto': widget.productDetail.codigo,
+      'local': origAddressController.text,
+      'lote': '',
+      'endereco': origAddressController.text,
+    };
+    final jsonDest = {
+      'produto': widget.productDetail.codigo,
+      'local': destWarehouseController.text,
+      'lote': '',
+      'endereco': destAddressController.text,
+    };
+
+    final json = {
+      'quantidade': quantityController.text,
+      'origem': jsonOrig,
+      'destino': jsonDest
+    };
+
+    final jsonString = jsonEncode(json);
+    print(jsonString);
+  }
+
+  void _setValue(int number) {
+    int isPositive = int.parse(quantityController.text) + number;
+
+    if (isPositive >= 0) {
+      quantityController.text =
+          (int.parse(quantityController.text) + number).toString();
+      quantityController.selection =
+          TextSelection.collapsed(offset: quantityController.text.length);
+    }
   }
 }
