@@ -35,7 +35,7 @@ class ProductTransferCard extends StatelessWidget {
                 fontSize: 16,
               ),
             ),
-            //const Divider(),
+            const Divider(),
             Text(
               "Código: ${productDetail.codigo}",
               style: Theme.of(context).textTheme.subtitle1,

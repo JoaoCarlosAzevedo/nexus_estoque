@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:nexus_estoque/core/pages/searches/products/pages/products_search_page.dart';
+import 'package:nexus_estoque/core/pages/searches/address/page/address_search_page.dart';
 import 'package:nexus_estoque/core/theme/app_colors.dart';
 import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/data/model/product_balance_model.dart';
-import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/widgets/address_balance_search.dart';
-import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/widgets/input_quantity.dart';
-import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/widgets/input_text.dart';
-import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/widgets/produc_transfer_card.dart';
-import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/widgets/warehouse_balance_search.dart';
+import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer/widgets/address_balance_search.dart';
+import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer/widgets/input_quantity.dart';
+import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer/widgets/input_text.dart';
+import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer/widgets/produc_transfer_card.dart';
+import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer/widgets/warehouse_balance_search.dart';
 
 class ProductSelectedDetail extends StatefulWidget {
   final ProductBalanceModel productDetail;
@@ -27,7 +27,10 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
   final TextEditingController quantityController =
       TextEditingController(text: '0');
 
-  late Armazem origWarehouse;
+  final FocusNode origWarehouseFocus = FocusNode();
+  final FocusNode destWarehouseFocus = FocusNode();
+  final FocusNode origAddressFocus = FocusNode();
+  final FocusNode destAddressFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -58,24 +61,30 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
                   const Divider(),
                   InputText(
                     label: "Local",
+                    focus: origWarehouseFocus,
                     controller: origWarehouseController,
                     enabled: true,
                     onPressed: () {
                       warehouseSearch();
                     },
-                    onSubmitted: () {},
+                    onSubmitted: () {
+                      origAddressFocus.requestFocus();
+                    },
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   InputText(
                     label: "Endereços",
+                    focus: origAddressFocus,
                     controller: origAddressController,
                     enabled: true,
                     onPressed: () {
                       addressSearch();
                     },
-                    onSubmitted: () {},
+                    onSubmitted: () {
+                      destAddressFocus.requestFocus();
+                    },
                   ),
                   const SizedBox(
                     height: 20,
@@ -93,6 +102,7 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
                   const Divider(),
                   InputText(
                     label: "Local",
+                    focus: destWarehouseFocus,
                     controller: destWarehouseController,
                     enabled: false,
                     onPressed: () async {
@@ -114,10 +124,11 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
                   ),
                   InputText(
                     label: "Endereços",
+                    focus: destAddressFocus,
                     controller: destAddressController,
                     enabled: true,
                     onPressed: () {
-                      addressSearch();
+                      allAddressSearch();
                     },
                     onSubmitted: () {},
                   ),
@@ -152,39 +163,51 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
   }
 
   void warehouseSearch() async {
-    /*   final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => WarehouseBalanceSearch(
-                warehouseBalances: widget.productDetail.armazem,
-              )),
-    );
-
-    if (result != null) {
-      origWarehouse = result as Armazem;
-      origWarehouseController.text = result.armz;
-      destWarehouseController.text = result.armz;
-    } */
     final result = await showModalBottomSheet<dynamic>(
       context: context,
       builder: (BuildContext context) {
-        return ProductSearchPage();
+        return WarehouseBalanceSearch(
+          warehouseBalances: widget.productDetail.armazem,
+        );
       },
-    );
-    print(result);
-  }
-
-  void addressSearch() async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => AddressBalance(
-                addressBalance: origWarehouse.enderecos,
-              )),
     );
 
     if (result != null) {
-      origAddressController.text = result;
+      final warehouse = result as Armazem;
+      origWarehouseController.text = warehouse.armz;
+      destWarehouseController.text = warehouse.armz;
+    }
+  }
+
+  void addressSearch() async {
+    final armz = origWarehouseController.text;
+    final addresses = widget.productDetail.armazem
+        .firstWhere((element) => element.armz == armz);
+    final result = await showModalBottomSheet<dynamic>(
+      context: context,
+      builder: (BuildContext context) {
+        return AddressBalance(
+          addressBalance: addresses.enderecos,
+        );
+      },
+    );
+
+    if (result != null) {
+      final tapedAddress = result as Enderecos;
+      origAddressController.text = tapedAddress.codLocalizacao;
+      destAddressController.text = tapedAddress.codLocalizacao;
+    }
+  }
+
+  void allAddressSearch() async {
+    final result = await showModalBottomSheet<dynamic>(
+      context: context,
+      builder: (BuildContext context) {
+        return const AddressSearchPage();
+      },
+    );
+
+    if (result != null) {
       destAddressController.text = result;
     }
   }

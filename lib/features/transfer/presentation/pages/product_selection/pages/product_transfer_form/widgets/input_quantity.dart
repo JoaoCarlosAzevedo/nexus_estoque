@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nexus_estoque/core/theme/app_colors.dart';
 
 class InputQuantity extends StatefulWidget {
@@ -19,7 +20,7 @@ class _InputQuantityState extends State<InputQuantity> {
       children: <Widget>[
         IconButton(
           onPressed: () {
-            _setValue(-1);
+            _setValue(-1.0);
           },
           iconSize: 30,
           icon: const Icon(
@@ -31,13 +32,19 @@ class _InputQuantityState extends State<InputQuantity> {
           child: TextField(
             textAlign: TextAlign.center,
             controller: widget.controller,
-            keyboardType: TextInputType.number,
+            keyboardType: const TextInputType.numberWithOptions(
+              decimal: true,
+              signed: false,
+            ),
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'))
+            ],
             onSubmitted: (e) {},
             onChanged: (e) {
-              var intParsed = int.tryParse(e);
+              var doubleParsed = double.tryParse(e);
 
-              if (intParsed != null) {
-                if (int.parse(e) <= 0) {
+              if (doubleParsed != null) {
+                if (double.parse(e) <= 0) {
                   widget.controller.text = '0';
                   widget.controller.selection = TextSelection.collapsed(
                       offset: widget.controller.text.length);
@@ -49,7 +56,7 @@ class _InputQuantityState extends State<InputQuantity> {
         IconButton(
           iconSize: 30,
           onPressed: () {
-            _setValue(1);
+            _setValue(1.0);
           },
           icon: const Icon(
             Icons.add,
@@ -60,12 +67,17 @@ class _InputQuantityState extends State<InputQuantity> {
     );
   }
 
-  void _setValue(int number) {
-    int isPositive = int.parse(widget.controller.text) + number;
+  void _setValue(double number) {
+    if (widget.controller.text.isEmpty) {
+      widget.controller.text = '0';
+    }
+
+    double isPositive = double.parse(widget.controller.text) + number;
 
     if (isPositive >= 0) {
       widget.controller.text =
-          (int.parse(widget.controller.text) + number).toString();
+          (double.parse(widget.controller.text) + number).toStringAsFixed(2);
+
       widget.controller.selection =
           TextSelection.collapsed(offset: widget.controller.text.length);
     }

@@ -23,7 +23,7 @@ class AddressBalance extends StatelessWidget {
               title: Text(addressBalance[index].descEndereco),
               subtitle: Text("Saldo: ${addressBalance[index].quantidade}"),
               onTap: () {
-                Navigator.pop(context, addressBalance[index].codLocalizacao);
+                Navigator.pop(context, addressBalance[index]);
               },
             ),
           );

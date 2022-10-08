@@ -11,8 +11,8 @@ import 'package:nexus_estoque/features/address/presentation/pages/product_addres
 import 'package:nexus_estoque/features/address/presentation/pages/product_address_form_page/cubit/cubit/product_address_form_cubit.dart';
 
 import 'package:nexus_estoque/features/menu/presentantion/pages/menu_page.dart';
-import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/product_selection_form.dart';
-import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/product_selection_page.dart';
+import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer/product_transfer_page.dart';
+import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_selection/product_selection_page.dart';
 
 class AppRouter {
   late ProductAddressRepository productAddressRepository;

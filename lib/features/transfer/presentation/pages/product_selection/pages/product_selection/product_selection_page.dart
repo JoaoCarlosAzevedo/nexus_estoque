@@ -72,7 +72,6 @@ class _ProductSelectionPageState extends State<ProductSelectionPage> {
                           },
                           icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
                         ),
-                        //icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
                         label: const Text("Código de Barras"),
                       ),
                     ),

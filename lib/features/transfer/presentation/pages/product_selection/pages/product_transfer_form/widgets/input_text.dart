@@ -7,6 +7,7 @@ class InputText extends StatefulWidget {
   final bool enabled;
   final void Function() onPressed;
   final void Function() onSubmitted;
+  final FocusNode focus;
 
   const InputText({
     Key? key,
@@ -15,6 +16,7 @@ class InputText extends StatefulWidget {
     required this.enabled,
     required this.onPressed,
     required this.onSubmitted,
+    required this.focus,
   }) : super(key: key);
 
   @override
@@ -27,9 +29,10 @@ class _InputTextState extends State<InputText> {
     return TextField(
       enabled: widget.enabled,
       autofocus: false,
+      focusNode: widget.focus,
       controller: widget.controller,
       onSubmitted: (e) {
-        widget.onPressed();
+        widget.onSubmitted();
       },
       decoration: InputDecoration(
         label: Text(widget.label),
