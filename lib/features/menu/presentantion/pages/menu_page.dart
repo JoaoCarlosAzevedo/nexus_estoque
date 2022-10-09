@@ -21,17 +21,26 @@ class MenuPage extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            GestureDetector(
+            Image.asset(
+              "assets/NexusIcon.png",
+              fit: BoxFit.scaleDown,
+              width: 50,
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            const Text("Nexus WMS")
+            /*      GestureDetector(
               onTap: () {
                 Navigator.pushNamed(context, '/configuracoes');
-              },
+              }, 
               child: const FaIcon(
                 FontAwesomeIcons.gear,
                 color: AppColors.primary,
               ),
-            ),
+            ), */
           ],
         ),
       ),
