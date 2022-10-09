@@ -30,6 +30,7 @@ class _InputQuantityState extends State<InputQuantity> {
         ), // decrease qty button
         Expanded(
           child: TextField(
+            style: const TextStyle(fontSize: 20),
             textAlign: TextAlign.center,
             controller: widget.controller,
             keyboardType: const TextInputType.numberWithOptions(

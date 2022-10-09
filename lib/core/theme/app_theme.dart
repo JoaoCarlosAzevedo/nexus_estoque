@@ -10,6 +10,7 @@ class AppTheme {
       primaryColor: AppColors.grey,
       backgroundColor: AppColors.background,
       canvasColor: AppColors.primaryGrey, */
+      primaryColor: AppColors.secondaryGrey,
       colorScheme: const ColorScheme(
         primaryContainer: AppColors.primaryGrey,
         background: AppColors.primaryGrey,

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:nexus_estoque/core/pages/searches/address/cubit/address_search_cubit.dart';
 import 'package:nexus_estoque/core/pages/searches/address/cubit/address_search_state.dart';
 import 'package:nexus_estoque/core/pages/searches/address/data/repositories/address_search_repository.dart';
 
 class AddressSearchPage extends StatefulWidget {
-  const AddressSearchPage({super.key});
+  const AddressSearchPage({
+    Key? key,
+    required this.warehouse,
+  }) : super(key: key);
+  final String warehouse;
 
   @override
   State<AddressSearchPage> createState() => _AddressSearchPageState();
@@ -20,7 +25,8 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
         centerTitle: true,
       ),
       body: BlocProvider<AddressSearchCubit>(
-        create: (context) => AddressSearchCubit(AddressSearchRepository()),
+        create: (context) =>
+            AddressSearchCubit(AddressSearchRepository(), widget.warehouse),
         child: BlocBuilder<AddressSearchCubit, AddressSearchState>(
           builder: (context, state) {
             if (state is AddressSearchLoading) {
@@ -39,7 +45,9 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
               final list = state.addressess;
               return RefreshIndicator(
                 onRefresh: () async {
-                  context.read<AddressSearchCubit>().fetchAddress();
+                  context
+                      .read<AddressSearchCubit>()
+                      .fetchAddress(widget.warehouse);
                 },
                 child: Column(
                   children: [

@@ -33,7 +33,7 @@ final List menuItens = [
     color: Colors.red,
     route: 'transferencias',
   ),
-  MenuItemInfo(
+/*   MenuItemInfo(
     title: "Listagem Enderecos",
     icon: FontAwesomeIcons.clipboardCheck,
     color: Colors.red,
@@ -50,5 +50,5 @@ final List menuItens = [
     icon: FontAwesomeIcons.clipboardCheck,
     color: Colors.red,
     route: 'armazem',
-  ),
+  ), */
 ];

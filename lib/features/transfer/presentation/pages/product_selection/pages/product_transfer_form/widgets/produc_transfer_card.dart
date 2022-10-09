@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nexus_estoque/core/theme/app_colors.dart';
 
 import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/data/model/product_balance_model.dart';
@@ -28,17 +29,35 @@ class ProductTransferCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              productDetail.descricao,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: FaIcon(FontAwesomeIcons.boxOpen),
+                ),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        productDetail.descricao,
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
             const Divider(),
-            Text(
-              "Código: ${productDetail.codigo}",
-              style: Theme.of(context).textTheme.subtitle1,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Código: ${productDetail.codigo}",
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+              ],
             ),
             //const Divider(),
             Row(

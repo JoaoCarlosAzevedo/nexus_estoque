@@ -16,7 +16,8 @@ class AddressSearchRepository {
     dio = Dio(options);
   }
 
-  Future<Either<Failure, List<AddressModel>>> fetchAddress() async {
+  Future<Either<Failure, List<AddressModel>>> fetchAddress(
+      String warehouse) async {
     late dynamic response;
     try {
       response =
@@ -25,6 +26,7 @@ class AddressSearchRepository {
         'filial': "01",
         'page': "1",
         'pageSize': "10000",
+        'armazem': warehouse,
       });
 
       if (response.statusCode != 200) {

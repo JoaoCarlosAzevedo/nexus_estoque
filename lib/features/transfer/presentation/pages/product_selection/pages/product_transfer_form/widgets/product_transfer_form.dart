@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nexus_estoque/core/pages/searches/address/page/address_search_page.dart';
@@ -35,130 +36,178 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
   final FocusNode destAddressFocus = FocusNode();
 
   @override
+  void dispose() {
+    origWarehouseController.dispose();
+    destWarehouseController.dispose();
+    origAddressController.dispose();
+    destAddressController.dispose();
+    quantityController.dispose();
+
+    origWarehouseFocus.dispose();
+    destWarehouseFocus.dispose();
+    origAddressFocus.dispose();
+    destAddressFocus.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    origWarehouseController.text = widget.productDetail.localPadrao;
+    destWarehouseController.text = widget.productDetail.localPadrao;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.background,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            ProductTransferCard(
-              productDetail: widget.productDetail,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+      body: BlocListener<ProductTransferCubit, ProductTransferState>(
+        listener: (context, state) {
+          if (state is ProductTransferError) {
+            AwesomeDialog(
+                    context: context,
+                    dialogType: DialogType.error,
+                    animType: AnimType.rightSlide,
+                    //title: 'Alerta',
+                    desc: state.error.error,
+                    //btnCancelOnPress: () {},
+                    btnOkOnPress: () {},
+                    btnOkColor: Theme.of(context).primaryColor)
+                .show();
+          }
+
+          if (state is ProductTransferLoaded) {
+            Navigator.pop(context);
+          }
+        },
+        child: BlocBuilder<ProductTransferCubit, ProductTransferState>(
+          builder: (context, state) {
+            if (state is ProductTransferLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return SingleChildScrollView(
               child: Column(
                 children: [
-                  const Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Origem",
-                      style: TextStyle(
-                        //fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
+                  ProductTransferCard(
+                    productDetail: widget.productDetail,
                   ),
-                  const Divider(),
-                  InputText(
-                    label: "Local",
-                    focus: origWarehouseFocus,
-                    controller: origWarehouseController,
-                    enabled: true,
-                    onPressed: () {
-                      warehouseSearch();
-                    },
-                    onSubmitted: () {
-                      origAddressFocus.requestFocus();
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  InputText(
-                    label: "Endereços",
-                    focus: origAddressFocus,
-                    controller: origAddressController,
-                    enabled: true,
-                    onPressed: () {
-                      addressSearch();
-                    },
-                    onSubmitted: () {
-                      destAddressFocus.requestFocus();
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Destino",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                  const Divider(),
-                  InputText(
-                    label: "Local",
-                    focus: destWarehouseFocus,
-                    controller: destWarehouseController,
-                    enabled: false,
-                    onPressed: () async {
-                      final Armazem result = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => WarehouseBalanceSearch(
-                                  warehouseBalances:
-                                      widget.productDetail.armazem,
-                                )),
-                      );
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        const Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "Origem",
+                            style: TextStyle(
+                              //fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                        const Divider(),
+                        InputText(
+                          label: "Local",
+                          focus: origWarehouseFocus,
+                          controller: origWarehouseController,
+                          enabled: true,
+                          onPressed: () {
+                            warehouseSearch();
+                          },
+                          onSubmitted: () {
+                            origAddressFocus.requestFocus();
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        InputText(
+                          label: "Endereços",
+                          focus: origAddressFocus,
+                          controller: origAddressController,
+                          enabled: true,
+                          onPressed: () {
+                            addressSearch();
+                          },
+                          onSubmitted: () {
+                            destAddressFocus.requestFocus();
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "Destino",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                        const Divider(),
+                        InputText(
+                          label: "Local",
+                          focus: destWarehouseFocus,
+                          controller: destWarehouseController,
+                          enabled: false,
+                          onPressed: () async {
+                            final Armazem result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => WarehouseBalanceSearch(
+                                        warehouseBalances:
+                                            widget.productDetail.armazem,
+                                      )),
+                            );
 
-                      origWarehouseController.text = result.armz;
-                    },
-                    onSubmitted: () {},
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  InputText(
-                    label: "Endereços",
-                    focus: destAddressFocus,
-                    controller: destAddressController,
-                    enabled: true,
-                    onPressed: () {
-                      allAddressSearch();
-                    },
-                    onSubmitted: () {},
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  InputQuantity(
-                    controller: quantityController,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      postTransfer();
-                    },
-                    child: const SizedBox(
-                      width: double.infinity,
-                      child: Padding(
-                        padding: EdgeInsets.all(15.0),
-                        child: Center(child: Text("Confirmar")),
-                      ),
+                            origWarehouseController.text = result.armz;
+                          },
+                          onSubmitted: () {},
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        InputText(
+                          label: "Endereços",
+                          focus: destAddressFocus,
+                          controller: destAddressController,
+                          enabled: true,
+                          onPressed: () {
+                            allAddressSearch();
+                          },
+                          onSubmitted: () {},
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        InputQuantity(
+                          controller: quantityController,
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            postTransfer();
+                          },
+                          child: const SizedBox(
+                            width: double.infinity,
+                            child: Padding(
+                              padding: EdgeInsets.all(15.0),
+                              child: Center(child: Text("Confirmar")),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );
@@ -205,7 +254,9 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
     final result = await showModalBottomSheet<dynamic>(
       context: context,
       builder: (BuildContext context) {
-        return const AddressSearchPage();
+        return AddressSearchPage(
+          warehouse: destWarehouseController.text,
+        );
       },
     );
 

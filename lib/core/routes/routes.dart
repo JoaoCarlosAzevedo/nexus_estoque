@@ -57,8 +57,11 @@ class AppRouter {
         return MaterialPageRoute(
             builder: (context) => const ProductSelectionPage());
       case "/enderecos":
+        final args = settings.arguments as String;
         return MaterialPageRoute(
-            builder: (context) => const AddressSearchPage());
+            builder: (context) => AddressSearchPage(
+                  warehouse: args,
+                ));
       case "/produtos":
         return MaterialPageRoute(
             builder: (context) => const ProductSearchPage());

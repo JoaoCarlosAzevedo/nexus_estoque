@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nexus_estoque/core/theme/app_colors.dart';
 import 'package:nexus_estoque/features/address/data/model/product_address_model.dart';
 
 class ProductInfo extends StatelessWidget {
@@ -9,12 +10,17 @@ class ProductInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).selectedRowColor,
-        borderRadius: BorderRadius.circular(15),
+      decoration: const BoxDecoration(
+        //color: Theme.of(context).selectedRowColor,
+        //borderRadius: BorderRadius.circular(15),
+        color: AppColors.background,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(25),
+          bottomRight: Radius.circular(25),
+        ),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -38,7 +44,6 @@ class ProductInfo extends StatelessWidget {
                 ),
               ],
             ),
-            const Divider(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -61,11 +66,11 @@ class ProductInfo extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      "Lote",
+                      "Fornecedor",
                       style: Theme.of(context).textTheme.caption,
                     ),
                     Text(
-                      productAddress.lote,
+                      productAddress.fornecedor,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ],
@@ -81,11 +86,25 @@ class ProductInfo extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Saldo a endereçar",
+                      "Armazem",
                       style: Theme.of(context).textTheme.caption,
                     ),
                     Text(
-                      "${productAddress.saldo} ${productAddress.um}",
+                      productAddress.armazem,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "NF",
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                    Text(
+                      '${productAddress.notafiscal} ${productAddress.serie}',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ],
@@ -95,15 +114,18 @@ class ProductInfo extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      "Armazem",
+                      "Saldo a endereçar",
                       style: Theme.of(context).textTheme.caption,
                     ),
                     Text(
-                      productAddress.armazem,
-                      style: Theme.of(context).textTheme.titleMedium,
+                      "${productAddress.saldo} ${productAddress.um}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ],
