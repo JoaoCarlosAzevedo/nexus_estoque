@@ -1,14 +1,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nexus_estoque/core/pages/searches/address/page/address_search_page.dart';
 import 'package:nexus_estoque/core/theme/app_colors.dart';
 import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/data/model/product_balance_model.dart';
-import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer/widgets/address_balance_search.dart';
-import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer/widgets/input_quantity.dart';
-import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer/widgets/input_text.dart';
-import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer/widgets/produc_transfer_card.dart';
-import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer/widgets/warehouse_balance_search.dart';
+import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer_form/cubit/product_transfer_cubit.dart';
+import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer_form/widgets/address_balance_search.dart';
+import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer_form/widgets/input_quantity.dart';
+import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer_form/widgets/input_text.dart';
+import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer_form/widgets/produc_transfer_card.dart';
+import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer_form/widgets/warehouse_balance_search.dart';
 
 class ProductSelectedDetail extends StatefulWidget {
   final ProductBalanceModel productDetail;
@@ -143,7 +145,7 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      creatJson();
+                      postTransfer();
                     },
                     child: const SizedBox(
                       width: double.infinity,
@@ -212,13 +214,17 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
     }
   }
 
-  void creatJson() {
+  void postTransfer() {
+    final cubit = BlocProvider.of<ProductTransferCubit>(context);
+    final double quantity = double.tryParse(quantityController.text) ?? 0.0;
+
     final jsonOrig = {
       'produto': widget.productDetail.codigo,
-      'local': origAddressController.text,
+      'local': origWarehouseController.text,
       'lote': '',
       'endereco': origAddressController.text,
     };
+
     final jsonDest = {
       'produto': widget.productDetail.codigo,
       'local': destWarehouseController.text,
@@ -227,12 +233,13 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
     };
 
     final json = {
-      'quantidade': quantityController.text,
+      'quantidade': quantity,
       'origem': jsonOrig,
       'destino': jsonDest
     };
 
     final jsonString = jsonEncode(json);
-    print(jsonString);
+
+    cubit.postTransfer(jsonString);
   }
 }

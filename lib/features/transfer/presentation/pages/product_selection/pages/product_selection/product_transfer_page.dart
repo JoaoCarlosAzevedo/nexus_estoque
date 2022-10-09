@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/data/repositories/product_balance_repository.dart';
 import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_selection/cubit/product_balance_cubit_cubit.dart';
-import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer/widgets/product_transfer_form.dart';
+import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer_form/product_transfer_form_page.dart';
 
 class ProductSelectionForm extends StatefulWidget {
   final String barcode;
@@ -32,7 +32,7 @@ class _ProductSelectionFormState extends State<ProductSelectionForm> {
 
           if (state is ProductBalanceCubitLoaded) {
             return Center(
-                child: ProductSelectedDetail(
+                child: ProductTransferFormPage(
               productDetail: state.productBalance,
             ));
           }
