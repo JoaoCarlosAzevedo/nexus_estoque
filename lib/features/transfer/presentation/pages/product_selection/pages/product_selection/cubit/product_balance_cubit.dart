@@ -5,13 +5,13 @@ import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/data/model/product_balance_model.dart';
 import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/data/repositories/product_balance_repository.dart';
 
-part 'product_balance_cubit_state.dart';
+part 'product_balance_state.dart';
 
-class ProductBalanceCubitCubit extends Cubit<ProductBalanceCubitState> {
+class ProductBalanceCubit extends Cubit<ProductBalanceCubitState> {
   final ProductBalanceRepository repository;
   final String barcode;
 
-  ProductBalanceCubitCubit(this.repository, this.barcode)
+  ProductBalanceCubit(this.repository, this.barcode)
       : super(ProductBalanceCubitInitial()) {
     fetchProductBalance(barcode);
   }
