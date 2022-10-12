@@ -1,4 +1,4 @@
-part of 'product_balance_cubit_cubit.dart';
+part of 'product_balance_cubit.dart';
 
 abstract class ProductBalanceCubitState extends Equatable {
   const ProductBalanceCubitState();

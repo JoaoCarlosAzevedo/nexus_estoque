@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/data/repositories/product_balance_repository.dart';
-import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_selection/cubit/product_balance_cubit_cubit.dart';
+import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_selection/cubit/product_balance_cubit.dart';
 import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer_form/product_transfer_form_page.dart';
 
 class ProductSelectionForm extends StatefulWidget {
@@ -17,8 +17,8 @@ class _ProductSelectionFormState extends State<ProductSelectionForm> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          ProductBalanceCubitCubit(ProductBalanceRepository(), widget.barcode),
-      child: BlocBuilder<ProductBalanceCubitCubit, ProductBalanceCubitState>(
+          ProductBalanceCubit(ProductBalanceRepository(), widget.barcode),
+      child: BlocBuilder<ProductBalanceCubit, ProductBalanceCubitState>(
         builder: (context, state) {
           if (state is ProductBalanceCubitLoading) {
             return const Loading();
