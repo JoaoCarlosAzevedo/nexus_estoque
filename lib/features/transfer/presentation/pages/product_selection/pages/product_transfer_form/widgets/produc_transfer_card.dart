@@ -30,21 +30,16 @@ class ProductTransferCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const Padding(
                   padding: EdgeInsets.all(15.0),
                   child: FaIcon(FontAwesomeIcons.boxOpen),
                 ),
                 Flexible(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        productDetail.descricao,
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                    ],
+                  child: Text(
+                    productDetail.descricao,
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
               ],

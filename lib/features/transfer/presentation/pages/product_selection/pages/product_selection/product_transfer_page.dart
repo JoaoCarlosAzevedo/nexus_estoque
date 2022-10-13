@@ -25,8 +25,11 @@ class _ProductSelectionFormState extends State<ProductSelectionForm> {
           }
 
           if (state is ProductBalanceCubitError) {
-            return Center(
-              child: Text(state.error.error),
+            return Scaffold(
+              appBar: AppBar(),
+              body: Center(
+                child: Text(state.error.error),
+              ),
             );
           }
 

@@ -148,7 +148,7 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
                           ),
                         ),
                         const Divider(),
-                        InputText(
+                        /*      InputText(
                           label: "Local",
                           focus: destWarehouseFocus,
                           controller: destWarehouseController,
@@ -166,10 +166,10 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
                             origWarehouseController.text = result.armz;
                           },
                           onSubmitted: () {},
-                        ),
-                        const SizedBox(
+                        ), */
+                        /*  const SizedBox(
                           height: 20,
-                        ),
+                        ), */
                         InputText(
                           label: "Endereços",
                           focus: destAddressFocus,

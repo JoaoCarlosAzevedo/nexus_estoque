@@ -22,6 +22,10 @@ class ProductSearchRepository {
     dio.interceptors.add(dioCacheManager.interceptor);
   }
 
+  void cleanCache() {
+    dioCacheManager.deleteByPrimaryKey('$url/produtos/', requestMethod: "GET");
+  }
+
   Future<Either<Failure, List<ProductSearchModel>>> fetchAddress() async {
     late dynamic response;
     try {

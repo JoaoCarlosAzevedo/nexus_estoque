@@ -39,7 +39,7 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
               final list = state.products;
               return RefreshIndicator(
                 onRefresh: () async {
-                  context.read<ProductsSearchCubit>().fetchProducts();
+                  context.read<ProductsSearchCubit>().cleanCache();
                 },
                 child: Column(
                   children: [

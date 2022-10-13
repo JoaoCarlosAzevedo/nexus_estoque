@@ -9,6 +9,11 @@ class ProductsSearchCubit extends Cubit<ProductsSearchState> {
     fetchProducts();
   }
 
+  void cleanCache() {
+    repository.cleanCache();
+    fetchProducts();
+  }
+
   Future<void> fetchProducts() async {
     emit(ProductsSearchLoading());
 
