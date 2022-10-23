@@ -48,6 +48,7 @@ dependencies:
   awesome_dialog: ^3.0.2
   dio_http_cache: ^0.3.0
   google_fonts: ^3.0.1
+  flutter_riverpod: ^2.0.2
 
 dev_dependencies:
   flutter_test:

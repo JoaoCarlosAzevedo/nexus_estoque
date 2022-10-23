@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/theme/app_theme.dart';
 import 'core/routes/routes.dart';
 
@@ -7,8 +8,10 @@ void main() async {
   await dotenv.load(fileName: ".env");
 
   runApp(
-    NexusEstoque(
-      router: AppRouter(),
+    ProviderScope(
+      child: NexusEstoque(
+        router: AppRouter(),
+      ),
     ),
   );
 }
