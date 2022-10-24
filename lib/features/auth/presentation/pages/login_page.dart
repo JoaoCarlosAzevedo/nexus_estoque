@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nexus_estoque/features/auth/data/repositories/auth_repository.dart';
+import 'package:nexus_estoque/features/auth/model/user_model.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -12,6 +14,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController userController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final AuthRepository repository = AuthRepository();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,9 +75,10 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void login() {
-    print(userController.text);
-    print(passwordController.text);
+  void login() async {
+    late User user;
+    final data =
+        await repository.auth(userController.text, passwordController.text);
   }
 
 /*   final loginProvider = FutureProvider<bool>((ref) async {
