@@ -1,6 +1,4 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/features/auth/data/repositories/auth_repository.dart';
 import 'package:nexus_estoque/features/auth/model/user_model.dart';
 

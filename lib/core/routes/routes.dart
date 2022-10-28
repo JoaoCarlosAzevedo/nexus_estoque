@@ -9,7 +9,7 @@ import 'package:nexus_estoque/features/address/presentation/pages/address_list_p
 import 'package:nexus_estoque/features/address/presentation/pages/address_list_page/cubit/product_address_cubit.dart';
 import 'package:nexus_estoque/features/address/presentation/pages/product_address_form_page/address_form_page.dart';
 import 'package:nexus_estoque/features/address/presentation/pages/product_address_form_page/cubit/cubit/product_address_form_cubit.dart';
-import 'package:nexus_estoque/features/auth/presentation/pages/login_page.dart';
+import 'package:nexus_estoque/features/auth/presentation/pages/login/login_page.dart';
 
 import 'package:nexus_estoque/features/menu/presentantion/pages/menu_page.dart';
 import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_selection/product_transfer_page.dart';
