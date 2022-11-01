@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nexus_estoque/features/auth/data/repositories/auth_repository.dart';
-import 'package:nexus_estoque/features/auth/model/user_model.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -32,26 +31,26 @@ class _LoginPageState extends State<LoginPage> {
                       //crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         TextField(
-                          decoration: InputDecoration(label: Text("Usuário")),
+                          decoration:
+                              const InputDecoration(label: Text("Usuário")),
                           controller: userController,
                         ),
                         const SizedBox(
                           height: 20,
                         ),
                         TextField(
-                          decoration: InputDecoration(label: Text("Senha")),
+                          decoration:
+                              const InputDecoration(label: Text("Senha")),
                           keyboardType: TextInputType.visiblePassword,
                           obscureText: true,
                           controller: passwordController,
-                          onSubmitted: (e) {
-                            login();
-                          },
+                          onSubmitted: (e) {},
                         ),
                         const SizedBox(
                           height: 20,
                         ),
                         ElevatedButton(
-                          onPressed: login,
+                          onPressed: () {},
                           child: const SizedBox(
                             width: double.infinity,
                             child: Padding(
@@ -72,32 +71,4 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
-  void login() async {
-    late User user;
-    final data =
-        await repository.auth(userController.text, passwordController.text);
-  }
-
-/*   final loginProvider = FutureProvider<bool>((ref) async {
-    final dio = Dio();
-    late dynamic response;
-    try {
-      response = await dio.get(
-          'http://187.94.63.58:38137/REST/api/oauth2/v1/token',
-          queryParameters: {
-            'username': "JOAO.NEXUS",
-            'password': "Skate102030",
-            'grant_type': "password"
-          });
-
-      if (response.statusCode == 201) {
-        return true;
-      }
-    } on DioError catch (e) {
-      print(e);
-    }
-
-    return false;
-  }); */
 }
