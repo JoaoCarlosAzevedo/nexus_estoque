@@ -15,7 +15,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     final result = await repository.auth(username, password);
 
-    result.fold((l) => emit(AuthError(l)), (r) => AuthLoaded(r));
+    result.fold((l) => emit(AuthError(l)), (r) => emit(AuthLoaded(r)));
   }
 
   void logout() {
