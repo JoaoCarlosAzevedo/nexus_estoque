@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nexus_estoque/core/constants/menus.dart';
+import 'package:nexus_estoque/features/auth/presentation/pages/login/cubit/auth_cubit.dart';
 import 'package:nexus_estoque/features/menu/presentantion/pages/widgets/menu_card_widget.dart';
 import 'package:rive/rive.dart';
 
@@ -15,8 +17,14 @@ class MenuPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authCubit = context.read<AuthCubit>();
+    final state = authCubit.state as AuthLoaded;
+    final user = state.user;
+    print(user);
+
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         elevation: 0,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -30,23 +38,28 @@ class MenuPage extends StatelessWidget {
               width: 10,
             ),
             const Text("Nexus WMS")
-            /*      GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, '/configuracoes');
-              }, 
-              child: const FaIcon(
-                FontAwesomeIcons.gear,
-                color: AppColors.primary,
-              ),
-            ), */
           ],
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                authCubit.logout();
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/', (Route<dynamic> route) => false);
+              },
+              icon: const Icon(Icons.logout))
+        ],
       ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('Olá, ${user.displayName}'),
+              ),
               const Expanded(
                 flex: 1,
                 child: Card(

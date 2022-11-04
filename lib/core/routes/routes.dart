@@ -29,6 +29,9 @@ class AppRouter {
   Route generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case "/":
+        //return MaterialPageRoute(builder: (context) => const MenuPage());
+        return MaterialPageRoute(builder: (context) => const LoginPage());
+      case "/menu":
         return MaterialPageRoute(builder: (context) => const MenuPage());
       case "/enderecas":
         return MaterialPageRoute(

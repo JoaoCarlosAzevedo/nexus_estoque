@@ -2,7 +2,6 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nexus_estoque/features/auth/data/repositories/auth_repository.dart';
-import 'package:nexus_estoque/features/auth/model/user_model.dart';
 import 'package:nexus_estoque/features/auth/presentation/pages/login/cubit/auth_cubit.dart';
 import 'package:nexus_estoque/features/auth/presentation/pages/login/widgets/login_form.dart';
 
@@ -22,57 +21,43 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: BlocProvider(
-        create: (context) => AuthCubit(repository),
-        child: BlocListener<AuthCubit, AuthState>(
-          listener: (context, state) {
-            if (state is AuthError) {
-              AwesomeDialog(
-                      context: context,
-                      dialogType: DialogType.error,
-                      animType: AnimType.rightSlide,
-                      //title: 'Alerta',
-                      desc: state.error.error,
-                      //btnCancelOnPress: () {},
-                      btnOkOnPress: () {},
-                      btnOkColor: Theme.of(context).primaryColor)
-                  .show();
-            }
+      body: BlocListener<AuthCubit, AuthState>(
+        listener: (context, state) {
+          if (state is AuthError) {
+            AwesomeDialog(
+                    context: context,
+                    dialogType: DialogType.error,
+                    animType: AnimType.rightSlide,
+                    //title: 'Alerta',
+                    desc: state.error.error,
+                    //btnCancelOnPress: () {},
+                    btnOkOnPress: () {},
+                    btnOkColor: Theme.of(context).primaryColor)
+                .show();
+          }
 
-            if (state is AuthLoaded) {
-              AwesomeDialog(
-                      context: context,
-                      dialogType: DialogType.success,
-                      animType: AnimType.rightSlide,
-                      //title: 'Alerta',
-                      desc: state.user.displayName,
-                      //btnCancelOnPress: () {},
-                      btnOkOnPress: () {},
-                      btnOkColor: Theme.of(context).primaryColor)
-                  .show();
-            }
-          },
-          child: BlocBuilder<AuthCubit, AuthState>(
-            builder: (context, state) {
-              final cubit = BlocProvider.of<AuthCubit>(context);
-
-              print(cubit.state);
-
-              if (state is AuthLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-
-              return LoginForm(
-                userController: userController,
-                passwordController: passwordController,
-                onPressed: () {
-                  cubit.login(userController.text, passwordController.text);
-                },
+          if (state is AuthLoaded) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                '/menu', (Route<dynamic> route) => false);
+          }
+        },
+        child: BlocBuilder<AuthCubit, AuthState>(
+          builder: (context, state) {
+            final cubit = BlocProvider.of<AuthCubit>(context);
+            if (state is AuthLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
               );
-            },
-          ),
+            }
+
+            return LoginForm(
+              userController: userController,
+              passwordController: passwordController,
+              onPressed: () {
+                cubit.login(userController.text, passwordController.text);
+              },
+            );
+          },
         ),
       ),
     );

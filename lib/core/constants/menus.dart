@@ -22,12 +22,6 @@ final List menuItens = [
     route: 'enderecas',
   ),
   MenuItemInfo(
-    title: "Login Page",
-    icon: FontAwesomeIcons.boxOpen,
-    color: Colors.red,
-    route: 'login',
-  ),
-  MenuItemInfo(
     title: "Transferências",
     icon: FontAwesomeIcons.boxesPacking,
     color: Colors.red,

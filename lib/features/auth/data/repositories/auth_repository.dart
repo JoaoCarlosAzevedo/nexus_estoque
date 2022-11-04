@@ -25,29 +25,40 @@ class AuthRepository {
         'grant_type': "password"
       });
 
-      if (response.statusCode != 201) {
-        return const Left(Failure("Server Error!", ErrorType.exception));
+      if (response.statusCode == 201) {
+        final user = User.fromMap(response.data);
+
+        Map<String, dynamic> decodedToken = JwtDecoder.decode(user.accessToken);
+
+        final String userId = decodedToken['userid'];
+
+        final data = await getUser(userId);
+
+        return data.fold((l) {
+          return Left(l);
+        }, (r) {
+          user.id = userId;
+          user.userName = r['userName'];
+          user.displayName = r['displayName'];
+          return Right(user);
+        });
+      }
+      return const Left(Failure("Server Error!", ErrorType.exception));
+    } on DioError catch (e) {
+      log('auth ${e.type.name}');
+
+      if (e.type.name == "connectTimeout") {
+        return const Left(Failure("Tempo Excedido", ErrorType.timeout));
       }
 
-      final user = User.fromMap(response.data);
+      if (e.type.name == "receiveTimeout") {
+        return const Left(Failure("Tempo Excedido", ErrorType.timeout));
+      }
 
-      Map<String, dynamic> decodedToken = JwtDecoder.decode(user.accessToken);
-
-      final String userId = decodedToken['userid'];
-
-      final data = await getUser(userId);
-
-      data.fold((l) {
-        return Left(l);
-      }, (r) {
-        user.id = userId;
-        user.userName = r['userName'];
-        user.displayName = r['displayName'];
-      });
-
-      return Right(user);
-    } on DioError catch (e) {
-      log(e.type.name);
+      if (e.response?.statusCode == 401) {
+        return const Left(
+            Failure('Usuário ou senha inválido.', ErrorType.validation));
+      }
       return const Left(Failure("Server Error!", ErrorType.exception));
     }
   }
@@ -66,7 +77,13 @@ class AuthRepository {
         'displayName': response.data['displayName']
       });
     } on DioError catch (e) {
-      log(e.type.name);
+      log('getUser ${e.type.name}');
+      if (e.type.name == "connectTimeout") {
+        return const Left(Failure("Tempo Excedido", ErrorType.timeout));
+      }
+      if (e.type.name == "receiveTimeout") {
+        return const Left(Failure("Tempo Excedido", ErrorType.timeout));
+      }
       return const Left(Failure("Server Error!", ErrorType.exception));
     }
   }
