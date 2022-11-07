@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/core/constants/menus.dart';
 import 'package:nexus_estoque/features/auth/presentation/pages/login/cubit/auth_cubit.dart';
 import 'package:nexus_estoque/features/menu/presentantion/pages/widgets/menu_card_widget.dart';
@@ -44,8 +45,9 @@ class MenuPage extends StatelessWidget {
           IconButton(
               onPressed: () {
                 authCubit.logout();
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/', (Route<dynamic> route) => false);
+                /*      Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/', (Route<dynamic> route) => false); */
+                context.go('/');
               },
               icon: const Icon(Icons.logout))
         ],

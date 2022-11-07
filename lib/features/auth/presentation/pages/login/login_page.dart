@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/features/auth/data/repositories/auth_repository.dart';
 import 'package:nexus_estoque/features/auth/presentation/pages/login/cubit/auth_cubit.dart';
 import 'package:nexus_estoque/features/auth/presentation/pages/login/widgets/login_form.dart';
@@ -37,8 +38,9 @@ class _LoginPageState extends State<LoginPage> {
           }
 
           if (state is AuthLoaded) {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                '/menu', (Route<dynamic> route) => false);
+            /* Navigator.of(context).pushNamedAndRemoveUntil(
+                '/menu', (Route<dynamic> route) => false); */
+            context.go('/menu');
           }
         },
         child: BlocBuilder<AuthCubit, AuthState>(

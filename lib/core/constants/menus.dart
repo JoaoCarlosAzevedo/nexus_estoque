@@ -19,7 +19,7 @@ final List menuItens = [
     title: "Endereçar Saldos",
     icon: FontAwesomeIcons.warehouse,
     color: Colors.red,
-    route: 'enderecas',
+    route: 'enderecar',
   ),
   MenuItemInfo(
     title: "Transferências",

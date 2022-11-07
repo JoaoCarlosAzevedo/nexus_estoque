@@ -10,25 +10,24 @@ void main() async {
   await dotenv.load(fileName: ".env");
 
   runApp(
-    NexusEstoque(
-      router: AppRouter(),
-    ),
+    const NexusEstoque(),
   );
 }
 
 class NexusEstoque extends StatelessWidget {
-  final AppRouter router;
-
-  const NexusEstoque({Key? key, required this.router}) : super(key: key);
+  const NexusEstoque({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => AuthCubit(AuthRepository()),
-      child: MaterialApp(
+      child: MaterialApp.router(
         theme: AppTheme.defaultTheme,
         debugShowCheckedModeBanner: false,
-        onGenerateRoute: router.generateRoute,
+        //routerConfig: routes,
+        routerDelegate: routes.routerDelegate,
+        routeInformationParser: routes.routeInformationParser,
+        routeInformationProvider: routes.routeInformationProvider,
       ),
     );
   }

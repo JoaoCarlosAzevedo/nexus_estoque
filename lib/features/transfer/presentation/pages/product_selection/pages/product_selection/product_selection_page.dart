@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 class ProductSelectionPage extends StatefulWidget {
   const ProductSelectionPage({super.key});
@@ -99,6 +100,7 @@ class _ProductSelectionPageState extends State<ProductSelectionPage> {
   }
 
   void loadProduct(String barcode) {
-    Navigator.pushNamed(context, '/produtos/saldos', arguments: barcode);
+    //Navigator.pushNamed(context, '/produtos/saldos', arguments: barcode);
+    context.go('/produtos/saldos/$barcode');
   }
 }

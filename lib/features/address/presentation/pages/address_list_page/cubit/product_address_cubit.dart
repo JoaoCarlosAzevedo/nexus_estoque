@@ -6,7 +6,9 @@ class ProductAddressCubit extends Cubit<ProductAddressState> {
   final ProductAddressRepository productAddressRepository;
 
   ProductAddressCubit(this.productAddressRepository)
-      : super(ProductAddresInitial());
+      : super(ProductAddresInitial()) {
+    fetchProductAddress();
+  }
 
   void fetchProductAddress() async {
     emit(ProductAddressLoading());

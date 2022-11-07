@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/core/constants/menus.dart';
 import 'package:nexus_estoque/core/theme/app_colors.dart';
 
@@ -16,7 +17,8 @@ class MenuCard extends StatelessWidget {
       elevation: 5,
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(context, '/${info.route}');
+          //Navigator.pushNamed(context, '/${info.route}');
+          context.push('/${info.route}');
         },
         child: Padding(
           padding: const EdgeInsets.all(15.0),

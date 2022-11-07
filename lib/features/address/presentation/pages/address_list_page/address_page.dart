@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/features/address/data/model/product_address_model.dart';
+import 'package:nexus_estoque/features/address/data/repositories/product_address_repository.dart';
 import 'package:nexus_estoque/features/address/presentation/pages/address_list_page/cubit/product_address_cubit.dart';
 import 'package:nexus_estoque/features/address/presentation/pages/address_list_page/cubit/product_address_state.dart';
 
@@ -13,13 +15,6 @@ class AddressPage extends StatefulWidget {
 
 class _AddressPageState extends State<AddressPage> {
   @override
-  void initState() {
-    context.read<ProductAddressCubit>().fetchProductAddress();
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -30,69 +25,66 @@ class _AddressPageState extends State<AddressPage> {
         onRefresh: () async {
           context.read<ProductAddressCubit>().fetchProductAddress();
         },
-        child: Padding(
-          //padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-          padding: const EdgeInsets.all(0),
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            color: Theme.of(context).selectedRowColor,
-            child: Column(
-              children: [
-                /*   TextField(
-                  enabled: true,
-                  autofocus: false,
-                  onSubmitted: (value) {},
-                  decoration: const InputDecoration(
-                    label: Text("Código | Descrição"),
-                    prefixIcon: Icon(Icons.search),
-                    suffixIcon: Icon(Icons.qr_code_scanner_rounded),
-                  ),
-                ), */
-                Expanded(
-                  child: BlocBuilder<ProductAddressCubit, ProductAddressState>(
-                    builder: (context, state) {
-                      if (state is ProductAddresInitial) {
-                        return const Center(
-                          child: Text("State Initital"),
-                        );
-                      }
-                      if (state is ProductAddressLoading) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-
-                      if (state is ProductAddressError) {
-                        return Center(
-                          child: Text(state.failure.error),
-                        );
-                      }
-                      if (state is ProductAddressLoaded) {
-                        final list = state.productAddresList;
-                        if (list.isEmpty) {
+        child: BlocProvider(
+          create: (context) => ProductAddressCubit(ProductAddressRepository()),
+          child: Padding(
+            //padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+            padding: const EdgeInsets.all(0),
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              color: Theme.of(context).selectedRowColor,
+              child: Column(
+                children: [
+                  Expanded(
+                    child:
+                        BlocBuilder<ProductAddressCubit, ProductAddressState>(
+                      builder: (context, state) {
+                        if (state is ProductAddresInitial) {
                           return const Center(
-                            child: Text("Nenhum registro encontrado."),
+                            child: Text("State Initital"),
                           );
                         }
-                        return ListView.builder(
-                          itemCount: list.length,
-                          itemBuilder: (context, index) {
-                            return AddressCard(
-                              data: list[index],
-                              onTap: () {
-                                Navigator.pushNamed(context, '/enderecar/form',
-                                    arguments: list[index]);
-                              },
+                        if (state is ProductAddressLoading) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+
+                        if (state is ProductAddressError) {
+                          return Center(
+                            child: Text(state.failure.error),
+                          );
+                        }
+                        if (state is ProductAddressLoaded) {
+                          final list = state.productAddresList;
+                          if (list.isEmpty) {
+                            return const Center(
+                              child: Text("Nenhum registro encontrado."),
                             );
-                          },
-                        );
-                      }
-                      return const Text("Error State");
-                    },
-                  ),
-                )
-                //Divider(),
-              ],
+                          }
+                          return ListView.builder(
+                            itemCount: list.length,
+                            itemBuilder: (context, index) {
+                              return AddressCard(
+                                data: list[index],
+                                onTap: () {
+                                  /*   Navigator.pushNamed(
+                                      context, '/enderecar/form',
+                                      arguments: list[index]); */
+                                  context.push('/enderecar/form/',
+                                      extra: list[index]);
+                                },
+                              );
+                            },
+                          );
+                        }
+                        return const Text("Error State");
+                      },
+                    ),
+                  )
+                  //Divider(),
+                ],
+              ),
             ),
           ),
         ),
