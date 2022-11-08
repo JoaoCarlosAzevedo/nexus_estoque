@@ -7,6 +7,7 @@ import 'package:nexus_estoque/features/address/data/model/product_address_model.
 import 'package:nexus_estoque/features/address/presentation/pages/address_list_page/address_page.dart';
 import 'package:nexus_estoque/features/address/presentation/pages/product_address_form_page/address_form_page.dart';
 import 'package:nexus_estoque/features/auth/presentation/pages/login/login_page.dart';
+import 'package:nexus_estoque/features/auth/services/auth_service.dart';
 import 'package:nexus_estoque/features/menu/presentantion/pages/menu_page.dart';
 import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_selection/product_transfer_page.dart';
 import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_selection/product_selection_page.dart';
@@ -29,12 +30,23 @@ class DefaultPage extends StatelessWidget {
   }
 }
 
+final authService = AuthService();
+
 final routes = GoRouter(
     initialLocation: '/',
-/*     refreshListenable: null,
-    redirect: (state) {
-      return null
-    }, */
+    refreshListenable: authService,
+    redirect: (context, state) {
+      final isAuthenticated = authService.isAuthenticated;
+      final isLoginRoute = state.subloc == '/';
+
+      if (!isAuthenticated) {
+        return isLoginRoute ? null : '/';
+      }
+
+      if (isLoginRoute) return '/menu';
+
+      return null;
+    },
     errorBuilder: (context, state) =>
         DefaultPage(title: state.error.toString()),
     routes: [

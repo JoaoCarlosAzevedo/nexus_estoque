@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/core/constants/menus.dart';
 import 'package:nexus_estoque/features/auth/presentation/pages/login/cubit/auth_cubit.dart';
+import 'package:nexus_estoque/features/auth/services/auth_service.dart';
 import 'package:nexus_estoque/features/menu/presentantion/pages/widgets/menu_card_widget.dart';
 import 'package:rive/rive.dart';
 
@@ -21,7 +21,6 @@ class MenuPage extends StatelessWidget {
     final authCubit = context.read<AuthCubit>();
     final state = authCubit.state as AuthLoaded;
     final user = state.user;
-    print(user);
 
     return Scaffold(
       appBar: AppBar(
@@ -47,7 +46,8 @@ class MenuPage extends StatelessWidget {
                 authCubit.logout();
                 /*      Navigator.of(context).pushNamedAndRemoveUntil(
                     '/', (Route<dynamic> route) => false); */
-                context.go('/');
+                //context.go('/');
+                context.read<AuthService>().logout();
               },
               icon: const Icon(Icons.logout))
         ],

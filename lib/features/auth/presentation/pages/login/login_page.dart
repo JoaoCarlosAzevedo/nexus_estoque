@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/features/auth/data/repositories/auth_repository.dart';
 import 'package:nexus_estoque/features/auth/presentation/pages/login/cubit/auth_cubit.dart';
 import 'package:nexus_estoque/features/auth/presentation/pages/login/widgets/login_form.dart';
+import 'package:nexus_estoque/features/auth/services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -38,9 +39,7 @@ class _LoginPageState extends State<LoginPage> {
           }
 
           if (state is AuthLoaded) {
-            /* Navigator.of(context).pushNamedAndRemoveUntil(
-                '/menu', (Route<dynamic> route) => false); */
-            context.go('/menu');
+            context.read<AuthService>().login();
           }
         },
         child: BlocBuilder<AuthCubit, AuthState>(
