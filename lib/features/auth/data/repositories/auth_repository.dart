@@ -1,11 +1,14 @@
 import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:nexus_estoque/core/constants/config.dart';
 import 'package:nexus_estoque/core/constants/dio_config.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/features/auth/model/user_model.dart';
+
+final authRepository = Provider<AuthRepository>((ref) => AuthRepository());
 
 class AuthRepository {
   late Dio dio;
@@ -27,9 +30,9 @@ class AuthRepository {
 
       if (response.statusCode == 201) {
         final user = User.fromMap(response.data);
+/* 
 
         Map<String, dynamic> decodedToken = JwtDecoder.decode(user.accessToken);
-
         final String userId = decodedToken['userid'];
 
         final data = await getUser(userId);
@@ -41,7 +44,9 @@ class AuthRepository {
           user.userName = r['userName'];
           user.displayName = r['displayName'];
           return Right(user);
-        });
+        }); */
+
+        return Right(user);
       }
       return const Left(Failure("Server Error!", ErrorType.exception));
     } on DioError catch (e) {

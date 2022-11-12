@@ -1,20 +1,20 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/features/auth/data/repositories/auth_repository.dart';
 import 'package:nexus_estoque/features/auth/presentation/pages/login/cubit/auth_cubit.dart';
 import 'package:nexus_estoque/features/auth/presentation/pages/login/widgets/login_form.dart';
-import 'package:nexus_estoque/features/auth/services/auth_service.dart';
+import 'package:nexus_estoque/features/auth/providers/login_controller_provider.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final TextEditingController userController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final AuthRepository repository = AuthRepository();
@@ -39,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
           }
 
           if (state is AuthLoaded) {
-            context.read<AuthService>().login();
+            ref.read(loginControllerProvider.notifier).login();
           }
         },
         child: BlocBuilder<AuthCubit, AuthState>(

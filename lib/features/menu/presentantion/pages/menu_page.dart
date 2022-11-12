@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/constants/menus.dart';
 import 'package:nexus_estoque/features/auth/presentation/pages/login/cubit/auth_cubit.dart';
-import 'package:nexus_estoque/features/auth/services/auth_service.dart';
+import 'package:nexus_estoque/features/auth/providers/login_controller_provider.dart';
 import 'package:nexus_estoque/features/menu/presentantion/pages/widgets/menu_card_widget.dart';
 import 'package:rive/rive.dart';
 
-class MenuPage extends StatelessWidget {
+class MenuPage extends ConsumerWidget {
   const MenuPage({
     Key? key,
     this.crossAxisCount = 2,
@@ -17,7 +18,7 @@ class MenuPage extends StatelessWidget {
   final double childAspectRatio;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final authCubit = context.read<AuthCubit>();
     final state = authCubit.state as AuthLoaded;
     final user = state.user;
@@ -43,11 +44,8 @@ class MenuPage extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                authCubit.logout();
-                /*      Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/', (Route<dynamic> route) => false); */
-                //context.go('/');
-                context.read<AuthService>().logout();
+                //authCubit.logout();
+                ref.read(loginControllerProvider.notifier).logout();
               },
               icon: const Icon(Icons.logout))
         ],
