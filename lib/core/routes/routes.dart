@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/core/pages/searches/address/page/address_search_page.dart';
 import 'package:nexus_estoque/core/pages/searches/products/pages/products_search_page.dart';
 import 'package:nexus_estoque/core/pages/searches/warehouses/pages/warehouse_search_page.dart';
 import 'package:nexus_estoque/features/address/data/model/product_address_model.dart';
+import 'package:nexus_estoque/features/address/data/repositories/product_address_repository.dart';
 import 'package:nexus_estoque/features/address/presentation/pages/address_list_page/address_page.dart';
+import 'package:nexus_estoque/features/address/presentation/pages/address_list_page/cubit/product_address_cubit.dart';
 import 'package:nexus_estoque/features/address/presentation/pages/product_address_form_page/address_form_page.dart';
 import 'package:nexus_estoque/features/auth/presentation/pages/login/login_page.dart';
 import 'package:nexus_estoque/features/auth/providers/login_controller_provider.dart';
@@ -42,7 +45,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(path: "/", builder: ((context, state) => const MenuPage())),
         GoRoute(
             path: "/enderecar",
-            builder: ((context, state) => const AddressPage())),
+            builder: ((context, state) => BlocProvider(
+                  create: (context) =>
+                      ProductAddressCubit(ref.read(productAddressRepository)),
+                  child: const AddressPage(),
+                ))),
         GoRoute(
           path: "/enderecar/form",
           builder: ((context, state) {

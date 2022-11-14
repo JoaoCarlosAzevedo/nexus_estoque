@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/pages/searches/products/cubit/products_search_cubit.dart';
 import 'package:nexus_estoque/core/pages/searches/products/cubit/products_search_state.dart';
+import 'package:nexus_estoque/core/pages/searches/products/data/model/product_search_model.dart';
 import 'package:nexus_estoque/core/pages/searches/products/data/repositories/product_search_repository.dart';
 
 class ProductSearchPage extends ConsumerStatefulWidget {
@@ -13,6 +14,10 @@ class ProductSearchPage extends ConsumerStatefulWidget {
 }
 
 class _ProductSearchPageState extends ConsumerState<ProductSearchPage> {
+  List<ProductSearchModel> filterListProducts = [];
+  List<ProductSearchModel> listProducts = [];
+  bool resetFilter = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,49 +43,72 @@ class _ProductSearchPageState extends ConsumerState<ProductSearchPage> {
             }
 
             if (state is ProductsSearchLoaded) {
-              final list = state.products;
+              listProducts = state.products;
+              if (resetFilter) {
+                filterListProducts = state.products;
+                resetFilter = false;
+              }
               return RefreshIndicator(
                 onRefresh: () async {
                   context.read<ProductsSearchCubit>().cleanCache();
                 },
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: list.length,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            child: ListTile(
-                              onTap: () {
-                                Navigator.pop(context, list[index].codigo);
-                              },
-                              title: Text(list[index].descricao),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(list[index].codigo),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text('Tipo ${list[index].tipo}'),
-                                      Text('Local ${list[index].localPadrao}'),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              trailing: Column(
-                                children: [
-                                  Text(list[index].saldoAtual.toString()),
-                                  Text(list[index].um),
-                                ],
-                              ),
-                            ),
-                          );
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      TextField(
+                        onChanged: (e) {
+                          productSearch(e);
                         },
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.search),
+                          label: Text("Pesquisar Código / Descrição"),
+                        ),
                       ),
-                    ),
-                  ],
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: filterListProducts.length,
+                          itemBuilder: (context, index) {
+                            return Card(
+                              margin: const EdgeInsets.only(top: 10),
+                              child: ListTile(
+                                onTap: () {
+                                  Navigator.pop(context,
+                                      filterListProducts[index].codigo);
+                                },
+                                title:
+                                    Text(filterListProducts[index].descricao),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(filterListProducts[index].codigo),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                            'Tipo ${filterListProducts[index].tipo}'),
+                                        Text(
+                                            'Local ${filterListProducts[index].localPadrao}'),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                trailing: Column(
+                                  children: [
+                                    Text(filterListProducts[index]
+                                        .saldoAtual
+                                        .toString()),
+                                    Text(filterListProducts[index].um),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             }
@@ -91,5 +119,26 @@ class _ProductSearchPageState extends ConsumerState<ProductSearchPage> {
         ),
       ),
     );
+  }
+
+  void productSearch(String search) {
+    if (search.isNotEmpty) {
+      setState(() {
+        filterListProducts = listProducts.where((element) {
+          if (element.codigo.toUpperCase().contains(search.toUpperCase())) {
+            return true;
+          }
+
+          if (element.descricao.toUpperCase().contains(search.toUpperCase())) {
+            return true;
+          }
+          return false;
+        }).toList();
+      });
+    } else {
+      setState(() {
+        resetFilter = true;
+      });
+    }
   }
 }

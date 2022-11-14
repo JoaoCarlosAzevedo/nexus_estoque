@@ -28,6 +28,11 @@ class AppInterceptors extends Interceptor {
       options.headers['Authorization'] = 'Bearer $accessToken';
     }
 
+    //se for uma nova solicitacao de autenticacao, deleta os tokens anteriores
+    if (options.path.contains('oauth2/v1/token')) {
+      await _storage.deleteAll();
+    }
+
     return super.onRequest(options, handler);
   }
 

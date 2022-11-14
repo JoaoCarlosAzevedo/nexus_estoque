@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/features/address/data/model/product_address_model.dart';
-import 'package:nexus_estoque/features/address/data/repositories/product_address_repository.dart';
 import 'package:nexus_estoque/features/address/presentation/pages/address_list_page/cubit/product_address_cubit.dart';
 import 'package:nexus_estoque/features/address/presentation/pages/address_list_page/cubit/product_address_state.dart';
 
@@ -15,6 +14,10 @@ class AddressPage extends ConsumerStatefulWidget {
 }
 
 class _AddressPageState extends ConsumerState<AddressPage> {
+  List<ProductAddressModel> listProductAddress = [];
+  List<ProductAddressModel> filterList = [];
+  bool listReset = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,72 +29,108 @@ class _AddressPageState extends ConsumerState<AddressPage> {
         onRefresh: () async {
           context.read<ProductAddressCubit>().fetchProductAddress();
         },
-        child: BlocProvider(
-          create: (context) =>
-              ProductAddressCubit(ref.read(productAddressRepository)),
-          child: Padding(
-            //padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-            padding: const EdgeInsets.all(0),
-            child: Container(
-              padding: const EdgeInsets.all(10),
-              color: Theme.of(context).selectedRowColor,
-              child: Column(
-                children: [
-                  Expanded(
-                    child:
-                        BlocBuilder<ProductAddressCubit, ProductAddressState>(
-                      builder: (context, state) {
-                        if (state is ProductAddresInitial) {
-                          return const Center(
-                            child: Text("State Initital"),
-                          );
-                        }
-                        if (state is ProductAddressLoading) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
+        child: Padding(
+          //padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+          padding: const EdgeInsets.all(0),
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            color: Theme.of(context).selectedRowColor,
+            child: Column(
+              children: [
+                TextField(
+                  onChanged: (e) {
+                    search(e);
+                  },
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.search),
+                    label: Text("Pesquisar NF / Produto"),
+                  ),
+                ),
+                Expanded(
+                  child: BlocBuilder<ProductAddressCubit, ProductAddressState>(
+                    builder: (context, state) {
+                      if (state is ProductAddresInitial) {
+                        return const Center(
+                          child: Text("State Initital"),
+                        );
+                      }
+                      if (state is ProductAddressLoading) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+
+                      if (state is ProductAddressError) {
+                        return Center(
+                          child: Text(state.failure.error),
+                        );
+                      }
+                      if (state is ProductAddressLoaded) {
+                        if (listReset) {
+                          filterList = state.productAddresList;
+                          listReset = false;
                         }
 
-                        if (state is ProductAddressError) {
-                          return Center(
-                            child: Text(state.failure.error),
+                        listProductAddress = state.productAddresList;
+
+                        if (filterList.isEmpty) {
+                          return const Center(
+                            child: Text("Nenhum registro encontrado."),
                           );
                         }
-                        if (state is ProductAddressLoaded) {
-                          final list = state.productAddresList;
-                          if (list.isEmpty) {
-                            return const Center(
-                              child: Text("Nenhum registro encontrado."),
+                        return ListView.builder(
+                          itemCount: filterList.length,
+                          itemBuilder: (context, index) {
+                            return AddressCard(
+                              data: filterList[index],
+                              onTap: () {
+                                /*   Navigator.pushNamed(
+                                    context, '/enderecar/form',
+                                    arguments: list[index]); */
+                                context.push('/enderecar/form/',
+                                    extra: filterList[index]);
+                              },
                             );
-                          }
-                          return ListView.builder(
-                            itemCount: list.length,
-                            itemBuilder: (context, index) {
-                              return AddressCard(
-                                data: list[index],
-                                onTap: () {
-                                  /*   Navigator.pushNamed(
-                                      context, '/enderecar/form',
-                                      arguments: list[index]); */
-                                  context.push('/enderecar/form/',
-                                      extra: list[index]);
-                                },
-                              );
-                            },
-                          );
-                        }
-                        return const Text("Error State");
-                      },
-                    ),
-                  )
-                  //Divider(),
-                ],
-              ),
+                          },
+                        );
+                      }
+                      return const Text("Error State");
+                    },
+                  ),
+                )
+                //Divider(),
+              ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  void search(String search) {
+    if (search.isNotEmpty) {
+      setState(() {
+        filterList = listProductAddress.where((element) {
+          if (element.notafiscal.toUpperCase().contains(search.toUpperCase())) {
+            return true;
+          }
+
+          if (element.codigo.toUpperCase().contains(search.toUpperCase())) {
+            return true;
+          }
+
+          if (element.descricao.toUpperCase().contains(search.toUpperCase())) {
+            return true;
+          }
+
+          return false;
+        }).toList();
+      });
+    } else {
+      setState(() {
+        listReset = true;
+      });
+    }
   }
 }
 
@@ -108,6 +147,7 @@ class AddressCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: const EdgeInsets.only(top: 10),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListTile(
@@ -154,7 +194,7 @@ class AddressCard extends StatelessWidget {
                           "${data.saldo}",
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.titleMedium,
+                          style: Theme.of(context).textTheme.bodyLarge,
                         )
                       ],
                     ),
@@ -173,11 +213,22 @@ class AddressCard extends StatelessWidget {
                           "Fornecedor",
                           style: Theme.of(context).textTheme.caption,
                         ),
-                        Text(
-                          data.fornecedor,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.titleMedium,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              data.fornecedor,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            Text(
+                              'NF: ${data.notafiscal}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ],
                         )
                       ],
                     ),

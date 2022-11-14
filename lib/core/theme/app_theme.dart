@@ -138,7 +138,10 @@ class AppTheme {
       subtitle1: TextStyle(
           fontSize: 14.0, fontFamily: 'Nunito Sans', color: AppColors.grey),
       caption: TextStyle(
-          fontSize: 12.0, fontFamily: 'Nunito Sans', color: AppColors.grey),
+          fontSize: 12.0,
+          fontFamily: 'Nunito Sans',
+          color: AppColors.grey,
+          fontWeight: FontWeight.bold),
     );
   }
 }
