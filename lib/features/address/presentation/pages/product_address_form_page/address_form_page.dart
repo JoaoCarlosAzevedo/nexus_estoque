@@ -1,7 +1,9 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nexus_estoque/core/pages/searches/address/page/address_search_page.dart';
 import 'package:nexus_estoque/core/theme/app_colors.dart';
 import 'package:nexus_estoque/features/address/data/model/product_address_model.dart';
 import 'package:nexus_estoque/features/address/data/repositories/product_address_repository.dart';
@@ -11,15 +13,15 @@ import 'package:nexus_estoque/features/address/presentation/pages/product_addres
 import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer_form/widgets/input_quantity.dart';
 import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer_form/widgets/input_text.dart';
 
-class AddressForm extends StatefulWidget {
+class AddressForm extends ConsumerStatefulWidget {
   const AddressForm({super.key, required this.productAddress});
   final ProductAddressModel productAddress;
 
   @override
-  State<AddressForm> createState() => _AddressFormState();
+  ConsumerState<AddressForm> createState() => _AddressFormState();
 }
 
-class _AddressFormState extends State<AddressForm> {
+class _AddressFormState extends ConsumerState<AddressForm> {
   final TextEditingController addressController = TextEditingController();
   final TextEditingController quantityController =
       TextEditingController(text: '0');
@@ -39,7 +41,7 @@ class _AddressFormState extends State<AddressForm> {
       ),
       body: BlocProvider(
         create: (context) =>
-            ProductAddressFormCubit(ProductAddressRepository()),
+            ProductAddressFormCubit(ref.read(productAddressRepository)),
         child: BlocListener<ProductAddressFormCubit, ProductAddressFormState>(
           listener: (context, state) {
             if (state is ProductAddressFormValidation) {
@@ -87,16 +89,7 @@ class _AddressFormState extends State<AddressForm> {
                             label: "Endereço",
                             enabled: true,
                             onPressed: () async {
-                              /*     final result = await Navigator.pushNamed( */
-                              /*         context, '/enderecos', */
-                              /*         arguments: widget.productAddress.armazem);  */
-                              context.push(
-                                  '/enderecos/${widget.productAddress.armazem}');
-                              /*  if (result != null) {
-                                addressController.text = result as String;
-                              } else {
-                                addressController.clear();
-                              } */
+                              addressSearchPage();
                             },
                             onSubmitted: () {},
                             focus: FocusNode(),
@@ -134,5 +127,22 @@ class _AddressFormState extends State<AddressForm> {
         ),
       ),
     );
+  }
+
+  void addressSearchPage() async {
+    final String? result = await showModalBottomSheet<dynamic>(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return FractionallySizedBox(
+            heightFactor: 0.9,
+            child: AddressSearchPage(
+              warehouse: widget.productAddress.armazem,
+            ));
+      },
+    );
+    if (result != null) {
+      addressController.text = result;
+    }
   }
 }

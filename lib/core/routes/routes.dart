@@ -24,21 +24,22 @@ final routerProvider = Provider<GoRouter>((ref) {
       redirect: (context, state) {
         //final isAuthenticated = authService.isAuthenticated;
         final loginState = ref.read(loginControllerProvider);
-        final isLoginRoute = state.subloc == '/';
+        final isLoginRoute = state.subloc == '/login';
 
         if (loginState is LoginStateInitial) {
-          return isLoginRoute ? null : '/';
+          return isLoginRoute ? null : '/login';
         }
 
-        if (isLoginRoute) return '/menu';
+        if (isLoginRoute) return '/';
 
         return null;
       },
       errorBuilder: (context, state) =>
           DefaultPage(title: state.error.toString()),
       routes: [
-        GoRoute(path: "/", builder: ((context, state) => const LoginPage())),
-        GoRoute(path: "/menu", builder: ((context, state) => const MenuPage())),
+        GoRoute(
+            path: "/login", builder: ((context, state) => const LoginPage())),
+        GoRoute(path: "/", builder: ((context, state) => const MenuPage())),
         GoRoute(
             path: "/enderecar",
             builder: ((context, state) => const AddressPage())),

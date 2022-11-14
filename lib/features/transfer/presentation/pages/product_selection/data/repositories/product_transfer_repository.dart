@@ -1,16 +1,22 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/constants/config.dart';
 import 'package:nexus_estoque/core/constants/dio_config.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
+import 'package:nexus_estoque/core/http/http_provider.dart';
+
+final productTransferRepository = Provider<ProductTransferRepository>(
+    (ref) => ProductTransferRepository(ref));
 
 class ProductTransferRepository {
   late Dio dio;
   final String url = Config.baseURL!;
   final options = DioConfig.dioBaseOption;
+  final Ref _ref;
 
-  ProductTransferRepository() {
-    dio = Dio(options);
+  ProductTransferRepository(this._ref) {
+    dio = _ref.read(httpProvider).dioInstance;
   }
 
   Future<Either<Failure, String>> postTransfer(String json) async {

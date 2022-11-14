@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:nexus_estoque/core/constants/config.dart';
 import 'package:nexus_estoque/core/constants/dio_config.dart';
@@ -16,6 +17,7 @@ class AuthRepository {
   //late Dio dio;
   final String url = Config.baseURL!;
   final options = DioConfig.dioBaseOption;
+  final _storage = const FlutterSecureStorage();
 
   AuthRepository(this._ref) {
     //dio = Dio(options);
@@ -23,14 +25,9 @@ class AuthRepository {
 
   Future<Either<Failure, User>> auth(String username, String password) async {
     late dynamic response;
-    final dio = _ref.read(httpProvider);
+    final dio = _ref.read(httpProvider).dioInstance;
     try {
-/*       response = await dio.post('$url/api/oauth2/v1/token', queryParameters: {
-        'username': username,
-        'password': password,
-        'grant_type': "password"
-      }); */
-      response = await dio.post('/api/oauth2/v1/token', '', query: {
+      response = await dio.post('$url/api/oauth2/v1/token', queryParameters: {
         'username': username,
         'password': password,
         'grant_type': "password"
@@ -38,7 +35,9 @@ class AuthRepository {
 
       if (response.statusCode == 201) {
         final user = User.fromMap(response.data);
-/* 
+
+        await _storage.write(key: 'access_token', value: user.accessToken);
+        await _storage.write(key: 'refresh_token', value: user.refreshToken);
 
         Map<String, dynamic> decodedToken = JwtDecoder.decode(user.accessToken);
         final String userId = decodedToken['userid'];
@@ -52,9 +51,7 @@ class AuthRepository {
           user.userName = r['userName'];
           user.displayName = r['displayName'];
           return Right(user);
-        }); */
-
-        return Right(user);
+        });
       }
       return const Left(Failure("Server Error!", ErrorType.exception));
     } on DioError catch (e) {
@@ -76,8 +73,9 @@ class AuthRepository {
     }
   }
 
-  /*  Future<Either<Failure, Map<String, dynamic>>> getUser(String userId) async {
+  Future<Either<Failure, Map<String, dynamic>>> getUser(String userId) async {
     late dynamic response;
+    final dio = _ref.read(httpProvider).dioInstance;
     try {
       response = await dio.get('$url/api/framework/v1/users/$userId');
 
@@ -90,7 +88,6 @@ class AuthRepository {
         'displayName': response.data['displayName']
       });
     } on DioError catch (e) {
-      log('getUser ${e.type.name}');
       if (e.type.name == "connectTimeout") {
         return const Left(Failure("Tempo Excedido", ErrorType.timeout));
       }
@@ -99,5 +96,5 @@ class AuthRepository {
       }
       return const Left(Failure("Server Error!", ErrorType.exception));
     }
-  } */
+  }
 }

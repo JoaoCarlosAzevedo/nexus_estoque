@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/data/repositories/product_balance_repository.dart';
 import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_selection/cubit/product_balance_cubit.dart';
 import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_transfer_form/product_transfer_form_page.dart';
 
-class ProductSelectionForm extends StatefulWidget {
+class ProductSelectionForm extends ConsumerStatefulWidget {
   final String barcode;
   const ProductSelectionForm({super.key, required this.barcode});
 
   @override
-  State<ProductSelectionForm> createState() => _ProductSelectionFormState();
+  ConsumerState<ProductSelectionForm> createState() =>
+      _ProductSelectionFormState();
 }
 
-class _ProductSelectionFormState extends State<ProductSelectionForm> {
+class _ProductSelectionFormState extends ConsumerState<ProductSelectionForm> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          ProductBalanceCubit(ProductBalanceRepository(), widget.barcode),
+      create: (context) => ProductBalanceCubit(
+          ref.read(productBalanceRepository), widget.barcode),
       child: BlocBuilder<ProductBalanceCubit, ProductBalanceCubitState>(
         builder: (context, state) {
           if (state is ProductBalanceCubitLoading) {

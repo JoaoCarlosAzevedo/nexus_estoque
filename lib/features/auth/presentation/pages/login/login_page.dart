@@ -44,12 +44,29 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         child: BlocBuilder<AuthCubit, AuthState>(
           builder: (context, state) {
             final cubit = BlocProvider.of<AuthCubit>(context);
+            print(state);
             if (state is AuthLoading) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }
 
+            if (state is AuthInitial) {
+              return LoginForm(
+                userController: userController,
+                passwordController: passwordController,
+                onPressed: () {
+                  cubit.login(userController.text, passwordController.text);
+                },
+              );
+            }
+
+            /*  if (state is AuthLoaded) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+ */
             return LoginForm(
               userController: userController,
               passwordController: passwordController,

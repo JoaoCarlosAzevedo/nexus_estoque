@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/features/address/data/model/product_address_model.dart';
 import 'package:nexus_estoque/features/address/data/repositories/product_address_repository.dart';
 import 'package:nexus_estoque/features/address/presentation/pages/address_list_page/cubit/product_address_cubit.dart';
 import 'package:nexus_estoque/features/address/presentation/pages/address_list_page/cubit/product_address_state.dart';
 
-class AddressPage extends StatefulWidget {
+class AddressPage extends ConsumerStatefulWidget {
   const AddressPage({super.key});
 
   @override
-  State<AddressPage> createState() => _AddressPageState();
+  ConsumerState<AddressPage> createState() => _AddressPageState();
 }
 
-class _AddressPageState extends State<AddressPage> {
+class _AddressPageState extends ConsumerState<AddressPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +27,8 @@ class _AddressPageState extends State<AddressPage> {
           context.read<ProductAddressCubit>().fetchProductAddress();
         },
         child: BlocProvider(
-          create: (context) => ProductAddressCubit(ProductAddressRepository()),
+          create: (context) =>
+              ProductAddressCubit(ref.read(productAddressRepository)),
           child: Padding(
             //padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
             padding: const EdgeInsets.all(0),

@@ -2,20 +2,25 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/constants/config.dart';
 import 'package:nexus_estoque/core/constants/dio_config.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
+import 'package:nexus_estoque/core/http/http_provider.dart';
 
 import '../model/product_address_model.dart';
+
+final productAddressRepository =
+    Provider<ProductAddressRepository>((ref) => ProductAddressRepository(ref));
 
 class ProductAddressRepository {
   late Dio dio;
   final String url = Config.baseURL!;
-
+  final Ref _ref;
   final options = DioConfig.dioBaseOption;
 
-  ProductAddressRepository() {
-    dio = Dio(options);
+  ProductAddressRepository(this._ref) {
+    dio = _ref.read(httpProvider).dioInstance;
   }
 
   Future<Either<Failure, List<ProductAddressModel>>>

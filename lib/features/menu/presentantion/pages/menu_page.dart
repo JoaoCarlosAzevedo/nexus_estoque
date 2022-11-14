@@ -5,7 +5,6 @@ import 'package:nexus_estoque/core/constants/menus.dart';
 import 'package:nexus_estoque/features/auth/presentation/pages/login/cubit/auth_cubit.dart';
 import 'package:nexus_estoque/features/auth/providers/login_controller_provider.dart';
 import 'package:nexus_estoque/features/menu/presentantion/pages/widgets/menu_card_widget.dart';
-import 'package:rive/rive.dart';
 
 class MenuPage extends ConsumerWidget {
   const MenuPage({
@@ -44,8 +43,8 @@ class MenuPage extends ConsumerWidget {
         actions: [
           IconButton(
               onPressed: () {
-                //authCubit.logout();
                 ref.read(loginControllerProvider.notifier).logout();
+                authCubit.logout();
               },
               icon: const Icon(Icons.logout))
         ],
@@ -60,7 +59,7 @@ class MenuPage extends ConsumerWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Text('Olá, ${user.displayName}'),
               ),
-              const Expanded(
+              /*   const Expanded(
                 flex: 1,
                 child: Card(
                   elevation: 5,
@@ -71,7 +70,7 @@ class MenuPage extends ConsumerWidget {
                     ),
                   ),
                 ),
-              ),
+              ), */
               const SizedBox(
                 height: 15,
               ),

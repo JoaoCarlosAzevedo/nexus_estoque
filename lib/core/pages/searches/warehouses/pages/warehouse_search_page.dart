@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/pages/searches/warehouses/cubit/products_search_cubit.dart';
 import 'package:nexus_estoque/core/pages/searches/warehouses/cubit/products_search_state.dart';
 import 'package:nexus_estoque/core/pages/searches/warehouses/data/repositories/product_search_repository.dart';
 
-class WarehouseSearchPage extends StatefulWidget {
+class WarehouseSearchPage extends ConsumerStatefulWidget {
   const WarehouseSearchPage({super.key});
 
   @override
-  State<WarehouseSearchPage> createState() => _WarehouseSearchPageState();
+  ConsumerState<WarehouseSearchPage> createState() =>
+      _WarehouseSearchPageState();
 }
 
-class _WarehouseSearchPageState extends State<WarehouseSearchPage> {
+class _WarehouseSearchPageState extends ConsumerState<WarehouseSearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +22,8 @@ class _WarehouseSearchPageState extends State<WarehouseSearchPage> {
         centerTitle: true,
       ),
       body: BlocProvider<WarehouseSearchCubit>(
-        create: (context) => WarehouseSearchCubit(WarehouseSearchRepository()),
+        create: (context) =>
+            WarehouseSearchCubit(ref.read(warehouseSearchRepository)),
         child: BlocBuilder<WarehouseSearchCubit, WarehouseSearchState>(
           builder: (context, state) {
             if (state is WarehouseSearchLoading) {

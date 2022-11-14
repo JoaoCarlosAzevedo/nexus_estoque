@@ -3,20 +3,24 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/constants/config.dart';
-import 'package:nexus_estoque/core/constants/dio_config.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
+import 'package:nexus_estoque/core/http/http_provider.dart';
 import 'package:nexus_estoque/core/pages/searches/products/data/model/product_search_model.dart';
+
+final productSearchRepository =
+    Provider<ProductSearchRepository>((ref) => ProductSearchRepository(ref));
 
 class ProductSearchRepository {
   late Dio dio;
   final String url = Config.baseURL!;
-  final options = DioConfig.dioBaseOption;
+  final Ref _ref;
   late DioCacheManager dioCacheManager;
   late Options cacheOptions;
 
-  ProductSearchRepository() {
-    dio = Dio(options);
+  ProductSearchRepository(this._ref) {
+    dio = _ref.read(httpProvider).dioInstance;
     dioCacheManager = DioCacheManager(CacheConfig());
     cacheOptions = buildCacheOptions(const Duration(days: 7));
     dio.interceptors.add(dioCacheManager.interceptor);

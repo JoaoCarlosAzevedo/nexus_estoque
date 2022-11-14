@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nexus_estoque/core/pages/searches/products/pages/products_search_page.dart';
 
 class ProductSelectionPage extends StatefulWidget {
   const ProductSelectionPage({super.key});
@@ -63,13 +64,7 @@ class _ProductSelectionPageState extends State<ProductSelectionPage> {
                         prefixIcon: const Icon(Icons.qr_code),
                         suffixIcon: IconButton(
                           onPressed: () async {
-                            final result =
-                                await Navigator.pushNamed(context, '/produtos');
-                            if (result != null) {
-                              controller.text = result as String;
-                            } else {
-                              controller.clear();
-                            }
+                            productSearchPage();
                           },
                           icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
                         ),
@@ -100,7 +95,22 @@ class _ProductSelectionPageState extends State<ProductSelectionPage> {
   }
 
   void loadProduct(String barcode) {
-    //Navigator.pushNamed(context, '/produtos/saldos', arguments: barcode);
-    context.go('/produtos/saldos/$barcode');
+    context.push('/produtos/saldos/$barcode');
+  }
+
+  void productSearchPage() async {
+    final String? result = await showModalBottomSheet<dynamic>(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return const FractionallySizedBox(
+          heightFactor: 0.9,
+          child: ProductSearchPage(),
+        );
+      },
+    );
+    if (result != null) {
+      controller.text = result;
+    }
   }
 }
