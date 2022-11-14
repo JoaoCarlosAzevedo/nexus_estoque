@@ -6,23 +6,31 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:nexus_estoque/core/constants/config.dart';
 import 'package:nexus_estoque/core/constants/dio_config.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
+import 'package:nexus_estoque/core/http/http_provider.dart';
 import 'package:nexus_estoque/features/auth/model/user_model.dart';
 
-final authRepository = Provider<AuthRepository>((ref) => AuthRepository());
+final authRepository = Provider<AuthRepository>((ref) => AuthRepository(ref));
 
 class AuthRepository {
-  late Dio dio;
+  final Ref _ref;
+  //late Dio dio;
   final String url = Config.baseURL!;
   final options = DioConfig.dioBaseOption;
 
-  AuthRepository() {
-    dio = Dio(options);
+  AuthRepository(this._ref) {
+    //dio = Dio(options);
   }
 
   Future<Either<Failure, User>> auth(String username, String password) async {
     late dynamic response;
+    final dio = _ref.read(httpProvider);
     try {
-      response = await dio.post('$url/api/oauth2/v1/token', queryParameters: {
+/*       response = await dio.post('$url/api/oauth2/v1/token', queryParameters: {
+        'username': username,
+        'password': password,
+        'grant_type': "password"
+      }); */
+      response = await dio.post('/api/oauth2/v1/token', '', query: {
         'username': username,
         'password': password,
         'grant_type': "password"
@@ -68,7 +76,7 @@ class AuthRepository {
     }
   }
 
-  Future<Either<Failure, Map<String, dynamic>>> getUser(String userId) async {
+  /*  Future<Either<Failure, Map<String, dynamic>>> getUser(String userId) async {
     late dynamic response;
     try {
       response = await dio.get('$url/api/framework/v1/users/$userId');
@@ -91,5 +99,5 @@ class AuthRepository {
       }
       return const Left(Failure("Server Error!", ErrorType.exception));
     }
-  }
+  } */
 }

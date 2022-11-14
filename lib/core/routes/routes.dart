@@ -17,7 +17,6 @@ import 'package:nexus_estoque/features/transfer/presentation/pages/product_selec
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authService = RouterNotifier(ref);
-
   return GoRouter(
       debugLogDiagnostics: true,
       initialLocation: '/',

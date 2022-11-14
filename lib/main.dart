@@ -22,7 +22,7 @@ class NexusEstoque extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final routes = ref.watch(routerProvider);
     return BlocProvider(
-      create: (context) => AuthCubit(AuthRepository()),
+      create: (context) => AuthCubit(ref.read(authRepository)),
       child: MaterialApp.router(
         theme: AppTheme.defaultTheme,
         debugShowCheckedModeBanner: false,
