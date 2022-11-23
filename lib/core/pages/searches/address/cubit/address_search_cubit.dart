@@ -13,6 +13,10 @@ class AddressSearchCubit extends Cubit<AddressSearchState> {
   ) : super(AddressSearchInitial()) {
     fetchAddress(warehouse);
   }
+  void cleanCache() {
+    repository.cleanCache();
+    fetchAddress(warehouse);
+  }
 
   Future<void> fetchAddress(String warehouse) async {
     emit(AddressSearchLoading());

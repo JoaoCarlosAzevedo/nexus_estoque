@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nexus_estoque/core/pages/searches/address/page/address_search_page.dart';
 import 'package:nexus_estoque/core/theme/app_colors.dart';
@@ -34,6 +35,16 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
   final FocusNode destWarehouseFocus = FocusNode();
   final FocusNode origAddressFocus = FocusNode();
   final FocusNode destAddressFocus = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    origAddressFocus.requestFocus();
+    Future.delayed(
+      const Duration(milliseconds: 300),
+      () => SystemChannels.textInput.invokeMethod('TextInput.hide'),
+    );
+  }
 
   @override
   void dispose() {
@@ -148,28 +159,6 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
                           ),
                         ),
                         const Divider(),
-                        /*      InputText(
-                          label: "Local",
-                          focus: destWarehouseFocus,
-                          controller: destWarehouseController,
-                          enabled: false,
-                          onPressed: () async {
-                            final Armazem result = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => WarehouseBalanceSearch(
-                                        warehouseBalances:
-                                            widget.productDetail.armazem,
-                                      )),
-                            );
-
-                            origWarehouseController.text = result.armz;
-                          },
-                          onSubmitted: () {},
-                        ), */
-                        /*  const SizedBox(
-                          height: 20,
-                        ), */
                         InputText(
                           label: "Endereços",
                           focus: destAddressFocus,
@@ -246,7 +235,7 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
     if (result != null) {
       final tapedAddress = result as Enderecos;
       origAddressController.text = tapedAddress.codLocalizacao;
-      destAddressController.text = tapedAddress.codLocalizacao;
+      //destAddressController.text = tapedAddress.codLocalizacao;
     }
   }
 

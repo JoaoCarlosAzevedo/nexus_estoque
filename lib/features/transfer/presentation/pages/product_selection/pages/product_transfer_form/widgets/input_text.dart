@@ -8,16 +8,18 @@ class InputText extends StatefulWidget {
   final void Function() onPressed;
   final void Function() onSubmitted;
   final FocusNode focus;
+  final bool autoFocus;
 
-  const InputText({
-    Key? key,
-    required this.controller,
-    required this.label,
-    required this.enabled,
-    required this.onPressed,
-    required this.onSubmitted,
-    required this.focus,
-  }) : super(key: key);
+  const InputText(
+      {Key? key,
+      required this.controller,
+      required this.label,
+      required this.enabled,
+      required this.onPressed,
+      required this.onSubmitted,
+      required this.focus,
+      this.autoFocus = false})
+      : super(key: key);
 
   @override
   State<InputText> createState() => _InputTextState();
@@ -28,7 +30,7 @@ class _InputTextState extends State<InputText> {
   Widget build(BuildContext context) {
     return TextField(
       enabled: widget.enabled,
-      autofocus: false,
+      autofocus: widget.autoFocus,
       focusNode: widget.focus,
       controller: widget.controller,
       onSubmitted: (e) {

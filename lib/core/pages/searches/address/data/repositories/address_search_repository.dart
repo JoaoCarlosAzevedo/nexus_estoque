@@ -20,6 +20,8 @@ class AddressSearchRepository {
     dio = _ref.read(httpProvider).dioInstance;
   }
 
+  void cleanCache() async {}
+
   Future<Either<Failure, List<AddressModel>>> fetchAddress(
       String warehouse) async {
     late dynamic response;
@@ -46,7 +48,7 @@ class AddressSearchRepository {
       }).toList();
 
       return Right(listAddress
-          .where((element) => element.codigoEndereco.contains(warehouse))
+          .where((element) => element.local.contains(warehouse))
           .toList());
     } on DioError catch (e) {
       log(e.type.name);

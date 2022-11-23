@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -25,6 +26,16 @@ class _AddressFormState extends ConsumerState<AddressForm> {
   final TextEditingController addressController = TextEditingController();
   final TextEditingController quantityController =
       TextEditingController(text: '0');
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(
+      const Duration(milliseconds: 300),
+      () => SystemChannels.textInput.invokeMethod('TextInput.hide'),
+    );
+  }
+
   @override
   void dispose() {
     addressController.dispose();
@@ -85,6 +96,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                       child: Column(
                         children: [
                           InputText(
+                            autoFocus: true,
                             controller: addressController,
                             label: "Endereço",
                             enabled: true,

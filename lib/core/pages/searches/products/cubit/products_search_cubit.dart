@@ -17,7 +17,7 @@ class ProductsSearchCubit extends Cubit<ProductsSearchState> {
   Future<void> fetchProducts() async {
     emit(ProductsSearchLoading());
 
-    final result = await repository.fetchAddress();
+    final result = await repository.fetchProducts();
 
     if (result.isRight()) {
       result.fold((l) => null, (r) {

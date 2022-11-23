@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/core/pages/searches/products/pages/products_search_page.dart';
@@ -12,6 +13,15 @@ class ProductSelectionPage extends StatefulWidget {
 
 class _ProductSelectionPageState extends State<ProductSelectionPage> {
   final TextEditingController controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(
+      const Duration(milliseconds: 300),
+      () => SystemChannels.textInput.invokeMethod('TextInput.hide'),
+    );
+  }
 
   @override
   void dispose() {
@@ -57,9 +67,11 @@ class _ProductSelectionPageState extends State<ProductSelectionPage> {
                   Expanded(
                     child: TextField(
                       enabled: true,
-                      autofocus: false,
+                      autofocus: true,
                       controller: controller,
-                      onSubmitted: (e) {},
+                      onSubmitted: (e) {
+                        loadProduct(e);
+                      },
                       decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.qr_code),
                         suffixIcon: IconButton(

@@ -46,9 +46,7 @@ class _AddressSearchPageState extends ConsumerState<AddressSearchPage> {
               final list = state.addressess;
               return RefreshIndicator(
                 onRefresh: () async {
-                  context
-                      .read<AddressSearchCubit>()
-                      .fetchAddress(widget.warehouse);
+                  context.read<AddressSearchCubit>().cleanCache();
                 },
                 child: Column(
                   children: [
@@ -75,7 +73,7 @@ class _AddressSearchPageState extends ConsumerState<AddressSearchPage> {
               );
             }
             return const Center(
-              child: Text("aaa"),
+              child: Text("Erro ao carregar dados"),
             );
           },
         ),

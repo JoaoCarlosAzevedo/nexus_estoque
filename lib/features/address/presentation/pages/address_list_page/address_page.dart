@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -17,6 +18,15 @@ class _AddressPageState extends ConsumerState<AddressPage> {
   List<ProductAddressModel> listProductAddress = [];
   List<ProductAddressModel> filterList = [];
   bool listReset = true;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(
+      const Duration(milliseconds: 300),
+      () => SystemChannels.textInput.invokeMethod('TextInput.hide'),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +48,7 @@ class _AddressPageState extends ConsumerState<AddressPage> {
             child: Column(
               children: [
                 TextField(
+                  autofocus: true,
                   onChanged: (e) {
                     search(e);
                   },
