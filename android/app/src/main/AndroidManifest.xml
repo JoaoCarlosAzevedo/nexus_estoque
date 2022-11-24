@@ -2,7 +2,7 @@
     package="com.example.nexus_estoque">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="nexus_estoque"
+        android:label="Nexus Estoque"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
