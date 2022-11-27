@@ -41,7 +41,7 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
     super.initState();
     origAddressFocus.requestFocus();
     Future.delayed(
-      const Duration(milliseconds: 300),
+      const Duration(milliseconds: 500),
       () => SystemChannels.textInput.invokeMethod('TextInput.hide'),
     );
   }

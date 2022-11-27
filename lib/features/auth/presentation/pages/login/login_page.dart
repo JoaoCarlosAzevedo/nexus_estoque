@@ -14,9 +14,10 @@ class LoginPage extends ConsumerStatefulWidget {
 }
 
 class _LoginPageState extends ConsumerState<LoginPage> {
-  final TextEditingController userController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  //final AuthRepository repository = AuthRepository(ref);
+  final TextEditingController userController =
+      TextEditingController(text: "JOAO.NEXUS");
+  final TextEditingController passwordController =
+      TextEditingController(text: "Skate102030");
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +45,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         child: BlocBuilder<AuthCubit, AuthState>(
           builder: (context, state) {
             final cubit = BlocProvider.of<AuthCubit>(context);
-            print(state);
+
             if (state is AuthLoading) {
               return const Center(
                 child: CircularProgressIndicator(),
@@ -61,12 +62,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               );
             }
 
-            /*  if (state is AuthLoaded) {
+            if (state is AuthLoaded) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }
- */
+
             return LoginForm(
               userController: userController,
               passwordController: passwordController,

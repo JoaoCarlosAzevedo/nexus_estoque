@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/core/pages/searches/address/page/address_search_page.dart';
 import 'package:nexus_estoque/core/theme/app_colors.dart';
 import 'package:nexus_estoque/features/address/data/model/product_address_model.dart';
@@ -31,7 +30,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
   void initState() {
     super.initState();
     Future.delayed(
-      const Duration(milliseconds: 300),
+      const Duration(milliseconds: 500),
       () => SystemChannels.textInput.invokeMethod('TextInput.hide'),
     );
   }
@@ -46,6 +45,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: AppColors.background,
         title: const Text("Endereçamento"),

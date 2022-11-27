@@ -17,13 +17,13 @@ class AddressPage extends ConsumerStatefulWidget {
 class _AddressPageState extends ConsumerState<AddressPage> {
   List<ProductAddressModel> listProductAddress = [];
   List<ProductAddressModel> filterList = [];
-  bool listReset = true;
+  final TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     Future.delayed(
-      const Duration(milliseconds: 300),
+      const Duration(milliseconds: 500),
       () => SystemChannels.textInput.invokeMethod('TextInput.hide'),
     );
   }
@@ -31,6 +31,7 @@ class _AddressPageState extends ConsumerState<AddressPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Endereçamento"),
         centerTitle: true,
@@ -48,9 +49,16 @@ class _AddressPageState extends ConsumerState<AddressPage> {
             child: Column(
               children: [
                 TextField(
+                  showCursor: true,
                   autofocus: true,
+                  controller: controller,
                   onChanged: (e) {
-                    search(e);
+                    setState(() {});
+                    //search(e);
+                  },
+                  onSubmitted: (e) {
+                    //search(e);
+                    setState(() {});
                   },
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.search),
@@ -77,12 +85,8 @@ class _AddressPageState extends ConsumerState<AddressPage> {
                         );
                       }
                       if (state is ProductAddressLoaded) {
-                        if (listReset) {
-                          filterList = state.productAddresList;
-                          listReset = false;
-                        }
-
                         listProductAddress = state.productAddresList;
+                        filterList = filter(controller.text);
 
                         if (filterList.isEmpty) {
                           return const Center(
@@ -90,14 +94,13 @@ class _AddressPageState extends ConsumerState<AddressPage> {
                           );
                         }
                         return ListView.builder(
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
                           itemCount: filterList.length,
                           itemBuilder: (context, index) {
                             return AddressCard(
                               data: filterList[index],
                               onTap: () {
-                                /*   Navigator.pushNamed(
-                                    context, '/enderecar/form',
-                                    arguments: list[index]); */
                                 context.push('/enderecar/form/',
                                     extra: filterList[index]);
                               },
@@ -118,30 +121,22 @@ class _AddressPageState extends ConsumerState<AddressPage> {
     );
   }
 
-  void search(String search) {
-    if (search.isNotEmpty) {
-      setState(() {
-        filterList = listProductAddress.where((element) {
-          if (element.notafiscal.toUpperCase().contains(search.toUpperCase())) {
-            return true;
-          }
+  List<ProductAddressModel> filter(String search) {
+    return listProductAddress.where((element) {
+      if (element.notafiscal.toUpperCase().contains(search.toUpperCase())) {
+        return true;
+      }
 
-          if (element.codigo.toUpperCase().contains(search.toUpperCase())) {
-            return true;
-          }
+      if (element.codigo.toUpperCase().contains(search.toUpperCase())) {
+        return true;
+      }
 
-          if (element.descricao.toUpperCase().contains(search.toUpperCase())) {
-            return true;
-          }
+      if (element.descricao.toUpperCase().contains(search.toUpperCase())) {
+        return true;
+      }
 
-          return false;
-        }).toList();
-      });
-    } else {
-      setState(() {
-        listReset = true;
-      });
-    }
+      return false;
+    }).toList();
   }
 }
 
@@ -271,4 +266,9 @@ class AddressCard extends StatelessWidget {
       ),
     );
   }
+}
+
+class AlwaysDisabledFocusNode extends FocusNode {
+  @override
+  bool get hasFocus => true;
 }

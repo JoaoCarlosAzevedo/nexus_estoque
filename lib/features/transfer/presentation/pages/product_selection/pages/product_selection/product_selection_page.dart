@@ -18,7 +18,7 @@ class _ProductSelectionPageState extends State<ProductSelectionPage> {
   void initState() {
     super.initState();
     Future.delayed(
-      const Duration(milliseconds: 300),
+      const Duration(milliseconds: 500),
       () => SystemChannels.textInput.invokeMethod('TextInput.hide'),
     );
   }
@@ -34,6 +34,7 @@ class _ProductSelectionPageState extends State<ProductSelectionPage> {
     final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Transferência"),
         centerTitle: true,
@@ -91,7 +92,10 @@ class _ProductSelectionPageState extends State<ProductSelectionPage> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  loadProduct(controller.text);
+                  if (controller.text.isNotEmpty) {
+                    loadProduct(controller.text);
+                    controller.clear();
+                  }
                 },
                 child: SizedBox(
                   height: height / 15,
