@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nexus_estoque/core/constants/config.dart';
 import 'package:nexus_estoque/features/auth/presentation/pages/login/cubit/auth_cubit.dart';
 import 'package:nexus_estoque/features/auth/presentation/pages/login/widgets/login_form.dart';
 import 'package:nexus_estoque/features/auth/providers/login_controller_provider.dart';
@@ -18,11 +19,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       TextEditingController(text: "JOAO.NEXUS");
   final TextEditingController passwordController =
       TextEditingController(text: "Skate102030");
+  final String env = Config.baseURL!;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(env),
+      ),
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthError) {
