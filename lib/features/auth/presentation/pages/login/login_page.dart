@@ -19,14 +19,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       TextEditingController(text: "JOAO.NEXUS");
   final TextEditingController passwordController =
       TextEditingController(text: "Skate102030");
-  final String env = Config.baseURL!;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(env),
-      ),
+      appBar: AppBar(),
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthError) {
