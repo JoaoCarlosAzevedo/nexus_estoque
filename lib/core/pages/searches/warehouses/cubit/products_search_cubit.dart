@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:nexus_estoque/core/pages/searches/warehouses/cubit/products_search_state.dart';
-import 'package:nexus_estoque/core/pages/searches/warehouses/data/repositories/product_search_repository.dart';
+import 'package:nexus_estoque/core/pages/searches/warehouses/data/repositories/warehouse_search_repository.dart';
 
 class WarehouseSearchCubit extends Cubit<WarehouseSearchState> {
   final WarehouseSearchRepository repository;

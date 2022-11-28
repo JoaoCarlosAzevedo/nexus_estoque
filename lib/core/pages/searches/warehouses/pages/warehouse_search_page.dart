@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/pages/searches/warehouses/cubit/products_search_cubit.dart';
 import 'package:nexus_estoque/core/pages/searches/warehouses/cubit/products_search_state.dart';
-import 'package:nexus_estoque/core/pages/searches/warehouses/data/repositories/product_search_repository.dart';
+import 'package:nexus_estoque/core/pages/searches/warehouses/data/repositories/warehouse_search_repository.dart';
 
 class WarehouseSearchPage extends ConsumerStatefulWidget {
   const WarehouseSearchPage({super.key});

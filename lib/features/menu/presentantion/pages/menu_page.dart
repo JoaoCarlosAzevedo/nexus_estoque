@@ -59,18 +59,6 @@ class MenuPage extends ConsumerWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Text('Olá, ${user.displayName}'),
               ),
-              /*   const Expanded(
-                flex: 1,
-                child: Card(
-                  elevation: 5,
-                  child: Center(
-                    child: RiveAnimation.asset(
-                      fit: BoxFit.scaleDown,
-                      'assets/inventory_app.riv',
-                    ),
-                  ),
-                ),
-              ), */
               const SizedBox(
                 height: 15,
               ),
