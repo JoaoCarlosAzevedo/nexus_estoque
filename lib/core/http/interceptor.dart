@@ -18,15 +18,15 @@ class AppInterceptors extends Interceptor {
       RequestOptions options, RequestInterceptorHandler handler) async {
     print('REQUEST[${options.method}] => PATH: ${options.path}');
 
+    //se for uma nova solicitacao de autenticacao, deleta os tokens anteriores
+    if (options.path.contains('oauth2/v1/token')) {
+      await _storage.deleteAll();
+    }
+
     accessToken ??= await _storage.read(key: 'access_token');
 
     if (!options.path.contains('oauth2/v1/token')) {
       options.headers['Authorization'] = 'Bearer $accessToken';
-    }
-
-    //se for uma nova solicitacao de autenticacao, deleta os tokens anteriores
-    if (options.path.contains('oauth2/v1/token')) {
-      await _storage.deleteAll();
     }
 
     return super.onRequest(options, handler);

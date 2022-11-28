@@ -9,6 +9,11 @@ import 'package:nexus_estoque/features/auth/presentation/pages/login/cubit/auth_
 
 void main() async {
   await dotenv.load(fileName: ".env");
+  //splashscreen
+  await Future.delayed(
+    const Duration(seconds: 1),
+    () => true,
+  );
 
   runApp(
     const ProviderScope(child: NexusEstoque()),
