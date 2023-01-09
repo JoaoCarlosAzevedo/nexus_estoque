@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/routes/routes.dart';
 import 'package:nexus_estoque/core/theme/app_theme.dart';
 import 'package:nexus_estoque/features/auth/data/repositories/auth_repository.dart';
-import 'package:nexus_estoque/features/auth/presentation/pages/login/cubit/auth_cubit.dart';
+import 'package:nexus_estoque/features/auth/pages/login/cubit/auth_cubit.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");

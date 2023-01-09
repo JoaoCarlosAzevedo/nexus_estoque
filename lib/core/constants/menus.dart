@@ -23,16 +23,17 @@ final List menuItens = [
   ),
   MenuItemInfo(
     title: "Transferências",
-    icon: FontAwesomeIcons.boxesPacking,
+    icon: FontAwesomeIcons.cartFlatbed,
     color: Colors.red,
     route: 'transferencias',
   ),
-/*   MenuItemInfo(
-    title: "Listagem Enderecos",
-    icon: FontAwesomeIcons.clipboardCheck,
+  MenuItemInfo(
+    title: "Movimentos Internos",
+    icon: FontAwesomeIcons.boxesPacking,
     color: Colors.red,
-    route: 'enderecos',
+    route: 'movimentos',
   ),
+  /*
   MenuItemInfo(
     title: "Listagem Produtos",
     icon: FontAwesomeIcons.clipboardCheck,

@@ -7,16 +7,17 @@ import 'package:nexus_estoque/core/pages/searches/products/pages/products_search
 import 'package:nexus_estoque/core/pages/searches/warehouses/pages/warehouse_search_page.dart';
 import 'package:nexus_estoque/features/address/data/model/product_address_model.dart';
 import 'package:nexus_estoque/features/address/data/repositories/product_address_repository.dart';
-import 'package:nexus_estoque/features/address/presentation/pages/address_list_page/address_page.dart';
-import 'package:nexus_estoque/features/address/presentation/pages/address_list_page/cubit/product_address_cubit.dart';
-import 'package:nexus_estoque/features/address/presentation/pages/product_address_form_page/address_form_page.dart';
-import 'package:nexus_estoque/features/auth/presentation/pages/login/login_page.dart';
+import 'package:nexus_estoque/features/address/pages/address_list_page/address_page.dart';
+import 'package:nexus_estoque/features/address/pages/address_list_page/cubit/product_address_cubit.dart';
+import 'package:nexus_estoque/features/address/pages/product_address_form_page/address_form_page.dart';
+import 'package:nexus_estoque/features/auth/pages/login/login_page.dart';
 import 'package:nexus_estoque/features/auth/providers/login_controller_provider.dart';
 import 'package:nexus_estoque/features/auth/providers/login_state.dart';
 import 'package:nexus_estoque/features/auth/providers/router_notifier.dart';
-import 'package:nexus_estoque/features/menu/presentantion/pages/menu_page.dart';
-import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_selection/product_transfer_page.dart';
-import 'package:nexus_estoque/features/transfer/presentation/pages/product_selection/pages/product_selection/product_selection_page.dart';
+import 'package:nexus_estoque/features/menu/presentation/pages/menu_page.dart';
+import 'package:nexus_estoque/features/transaction/pages/product_selection_transaction/product_selection_transaction_page.dart';
+import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_selection/product_selection_page.dart';
+import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_selection/product_transfer_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authService = RouterNotifier(ref);
@@ -61,7 +62,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         ),
         GoRoute(
             path: "/transferencias",
-            builder: ((context, state) => const ProductSelectionPage())),
+            builder: ((context, state) =>
+                const ProductSelectionTransferPage())),
         GoRoute(
             path: "/enderecos/:armazem",
             builder: ((context, state) {
@@ -84,6 +86,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/armazem",
             builder: ((context, state) => const WarehouseSearchPage())),
+        GoRoute(
+            path: "/movimentos",
+            builder: ((context, state) => const ProductSelectionTransaction())),
         GoRoute(
             path: "/configuracoes",
             builder: ((context, state) =>
