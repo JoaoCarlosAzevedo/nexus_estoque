@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/core/pages/searches/products/pages/products_search_page.dart';
-import 'package:nexus_estoque/features/transaction/pages/transaction_form_page/transaction_form_page.dart';
 
 class ProductSelectionTransaction extends StatefulWidget {
   const ProductSelectionTransaction({super.key});
@@ -96,12 +95,7 @@ class _ProductSelectionTransactionState
               ElevatedButton(
                 onPressed: () {
                   //context.push('/produtos/saldos/');
-
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const TransactionFormPage()),
-                  );
+                  context.push('/saldos/${controller.text}');
                 },
                 child: SizedBox(
                   height: height / 15,

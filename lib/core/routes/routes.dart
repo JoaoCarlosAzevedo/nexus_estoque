@@ -15,6 +15,7 @@ import 'package:nexus_estoque/features/auth/providers/login_controller_provider.
 import 'package:nexus_estoque/features/auth/providers/login_state.dart';
 import 'package:nexus_estoque/features/auth/providers/router_notifier.dart';
 import 'package:nexus_estoque/features/menu/presentation/pages/menu_page.dart';
+import 'package:nexus_estoque/features/transaction/pages/product_balance_page/product_balance_page.dart';
 import 'package:nexus_estoque/features/transaction/pages/product_selection_transaction/product_selection_transaction_page.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_selection/product_selection_page.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_selection/product_transfer_page.dart';
@@ -89,6 +90,14 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/movimentos",
             builder: ((context, state) => const ProductSelectionTransaction())),
+        GoRoute(
+            path: "/saldos/:barcode",
+            builder: ((context, state) {
+              final param = state.params['barcode'];
+              return ProductBalancePage(
+                barcode: param!,
+              );
+            })),
         GoRoute(
             path: "/configuracoes",
             builder: ((context, state) =>

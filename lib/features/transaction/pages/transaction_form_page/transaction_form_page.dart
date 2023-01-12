@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/data/model/product_balance_model.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form/widgets/input_quantity.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form/widgets/input_text.dart';
-import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form/widgets/produc_transfer_card.dart';
 
 class TransactionFormPage extends StatefulWidget {
   const TransactionFormPage({super.key});
