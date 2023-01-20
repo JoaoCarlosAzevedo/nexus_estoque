@@ -60,14 +60,14 @@ class AppTheme {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16.0),
           borderSide: const BorderSide(
-            width: 0,
-            color: AppColors.background,
+            width: 2,
+            color: AppColors.secondaryGrey,
           ),
         ),
         disabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16.0),
           borderSide: const BorderSide(
-            width: 0,
+            width: 2,
             color: AppColors.background,
           ),
         ),
@@ -85,10 +85,19 @@ class AppTheme {
         focusedBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(16)),
           borderSide: BorderSide(
-              width: 2, color: AppColors.grey, style: BorderStyle.solid),
+              width: 4, color: AppColors.grey, style: BorderStyle.solid),
+        ),
+        focusedErrorBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+          borderSide: BorderSide(width: 4, color: AppColors.primaryRed),
         ),
         labelStyle: const TextStyle(
             fontSize: 16.0,
+            fontFamily: 'Nunito Sans',
+            color: AppColors.grey,
+            fontWeight: FontWeight.normal),
+        floatingLabelStyle: const TextStyle(
+            fontSize: 20.0,
             fontFamily: 'Nunito Sans',
             color: AppColors.grey,
             fontWeight: FontWeight.normal),

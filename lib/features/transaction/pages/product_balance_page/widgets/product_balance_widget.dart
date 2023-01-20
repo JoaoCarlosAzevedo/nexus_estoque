@@ -27,13 +27,16 @@ class _ProductBalanceWidgetState extends State<ProductBalanceWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print("armaze: $warehouse  endereço: $address");
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ProductBalanceHeader(
             productBalance: widget.product,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextFormField(),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -45,25 +48,23 @@ class _ProductBalanceWidgetState extends State<ProductBalanceWidget> {
               }),
             ),
           ),
-          ProductBatchBalanceWidget(
-            productBalance: widget.product,
-            warehouseSelect: warehouse,
-            onSelect: ((value) => print(value)),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text("Endereços"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ProductAddressBalanceWidget(
+          if (widget.product.lote == 'L')
+            ProductBatchBalanceWidget(
               productBalance: widget.product,
               warehouseSelect: warehouse,
-              onSelect: ((value) => setState(() {
-                    address = value;
-                  })),
+              onSelect: ((value) => {}),
             ),
-          )
+          if (widget.product.localizacao == 'S')
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ProductAddressBalanceWidget(
+                productBalance: widget.product,
+                warehouseSelect: warehouse,
+                onSelect: ((value) => setState(() {
+                      address = value;
+                    })),
+              ),
+            )
         ],
       ),
     );

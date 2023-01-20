@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -16,7 +18,7 @@ class AppInterceptors extends Interceptor {
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    print('REQUEST[${options.method}] => PATH: ${options.path}');
+    log('REQUEST[${options.method}] => PATH: ${options.path}');
 
     //se for uma nova solicitacao de autenticacao, deleta os tokens anteriores
     if (options.path.contains('oauth2/v1/token')) {
@@ -34,15 +36,13 @@ class AppInterceptors extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    print(
-        'RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}');
+    log('RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}');
     return super.onResponse(response, handler);
   }
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) async {
-    print(
-        'ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}');
+    log('ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}');
 
     if (err.response?.statusCode == 401) {
       if (await _storage.containsKey(key: 'refresh_token')) {
@@ -78,7 +78,7 @@ class AppInterceptors extends Interceptor {
         'grant_type': 'refresh_token',
         'refresh_token': refreshToken,
       });
-      print("REFRESH_TOKEN[POST]");
+      log("REFRESH_TOKEN[POST]");
       //se atualizou o refreshtoken na api
       if (response.statusCode == 201) {
         accessToken = response.data["access_token"]; //talvez pasear aqui
