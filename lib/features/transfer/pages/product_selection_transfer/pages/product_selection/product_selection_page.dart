@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nexus_estoque/core/pages/searches/products/pages/products_search_page.dart';
+import 'package:nexus_estoque/core/features/searches/products/pages/products_search_page.dart';
 
 class ProductSelectionTransferPage extends StatefulWidget {
   const ProductSelectionTransferPage({super.key});
