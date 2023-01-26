@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/constants/config.dart';
+import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/core/features/searches/batches/data/model/batch_model.dart';
 import 'package:nexus_estoque/core/http/http_provider.dart';
 
@@ -16,7 +17,8 @@ class BatchRepository {
     dio = _ref.read(httpProvider).dioInstance;
   }
 
-  Future<List<BatchModel>> fetchBatches() async {
+  Future<List<BatchModel>> fetchBatches(
+      String product, String warehouse) async {
     late dynamic response;
     try {
       response = await dio.get('$url/lotes/', queryParameters: {
@@ -24,17 +26,21 @@ class BatchRepository {
         'filial': "01",
         'page': "1",
         'pageSize': "10000",
-        'produto': "45274905",
-        'armazem': "01",
+        'produto': product,
+        'armazem': warehouse,
       });
 
       if (response.statusCode != 200) {
-        //return const Left(Failure("Server Error!", ErrorType.exception));
-        throw Exception("Server Error!");
+        throw const Failure("Erro ao conectar!", ErrorType.exception);
       }
 
       if (response.data.isEmpty) {
-        throw Exception("Nenhum registro encontrado.");
+        throw const Failure("Nenhum registro encontrado.", ErrorType.exception);
+      }
+
+      if ((response.data['resultado'] as List).isEmpty) {
+        throw const Failure(
+            "Nenhum registro encontrado.", ErrorType.validation);
       }
 
       final batches = (response.data['resultado'] as List).map((item) {
@@ -43,7 +49,7 @@ class BatchRepository {
 
       return batches;
     } on DioError catch (e) {
-      throw Exception("Server Error!");
+      throw const Failure("Erro ao conectar!", ErrorType.exception);
     }
   }
 }

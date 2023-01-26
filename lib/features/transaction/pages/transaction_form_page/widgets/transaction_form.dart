@@ -109,7 +109,10 @@ class _TransactionFormState extends State<TransactionForm> with ValidationMixi {
       context: context,
       builder: (BuildContext context) {
         //return const WarehouseSearchPage();
-        return const BatchSearchPage();
+        return BatchSearchPage(
+          product: '45274905',
+          warehouse: '01',
+        );
       },
     );
 
