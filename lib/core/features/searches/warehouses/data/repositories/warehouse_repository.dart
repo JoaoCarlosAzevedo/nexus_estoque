@@ -7,22 +7,22 @@ import 'package:nexus_estoque/core/constants/config.dart';
 import 'package:nexus_estoque/core/constants/dio_config.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/core/http/http_provider.dart';
-import 'package:nexus_estoque/core/features/searches/warehouses/data/model/warehouse_search_model.dart';
+import 'package:nexus_estoque/core/features/searches/warehouses/data/model/warehouse_model.dart';
 
-final warehouseSearchRepository = Provider<WarehouseSearchRepository>(
-    (ref) => WarehouseSearchRepository(ref));
+final warehouseRepository =
+    Provider<WarehouseRepository>((ref) => WarehouseRepository(ref));
 
-class WarehouseSearchRepository {
+class WarehouseRepository {
   late Dio dio;
   final String url = Config.baseURL!;
   final options = DioConfig.dioBaseOption;
   final Ref _ref;
 
-  WarehouseSearchRepository(this._ref) {
+  WarehouseRepository(this._ref) {
     dio = _ref.read(httpProvider).dioInstance;
   }
 
-  Future<Either<Failure, List<WarehouseModel>>> fetchWarehouses() async {
+  Future<List<WarehouseModel>> fetchWarehouses() async {
     late dynamic response;
     try {
       response = await dio.get('$url/armazens/', queryParameters: {
@@ -31,11 +31,11 @@ class WarehouseSearchRepository {
       });
 
       if (response.statusCode != 200) {
-        return const Left(Failure("Server Error!", ErrorType.exception));
+        throw const Left(Failure("Server Error!", ErrorType.exception));
       }
 
       if (response.data.isEmpty) {
-        return const Left(
+        throw const Left(
             Failure("Nenhum registro encontrado.", ErrorType.validation));
       }
 
@@ -43,10 +43,10 @@ class WarehouseSearchRepository {
         return WarehouseModel.fromMap(item);
       }).toList();
 
-      return Right(listWarehouses);
+      return listWarehouses;
     } on DioError catch (e) {
       log(e.type.name);
-      return const Left(Failure("Server Error!", ErrorType.exception));
+      return throw const Left(Failure("Server Error!", ErrorType.exception));
     }
   }
 }

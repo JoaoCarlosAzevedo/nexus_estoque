@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nexus_estoque/core/features/searches/batches/pages/batches_search_page.dart';
 import 'package:nexus_estoque/core/mixins/validation_mixin.dart';
-import 'package:nexus_estoque/core/features/searches/warehouses/data/model/warehouse_search_model.dart';
-import 'package:nexus_estoque/core/features/searches/warehouses/pages/warehouse_search_page.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/data/model/product_balance_model.dart';
 
 class TransactionForm extends StatefulWidget {
@@ -117,7 +115,7 @@ class _TransactionFormState extends State<TransactionForm> with ValidationMixi {
     );
 
     if (result != null) {
-      print(result);
+      log(result);
     }
   }
 }

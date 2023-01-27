@@ -10,7 +10,8 @@ import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/core/http/http_provider.dart';
 import 'package:nexus_estoque/features/auth/model/user_model.dart';
 
-final authRepository = Provider<AuthRepository>((ref) => AuthRepository(ref));
+final authRepositoryProvider =
+    Provider<AuthRepository>((ref) => AuthRepository(ref));
 
 class AuthRepository {
   final Ref _ref;
@@ -23,7 +24,8 @@ class AuthRepository {
     //dio = Dio(options);
   }
 
-  Future<Either<Failure, User>> auth(String username, String password) async {
+  Future<Either<Failure, UserModel>> auth(
+      String username, String password) async {
     late dynamic response;
     final dio = _ref.read(httpProvider).dioInstance;
     try {
@@ -34,7 +36,7 @@ class AuthRepository {
       });
 
       if (response.statusCode == 201) {
-        final user = User.fromMap(response.data);
+        final user = UserModel.fromMap(response.data);
 
         await _storage.write(key: 'access_token', value: user.accessToken);
         await _storage.write(key: 'refresh_token', value: user.refreshToken);

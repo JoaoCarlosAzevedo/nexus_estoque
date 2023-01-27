@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-class User {
+class UserModel {
   String id;
   String userName;
   String displayName;
   String accessToken;
   String refreshToken;
 
-  User({
+  UserModel({
     required this.id,
     required this.userName,
     required this.displayName,
@@ -25,8 +25,8 @@ class User {
     };
   }
 
-  factory User.fromMap(Map<String, dynamic> map) {
-    return User(
+  factory UserModel.fromMap(Map<String, dynamic> map) {
+    return UserModel(
       id: map['id'] ?? '',
       userName: map['userName'] ?? '',
       displayName: map['displayName'] ?? '',
@@ -37,5 +37,6 @@ class User {
 
   String toJson() => json.encode(toMap());
 
-  factory User.fromJson(String source) => User.fromMap(json.decode(source));
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source));
 }

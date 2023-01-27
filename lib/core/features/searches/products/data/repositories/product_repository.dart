@@ -6,23 +6,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/constants/config.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/core/http/http_provider.dart';
-import 'package:nexus_estoque/core/features/searches/products/data/model/product_search_model.dart';
+import 'package:nexus_estoque/core/features/searches/products/data/model/product_model.dart';
 
-final productSearchRepository =
-    Provider<ProductSearchRepository>((ref) => ProductSearchRepository(ref));
+final productRepositoryProvider =
+    Provider<ProductRepository>((ref) => ProductRepository(ref));
 
-class ProductSearchRepository {
+class ProductRepository {
   late Dio dio;
   final String url = Config.baseURL!;
   final Ref _ref;
 
-  ProductSearchRepository(this._ref) {
+  ProductRepository(this._ref) {
     dio = _ref.read(httpProvider).dioInstance;
   }
 
   void cleanCache() async {}
 
-  Future<Either<Failure, List<ProductSearchModel>>> fetchProducts() async {
+  Future<List<ProductModel>> fetchProducts() async {
     late dynamic response;
     try {
       response = await dio.get('$url/produtos/', queryParameters: {
@@ -33,22 +33,22 @@ class ProductSearchRepository {
       });
 
       if (response.statusCode != 200) {
-        return const Left(Failure("Server Error!", ErrorType.exception));
+        throw const Left(Failure("Server Error!", ErrorType.exception));
       }
 
       if (response.data.isEmpty) {
-        return const Left(
+        throw const Left(
             Failure("Nenhum registro encontrado.", ErrorType.validation));
       }
 
-      final listAddress = (response.data['resultado'] as List).map((item) {
-        return ProductSearchModel.fromMap(item);
+      final listProducts = (response.data['resultado'] as List).map((item) {
+        return ProductModel.fromMap(item);
       }).toList();
 
-      return Right(listAddress);
+      return listProducts;
     } on DioError catch (e) {
       log(e.type.name);
-      return const Left(Failure("Server Error!", ErrorType.exception));
+      return throw const Left(Failure("Server Error!", ErrorType.exception));
     }
   }
 }

@@ -8,22 +8,21 @@ import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/core/http/http_provider.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/data/model/address_model.dart';
 
-final addressSearchRepository =
-    Provider<AddressSearchRepository>((ref) => AddressSearchRepository(ref));
+final addressRepository =
+    Provider<AddressRepository>((ref) => AddressRepository(ref));
 
-class AddressSearchRepository {
+class AddressRepository {
   late Dio dio;
   final String url = Config.baseURL!;
   final Ref _ref;
 
-  AddressSearchRepository(this._ref) {
+  AddressRepository(this._ref) {
     dio = _ref.read(httpProvider).dioInstance;
   }
 
   void cleanCache() async {}
 
-  Future<Either<Failure, List<AddressModel>>> fetchAddress(
-      String warehouse) async {
+  Future<List<AddressModel>> fetchAddress(String warehouse) async {
     late dynamic response;
     try {
       response =
@@ -35,11 +34,11 @@ class AddressSearchRepository {
       });
 
       if (response.statusCode != 200) {
-        return const Left(Failure("Server Error!", ErrorType.exception));
+        throw const Left(Failure("Server Error!", ErrorType.exception));
       }
 
       if (response.data.isEmpty) {
-        return const Left(
+        throw const Left(
             Failure("Nenhum registro encontrado.", ErrorType.validation));
       }
 
@@ -47,12 +46,12 @@ class AddressSearchRepository {
         return AddressModel.fromMap(item);
       }).toList();
 
-      return Right(listAddress
+      return listAddress
           .where((element) => element.local.contains(warehouse))
-          .toList());
+          .toList();
     } on DioError catch (e) {
       log(e.type.name);
-      return const Left(Failure("Server Error!", ErrorType.exception));
+      throw const Left(Failure("Server Error!", ErrorType.exception));
     }
   }
 }

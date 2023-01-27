@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-class ProductSearchModel {
+class ProductModel {
   String descricao;
   String localPadrao;
   String lote;
@@ -11,7 +11,7 @@ class ProductSearchModel {
   String um;
   String codigo;
 
-  ProductSearchModel({
+  ProductModel({
     required this.descricao,
     required this.localPadrao,
     required this.lote,
@@ -37,8 +37,8 @@ class ProductSearchModel {
     };
   }
 
-  factory ProductSearchModel.fromMap(Map<String, dynamic> map) {
-    return ProductSearchModel(
+  factory ProductModel.fromMap(Map<String, dynamic> map) {
+    return ProductModel(
       descricao: map['Descricao'] ?? '',
       localPadrao: map['LocalPadrao'] ?? '',
       codigoBarras: map['CodigoBarras'] ?? '',
@@ -53,6 +53,6 @@ class ProductSearchModel {
 
   String toJson() => json.encode(toMap());
 
-  factory ProductSearchModel.fromJson(String source) =>
-      ProductSearchModel.fromMap(json.decode(source));
+  factory ProductModel.fromJson(String source) =>
+      ProductModel.fromMap(json.decode(source));
 }

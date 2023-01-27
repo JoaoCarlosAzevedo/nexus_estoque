@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
-import 'package:nexus_estoque/core/features/searches/batches/data/model/batch_model.dart';
 import 'package:nexus_estoque/core/features/searches/batches/provider/remote_batches_provider.dart';
 
 class BatchSearchPage extends ConsumerStatefulWidget {
@@ -10,7 +9,7 @@ class BatchSearchPage extends ConsumerStatefulWidget {
   }
   final String product;
   final String warehouse;
-  late List<String> args;
+  late final List<String> args;
 
   @override
   ConsumerState<BatchSearchPage> createState() => _BatchSearchPageState();
@@ -19,13 +18,7 @@ class BatchSearchPage extends ConsumerStatefulWidget {
 class _BatchSearchPageState extends ConsumerState<BatchSearchPage> {
   @override
   Widget build(BuildContext context) {
-    ref.listen(remoteBatchProvider(widget.args), (previous, next) {
-      print("passei no listen");
-      print(next);
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('yoyo')));
-    });
-    final provider = ref.watch(remoteBatchProvider(widget.args));
+    final futureProvider = ref.watch(remoteBatchProvider(widget.args));
 
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +32,7 @@ class _BatchSearchPageState extends ConsumerState<BatchSearchPage> {
               icon: const Icon(Icons.refresh)),
         ],
       ),
-      body: provider.when(
+      body: futureProvider.when(
         skipLoadingOnRefresh: false,
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) {

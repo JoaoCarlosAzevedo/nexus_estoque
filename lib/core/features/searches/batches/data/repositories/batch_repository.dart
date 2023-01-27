@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/constants/config.dart';
@@ -49,6 +51,7 @@ class BatchRepository {
 
       return batches;
     } on DioError catch (e) {
+      log(e.message);
       throw const Failure("Erro ao conectar!", ErrorType.exception);
     }
   }
