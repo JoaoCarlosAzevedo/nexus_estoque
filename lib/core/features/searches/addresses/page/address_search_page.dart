@@ -31,28 +31,29 @@ class _AddressSearchPageState extends ConsumerState<AddressSearchPage> {
           return Center(child: Text(failure.error));
         },
         data: (data) {
-          return Expanded(
-            child: Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: data.length,
-                    itemBuilder: (context, index) {
-                      return Card(
-                        child: ListTile(
-                          onTap: () {
-                            Navigator.pop(context, data[index].codigoEndereco);
-                          },
-                          title: Text(data[index].descricao),
-                          subtitle: Text(data[index].codigoEndereco),
-                          trailing: Text(data[index].local),
-                        ),
-                      );
-                    },
-                  ),
+          if (data.isEmpty) {
+            return const Center(child: Text("Nenhum registro encontrado!"));
+          }
+          return Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  itemCount: data.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      child: ListTile(
+                        onTap: () {
+                          Navigator.pop(context, data[index].codigoEndereco);
+                        },
+                        title: Text(data[index].descricao),
+                        subtitle: Text(data[index].codigoEndereco),
+                        trailing: Text(data[index].local),
+                      ),
+                    );
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
           );
         },
       ),
