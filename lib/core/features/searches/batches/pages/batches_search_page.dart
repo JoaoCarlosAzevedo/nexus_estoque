@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
+import 'package:nexus_estoque/core/features/searches/batches/data/model/batch_model.dart';
+import 'package:nexus_estoque/core/features/searches/batches/data/model/product_arg_model.dart';
 import 'package:nexus_estoque/core/features/searches/batches/provider/remote_batches_provider.dart';
 
 class BatchSearchPage extends ConsumerStatefulWidget {
-  BatchSearchPage({required this.product, required this.warehouse, super.key}) {
-    args = [product, warehouse];
-  }
-  final String product;
-  final String warehouse;
-  late final List<String> args;
+  const BatchSearchPage({required this.product, super.key});
+  final ProductArg product;
 
   @override
   ConsumerState<BatchSearchPage> createState() => _BatchSearchPageState();
 }
 
 class _BatchSearchPageState extends ConsumerState<BatchSearchPage> {
+  List<BatchModel> listBatches = [];
+  bool resetFilter = true;
+
   @override
   Widget build(BuildContext context) {
-    final futureProvider = ref.watch(remoteBatchProvider(widget.args));
+    final futureProvider = ref.watch(remoteBatchProvider(widget.product));
 
     return Scaffold(
       appBar: AppBar(
@@ -27,7 +28,7 @@ class _BatchSearchPageState extends ConsumerState<BatchSearchPage> {
         actions: [
           IconButton(
               onPressed: () {
-                ref.invalidate(remoteBatchProvider(widget.args));
+                ref.invalidate(remoteBatchProvider(widget.product));
               },
               icon: const Icon(Icons.refresh)),
         ],
@@ -40,29 +41,62 @@ class _BatchSearchPageState extends ConsumerState<BatchSearchPage> {
           return Center(child: Text(failure.error));
         },
         data: (data) {
-          return Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      child: ListTile(
-                        onTap: () {
-                          Navigator.pop(context, data[index].lote);
-                        },
-                        title: Text(data[index].lote),
-                        subtitle: Text(data[index].lotefor),
-                        trailing: Text(data[index].saldo.toString()),
-                      ),
-                    );
+          if (resetFilter) {
+            listBatches = data;
+            resetFilter = false;
+          }
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                TextField(
+                  onChanged: (e) {
+                    searchBatch(e, data);
                   },
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.search),
+                    label: Text("Pesquisar"),
+                  ),
                 ),
-              ),
-            ],
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: listBatches.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        child: ListTile(
+                          onTap: () {
+                            Navigator.pop(context, listBatches[index].lote);
+                          },
+                          title: Text(listBatches[index].lote),
+                          subtitle: Text(listBatches[index].lotefor),
+                          trailing: Text(listBatches[index].saldo.toString()),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           );
         },
       ),
     );
+  }
+
+  void searchBatch(String value, List<BatchModel> data) {
+    if (value.isNotEmpty) {
+      setState(() {
+        listBatches = data.where((element) {
+          if (element.lote.toUpperCase().contains(value.toUpperCase())) {
+            return true;
+          }
+          return false;
+        }).toList();
+      });
+    } else {
+      setState(() {
+        resetFilter = true;
+      });
+    }
   }
 }

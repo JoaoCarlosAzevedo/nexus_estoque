@@ -22,7 +22,7 @@ class AddressRepository {
 
   void cleanCache() async {}
 
-  Future<List<AddressModel>> fetchAddress(String warehouse) async {
+  Future<List<AddressModel>> fetchAddress() async {
     late dynamic response;
     try {
       response =
@@ -45,10 +45,10 @@ class AddressRepository {
       final listAddress = (response.data['resultado'] as List).map((item) {
         return AddressModel.fromMap(item);
       }).toList();
-
-      return listAddress
+      return listAddress;
+/*       return listAddress
           .where((element) => element.local.contains(warehouse))
-          .toList();
+          .toList(); */
     } on DioError catch (e) {
       log(e.type.name);
       throw const Left(Failure("Server Error!", ErrorType.exception));

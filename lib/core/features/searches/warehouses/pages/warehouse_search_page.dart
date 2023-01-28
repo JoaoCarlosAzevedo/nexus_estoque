@@ -23,6 +23,13 @@ class _WarehouseSearchPageState extends ConsumerState<WarehouseSearchPage> {
       appBar: AppBar(
         title: const Text("Busca Armazem"),
         centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                ref.invalidate(remoteWarehouseProvider);
+              },
+              icon: const Icon(Icons.refresh)),
+        ],
       ),
       body: futureProvider.when(
         skipLoadingOnRefresh: false,
@@ -32,58 +39,32 @@ class _WarehouseSearchPageState extends ConsumerState<WarehouseSearchPage> {
           return Center(child: Text(failure.error));
         },
         data: (data) {
-          return Column(
-            children: [
-              IconButton(
-                  onPressed: () {
-                    ref.invalidate(remoteWarehouseProvider);
-                  },
-                  icon: const Icon(Icons.abc)),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      child: ListTile(
-                        onTap: () {
-                          Navigator.pop(context, data[index].codigo);
-                        },
-                        title: Text(data[index].descricao),
-                        subtitle: Text(data[index].codigo),
-                        trailing: Text(data[index].filial),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-/*       body: widget.productWarehouse.isEmpty
-          ? NetworkWarehouse(ref: ref)
-          : Column(
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
               children: [
                 Expanded(
                   child: ListView.builder(
-                    itemCount: widget.productWarehouse.length,
+                    itemCount: data.length,
                     itemBuilder: (context, index) {
                       return Card(
                         child: ListTile(
                           onTap: () {
-                            Navigator.pop(
-                                context, widget.productWarehouse[index].codigo);
+                            Navigator.pop(context, data[index].codigo);
                           },
-                          title: Text(widget.productWarehouse[index].descricao),
-                          subtitle: Text(widget.productWarehouse[index].codigo),
-                          trailing: Text(widget.productWarehouse[index].filial),
+                          title: Text(data[index].descricao),
+                          subtitle: Text('Local: ${data[index].codigo}'),
+                          trailing: Text('Filial ${data[index].filial}'),
                         ),
                       );
                     },
                   ),
                 ),
               ],
-            ), */
+            ),
+          );
+        },
+      ),
     );
   }
 }
