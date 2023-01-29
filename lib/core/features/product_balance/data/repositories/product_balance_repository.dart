@@ -6,19 +6,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/constants/config.dart';
 import 'package:nexus_estoque/core/constants/dio_config.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
+import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
 import 'package:nexus_estoque/core/http/http_provider.dart';
-import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/data/model/product_balance_model.dart';
 
-final productBalanceRepository =
-    Provider<ProductBalanceRepository>((ref) => ProductBalanceRepository(ref));
+final productBalanceRepositoryProvider = Provider<ProductBalanceRepositoryv2>(
+    (ref) => ProductBalanceRepositoryv2(ref));
 
-class ProductBalanceRepository {
+class ProductBalanceRepositoryv2 {
   late Dio dio;
   final String url = Config.baseURL!;
   final options = DioConfig.dioBaseOption;
   final Ref _ref;
 
-  ProductBalanceRepository(this._ref) {
+  ProductBalanceRepositoryv2(this._ref) {
     dio = _ref.read(httpProvider).dioInstance;
   }
 

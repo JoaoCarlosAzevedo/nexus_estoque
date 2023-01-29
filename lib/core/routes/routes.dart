@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/page/address_search_page.dart';
 import 'package:nexus_estoque/core/features/searches/products/pages/products_search_page.dart';
 import 'package:nexus_estoque/core/features/searches/warehouses/pages/warehouse_search_page.dart';
@@ -15,10 +16,8 @@ import 'package:nexus_estoque/features/auth/providers/login_controller_provider.
 import 'package:nexus_estoque/features/auth/providers/login_state.dart';
 import 'package:nexus_estoque/features/auth/providers/router_notifier.dart';
 import 'package:nexus_estoque/features/menu/presentation/pages/menu_page.dart';
-import 'package:nexus_estoque/features/transaction/pages/product_selection_transaction/product_selection_transaction_page.dart';
 import 'package:nexus_estoque/features/transaction/pages/transaction_form_page/transaction_page.dart';
-import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_selection/product_selection_page.dart';
-import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_selection/product_transfer_page.dart';
+import 'package:nexus_estoque/features/transaction/pages/transaction_form_page/widgets/transaction_form_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authService = RouterNotifier(ref);
@@ -62,9 +61,14 @@ final routerProvider = Provider<GoRouter>((ref) {
           }),
         ),
         GoRoute(
-            path: "/transferencias",
-            builder: ((context, state) =>
-                const ProductSelectionTransferPage())),
+          path: "/movimentos/form",
+          builder: ((context, state) {
+            final param = state.extra as ProductBalanceModel;
+            return TransactionFormPage(
+              product: param,
+            );
+          }),
+        ),
         GoRoute(
             path: "/enderecos/:armazem",
             builder: ((context, state) {
@@ -76,28 +80,28 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/produtos",
             builder: ((context, state) => const ProductSearchPage())),
-        GoRoute(
+/*         GoRoute(
             path: "/produtos/saldos/:barcode",
             builder: ((context, state) {
               final param = state.params['barcode'];
               return ProductSelectionForm(
                 barcode: param!,
               );
-            })),
+            })), */
         GoRoute(
             path: "/armazem",
             builder: ((context, state) => const WarehouseSearchPage())),
         GoRoute(
             path: "/movimentos",
-            builder: ((context, state) => const ProductSelectionTransaction())),
-        GoRoute(
+            builder: ((context, state) => const ProductTransactionPage())),
+/*         GoRoute(
             path: "/saldos/:barcode",
             builder: ((context, state) {
               final param = state.params['barcode'];
               return ProductBalanceTransaction(
                 barcode: param!,
               );
-            })),
+            })), */
         GoRoute(
             path: "/configuracoes",
             builder: ((context, state) =>

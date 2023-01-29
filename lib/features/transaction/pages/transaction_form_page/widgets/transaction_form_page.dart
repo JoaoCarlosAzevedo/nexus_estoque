@@ -1,20 +1,23 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
+import 'package:nexus_estoque/core/features/product_balance/pages/product_selection/cubit/product_balance_cubit.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/page/address_search_page.dart';
 import 'package:nexus_estoque/core/mixins/validation_mixin.dart';
-import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/data/model/product_balance_model.dart';
 
-class TransactionForm extends StatefulWidget {
-  const TransactionForm({super.key, required this.product});
+class TransactionFormPage extends StatefulWidget {
+  const TransactionFormPage({super.key, required this.product});
   final ProductBalanceModel product;
 
   @override
-  State<TransactionForm> createState() => _TransactionFormState();
+  State<TransactionFormPage> createState() => _TransactionFormPageState();
 }
 
-class _TransactionFormState extends State<TransactionForm> with ValidationMixi {
+class _TransactionFormPageState extends State<TransactionFormPage>
+    with ValidationMixi {
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -85,6 +88,8 @@ class _TransactionFormState extends State<TransactionForm> with ValidationMixi {
             ),
             ElevatedButton(
               onPressed: () {
+                context.read<ProductBalanceCubit>().reset();
+
                 final isValid = formKey.currentState!.validate();
                 log(isValid.toString());
               },

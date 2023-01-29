@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/data/model/product_balance_model.dart';
+import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
 
 class AddressBalance extends StatelessWidget {
   final List<Enderecos> addressBalance;
