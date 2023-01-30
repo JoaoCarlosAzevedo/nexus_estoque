@@ -5,7 +5,7 @@ class ProductAddressModel {
   final String numseq;
   final String clifor;
   final String lote;
-  final int saldo;
+  final double saldo;
   final String serie;
   final String notafiscal;
   final String um;
@@ -49,7 +49,7 @@ class ProductAddressModel {
         numseq: map['numseq'] ?? '',
         clifor: map['clifor'] ?? '',
         lote: map['lote'] ?? '',
-        saldo: map['saldo']?.toInt() ?? 0,
+        saldo: map['saldo']?.toDouble() ?? 0,
         serie: map['serie'] ?? '',
         notafiscal: map['notafiscal'] ?? '',
         um: map['um'] ?? '',

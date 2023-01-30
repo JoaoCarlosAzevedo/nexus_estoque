@@ -4,7 +4,7 @@ import 'dart:convert';
 class TransactionModel {
   String codigo;
   String local;
-  int quantidade;
+  double quantidade;
   String lote;
   String endereco;
   TransactionModel({
@@ -15,24 +15,8 @@ class TransactionModel {
     required this.endereco,
   });
 
-  TransactionModel copyWith({
-    String? codigo,
-    String? local,
-    int? quantidade,
-    String? lote,
-    String? endereco,
-  }) {
-    return TransactionModel(
-      codigo: codigo ?? this.codigo,
-      local: local ?? this.local,
-      quantidade: quantidade ?? this.quantidade,
-      lote: lote ?? this.lote,
-      endereco: endereco ?? this.endereco,
-    );
-  }
-
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+    return {
       'codigo': codigo,
       'local': local,
       'quantidade': quantidade,
@@ -40,21 +24,6 @@ class TransactionModel {
       'endereco': endereco,
     };
   }
-
-  factory TransactionModel.fromMap(Map<String, dynamic> map) {
-    return TransactionModel(
-      codigo: map['codigo'] as String,
-      local: map['local'] as String,
-      quantidade: map['quantidade'] as int,
-      lote: map['lote'] as String,
-      endereco: map['endereco'] as String,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory TransactionModel.fromJson(String source) =>
-      TransactionModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
@@ -80,4 +49,19 @@ class TransactionModel {
         lote.hashCode ^
         endereco.hashCode;
   }
+
+  factory TransactionModel.fromMap(Map<String, dynamic> map) {
+    return TransactionModel(
+      codigo: map['codigo'] ?? '',
+      local: map['local'] ?? '',
+      quantidade: map['quantidade']?.toDouble() ?? 0,
+      lote: map['lote'] ?? '',
+      endereco: map['endereco'] ?? '',
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory TransactionModel.fromJson(String source) =>
+      TransactionModel.fromMap(json.decode(source));
 }

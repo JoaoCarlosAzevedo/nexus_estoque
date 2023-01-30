@@ -14,7 +14,7 @@ class ProductBalanceModel {
   List<Armazem> armazem;
   String codigo;
 
-  int get stock {
+  double get stock {
     return armazem.fold(0, (sum, element) => sum + element.saldoLocal);
   }
 
@@ -53,7 +53,7 @@ class Armazem {
   List<Enderecos> enderecos;
   List<BatchModel> lotes;
   String armz;
-  int saldoLocal;
+  double saldoLocal;
 
   Armazem({
     required this.enderecos,
@@ -69,7 +69,7 @@ class Armazem {
       lotes: List<BatchModel>.from(
           map['lotes']?.map((x) => BatchModel.fromMap(x))),
       armz: map['Armz'] ?? '',
-      saldoLocal: map['SaldoLocal']?.toInt() ?? 0,
+      saldoLocal: map['SaldoLocal']?.toDouble() ?? 0,
     );
   }
 
@@ -79,7 +79,7 @@ class Armazem {
 
 class Enderecos {
   String descEndereco;
-  int quantidade;
+  double quantidade;
   String lote;
   String armz;
   String codLocalizacao;
@@ -95,7 +95,7 @@ class Enderecos {
   factory Enderecos.fromMap(Map<String, dynamic> map) {
     return Enderecos(
       descEndereco: map['DescEndereco'] ?? '',
-      quantidade: map['Quantidade']?.toInt() ?? 0,
+      quantidade: map['Quantidade']?.toDouble() ?? 0,
       lote: map['Lote'] ?? '',
       armz: map['Armz'] ?? '',
       codLocalizacao: map['CodLocalizacao'] ?? '',
