@@ -4,6 +4,7 @@ import 'package:nexus_estoque/core/theme/app_colors.dart';
 class AppTheme {
   static ThemeData get defaultTheme {
     return ThemeData(
+      //useMaterial3: true,
       // Define the default brightness and colors.
       /*   brightness: Brightness.light,
       secondaryHeaderColor: AppColors.primaryGrey,
@@ -33,6 +34,11 @@ class AppTheme {
         //canvasColor: AppColors.primaryGrey,
       ),
       // Define the default font family.
+      radioTheme: RadioThemeData(
+          fillColor: MaterialStateProperty.all(AppColors.grey),
+          visualDensity: VisualDensity.standard
+          //overlayColor:
+          ),
       fontFamily: 'Nunito Sans',
       scaffoldBackgroundColor: AppColors.primaryGrey,
       appBarTheme: const AppBarTheme(

@@ -5,19 +5,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/repositories/product_balance_repository.dart';
 import 'package:nexus_estoque/core/features/product_balance/pages/product_selection/cubit/product_balance_cubit.dart';
-import 'package:nexus_estoque/core/features/product_balance/pages/product_selection/widget/product_selection_builder.dart';
 import 'package:nexus_estoque/core/features/product_balance/pages/product_selection/widget/product_selection_form.dart';
+
+typedef ProductBalanceWidgetBuilder = Widget Function(
+    BuildContext context, ProductBalanceModel product);
 
 class ProductSelectionPage extends ConsumerWidget {
   const ProductSelectionPage(
       {super.key,
       required this.title,
       required this.icon,
-      required this.onProductLoad,
       required this.builder});
   final String title;
   final IconData icon;
-  final void Function(ProductBalanceModel) onProductLoad;
 
   final ProductBalanceWidgetBuilder builder;
 
@@ -25,18 +25,15 @@ class ProductSelectionPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final repository = ref.read(productBalanceRepositoryProvider);
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+          //backgroundColor: AppColors.background,
+          ),
       body: BlocProvider(
         create: (context) => ProductBalanceCubit(repository),
         child: BlocListener<ProductBalanceCubit, ProductBalanceCubitState>(
           listener: (context, state) {
             if (state is ProductBalanceCubitError) {
               showError(context, state.error.error);
-            }
-
-            if (state is ProductBalanceCubitLoaded) {
-              onProductLoad(state.productBalance);
-              //context.read<ProductBalanceCubit>().reset();
             }
           },
           child: BlocBuilder<ProductBalanceCubit, ProductBalanceCubitState>(

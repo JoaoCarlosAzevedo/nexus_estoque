@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/page/address_search_page.dart';
 import 'package:nexus_estoque/core/features/searches/products/pages/products_search_page.dart';
 import 'package:nexus_estoque/core/features/searches/warehouses/pages/warehouse_search_page.dart';
@@ -17,7 +16,6 @@ import 'package:nexus_estoque/features/auth/providers/login_state.dart';
 import 'package:nexus_estoque/features/auth/providers/router_notifier.dart';
 import 'package:nexus_estoque/features/menu/presentation/pages/menu_page.dart';
 import 'package:nexus_estoque/features/transaction/pages/transaction_form_page/transaction_page.dart';
-import 'package:nexus_estoque/features/transaction/pages/transaction_form_page/widgets/transaction_form_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authService = RouterNotifier(ref);
@@ -41,9 +39,9 @@ final routerProvider = Provider<GoRouter>((ref) {
       errorBuilder: (context, state) =>
           DefaultPage(title: state.error.toString()),
       routes: [
+        GoRoute(path: "/", builder: ((context, state) => const MenuPage())),
         GoRoute(
             path: "/login", builder: ((context, state) => const LoginPage())),
-        GoRoute(path: "/", builder: ((context, state) => const MenuPage())),
         GoRoute(
             path: "/enderecar",
             builder: ((context, state) => BlocProvider(
@@ -61,15 +59,6 @@ final routerProvider = Provider<GoRouter>((ref) {
           }),
         ),
         GoRoute(
-          path: "/movimentos/form",
-          builder: ((context, state) {
-            final param = state.extra as ProductBalanceModel;
-            return TransactionFormPage(
-              product: param,
-            );
-          }),
-        ),
-        GoRoute(
             path: "/enderecos/:armazem",
             builder: ((context, state) {
               final param = state.params['armazem'];
@@ -80,28 +69,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/produtos",
             builder: ((context, state) => const ProductSearchPage())),
-/*         GoRoute(
-            path: "/produtos/saldos/:barcode",
-            builder: ((context, state) {
-              final param = state.params['barcode'];
-              return ProductSelectionForm(
-                barcode: param!,
-              );
-            })), */
         GoRoute(
             path: "/armazem",
             builder: ((context, state) => const WarehouseSearchPage())),
         GoRoute(
             path: "/movimentos",
             builder: ((context, state) => const ProductTransactionPage())),
-/*         GoRoute(
-            path: "/saldos/:barcode",
-            builder: ((context, state) {
-              final param = state.params['barcode'];
-              return ProductBalanceTransaction(
-                barcode: param!,
-              );
-            })), */
         GoRoute(
             path: "/configuracoes",
             builder: ((context, state) =>

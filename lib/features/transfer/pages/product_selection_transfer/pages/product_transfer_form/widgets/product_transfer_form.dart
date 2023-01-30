@@ -100,7 +100,7 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
             return SingleChildScrollView(
               child: Column(
                 children: [
-                  ProductTransferCard(
+                  ProductHeaderCard(
                     productDetail: widget.productDetail,
                   ),
                   Padding(
