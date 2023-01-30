@@ -1,12 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
-import 'package:nexus_estoque/core/features/product_balance/pages/product_selection/cubit/product_balance_cubit.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/page/address_search_page.dart';
 import 'package:nexus_estoque/core/mixins/validation_mixin.dart';
+import 'package:nexus_estoque/core/widgets/form_input_search_widget.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form/widgets/produc_transfer_card.dart';
 
 class TransactionFormPage extends StatefulWidget {
@@ -74,60 +73,72 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                       ),
                     ],
                   ),
-                  TextFormField(
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20.0),
+                    child: TextFormField(
+                      validator: isNotEmpty,
+                      decoration: InputDecoration(
+                        label: const Text("Armazem"),
+                        border: InputBorder.none,
+                        prefixIcon: const Icon(Icons.qr_code),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            warehouseSearch();
+                          },
+                          icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
+                        ),
+                        //icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
+                      ),
+                    ),
+                  ),
+                  if (widget.product.lote == 'L')
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      child: TextFormField(
+                        enabled: true,
+                        validator: isNotEmpty,
+                        decoration: InputDecoration(
+                          label: const Text("Lote"),
+                          border: InputBorder.none,
+                          prefixIcon: const Icon(Icons.qr_code),
+                          suffixIcon: IconButton(
+                            onPressed: () {},
+                            icon:
+                                const FaIcon(FontAwesomeIcons.magnifyingGlass),
+                          ),
+                          //icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
+                        ),
+                      ),
+                    ),
+                  if (widget.product.localizacao == 'S')
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      child: TextFormField(
+                        enabled: true,
+                        validator: isNotEmpty,
+                        decoration: InputDecoration(
+                          label: const Text("Endereço"),
+                          border: InputBorder.none,
+                          prefixIcon: const Icon(Icons.qr_code),
+                          suffixIcon: IconButton(
+                            onPressed: () {},
+                            icon:
+                                const FaIcon(FontAwesomeIcons.magnifyingGlass),
+                          ),
+                        ),
+                      ),
+                    ),
+                  InputSearchWidget(
+                    label: "teste",
                     validator: isNotEmpty,
-                    decoration: InputDecoration(
-                      label: const Text("Armazem"),
-                      border: InputBorder.none,
-                      prefixIcon: const Icon(Icons.qr_code),
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          warehouseSearch();
-                        },
-                        icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
-                      ),
-                      //icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
-                    ),
-                  ),
-                  SizedBox(
-                    height: height * 0.02,
-                  ),
-                  TextFormField(
-                    enabled: true,
-                    validator: (value) => isNotEmpty(value, "Lote Obrigatório"),
-                    decoration: InputDecoration(
-                      label: const Text("Lote"),
-                      border: InputBorder.none,
-                      prefixIcon: const Icon(Icons.qr_code),
-                      suffixIcon: IconButton(
-                        onPressed: () {},
-                        icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
-                      ),
-                      //icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
-                    ),
-                  ),
-                  SizedBox(
-                    height: height * 0.02,
-                  ),
-                  TextFormField(
-                    enabled: true,
-                    decoration: InputDecoration(
-                      label: const Text("Endereço"),
-                      border: InputBorder.none,
-                      prefixIcon: const Icon(Icons.qr_code),
-                      suffixIcon: IconButton(
-                        onPressed: () {},
-                        icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
-                      ),
-                      //icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 50,
+                    onPressed: () {
+                      //warehouseSearch();
+                      AddressSearchModal.show(context);
+                    },
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      context.read<ProductBalanceCubit>().reset();
+                      //context.read<ProductBalanceCubit>().reset();
 
                       final isValid = formKey.currentState!.validate();
                       log(isValid.toString());

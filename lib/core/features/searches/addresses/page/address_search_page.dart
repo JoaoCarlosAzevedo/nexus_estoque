@@ -1,8 +1,36 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/data/model/address_model.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/provider/remote_address_provider.dart';
+
+class AddressSearchModal {
+  static Future<String> show(context) async {
+    {
+      final result = await showModalBottomSheet<dynamic>(
+        context: context,
+        builder: (BuildContext context) {
+          //return const WarehouseSearchPage();
+          //return const WarehouseSearchPage();
+          //return const ProductSearchPage();
+          return const AddressSearchPage(
+            warehouse: '01',
+          );
+/*         return BatchSearchPage(
+            product: ProductArg(product: '45274905', warehouse: '01')); */
+        },
+      );
+
+      if (result != null) {
+        return result;
+      } else {
+        return '';
+      }
+    }
+  }
+}
 
 class AddressSearchPage extends ConsumerStatefulWidget {
   const AddressSearchPage({
