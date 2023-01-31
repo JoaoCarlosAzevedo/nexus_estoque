@@ -67,7 +67,9 @@ class _ProductSelectioFormState extends State<ProductSelectioForm> {
                       prefixIcon: const Icon(Icons.qr_code),
                       suffixIcon: IconButton(
                         onPressed: () async {
-                          productSearchPage();
+                          //productSearchPage();
+                          controller.text =
+                              await ProductSearchModal.show(context);
                         },
                         icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
                       ),

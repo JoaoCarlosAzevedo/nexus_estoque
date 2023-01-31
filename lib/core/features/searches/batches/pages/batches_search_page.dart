@@ -5,6 +5,31 @@ import 'package:nexus_estoque/core/features/searches/batches/data/model/batch_mo
 import 'package:nexus_estoque/core/features/searches/batches/data/model/product_arg_model.dart';
 import 'package:nexus_estoque/core/features/searches/batches/provider/remote_batches_provider.dart';
 
+class BatchSearchModal {
+  static Future<String> show(context, String product, String warehouse) async {
+    {
+      final result = await showModalBottomSheet<dynamic>(
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return FractionallySizedBox(
+            heightFactor: 0.9,
+            child: BatchSearchPage(
+              product: ProductArg(product: product, warehouse: warehouse),
+            ),
+          );
+        },
+      );
+
+      if (result != null) {
+        return result;
+      } else {
+        return '';
+      }
+    }
+  }
+}
+
 class BatchSearchPage extends ConsumerStatefulWidget {
   const BatchSearchPage({required this.product, super.key});
   final ProductArg product;

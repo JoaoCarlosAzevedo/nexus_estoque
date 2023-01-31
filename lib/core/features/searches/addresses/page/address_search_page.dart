@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
@@ -11,18 +9,16 @@ class AddressSearchModal {
     {
       final result = await showModalBottomSheet<dynamic>(
         context: context,
+        isScrollControlled: true,
         builder: (BuildContext context) {
-          //return const WarehouseSearchPage();
-          //return const WarehouseSearchPage();
-          //return const ProductSearchPage();
-          return const AddressSearchPage(
-            warehouse: '01',
+          return const FractionallySizedBox(
+            heightFactor: 0.9,
+            child: AddressSearchPage(
+              warehouse: '01',
+            ),
           );
-/*         return BatchSearchPage(
-            product: ProductArg(product: '45274905', warehouse: '01')); */
         },
       );
-
       if (result != null) {
         return result;
       } else {

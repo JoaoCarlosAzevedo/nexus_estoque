@@ -4,6 +4,29 @@ import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/core/features/searches/products/data/model/product_model.dart';
 import 'package:nexus_estoque/core/features/searches/products/provider/remote_product_provider.dart';
 
+class ProductSearchModal {
+  static Future<String> show(context) async {
+    {
+      final result = await showModalBottomSheet<dynamic>(
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return const FractionallySizedBox(
+            heightFactor: 0.9,
+            child: ProductSearchPage(),
+          );
+        },
+      );
+
+      if (result != null) {
+        return result;
+      } else {
+        return '';
+      }
+    }
+  }
+}
+
 class ProductSearchPage extends ConsumerStatefulWidget {
   const ProductSearchPage({super.key});
 

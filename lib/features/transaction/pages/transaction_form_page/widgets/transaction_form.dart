@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/page/address_search_page.dart';
+import 'package:nexus_estoque/core/features/searches/warehouses/pages/warehouse_search_page.dart';
 import 'package:nexus_estoque/core/mixins/validation_mixin.dart';
 import 'package:nexus_estoque/core/widgets/form_input_search_widget.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form/widgets/produc_transfer_card.dart';
@@ -83,7 +84,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                         prefixIcon: const Icon(Icons.qr_code),
                         suffixIcon: IconButton(
                           onPressed: () {
-                            warehouseSearch();
+                            WarehouseSearchModal.show(context);
                           },
                           icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
                         ),
@@ -158,25 +159,5 @@ class _TransactionFormPageState extends State<TransactionFormPage>
         ),
       ),
     );
-  }
-
-  void warehouseSearch() async {
-    final result = await showModalBottomSheet<dynamic>(
-      context: context,
-      builder: (BuildContext context) {
-        //return const WarehouseSearchPage();
-        //return const WarehouseSearchPage();
-        //return const ProductSearchPage();
-        return const AddressSearchPage(
-          warehouse: '01',
-        );
-/*         return BatchSearchPage(
-            product: ProductArg(product: '45274905', warehouse: '01')); */
-      },
-    );
-
-    if (result != null) {
-      log(result);
-    }
   }
 }
