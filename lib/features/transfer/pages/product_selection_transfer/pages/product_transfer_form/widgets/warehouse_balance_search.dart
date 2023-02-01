@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
 
 class WarehouseBalanceSearch extends StatelessWidget {
-  final List<Armazem> warehouseBalances;
+  final List<BalanceWarehouse> warehouseBalances;
 
   const WarehouseBalanceSearch({
     Key? key,

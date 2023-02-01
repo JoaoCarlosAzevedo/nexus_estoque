@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
+import 'package:nexus_estoque/core/features/searches/addresses/data/model/address_model.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/page/address_search_page.dart';
 import 'package:nexus_estoque/core/theme/app_colors.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form/cubit/product_transfer_cubit.dart';
@@ -213,7 +214,7 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
     );
 
     if (result != null) {
-      final warehouse = result as Armazem;
+      final warehouse = result as BalanceWarehouse;
       origWarehouseController.text = warehouse.armz;
       destWarehouseController.text = warehouse.armz;
     }
@@ -233,8 +234,8 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
     );
 
     if (result != null) {
-      final tapedAddress = result as Enderecos;
-      origAddressController.text = tapedAddress.codLocalizacao;
+      final tapedAddress = result as AddressModel;
+      origAddressController.text = tapedAddress.codigo;
       //destAddressController.text = tapedAddress.codLocalizacao;
     }
   }

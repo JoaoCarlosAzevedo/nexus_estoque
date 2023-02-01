@@ -23,35 +23,19 @@ class ProductModel {
     required this.codigo,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'Descricao': descricao,
-      'LocalPadrao': localPadrao,
-      'Lote': lote,
-      'CodigoBarras': codigoBarras,
-      'Localizacao': localizacao,
-      'Tipo': tipo,
-      'SaldoAtual': saldoAtual,
-      'UM': um,
-      'Codigo': codigo,
-    };
-  }
-
   factory ProductModel.fromMap(Map<String, dynamic> map) {
     return ProductModel(
-      descricao: map['Descricao'] ?? '',
-      localPadrao: map['LocalPadrao'] ?? '',
-      codigoBarras: map['CodigoBarras'] ?? '',
-      lote: map['Lote'] ?? '',
-      localizacao: map['Localizacao'] ?? '',
-      tipo: map['Tipo'] ?? '',
-      saldoAtual: map['SaldoAtual']?.toDouble() ?? 0.0,
-      um: map['UM'] ?? '',
-      codigo: map['Codigo'] ?? '',
+      descricao: map['descricao'] ?? '',
+      localPadrao: map['localpadrao'] ?? '',
+      codigoBarras: map['codigobarras'] ?? '',
+      lote: map['lotes'] ?? '',
+      localizacao: map['localizacao'] ?? '',
+      tipo: map['tipo'] ?? '',
+      saldoAtual: map['saldo']?.toDouble() ?? 0.0,
+      um: map['um'] ?? '',
+      codigo: map['codigo'] ?? '',
     );
   }
-
-  String toJson() => json.encode(toMap());
 
   factory ProductModel.fromJson(String source) =>
       ProductModel.fromMap(json.decode(source));

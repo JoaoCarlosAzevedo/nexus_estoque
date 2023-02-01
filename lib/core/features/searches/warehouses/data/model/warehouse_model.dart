@@ -13,17 +13,17 @@ class WarehouseModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'Descricao': descricao,
-      'Filial': filial,
-      'Codigo': codigo,
+      'descricao': descricao,
+      'filial': filial,
+      'codigo': codigo,
     };
   }
 
   factory WarehouseModel.fromMap(Map<String, dynamic> map) {
     return WarehouseModel(
-      descricao: map['Descricao'] ?? '',
-      filial: map['Filial'] ?? '',
-      codigo: map['Codigo'] ?? '',
+      descricao: map['descricao'] ?? '',
+      filial: map['filial'] ?? '',
+      codigo: map['codigo'] ?? '',
     );
   }
 

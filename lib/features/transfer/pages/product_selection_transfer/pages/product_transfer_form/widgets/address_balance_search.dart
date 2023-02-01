@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
+import 'package:nexus_estoque/core/features/searches/addresses/data/model/address_model.dart';
 
 class AddressBalance extends StatelessWidget {
-  final List<Enderecos> addressBalance;
+  final List<AddressModel> addressBalance;
 
   const AddressBalance({
     Key? key,
@@ -20,7 +20,7 @@ class AddressBalance extends StatelessWidget {
         itemBuilder: (context, index) {
           return Card(
             child: ListTile(
-              title: Text(addressBalance[index].descEndereco),
+              title: Text(addressBalance[index].descricao),
               subtitle: Text("Saldo: ${addressBalance[index].quantidade}"),
               onTap: () {
                 Navigator.pop(context, addressBalance[index]);

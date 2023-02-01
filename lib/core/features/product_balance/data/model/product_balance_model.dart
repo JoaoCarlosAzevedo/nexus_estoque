@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:nexus_estoque/core/features/searches/addresses/data/model/address_model.dart';
 import 'package:nexus_estoque/core/features/searches/batches/data/model/batch_model.dart';
 
 class ProductBalanceModel {
@@ -11,7 +12,7 @@ class ProductBalanceModel {
   String localizacao;
   String tipo;
   String uM;
-  List<Armazem> armazem;
+  List<BalanceWarehouse> armazem;
   String codigo;
 
   double get stock {
@@ -32,16 +33,16 @@ class ProductBalanceModel {
 
   factory ProductBalanceModel.fromMap(Map<String, dynamic> map) {
     return ProductBalanceModel(
-      descricao: map['Descricao'] ?? '',
-      localPadrao: map['LocalPadrao'] ?? '',
-      codigoBarras: map['CodigoBarras'] ?? '',
-      lote: map['Lote'] ?? '',
-      localizacao: map['Localizacao'] ?? '',
-      tipo: map['Tipo'] ?? '',
-      uM: map['UM'] ?? '',
-      armazem:
-          List<Armazem>.from(map['armazem']?.map((x) => Armazem.fromMap(x))),
-      codigo: map['Codigo'] ?? '',
+      descricao: map['descricao'] ?? '',
+      localPadrao: map['localpadrao'] ?? '',
+      codigoBarras: map['codigobarras'] ?? '',
+      lote: map['lote'] ?? '',
+      localizacao: map['localizacao'] ?? '',
+      tipo: map['tipo'] ?? '',
+      uM: map['um'] ?? '',
+      armazem: List<BalanceWarehouse>.from(
+          map['armazem']?.map((x) => BalanceWarehouse.fromMap(x))),
+      codigo: map['codigo'] ?? '',
     );
   }
 
@@ -49,59 +50,33 @@ class ProductBalanceModel {
       ProductBalanceModel.fromMap(json.decode(source));
 }
 
-class Armazem {
-  List<Enderecos> enderecos;
+class BalanceWarehouse {
+  List<AddressModel> enderecos;
   List<BatchModel> lotes;
   String armz;
+  String filial;
   double saldoLocal;
 
-  Armazem({
+  BalanceWarehouse({
     required this.enderecos,
     required this.lotes,
     required this.armz,
+    required this.filial,
     required this.saldoLocal,
   });
 
-  factory Armazem.fromMap(Map<String, dynamic> map) {
-    return Armazem(
-      enderecos: List<Enderecos>.from(
-          map['enderecos']?.map((x) => Enderecos.fromMap(x))),
+  factory BalanceWarehouse.fromMap(Map<String, dynamic> map) {
+    return BalanceWarehouse(
+      enderecos: List<AddressModel>.from(
+          map['enderecos']?.map((x) => AddressModel.fromMap(x))),
       lotes: List<BatchModel>.from(
           map['lotes']?.map((x) => BatchModel.fromMap(x))),
-      armz: map['Armz'] ?? '',
-      saldoLocal: map['SaldoLocal']?.toDouble() ?? 0,
+      armz: map['codigo'] ?? '',
+      saldoLocal: map['saldo']?.toDouble() ?? 0,
+      filial: map['filial'] ?? '',
     );
   }
 
-  factory Armazem.fromJson(String source) =>
-      Armazem.fromMap(json.decode(source));
-}
-
-class Enderecos {
-  String descEndereco;
-  double quantidade;
-  String lote;
-  String armz;
-  String codLocalizacao;
-
-  Enderecos({
-    required this.descEndereco,
-    required this.quantidade,
-    required this.lote,
-    required this.armz,
-    required this.codLocalizacao,
-  });
-
-  factory Enderecos.fromMap(Map<String, dynamic> map) {
-    return Enderecos(
-      descEndereco: map['DescEndereco'] ?? '',
-      quantidade: map['Quantidade']?.toDouble() ?? 0,
-      lote: map['Lote'] ?? '',
-      armz: map['Armz'] ?? '',
-      codLocalizacao: map['CodLocalizacao'] ?? '',
-    );
-  }
-
-  factory Enderecos.fromJson(String source) =>
-      Enderecos.fromMap(json.decode(source));
+  factory BalanceWarehouse.fromJson(String source) =>
+      BalanceWarehouse.fromMap(json.decode(source));
 }

@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/page/address_search_page.dart';
+import 'package:nexus_estoque/core/features/searches/batches/pages/batches_search_page.dart';
 import 'package:nexus_estoque/core/features/searches/warehouses/pages/warehouse_search_page.dart';
 import 'package:nexus_estoque/core/mixins/validation_mixin.dart';
 import 'package:nexus_estoque/core/widgets/form_input_search_widget.dart';
@@ -23,11 +23,18 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     with ValidationMixi {
   final formKey = GlobalKey<FormState>();
   Tm? tmSelected = Tm.entrada;
+  final TextEditingController warehouseController = TextEditingController();
+  final TextEditingController batchController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+
+  @override
+  void initState() {
+    warehouseController.text = widget.product.localPadrao;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-
     return SingleChildScrollView(
       child: Form(
         key: formKey,
@@ -74,74 +81,48 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20.0),
-                    child: TextFormField(
-                      validator: isNotEmpty,
-                      decoration: InputDecoration(
-                        label: const Text("Armazem"),
-                        border: InputBorder.none,
-                        prefixIcon: const Icon(Icons.qr_code),
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            WarehouseSearchModal.show(context);
-                          },
-                          icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
-                        ),
-                        //icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
-                      ),
-                    ),
-                  ),
-                  if (widget.product.lote == 'L')
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 20.0),
-                      child: TextFormField(
-                        enabled: true,
-                        validator: isNotEmpty,
-                        decoration: InputDecoration(
-                          label: const Text("Lote"),
-                          border: InputBorder.none,
-                          prefixIcon: const Icon(Icons.qr_code),
-                          suffixIcon: IconButton(
-                            onPressed: () {},
-                            icon:
-                                const FaIcon(FontAwesomeIcons.magnifyingGlass),
-                          ),
-                          //icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
-                        ),
-                      ),
-                    ),
-                  if (widget.product.localizacao == 'S')
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 20.0),
-                      child: TextFormField(
-                        enabled: true,
-                        validator: isNotEmpty,
-                        decoration: InputDecoration(
-                          label: const Text("Endereço"),
-                          border: InputBorder.none,
-                          prefixIcon: const Icon(Icons.qr_code),
-                          suffixIcon: IconButton(
-                            onPressed: () {},
-                            icon:
-                                const FaIcon(FontAwesomeIcons.magnifyingGlass),
-                          ),
-                        ),
-                      ),
-                    ),
                   InputSearchWidget(
-                    label: "teste",
+                    label: "Armazem",
+                    controller: warehouseController,
                     validator: isNotEmpty,
-                    onPressed: () {
-                      //warehouseSearch();
-                      AddressSearchModal.show(context);
+                    onPressed: () async {
+                      final value = await WarehouseSearchModal.show(context);
+                      warehouseController.text = value;
                     },
                   ),
+                  if (widget.product.lote == 'L')
+                    InputSearchWidget(
+                      label: "Lote",
+                      controller: batchController,
+                      validator: isNotEmpty,
+                      onPressed: () async {
+                        final value = await BatchSearchModal.show(context,
+                            widget.product.codigo, warehouseController.text);
+                        batchController.text = value;
+                      },
+                    ),
+                  if (widget.product.localizacao == 'S')
+                    InputSearchWidget(
+                      label: "Endereço",
+                      controller: addressController,
+                      validator: isNotEmpty,
+                      onPressed: () async {
+                        final value = await AddressSearchModal.show(
+                            context, warehouseController.text);
+                        addressController.text = value;
+                      },
+                    ),
                   ElevatedButton(
                     onPressed: () {
                       //context.read<ProductBalanceCubit>().reset();
 
                       final isValid = formKey.currentState!.validate();
+                      if (isValid) {
+                        log(batchController.text);
+                        log(warehouseController.text);
+                        log(addressController.text);
+                        log(tmSelected.toString());
+                      }
                       log(isValid.toString());
                     },
                     child: const SizedBox(

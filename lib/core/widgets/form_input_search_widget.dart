@@ -3,10 +3,15 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class InputSearchWidget extends StatefulWidget {
   const InputSearchWidget(
-      {super.key, this.validator, required this.label, this.onPressed});
+      {super.key,
+      this.validator,
+      required this.label,
+      this.onPressed,
+      required this.controller});
   final String? Function(String?)? validator;
   final void Function()? onPressed;
   final String label;
+  final TextEditingController controller;
   @override
   State<InputSearchWidget> createState() => _InputSearchWidgetState();
 }
@@ -18,6 +23,7 @@ class _InputSearchWidgetState extends State<InputSearchWidget> {
       padding: const EdgeInsets.only(bottom: 20.0),
       child: TextFormField(
         validator: widget.validator,
+        controller: widget.controller,
         decoration: InputDecoration(
           label: Text(widget.label),
           border: InputBorder.none,

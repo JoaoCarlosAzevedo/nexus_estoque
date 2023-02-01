@@ -5,16 +5,16 @@ import 'package:nexus_estoque/core/features/searches/addresses/data/model/addres
 import 'package:nexus_estoque/core/features/searches/addresses/provider/remote_address_provider.dart';
 
 class AddressSearchModal {
-  static Future<String> show(context) async {
+  static Future<String> show(context, String warehouse) async {
     {
       final result = await showModalBottomSheet<dynamic>(
         context: context,
         isScrollControlled: true,
         builder: (BuildContext context) {
-          return const FractionallySizedBox(
+          return FractionallySizedBox(
             heightFactor: 0.9,
             child: AddressSearchPage(
-              warehouse: '01',
+              warehouse: warehouse,
             ),
           );
         },
@@ -101,10 +101,10 @@ class _AddressSearchPageState extends ConsumerState<AddressSearchPage> {
                         child: ListTile(
                           onTap: () {
                             Navigator.pop(
-                                context, filterAddresses[index].codigoEndereco);
+                                context, filterAddresses[index].codigo);
                           },
                           title: Text(filterAddresses[index].descricao),
-                          subtitle: Text(filterAddresses[index].codigoEndereco),
+                          subtitle: Text(filterAddresses[index].codigo),
                           trailing:
                               Text("Local: ${filterAddresses[index].local}"),
                         ),
@@ -124,9 +124,7 @@ class _AddressSearchPageState extends ConsumerState<AddressSearchPage> {
     if (value.isNotEmpty) {
       setState(() {
         filterAddresses = listAddresses.where((element) {
-          if (element.codigoEndereco
-              .toUpperCase()
-              .contains(value.toUpperCase())) {
+          if (element.codigo.toUpperCase().contains(value.toUpperCase())) {
             return true;
           }
 
