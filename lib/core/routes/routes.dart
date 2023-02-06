@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/page/address_search_page.dart';
 import 'package:nexus_estoque/core/features/searches/products/pages/products_search_page.dart';
-import 'package:nexus_estoque/core/features/searches/warehouses/pages/warehouse_search_page.dart';
 import 'package:nexus_estoque/features/address/data/model/product_address_model.dart';
 import 'package:nexus_estoque/features/address/data/repositories/product_address_repository.dart';
 import 'package:nexus_estoque/features/address/pages/address_list_page/address_page.dart';
@@ -69,9 +68,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/produtos",
             builder: ((context, state) => const ProductSearchPage())),
-        GoRoute(
+        /*      GoRoute(
             path: "/armazem",
-            builder: ((context, state) => const WarehouseSearchPage())),
+            builder: ((context, state) => const WarehouseSearchPage())), */
         GoRoute(
             path: "/movimentos",
             builder: ((context, state) => const ProductTransactionPage())),

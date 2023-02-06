@@ -86,7 +86,8 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                     controller: warehouseController,
                     validator: isNotEmpty,
                     onPressed: () async {
-                      final value = await WarehouseSearchModal.show(context);
+                      final value = await WarehouseSearchModal.show(
+                          context, widget.product, tmSelected!);
                       warehouseController.text = value;
                     },
                   ),
@@ -96,8 +97,11 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                       controller: batchController,
                       validator: isNotEmpty,
                       onPressed: () async {
-                        final value = await BatchSearchModal.show(context,
-                            widget.product.codigo, warehouseController.text);
+                        final value = await BatchSearchModal.show(
+                            context,
+                            widget.product,
+                            warehouseController.text,
+                            tmSelected!);
                         batchController.text = value;
                       },
                     ),

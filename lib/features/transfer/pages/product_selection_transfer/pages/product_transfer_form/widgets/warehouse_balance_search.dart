@@ -20,7 +20,7 @@ class WarehouseBalanceSearch extends StatelessWidget {
         itemBuilder: (context, index) {
           return Card(
             child: ListTile(
-              title: Text("Armazém: ${warehouseBalances[index].armz}"),
+              title: Text("Armazém: ${warehouseBalances[index].codigo}"),
               subtitle: Text("Saldo: ${warehouseBalances[index].saldoLocal}"),
               onTap: () {
                 Navigator.pop(context, warehouseBalances[index]);

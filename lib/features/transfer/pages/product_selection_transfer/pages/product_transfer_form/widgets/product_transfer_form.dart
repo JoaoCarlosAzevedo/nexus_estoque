@@ -215,15 +215,15 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
 
     if (result != null) {
       final warehouse = result as BalanceWarehouse;
-      origWarehouseController.text = warehouse.armz;
-      destWarehouseController.text = warehouse.armz;
+      origWarehouseController.text = warehouse.codigo;
+      destWarehouseController.text = warehouse.codigo;
     }
   }
 
   void addressSearch() async {
     final armz = origWarehouseController.text;
     final addresses = widget.productDetail.armazem
-        .firstWhere((element) => element.armz == armz);
+        .firstWhere((element) => element.codigo == armz);
     final result = await showModalBottomSheet<dynamic>(
       context: context,
       builder: (BuildContext context) {

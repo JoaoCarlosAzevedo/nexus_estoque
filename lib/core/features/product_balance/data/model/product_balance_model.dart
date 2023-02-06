@@ -53,14 +53,16 @@ class ProductBalanceModel {
 class BalanceWarehouse {
   List<AddressModel> enderecos;
   List<BatchModel> lotes;
-  String armz;
+  String codigo;
+  String descricao;
   String filial;
   double saldoLocal;
 
   BalanceWarehouse({
     required this.enderecos,
     required this.lotes,
-    required this.armz,
+    required this.codigo,
+    required this.descricao,
     required this.filial,
     required this.saldoLocal,
   });
@@ -71,7 +73,8 @@ class BalanceWarehouse {
           map['enderecos']?.map((x) => AddressModel.fromMap(x))),
       lotes: List<BatchModel>.from(
           map['lotes']?.map((x) => BatchModel.fromMap(x))),
-      armz: map['codigo'] ?? '',
+      codigo: map['codigo'] ?? '',
+      descricao: map['descricao'] ?? '',
       saldoLocal: map['saldo']?.toDouble() ?? 0,
       filial: map['filial'] ?? '',
     );
