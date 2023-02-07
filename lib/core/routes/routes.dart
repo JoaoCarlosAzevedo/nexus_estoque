@@ -63,6 +63,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               final param = state.params['armazem'];
               return AddressSearchPage(
                 warehouse: param!,
+                data: const [],
               );
             })),
         GoRoute(

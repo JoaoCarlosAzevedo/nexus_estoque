@@ -150,6 +150,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
             heightFactor: 0.9,
             child: AddressSearchPage(
               warehouse: widget.productAddress.armazem,
+              data: const [],
             ));
       },
     );

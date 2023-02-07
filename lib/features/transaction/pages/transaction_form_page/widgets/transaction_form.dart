@@ -91,7 +91,8 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                       warehouseController.text = value;
                     },
                   ),
-                  if (widget.product.lote == 'L')
+                  if (widget.product.lote == 'L' &&
+                      widget.product.localizacao != "S")
                     InputSearchWidget(
                       label: "Lote",
                       controller: batchController,
@@ -105,14 +106,15 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                         batchController.text = value;
                       },
                     ),
-                  if (widget.product.localizacao == 'S')
+                  if (widget.product.localizacao == 'S' &&
+                      tmSelected! == Tm.saida)
                     InputSearchWidget(
                       label: "Endereço",
                       controller: addressController,
                       validator: isNotEmpty,
                       onPressed: () async {
                         final value = await AddressSearchModal.show(
-                            context, warehouseController.text);
+                            context, warehouseController.text, widget.product);
                         addressController.text = value;
                       },
                     ),

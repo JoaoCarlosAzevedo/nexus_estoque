@@ -246,6 +246,7 @@ class _ProductSelectedDetailState extends State<ProductSelectedDetail> {
       builder: (BuildContext context) {
         return AddressSearchPage(
           warehouse: destWarehouseController.text,
+          data: const [],
         );
       },
     );
