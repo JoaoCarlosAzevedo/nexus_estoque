@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
+import 'package:nexus_estoque/core/features/product_balance/pages/product_selection/cubit/product_balance_cubit.dart';
 import 'package:nexus_estoque/core/features/product_balance/pages/product_selection/product_selection_page.dart';
 import 'package:nexus_estoque/features/transaction/data/repositories/transaction_repository.dart';
 import 'package:nexus_estoque/features/transaction/pages/transaction_form_page/cubit/transaction_cubit.dart';
@@ -26,6 +27,10 @@ class ProductTransactionPage extends ConsumerWidget {
               if (state is TransactionError) {
                 showError(context, state.failure.error);
               }
+
+              if (state is TransactionLoaded) {
+                context.read<ProductBalanceCubit>().reset();
+              }
             },
             child: BlocBuilder<TransactionCubit, TransactionState>(
               builder: (context, state) {
@@ -35,11 +40,11 @@ class ProductTransactionPage extends ConsumerWidget {
                   );
                 }
 
-                if (state is TransactionLoaded) {
+                /*   if (state is TransactionLoaded) {
                   return const Center(
                     child: Text("Sucesso!"),
                   );
-                }
+                } */
                 return TransactionFormPage(
                   product: productBalance,
                 );

@@ -36,7 +36,7 @@ class TransactionRepository {
       }
 
       if (response.statusCode == 201) {
-        return Right(TransactionModel.fromJson(response.data));
+        return Right(TransactionModel.fromMap(response.data));
       }
 
       return const Left(Failure("Server Error!", ErrorType.exception));
