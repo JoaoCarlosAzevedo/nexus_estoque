@@ -1,12 +1,16 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/page/address_search_page.dart';
 import 'package:nexus_estoque/core/features/searches/batches/pages/batches_search_page.dart';
 import 'package:nexus_estoque/core/features/searches/warehouses/pages/warehouse_search_page.dart';
 import 'package:nexus_estoque/core/mixins/validation_mixin.dart';
 import 'package:nexus_estoque/core/widgets/form_input_search_widget.dart';
+import 'package:nexus_estoque/features/transaction/data/model/transaction_model.dart';
+import 'package:nexus_estoque/features/transaction/pages/transaction_form_page/cubit/transaction_cubit.dart';
+import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form/widgets/input_quantity.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form/widgets/produc_transfer_card.dart';
 
 class TransactionFormPage extends StatefulWidget {
@@ -26,6 +30,8 @@ class _TransactionFormPageState extends State<TransactionFormPage>
   final TextEditingController warehouseController = TextEditingController();
   final TextEditingController batchController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
+  final TextEditingController quantityController =
+      TextEditingController(text: '0.00');
 
   @override
   void initState() {
@@ -118,6 +124,12 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                         addressController.text = value;
                       },
                     ),
+                  InputQuantity(
+                    controller: quantityController,
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
                   ElevatedButton(
                     onPressed: () {
                       //context.read<ProductBalanceCubit>().reset();
@@ -128,6 +140,16 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                         log(warehouseController.text);
                         log(addressController.text);
                         log(tmSelected.toString());
+                        final tm = tmSelected == Tm.entrada ? '001' : '501';
+                        final transaction = TransactionModel(
+                            codigo: widget.product.codigo,
+                            local: warehouseController.text,
+                            quantidade: double.parse(quantityController.text),
+                            lote: batchController.text,
+                            endereco: addressController.text);
+                        context
+                            .read<TransactionCubit>()
+                            .postTransaction(transaction, tm);
                       }
                       log(isValid.toString());
                     },
