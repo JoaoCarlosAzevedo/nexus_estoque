@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
+import 'package:nexus_estoque/core/features/searches/addresses/data/model/address_model.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/page/address_search_page.dart';
 import 'package:nexus_estoque/core/features/searches/batches/pages/batches_search_page.dart';
 import 'package:nexus_estoque/core/features/searches/warehouses/pages/warehouse_search_page.dart';
@@ -37,6 +38,15 @@ class _TransactionFormPageState extends State<TransactionFormPage>
   void initState() {
     warehouseController.text = widget.product.localPadrao;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    warehouseController.dispose();
+    batchController.dispose();
+    addressController.dispose();
+    quantityController.dispose();
+    super.dispose();
   }
 
   @override
@@ -98,7 +108,8 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                     },
                   ),
                   if (widget.product.lote == 'L' &&
-                      widget.product.localizacao != "S")
+                      widget.product.localizacao == "S" &&
+                      tmSelected == Tm.entrada)
                     InputSearchWidget(
                       label: "Lote",
                       controller: batchController,
@@ -121,7 +132,10 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                       onPressed: () async {
                         final value = await AddressSearchModal.show(
                             context, warehouseController.text, widget.product);
-                        addressController.text = value;
+                        if (value is AddressModel) {
+                          addressController.text = value.codigo;
+                          batchController.text = value.lote;
+                        }
                       },
                     ),
                   InputQuantity(
@@ -136,10 +150,6 @@ class _TransactionFormPageState extends State<TransactionFormPage>
 
                       final isValid = formKey.currentState!.validate();
                       if (isValid) {
-                        log(batchController.text);
-                        log(warehouseController.text);
-                        log(addressController.text);
-                        log(tmSelected.toString());
                         final tm = tmSelected == Tm.entrada ? '001' : '501';
                         final transaction = TransactionModel(
                             codigo: widget.product.codigo,

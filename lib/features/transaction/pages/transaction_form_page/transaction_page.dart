@@ -39,12 +39,6 @@ class ProductTransactionPage extends ConsumerWidget {
                     child: CircularProgressIndicator(),
                   );
                 }
-
-                /*   if (state is TransactionLoaded) {
-                  return const Center(
-                    child: Text("Sucesso!"),
-                  );
-                } */
                 return TransactionFormPage(
                   product: productBalance,
                 );

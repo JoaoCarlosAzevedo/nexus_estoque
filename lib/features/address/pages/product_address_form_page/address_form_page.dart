@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nexus_estoque/core/features/searches/addresses/data/model/address_model.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/page/address_search_page.dart';
 import 'package:nexus_estoque/core/theme/app_colors.dart';
 import 'package:nexus_estoque/features/address/data/model/product_address_model.dart';
@@ -142,7 +143,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
   }
 
   void addressSearchPage() async {
-    final String? result = await showModalBottomSheet<dynamic>(
+    final result = await showModalBottomSheet<dynamic>(
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
@@ -154,8 +155,8 @@ class _AddressFormState extends ConsumerState<AddressForm> {
             ));
       },
     );
-    if (result != null) {
-      addressController.text = result;
+    if (result is AddressModel) {
+      addressController.text = result.codigo;
     }
   }
 }

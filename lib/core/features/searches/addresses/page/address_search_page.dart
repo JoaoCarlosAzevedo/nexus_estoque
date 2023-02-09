@@ -6,7 +6,7 @@ import 'package:nexus_estoque/core/features/searches/addresses/data/model/addres
 import 'package:nexus_estoque/core/features/searches/addresses/provider/remote_address_provider.dart';
 
 class AddressSearchModal {
-  static Future<String> show(
+  static Future<dynamic> show(
       context, String warehouse, ProductBalanceModel product) async {
     {
       final addresses = product.armazem.firstWhere(
@@ -131,7 +131,7 @@ class _AddressListState extends ConsumerState<AddressList> {
                 return Card(
                   child: ListTile(
                     onTap: () {
-                      Navigator.pop(context, filterAddresses[index].codigo);
+                      Navigator.pop(context, filterAddresses[index]);
                     },
                     title: Text(filterAddresses[index].descricao),
                     subtitle: Text(

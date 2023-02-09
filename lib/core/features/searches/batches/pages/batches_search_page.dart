@@ -61,7 +61,7 @@ class BatchSearchPage extends ConsumerWidget {
           actions: [
             IconButton(
                 onPressed: () {
-                  //ref.invalidate(remoteBatchProvider(widget.product));
+                  ref.invalidate(remoteBatchProvider(productArgs));
                 },
                 icon: const Icon(Icons.refresh)),
           ],
