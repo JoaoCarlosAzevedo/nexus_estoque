@@ -37,7 +37,7 @@ class _TransferFormPageState extends State<TransferFormPage>
   final TextEditingController destBatchController = TextEditingController();
 
   final TextEditingController quantityController =
-      TextEditingController(text: '1.0');
+      TextEditingController(text: '1.00');
 
   @override
   void initState() {

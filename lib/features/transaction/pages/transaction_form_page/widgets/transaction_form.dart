@@ -32,7 +32,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
   final TextEditingController batchController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController quantityController =
-      TextEditingController(text: '0.00');
+      TextEditingController(text: '1.00');
 
   @override
   void initState() {
