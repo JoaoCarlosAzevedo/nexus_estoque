@@ -62,7 +62,14 @@ class _ProductSelectioFormState extends State<ProductSelectioForm> {
                     enabled: true,
                     autofocus: true,
                     controller: controller,
-                    onSubmitted: (e) {},
+                    onSubmitted: (e) {
+                      if (controller.text.isNotEmpty) {
+                        context
+                            .read<ProductBalanceCubit>()
+                            .fetchProductBalance(controller.text);
+                        controller.clear();
+                      }
+                    },
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.qr_code),
                       suffixIcon: IconButton(

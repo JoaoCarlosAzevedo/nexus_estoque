@@ -11,8 +11,8 @@ import 'package:nexus_estoque/core/mixins/validation_mixin.dart';
 import 'package:nexus_estoque/core/widgets/form_input_search_widget.dart';
 import 'package:nexus_estoque/features/transaction/data/model/transaction_model.dart';
 import 'package:nexus_estoque/features/transaction/pages/transaction_form_page/cubit/transaction_cubit.dart';
-import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form/widgets/input_quantity.dart';
-import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form/widgets/produc_transfer_card.dart';
+import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity.dart';
+import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/produc_transfer_card.dart';
 
 class TransactionFormPage extends StatefulWidget {
   const TransactionFormPage({super.key, required this.product});
@@ -107,22 +107,6 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                       warehouseController.text = value;
                     },
                   ),
-                  if (widget.product.lote == 'L' &&
-                      widget.product.localizacao == "S" &&
-                      tmSelected == Tm.entrada)
-                    InputSearchWidget(
-                      label: "Lote",
-                      controller: batchController,
-                      validator: isNotEmpty,
-                      onPressed: () async {
-                        final value = await BatchSearchModal.show(
-                            context,
-                            widget.product,
-                            warehouseController.text,
-                            tmSelected!);
-                        batchController.text = value;
-                      },
-                    ),
                   if (widget.product.localizacao == 'S' &&
                       tmSelected! == Tm.saida)
                     InputSearchWidget(
@@ -136,6 +120,20 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                           addressController.text = value.codigo;
                           batchController.text = value.lote;
                         }
+                      },
+                    ),
+                  if (widget.product.lote == 'L')
+                    InputSearchWidget(
+                      label: "Lote",
+                      controller: batchController,
+                      validator: isNotEmpty,
+                      onPressed: () async {
+                        final value = await BatchSearchModal.show(
+                            context,
+                            widget.product,
+                            warehouseController.text,
+                            tmSelected!);
+                        batchController.text = value;
                       },
                     ),
                   InputQuantity(

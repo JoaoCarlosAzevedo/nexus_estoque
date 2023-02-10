@@ -135,6 +135,10 @@ class _AddressPageState extends ConsumerState<AddressPage> {
         return true;
       }
 
+      if (element.lote.toUpperCase().contains(search.toUpperCase())) {
+        return true;
+      }
+
       return false;
     }).toList();
   }
@@ -229,7 +233,7 @@ class AddressCard extends StatelessWidget {
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
                             Text(
-                              'NF: ${data.notafiscal}',
+                              invoiceOrBatch(data.notafiscal, data.lote),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context).textTheme.titleMedium,
@@ -265,6 +269,22 @@ class AddressCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String invoiceOrBatch(String invoice, String batch) {
+    if (invoice.isEmpty && batch.isEmpty) {
+      return '';
+    }
+
+    if (invoice.isEmpty) {
+      return "Lote: $batch";
+    }
+
+    if (batch.isEmpty) {
+      return "NF: $invoice";
+    }
+
+    return '';
   }
 }
 

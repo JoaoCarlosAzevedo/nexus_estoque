@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
+import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
@@ -9,9 +11,9 @@ class AddressSearchModal {
   static Future<dynamic> show(
       context, String warehouse, ProductBalanceModel product) async {
     {
-      final addresses = product.armazem.firstWhere(
-        (element) => element.codigo == warehouse,
-      );
+      BalanceWarehouse? addresses = product.armazem
+          .firstWhereOrNull((element) => element.codigo == warehouse);
+
       final result = await showModalBottomSheet<dynamic>(
         context: context,
         isScrollControlled: true,
@@ -19,9 +21,8 @@ class AddressSearchModal {
           return FractionallySizedBox(
             heightFactor: 0.9,
             child: AddressSearchPage(
-              warehouse: warehouse,
-              data: addresses.enderecos,
-            ),
+                warehouse: warehouse,
+                data: addresses != null ? addresses.enderecos : []),
           );
         },
       );
@@ -34,17 +35,38 @@ class AddressSearchModal {
   }
 }
 
-class AddressSearchPage extends ConsumerWidget {
+enum SearchType { all, balance }
+
+class AddressSearchPage extends ConsumerStatefulWidget {
   const AddressSearchPage(
       {required this.warehouse, required this.data, super.key});
+
   final String warehouse;
   final List<AddressModel> data;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  AddressSearchPageState createState() => AddressSearchPageState();
+}
+
+class AddressSearchPageState extends ConsumerState<AddressSearchPage> {
+  SearchType searchSelected = SearchType.all;
+
+  @override
+  void initState() {
+    if (widget.data.isEmpty) {
+      searchSelected = SearchType.all;
+    } else {
+      searchSelected = SearchType.balance;
+    }
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Busca Endereços"),
+        title: const Text("Busca Endereço"),
         centerTitle: true,
         actions: [
           IconButton(
@@ -54,12 +76,52 @@ class AddressSearchPage extends ConsumerWidget {
               icon: const Icon(Icons.refresh)),
         ],
       ),
-      body: data.isEmpty
-          ? RemoteAddress(warehouse)
-          : AddressList(
-              warehouse: warehouse,
-              data: data,
-            ),
+      body: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              //const Text("Busca Endereços"),
+              Row(
+                children: [
+                  Radio<SearchType>(
+                    value: SearchType.all,
+                    groupValue: searchSelected,
+                    onChanged: (SearchType? value) {
+                      setState(() {
+                        searchSelected = value!;
+                      });
+                    },
+                  ),
+                  const Text("Todos")
+                ],
+              ),
+              Row(
+                children: [
+                  Radio<SearchType>(
+                    value: SearchType.balance,
+                    groupValue: searchSelected,
+                    onChanged: (SearchType? value) {
+                      setState(() {
+                        searchSelected = value!;
+                      });
+                    },
+                  ),
+                  const Text("Saldo")
+                ],
+              ),
+            ],
+          ),
+          Expanded(
+            child: searchSelected == SearchType.all
+                ? RemoteAddress(widget.warehouse)
+                : AddressList(
+                    warehouse: widget.warehouse,
+                    data: widget.data,
+                  ),
+          )
+        ],
+      ),
     );
   }
 }

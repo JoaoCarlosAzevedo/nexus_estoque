@@ -46,6 +46,13 @@ class _ProductSearchPageState extends ConsumerState<ProductSearchPage> {
       appBar: AppBar(
         title: const Text("Busca Produtos"),
         centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                ref.invalidate(remoteProductProvider);
+              },
+              icon: const Icon(Icons.refresh))
+        ],
       ),
       body: futureProvider.when(
           skipLoadingOnRefresh: false,

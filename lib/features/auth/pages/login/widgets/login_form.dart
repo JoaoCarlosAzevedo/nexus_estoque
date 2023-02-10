@@ -13,6 +13,7 @@ class LoginForm extends StatelessWidget {
   final TextEditingController userController;
   final TextEditingController passwordController;
   final void Function() onPressed;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -68,14 +69,7 @@ class LoginForm extends StatelessWidget {
                         const SizedBox(
                           height: 20,
                         ),
-                        TextField(
-                          decoration:
-                              const InputDecoration(label: Text("Senha")),
-                          keyboardType: TextInputType.visiblePassword,
-                          obscureText: true,
-                          controller: passwordController,
-                          onSubmitted: (e) {},
-                        ),
+                        PasswordInput(passwordController: passwordController),
                         const SizedBox(
                           height: 20,
                         ),
@@ -93,12 +87,51 @@ class LoginForm extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Text('Versão 1.0.0'),
+                const Text('Versão 1.0.1'),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class PasswordInput extends StatefulWidget {
+  const PasswordInput({
+    Key? key,
+    required this.passwordController,
+  }) : super(key: key);
+
+  final TextEditingController passwordController;
+
+  @override
+  State<PasswordInput> createState() => _PasswordInputState();
+}
+
+class _PasswordInputState extends State<PasswordInput> {
+  bool showPassWord = true;
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      decoration: InputDecoration(
+        label: const Text("Senha"),
+        suffixIcon: IconButton(
+          onPressed: () {
+            setState(() {
+              showPassWord = !showPassWord;
+            });
+          },
+          //icon: const Icon(Icons.remove_red_eye),
+          icon: showPassWord
+              ? const Icon(Icons.visibility_off)
+              : const Icon(Icons.visibility),
+        ),
+      ),
+      keyboardType: TextInputType.visiblePassword,
+      obscureText: showPassWord,
+      controller: widget.passwordController,
+      onSubmitted: (e) {},
     );
   }
 }

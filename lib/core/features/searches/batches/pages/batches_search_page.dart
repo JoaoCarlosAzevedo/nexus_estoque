@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
+import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
@@ -49,10 +51,11 @@ class BatchSearchPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //if tm == Tm.entrada ? RemoteBatch(product):
-    final balanceBatches = product.armazem.firstWhere(
+    BalanceWarehouse? balanceBatches = product.armazem.firstWhereOrNull(
       (element) => element.codigo == productArgs.warehouse,
     );
-    final batches = balanceBatches.lotes;
+    final List<BatchModel> batches =
+        balanceBatches != null ? balanceBatches.lotes : [];
 
     return Scaffold(
         appBar: AppBar(

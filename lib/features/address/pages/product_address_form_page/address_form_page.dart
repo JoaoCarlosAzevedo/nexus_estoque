@@ -11,8 +11,8 @@ import 'package:nexus_estoque/features/address/data/repositories/product_address
 import 'package:nexus_estoque/features/address/pages/product_address_form_page/cubit/cubit/product_address_form_cubit.dart';
 import 'package:nexus_estoque/features/address/pages/product_address_form_page/cubit/cubit/product_address_form_state.dart';
 import 'package:nexus_estoque/features/address/pages/product_address_form_page/widgets/product_info_widget.dart';
-import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form/widgets/input_quantity.dart';
-import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form/widgets/input_text.dart';
+import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity.dart';
+import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_text.dart';
 
 class AddressForm extends ConsumerStatefulWidget {
   const AddressForm({super.key, required this.productAddress});

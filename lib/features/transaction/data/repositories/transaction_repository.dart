@@ -41,12 +41,14 @@ class TransactionRepository {
 
       return const Left(Failure("Server Error!", ErrorType.exception));
     } on DioError catch (e) {
-      if (e.response!.data["message"] != null) {
-        return Left(Failure(e.response!.data["message"], ErrorType.validation));
-      }
       if (e.type.name == "connectTimeout") {
         return const Left(Failure("Tempo Excedido", ErrorType.timeout));
       }
+
+      if (e.response!.data["message"] != null) {
+        return Left(Failure(e.response!.data["message"], ErrorType.validation));
+      }
+
       return const Left(Failure("Server Error!", ErrorType.exception));
     }
   }

@@ -7,11 +7,16 @@ class InputSearchWidget extends StatefulWidget {
       this.validator,
       required this.label,
       this.onPressed,
+      this.onSubmitted,
+      this.focusNode,
       required this.controller});
   final String? Function(String?)? validator;
   final void Function()? onPressed;
+  final void Function(String)? onSubmitted;
   final String label;
+  final FocusNode? focusNode;
   final TextEditingController controller;
+
   @override
   State<InputSearchWidget> createState() => _InputSearchWidgetState();
 }
@@ -22,15 +27,23 @@ class _InputSearchWidgetState extends State<InputSearchWidget> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20.0),
       child: TextFormField(
+        autofocus: true,
+        textInputAction: TextInputAction.next,
+        focusNode: widget.focusNode,
+        onFieldSubmitted: widget.onSubmitted,
         validator: widget.validator,
         controller: widget.controller,
         decoration: InputDecoration(
           label: Text(widget.label),
           border: InputBorder.none,
           prefixIcon: const Icon(Icons.qr_code),
-          suffixIcon: IconButton(
-            onPressed: widget.onPressed,
-            icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
+          suffixIcon: Focus(
+            descendantsAreFocusable: false,
+            canRequestFocus: false,
+            child: IconButton(
+              onPressed: widget.onPressed,
+              icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
+            ),
           ),
         ),
       ),

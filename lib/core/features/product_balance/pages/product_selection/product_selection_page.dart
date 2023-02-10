@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
@@ -20,6 +21,13 @@ class ProductSelectionPage extends ConsumerWidget {
   final IconData icon;
 
   final ProductBalanceWidgetBuilder builder;
+
+  void hideKeyboard() {
+    Future.delayed(
+      const Duration(milliseconds: 500),
+      () => SystemChannels.textInput.invokeMethod('TextInput.hide'),
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -51,17 +59,8 @@ class ProductSelectionPage extends ConsumerWidget {
                       return false;
                     },
                     child: builder(context, state.productBalance));
-                /*           return Column(
-                  children: [
-                    Text(state.productBalance.descricao),
-                    ElevatedButton(
-                        onPressed: () { 
-                          context.read<ProductBalanceCubit>().reset();
-                        },
-                        child: const Text("reset"))
-                  ],
-                ); */
               }
+              hideKeyboard();
               return ProductSelectioForm(title: title, icon: icon);
             },
           ),

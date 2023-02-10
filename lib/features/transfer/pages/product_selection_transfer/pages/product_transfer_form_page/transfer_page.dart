@@ -6,41 +6,42 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
 import 'package:nexus_estoque/core/features/product_balance/pages/product_selection/cubit/product_balance_cubit.dart';
 import 'package:nexus_estoque/core/features/product_balance/pages/product_selection/product_selection_page.dart';
-import 'package:nexus_estoque/features/transaction/data/repositories/transaction_repository.dart';
-import 'package:nexus_estoque/features/transaction/pages/transaction_form_page/cubit/transaction_cubit.dart';
-import 'package:nexus_estoque/features/transaction/pages/transaction_form_page/widgets/transaction_form.dart';
+import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/data/repositories/product_transfer_repository.dart';
+import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/cubit/product_transfer_cubit.dart';
+import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/transfer_form_page.dart';
 
-class ProductTransactionPage extends ConsumerWidget {
-  const ProductTransactionPage({super.key});
+class ProductTransferPage extends ConsumerWidget {
+  const ProductTransferPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ProductSelectionPage(
-      title: "Movimentos",
-      icon: FontAwesomeIcons.boxesPacking,
+      title: "Transferências",
+      icon: FontAwesomeIcons.cartFlatbed,
       builder: (BuildContext context, ProductBalanceModel productBalance) {
         return BlocProvider(
           create: (context) =>
-              TransactionCubit(ref.read(transactionRepository)),
-          child: BlocListener<TransactionCubit, TransactionState>(
+              ProductTransferCubit(ref.read(productTransferRepository)),
+          child: BlocListener<ProductTransferCubit, ProductTransferState>(
             listener: (context, state) {
-              if (state is TransactionError) {
-                showError(context, state.failure.error);
+              if (state is ProductTransferError) {
+                showError(context, state.error.error);
               }
 
-              if (state is TransactionLoaded) {
+              if (state is ProductTransferLoaded) {
                 context.read<ProductBalanceCubit>().reset();
               }
             },
-            child: BlocBuilder<TransactionCubit, TransactionState>(
+            child: BlocBuilder<ProductTransferCubit, ProductTransferState>(
               builder: (context, state) {
-                if (state is TransactionLoading) {
+                if (state is ProductTransferLoading) {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
-                return TransactionFormPage(
-                  product: productBalance,
+
+                return TransferFormPage(
+                  productDetail: productBalance,
                 );
               },
             ),

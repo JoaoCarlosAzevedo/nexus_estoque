@@ -15,6 +15,7 @@ import 'package:nexus_estoque/features/auth/providers/login_state.dart';
 import 'package:nexus_estoque/features/auth/providers/router_notifier.dart';
 import 'package:nexus_estoque/features/menu/presentation/pages/menu_page.dart';
 import 'package:nexus_estoque/features/transaction/pages/transaction_form_page/transaction_page.dart';
+import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/transfer_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authService = RouterNotifier(ref);
@@ -69,9 +70,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/produtos",
             builder: ((context, state) => const ProductSearchPage())),
-        /*      GoRoute(
-            path: "/armazem",
-            builder: ((context, state) => const WarehouseSearchPage())), */
+        GoRoute(
+            path: "/transferencias",
+            builder: ((context, state) => const ProductTransferPage())),
         GoRoute(
             path: "/movimentos",
             builder: ((context, state) => const ProductTransactionPage())),
