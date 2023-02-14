@@ -99,6 +99,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                   ),
                   InputSearchWidget(
                     label: "Armazem",
+                    autoFocus: false,
                     controller: warehouseController,
                     validator: isNotEmpty,
                     onPressed: () async {

@@ -9,6 +9,7 @@ class InputSearchWidget extends StatefulWidget {
       this.onPressed,
       this.onSubmitted,
       this.focusNode,
+      this.autoFocus,
       required this.controller});
   final String? Function(String?)? validator;
   final void Function()? onPressed;
@@ -16,7 +17,7 @@ class InputSearchWidget extends StatefulWidget {
   final String label;
   final FocusNode? focusNode;
   final TextEditingController controller;
-
+  final bool? autoFocus;
   @override
   State<InputSearchWidget> createState() => _InputSearchWidgetState();
 }
@@ -27,7 +28,7 @@ class _InputSearchWidgetState extends State<InputSearchWidget> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20.0),
       child: TextFormField(
-        autofocus: true,
+        autofocus: widget.autoFocus ?? true,
         textInputAction: TextInputAction.next,
         focusNode: widget.focusNode,
         onFieldSubmitted: widget.onSubmitted,

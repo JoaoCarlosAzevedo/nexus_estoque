@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/constants/config.dart';
@@ -33,12 +32,12 @@ class ProductRepository {
       });
 
       if (response.statusCode != 200) {
-        throw const Left(Failure("Server Error!", ErrorType.exception));
+        throw const Failure("Server Error!", ErrorType.exception);
       }
 
       if (response.data.isEmpty) {
-        throw const Left(
-            Failure("Nenhum registro encontrado.", ErrorType.validation));
+        throw const Failure(
+            "Nenhum registro encontrado.", ErrorType.validation);
       }
 
       final listProducts = (response.data['resultado'] as List).map((item) {
@@ -48,7 +47,7 @@ class ProductRepository {
       return listProducts;
     } on DioError catch (e) {
       log(e.type.name);
-      return throw const Left(Failure("Server Error!", ErrorType.exception));
+      return throw const Failure("Server Error!", ErrorType.exception);
     }
   }
 }

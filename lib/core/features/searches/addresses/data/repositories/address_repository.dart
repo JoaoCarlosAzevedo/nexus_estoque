@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/constants/config.dart';
@@ -34,12 +33,12 @@ class AddressRepository {
       });
 
       if (response.statusCode != 200) {
-        throw const Left(Failure("Server Error!", ErrorType.exception));
+        throw const Failure("Server Error!", ErrorType.exception);
       }
 
       if (response.data.isEmpty) {
-        throw const Left(
-            Failure("Nenhum registro encontrado.", ErrorType.validation));
+        throw const Failure(
+            "Nenhum registro encontrado.", ErrorType.validation);
       }
 
       final listAddress = (response.data['resultado'] as List).map((item) {
@@ -51,7 +50,7 @@ class AddressRepository {
           .toList(); */
     } on DioError catch (e) {
       log(e.type.name);
-      throw const Left(Failure("Server Error!", ErrorType.exception));
+      throw const Failure("Server Error!", ErrorType.exception);
     }
   }
 }

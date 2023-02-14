@@ -96,6 +96,7 @@ class _TransferFormPageState extends State<TransferFormPage>
                     InputSearchWidget(
                       label: "Local Origem",
                       controller: origWarehouseController,
+                      autoFocus: false,
                       validator: isNotEmpty,
                       onPressed: () async {
                         final value = await WarehouseSearchModal.show(

@@ -19,8 +19,8 @@ class MenuPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authCubit = context.read<AuthCubit>();
-    final state = authCubit.state as AuthLoaded;
-    final user = state.user;
+    //final state = authCubit.state as AuthLoaded;
+    //final user = state.user;
 
     return Scaffold(
       appBar: AppBar(
@@ -55,13 +55,13 @@ class MenuPage extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
+              /*   Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text('Olá, ${user.displayName}'),
               ),
               const SizedBox(
                 height: 15,
-              ),
+              ), */
               Expanded(
                 flex: 3,
                 child: SingleChildScrollView(

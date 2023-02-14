@@ -50,6 +50,7 @@ class _ProductSearchPageState extends ConsumerState<ProductSearchPage> {
           IconButton(
               onPressed: () {
                 ref.invalidate(remoteProductProvider);
+                resetFilter = true;
               },
               icon: const Icon(Icons.refresh))
         ],
