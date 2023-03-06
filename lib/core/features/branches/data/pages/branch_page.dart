@@ -16,7 +16,7 @@ class BranchPange extends ConsumerWidget {
     final futureProvider = ref.watch(remoteBranchProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Busca Endereço"),
+        title: const Text("Grupo / Filial"),
         centerTitle: true,
         actions: [
           IconButton(

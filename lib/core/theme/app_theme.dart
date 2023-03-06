@@ -112,14 +112,19 @@ class AppTheme {
         suffixIconColor: AppColors.grey,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.grey,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16.0),
+        style: ElevatedButton.styleFrom(
+          disabledBackgroundColor: Colors.grey.shade500,
+          backgroundColor: AppColors.grey,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+          textStyle: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      )),
+      ),
       iconTheme: const IconThemeData(color: AppColors.grey),
       // Define the default `TextTheme`. Use this to specify the default
       // text styling for headlines, titles, bodies of text, and more.

@@ -25,7 +25,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         actions: [
           IconButton(
             onPressed: () {
-              context.push('/filiais');
+              context.push('/configuracoes');
             },
             icon: const Icon(Icons.settings),
           )

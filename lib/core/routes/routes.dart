@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/core/features/branches/data/pages/branch_page.dart';
+import 'package:nexus_estoque/core/features/environment/pages/environment_config_page.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/page/address_search_page.dart';
 import 'package:nexus_estoque/core/features/searches/products/pages/products_search_page.dart';
 import 'package:nexus_estoque/features/address/data/model/product_address_model.dart';
@@ -29,6 +30,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         final loginState = ref.read(loginControllerProvider);
         final isLoginRoute = state.subloc == '/login';
 
+        if (state.subloc == "/configuracoes") {
+          return null;
+        }
         if (loginState is LoginStateInitial) {
           return isLoginRoute ? null : '/login';
         }
@@ -82,8 +86,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: ((context, state) => const BranchPange())),
         GoRoute(
             path: "/configuracoes",
-            builder: ((context, state) =>
-                const DefaultPage(title: 'Configuracoes'))),
+            builder: ((context, state) => const EnvironmentConfigPage())),
       ]);
 });
 
