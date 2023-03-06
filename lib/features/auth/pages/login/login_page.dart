@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/features/auth/pages/login/cubit/auth_cubit.dart';
 import 'package:nexus_estoque/features/auth/pages/login/widgets/login_form.dart';
 import 'package:nexus_estoque/features/auth/providers/login_controller_provider.dart';
@@ -20,7 +21,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.push('/filiais');
+            },
+            icon: const Icon(Icons.settings),
+          )
+        ],
+      ),
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthError) {
