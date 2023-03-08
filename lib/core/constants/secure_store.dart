@@ -6,12 +6,13 @@ final urlStoreProvider = Provider<UrlStore>((ref) => UrlStore());
 class UrlStore {
   final _storage = const FlutterSecureStorage();
 
-  void saveURL(String url) async {
+  Future<void> saveURL(String url) async {
     await _storage.write(key: 'url', value: url.trim());
   }
 
   Future<String> getURL() async {
     final url = await _storage.read(key: 'url');
+
     return url ?? '';
   }
 }
