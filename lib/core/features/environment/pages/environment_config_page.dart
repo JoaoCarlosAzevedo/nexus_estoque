@@ -16,6 +16,11 @@ class _EnvironmentConfigPageState extends ConsumerState<EnvironmentConfigPage> {
   final TextEditingController urlController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final futureProvider =
         ref.watch(remoteEnvrionmentProvider(urlController.text));
