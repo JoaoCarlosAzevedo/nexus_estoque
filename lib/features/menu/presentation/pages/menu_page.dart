@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/core/constants/menus.dart';
 import 'package:nexus_estoque/features/auth/pages/login/cubit/auth_cubit.dart';
 import 'package:nexus_estoque/features/auth/providers/login_controller_provider.dart';
@@ -48,12 +47,12 @@ class MenuPage extends ConsumerWidget {
                 authCubit.logout();
               },
               icon: const Icon(Icons.logout)),
-          IconButton(
+          /*   IconButton(
             onPressed: () {
               context.push('/filiais');
             },
             icon: const Icon(Icons.settings),
-          )
+          ) */
         ],
       ),
       body: SafeArea(

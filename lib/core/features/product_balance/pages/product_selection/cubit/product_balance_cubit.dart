@@ -10,7 +10,12 @@ part 'product_balance_state.dart';
 class ProductBalanceCubit extends Cubit<ProductBalanceCubitState> {
   final ProductBalanceRepositoryv2 repository;
 
-  ProductBalanceCubit(this.repository) : super(ProductBalanceCubitInitial());
+  ProductBalanceCubit(this.repository, {String? code})
+      : super(ProductBalanceCubitInitial()) {
+    if (code != null) {
+      fetchProductBalance(code);
+    }
+  }
 
   void reset() {
     emit(ProductBalanceCubitInitial());

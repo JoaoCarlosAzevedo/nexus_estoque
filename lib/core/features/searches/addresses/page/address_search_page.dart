@@ -203,7 +203,10 @@ class _AddressListState extends ConsumerState<AddressList> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(filterAddresses[index].lote),
-                        Text("${filterAddresses[index].quantidade}"),
+                        if (filterAddresses[index].quantidade != 0)
+                          Text(
+                            "${filterAddresses[index].quantidade}",
+                          ),
                       ],
                     ),
                   ),

@@ -1,8 +1,13 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+// ignore: depend_on_referenced_packages
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
+import 'package:nexus_estoque/core/features/product_balance/data/repositories/product_balance_repository.dart';
+import 'package:nexus_estoque/core/features/product_balance/pages/product_selection/cubit/product_balance_cubit.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/data/model/address_model.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/page/address_search_page.dart';
 import 'package:nexus_estoque/core/theme/app_colors.dart';
@@ -143,20 +148,67 @@ class _AddressFormState extends ConsumerState<AddressForm> {
   }
 
   void addressSearchPage() async {
+    final repository = ref.read(productBalanceRepositoryProvider);
     final result = await showModalBottomSheet<dynamic>(
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
         return FractionallySizedBox(
-            heightFactor: 0.9,
-            child: AddressSearchPage(
+          heightFactor: 0.9,
+          child: BlocProvider(
+            create: (context) => ProductBalanceCubit(repository,
+                code: widget.productAddress.codigo),
+            child: BlocListener<ProductBalanceCubit, ProductBalanceCubitState>(
+              listener: (context, state) {
+                if (state is ProductBalanceCubitError) {
+                  showError(context, state.error.error);
+                }
+              },
+              child: BlocBuilder<ProductBalanceCubit, ProductBalanceCubitState>(
+                builder: (context, state) {
+                  if (state is ProductBalanceCubitLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (state is ProductBalanceCubitLoaded) {
+                    BalanceWarehouse? addresses = state.productBalance.armazem
+                        .firstWhereOrNull((element) =>
+                            element.codigo == widget.productAddress.armazem);
+
+                    return AddressSearchPage(
+                      warehouse: widget.productAddress.armazem,
+                      data: addresses != null ? addresses.enderecos : [],
+                    );
+                  }
+
+                  return const Center(
+                    child: Text("Erro ao carregar dados do produto"),
+                  );
+                },
+              ),
+            ),
+            /*  child: AddressSearchPage(
               warehouse: widget.productAddress.armazem,
               data: const [],
-            ));
+            ), */
+          ),
+        );
       },
     );
     if (result is AddressModel) {
       addressController.text = result.codigo;
     }
   }
+}
+
+void showError(context, String error) {
+  AwesomeDialog(
+          context: context,
+          dialogType: DialogType.error,
+          animType: AnimType.rightSlide,
+          desc: error,
+          btnOkOnPress: () {},
+          btnOkColor: Theme.of(context).primaryColor)
+      .show();
 }
