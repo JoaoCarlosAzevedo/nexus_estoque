@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/repositories/product_balance_repository.dart';
 import 'package:nexus_estoque/core/features/product_balance/pages/product_selection/cubit/product_balance_cubit.dart';
@@ -16,6 +17,7 @@ import 'package:nexus_estoque/features/address/data/repositories/product_address
 import 'package:nexus_estoque/features/address/pages/product_address_form_page/cubit/cubit/product_address_form_cubit.dart';
 import 'package:nexus_estoque/features/address/pages/product_address_form_page/cubit/cubit/product_address_form_state.dart';
 import 'package:nexus_estoque/features/address/pages/product_address_form_page/widgets/product_info_widget.dart';
+import 'package:nexus_estoque/features/address/pages/product_check_page/product_check_page.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_text.dart';
 
@@ -53,7 +55,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        //backgroundColor: AppColors.background,
         title: const Text("Endereçamento"),
       ),
       body: BlocProvider(
@@ -74,11 +76,16 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                   .show();
             }
             if (state is ProductAddressFormSuccess) {
-              Navigator.pop(context);
+              context.pop();
             }
           },
           child: BlocBuilder<ProductAddressFormCubit, ProductAddressFormState>(
             builder: (context, state) {
+              if (state is ProductAddressFormCheck) {
+                return ProductCheckPage(
+                  productAddress: widget.productAddress,
+                );
+              }
               if (state is ProductAddressFormLoading) {
                 return const Center(
                   child: CircularProgressIndicator(),
@@ -87,8 +94,11 @@ class _AddressFormState extends ConsumerState<AddressForm> {
               return SingleChildScrollView(
                 child: Column(
                   children: [
-                    ProductInfo(
-                      productAddress: widget.productAddress,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ProductInfo(
+                        productAddress: widget.productAddress,
+                      ),
                     ),
                     const SizedBox(
                       height: 10,

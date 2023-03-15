@@ -7,7 +7,11 @@ class ProductAddressFormCubit extends Cubit<ProductAddressFormState> {
   final ProductAddressRepository productAddressRepository;
 
   ProductAddressFormCubit(this.productAddressRepository)
-      : super(ProductAddressFormInitial());
+      : super(ProductAddressFormCheck());
+
+  void checkProduct() {
+    emit(ProductAddressFormInitial());
+  }
 
   void postProductAddress(
       String produto, String codeseq, String endereco, double quantity) async {

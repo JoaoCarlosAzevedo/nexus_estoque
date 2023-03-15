@@ -8,6 +8,11 @@ class ProductAddressFormInitial extends ProductAddressFormState {
   List<Object> get props => [];
 }
 
+class ProductAddressFormCheck extends ProductAddressFormState {
+  @override
+  List<Object> get props => [];
+}
+
 class ProductAddressFormLoading extends ProductAddressFormState {
   @override
   List<Object> get props => [];

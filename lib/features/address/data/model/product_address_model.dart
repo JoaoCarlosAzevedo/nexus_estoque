@@ -12,6 +12,9 @@ class ProductAddressModel {
   final String armazem;
   final String codigo;
   final String fornecedor;
+  final String validade;
+  final String chave;
+  final String codigoBarras;
 
   ProductAddressModel({
     required this.descricao,
@@ -25,6 +28,9 @@ class ProductAddressModel {
     required this.armazem,
     required this.codigo,
     required this.fornecedor,
+    required this.validade,
+    required this.chave,
+    required this.codigoBarras,
   });
 
   Map<String, dynamic> toMap() {
@@ -40,6 +46,9 @@ class ProductAddressModel {
       'armazem': armazem,
       'codigo': codigo,
       'fornecedor': fornecedor,
+      'validade': validade,
+      'chave': chave,
+      'codigobarras': codigoBarras,
     };
   }
 
@@ -55,7 +64,10 @@ class ProductAddressModel {
         um: map['um'] ?? '',
         armazem: map['armazem'] ?? '',
         codigo: map['codigo'] ?? '',
-        fornecedor: map['fornecedor'] ?? '');
+        fornecedor: map['fornecedor'] ?? '',
+        validade: map['validade'] ?? '',
+        chave: map['chave'] ?? '',
+        codigoBarras: map['codigobarras'] ?? '');
   }
 
   String toJson() => json.encode(toMap());

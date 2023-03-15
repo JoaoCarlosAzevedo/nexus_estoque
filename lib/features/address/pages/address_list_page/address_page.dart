@@ -139,6 +139,12 @@ class _AddressPageState extends ConsumerState<AddressPage> {
         return true;
       }
 
+      if (search.trim().length >= 44) {
+        if (element.chave.toUpperCase().contains(search.trim().toUpperCase())) {
+          return true;
+        }
+      }
+
       return false;
     }).toList();
   }
