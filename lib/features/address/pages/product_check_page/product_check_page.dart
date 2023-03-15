@@ -91,20 +91,27 @@ class _ProductCheckPageState extends State<ProductCheckPage> {
   }
 
   void checkProductCode(String code) {
+    final cubit = BlocProvider.of<ProductAddressFormCubit>(context);
+
     if (code.trim().isEmpty) {
       setState(() {
         _validate = true;
       });
       return;
     }
-    if (widget.productAddress.codigo.trim() == code.trim() ||
-        widget.productAddress.codigoBarras == code.trim()) {
-      final cubit = BlocProvider.of<ProductAddressFormCubit>(context);
+
+    if (widget.productAddress.codigo.trim() == code.trim()) {
       cubit.checkProduct();
-    } else {
-      setState(() {
-        _validate = true;
-      });
+      return;
     }
+
+    if (widget.productAddress.codigoBarras.contains(code.trim()) &&
+        code.trim().length > 6) {
+      cubit.checkProduct();
+      return;
+    }
+    setState(() {
+      _validate = true;
+    });
   }
 }
