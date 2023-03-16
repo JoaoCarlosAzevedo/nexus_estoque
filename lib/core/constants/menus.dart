@@ -33,17 +33,10 @@ final List menuItens = [
     color: Colors.red,
     route: 'movimentos',
   ),
-  /*
   MenuItemInfo(
-    title: "Listagem Produtos",
-    icon: FontAwesomeIcons.clipboardCheck,
+    title: "Separação",
+    icon: FontAwesomeIcons.dolly,
     color: Colors.red,
-    route: 'produtos',
+    route: 'separacao',
   ),
-  MenuItemInfo(
-    title: "Listagem Armazens",
-    icon: FontAwesomeIcons.clipboardCheck,
-    color: Colors.red,
-    route: 'armazem',
-  ), */
 ];

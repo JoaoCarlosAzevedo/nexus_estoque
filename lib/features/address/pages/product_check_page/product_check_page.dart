@@ -31,6 +31,12 @@ class _ProductCheckPageState extends State<ProductCheckPage> {
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
 

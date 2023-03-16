@@ -21,6 +21,12 @@ class _EnvironmentConfigPageState extends ConsumerState<EnvironmentConfigPage> {
   }
 
   @override
+  void dispose() {
+    urlController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final futureProvider =
         ref.watch(remoteEnvrionmentProvider(urlController.text));

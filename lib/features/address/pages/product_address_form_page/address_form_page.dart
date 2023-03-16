@@ -11,7 +11,6 @@ import 'package:nexus_estoque/core/features/product_balance/data/repositories/pr
 import 'package:nexus_estoque/core/features/product_balance/pages/product_selection/cubit/product_balance_cubit.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/data/model/address_model.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/page/address_search_page.dart';
-import 'package:nexus_estoque/core/theme/app_colors.dart';
 import 'package:nexus_estoque/features/address/data/model/product_address_model.dart';
 import 'package:nexus_estoque/features/address/data/repositories/product_address_repository.dart';
 import 'package:nexus_estoque/features/address/pages/product_address_form_page/cubit/cubit/product_address_form_cubit.dart';

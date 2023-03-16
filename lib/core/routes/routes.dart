@@ -11,12 +11,14 @@ import 'package:nexus_estoque/features/address/data/repositories/product_address
 import 'package:nexus_estoque/features/address/pages/address_list_page/address_page.dart';
 import 'package:nexus_estoque/features/address/pages/address_list_page/cubit/product_address_cubit.dart';
 import 'package:nexus_estoque/features/address/pages/product_address_form_page/address_form_page.dart';
-import 'package:nexus_estoque/features/address/pages/product_check_page/product_check_page.dart';
 import 'package:nexus_estoque/features/auth/pages/login/login_page.dart';
 import 'package:nexus_estoque/features/auth/providers/login_controller_provider.dart';
 import 'package:nexus_estoque/features/auth/providers/login_state.dart';
 import 'package:nexus_estoque/features/auth/providers/router_notifier.dart';
 import 'package:nexus_estoque/features/menu/presentation/pages/menu_page.dart';
+import 'package:nexus_estoque/features/picking/data/repositories/picking_repository.dart';
+import 'package:nexus_estoque/features/picking/pages/picking_list/cubit/picking_cubit.dart';
+import 'package:nexus_estoque/features/picking/pages/picking_list/picking_page.dart';
 import 'package:nexus_estoque/features/transaction/pages/transaction_form_page/transaction_page.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/transfer_page.dart';
 
@@ -55,18 +57,13 @@ final routerProvider = Provider<GoRouter>((ref) {
                       ProductAddressCubit(ref.read(productAddressRepository)),
                   child: const AddressPage(),
                 ))),
-        /*    GoRoute(
-          path: "/enderecar/check",
-          builder: ((context, state) {
-            final param = state.extra as ProductAddressModel;
-            /*  return AddressForm(
-              productAddress: param,
-            ); */
-            return ProductCheckPage(
-              productAddress: param,
-            );
-          }),
-        ), */
+        GoRoute(
+            path: "/separacao",
+            builder: ((context, state) => BlocProvider(
+                  create: (context) =>
+                      PickingCubitCubit(ref.read(pickingRepositoryProvider)),
+                  child: const PickingPage(),
+                ))),
         GoRoute(
           path: "/enderecar/form",
           builder: ((context, state) {
