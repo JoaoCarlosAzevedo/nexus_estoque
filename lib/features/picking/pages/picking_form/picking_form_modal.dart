@@ -122,6 +122,8 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
                           ),
                         ),
                         const Divider(),
+                        Text("Quant. Separada: $quantity"),
+                        const Divider(),
                         TextFormField(
                           enabled: true,
                           focusNode: productFocus,
@@ -130,7 +132,7 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
                             if (validateData()) {
                               productController.clear();
                               productFocus.requestFocus();
-                              increment(1);
+                              increment(context, 1);
                             }
                           },
                           decoration: const InputDecoration(
@@ -141,7 +143,7 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
                         const SizedBox(
                           height: 20,
                         ),
-                        ElevatedButton(
+                        /*  ElevatedButton(
                           onPressed: () {
                             submit(context);
                           },
@@ -152,7 +154,7 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
                               child: Center(child: Text("Confirmar")),
                             ),
                           ),
-                        ),
+                        ), */
                       ],
                     ),
                   ),
@@ -165,15 +167,10 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
     );
   }
 
-  void increment(double number) {
+  void increment(BuildContext context, double number) {
     double isPositive = quantity + number;
 
     if (isPositive >= 0) {
-      if (isPositive > widget.picking.quantidade) {
-        //showValidation(context, "Quantidade superior ao reservado!");
-        submit(context);
-        return;
-      }
       setState(() {
         checkProduct = true;
       });
@@ -182,6 +179,12 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
       setState(() {
         quantity = quantity + number;
       });
+
+      if (quantity == widget.picking.quantidade) {
+        //showValidation(context, "Quantidade superior ao reservado!");
+        submit(context);
+        return;
+      }
     }
   }
 

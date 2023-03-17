@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nexus_estoque/features/picking/data/model/picking_model.dart';
+import 'package:nexus_estoque/features/picking/data/model/picking_order_model.dart';
 import 'package:nexus_estoque/features/picking/pages/picking_form/picking_form_modal.dart';
 import 'package:nexus_estoque/features/picking/pages/picking_list/cubit/picking_cubit.dart';
 import 'package:nexus_estoque/features/picking/pages/picking_list/widgets/picking_card_widget.dart';
@@ -86,10 +88,14 @@ class _PickingProductPageState extends State<PickingProductPage> {
                           );
                         }
                         if (state is PickingCubiLoaded) {
-                          listProductAddress = state.pickingList
-                              .firstWhere(
-                                  (element) => element.pedido == widget.pedido)
-                              .itens;
+                          final aux = state.pickingList.firstWhereOrNull(
+                            (element) => element.pedido == widget.pedido,
+                          );
+                          if (aux != null) {
+                            listProductAddress = aux.itens;
+                          } else {
+                            listProductAddress = [];
+                          }
                           filterList = filter(controller.text);
 
                           if (filterList.isEmpty) {

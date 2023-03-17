@@ -195,9 +195,10 @@ class _AddressListState extends ConsumerState<AddressList> {
                     onTap: () {
                       Navigator.pop(context, filterAddresses[index]);
                     },
-                    title: Text(filterAddresses[index].descricao),
+                    title: Text(
+                        "${filterAddresses[index].local} - ${filterAddresses[index].armzDesc}"),
                     subtitle: Text(
-                        "${filterAddresses[index].local} - ${filterAddresses[index].codigo}"),
+                        "${filterAddresses[index].codigo} - ${filterAddresses[index].descricao}"),
                     trailing: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.end,

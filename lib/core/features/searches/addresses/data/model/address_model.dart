@@ -6,15 +6,16 @@ class AddressModel {
   String local;
   String codigo;
   String lote;
+  String armzDesc;
   double quantidade;
 
-  AddressModel({
-    required this.descricao,
-    required this.local,
-    required this.codigo,
-    required this.lote,
-    required this.quantidade,
-  });
+  AddressModel(
+      {required this.descricao,
+      required this.local,
+      required this.codigo,
+      required this.lote,
+      required this.quantidade,
+      required this.armzDesc});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -23,6 +24,7 @@ class AddressModel {
       'codigo': codigo,
       'lote': lote,
       'quantidade': quantidade,
+      'armazemDesc': armzDesc
     };
   }
 
@@ -32,6 +34,7 @@ class AddressModel {
       local: map['armazem'] ?? '',
       codigo: map['codigo'] ?? '',
       lote: map['lote'] ?? '',
+      armzDesc: map['armazemDesc'] ?? '',
       quantidade: map['quantidade']?.toDouble() ?? 0,
     );
   }
