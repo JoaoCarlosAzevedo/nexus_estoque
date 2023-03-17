@@ -47,23 +47,22 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
 
   final TextEditingController productController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
-  final TextEditingController quantityController =
-      TextEditingController(text: '1.00');
+
   final FocusNode productFocus = FocusNode();
   bool checkProduct = false;
+  double quantity = 0;
 
   @override
   void dispose() {
     productController.dispose();
     addressController.dispose();
-    quantityController.dispose();
     productFocus.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
-    quantityController.text = widget.picking.separado.toString();
+    quantity = widget.picking.separado;
     super.initState();
   }
 
@@ -139,10 +138,6 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
                             label: Text("Confirmação do Produto"),
                           ),
                         ),
-                        const Divider(),
-                        InputQuantity(
-                          controller: quantityController,
-                        ),
                         const SizedBox(
                           height: 20,
                         ),
@@ -171,11 +166,12 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
   }
 
   void increment(double number) {
-    double isPositive = double.parse(quantityController.text) + number;
+    double isPositive = quantity + number;
 
     if (isPositive >= 0) {
       if (isPositive > widget.picking.quantidade) {
-        showValidation(context, "Quantidade superior ao reservado!");
+        //showValidation(context, "Quantidade superior ao reservado!");
+        submit(context);
         return;
       }
       setState(() {
@@ -183,12 +179,9 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
       });
 
       AudioService.beep();
-
-      quantityController.text =
-          (double.parse(quantityController.text) + number).toStringAsFixed(2);
-
-      quantityController.selection =
-          TextSelection.collapsed(offset: quantityController.text.length);
+      setState(() {
+        quantity = quantity + number;
+      });
     }
   }
 
@@ -225,8 +218,6 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
       return;
     }
     if (isValid) {
-      final double quantity = double.tryParse(quantityController.text) ?? 0.0;
-
       if (quantity <= 0) {
         showValidation(context, "Quantidade inválida");
         return;
