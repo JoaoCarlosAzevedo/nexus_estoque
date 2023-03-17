@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/mixins/validation_mixin.dart';
+import 'package:nexus_estoque/core/utils/audio_player.dart';
 import 'package:nexus_estoque/features/picking/data/model/picking_model.dart';
 import 'package:nexus_estoque/features/picking/data/repositories/picking_repository.dart';
 import 'package:nexus_estoque/features/picking/pages/picking_form/cubit/picking_save_cubit.dart';
@@ -180,6 +181,8 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
       setState(() {
         checkProduct = true;
       });
+
+      AudioService.beep();
 
       quantityController.text =
           (double.parse(quantityController.text) + number).toStringAsFixed(2);
