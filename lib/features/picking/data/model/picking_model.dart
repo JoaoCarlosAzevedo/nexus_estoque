@@ -15,6 +15,8 @@ class PickingModel {
   String um;
   String codigo;
   String chave;
+  String codCli;
+  String desCli;
 
   PickingModel({
     required this.descricao,
@@ -31,6 +33,8 @@ class PickingModel {
     required this.um,
     required this.codigo,
     required this.chave,
+    required this.codCli,
+    required this.desCli,
   });
 
   Map<String, dynamic> toMap() {
@@ -49,6 +53,8 @@ class PickingModel {
       'um': um,
       'codigo': codigo,
       'chaveSDC': chave,
+      'codCliente': codCli,
+      'descCliente': desCli,
     };
   }
 
@@ -68,6 +74,8 @@ class PickingModel {
       um: map['um'] ?? '',
       codigo: map['codigo'] ?? '',
       chave: map['chaveSDC'] ?? '',
+      codCli: map['codCliente'] ?? '',
+      desCli: map['descCliente'] ?? '',
     );
   }
 

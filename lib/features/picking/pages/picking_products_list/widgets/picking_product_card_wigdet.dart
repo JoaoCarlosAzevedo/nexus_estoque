@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:nexus_estoque/features/picking/data/model/picking_order_model.dart';
+import 'package:nexus_estoque/features/picking/data/model/picking_model.dart';
 
-class PickingCard extends StatelessWidget {
-  final PickingOrder data;
+class PickingProductCard extends StatelessWidget {
+  final PickingModel data;
   final GestureTapCallback onTap;
 
-  const PickingCard({
+  const PickingProductCard({
     Key? key,
     required this.data,
     required this.onTap,
@@ -20,8 +20,7 @@ class PickingCard extends StatelessWidget {
         child: ListTile(
           onTap: onTap,
           title: Text(
-            "Pedido ${data.pedido}",
-            style: Theme.of(context).textTheme.displaySmall,
+            data.descricao,
           ),
           subtitle: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -37,11 +36,11 @@ class PickingCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Cliente",
+                          "Codigo",
                           style: Theme.of(context).textTheme.caption,
                         ),
                         Text(
-                          data.descCliente,
+                          data.codigo,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.titleMedium,
@@ -78,18 +77,24 @@ class PickingCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Código Cliente",
+                          "Endereço",
                           style: Theme.of(context).textTheme.caption,
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              data.codCliente,
+                              data.descEndereco,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
+                            /*     Text(
+                              "Pedido ${data.pedido}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ), */
                           ],
                         )
                       ],

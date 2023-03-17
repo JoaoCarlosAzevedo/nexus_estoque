@@ -6,6 +6,7 @@ import 'package:nexus_estoque/core/constants/dio_config.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/core/http/http_provider.dart';
 import 'package:nexus_estoque/features/picking/data/model/picking_model.dart';
+import 'package:nexus_estoque/features/picking/data/model/picking_order_model.dart';
 
 final pickingRepositoryProvider =
     Provider<PickingRepository>((ref) => PickingRepository(ref));
@@ -20,7 +21,7 @@ class PickingRepository {
     dio = _ref.read(httpProvider).dioInstance;
   }
 
-  Future<Either<Failure, List<PickingModel>>> fetchPickingList() async {
+  Future<Either<Failure, List<PickingOrder>>> fetchPickingList() async {
     try {
       var response = await dio.get('$url/separacao/pedido/', queryParameters: {
         'empresa': "01",
@@ -35,7 +36,7 @@ class PickingRepository {
         return const Left(Failure("Nao Encontrado!", ErrorType.validation));
       }
       final listProducts = (response.data['resultado'] as List).map((item) {
-        return PickingModel.fromMap(item);
+        return PickingOrder.fromMap(item);
       }).toList();
 
       return Right(listProducts);

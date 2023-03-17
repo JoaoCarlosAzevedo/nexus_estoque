@@ -20,6 +20,6 @@ class PickingCubitError extends PickingCubitState {
 }
 
 class PickingCubiLoaded extends PickingCubitState {
-  final List<PickingModel> pickingList;
+  final List<PickingOrder> pickingList;
   const PickingCubiLoaded(this.pickingList);
 }

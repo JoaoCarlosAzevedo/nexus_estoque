@@ -1,11 +1,13 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_beep/flutter_beep.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/mixins/validation_mixin.dart';
 import 'package:nexus_estoque/features/picking/data/model/picking_model.dart';
 import 'package:nexus_estoque/features/picking/data/repositories/picking_repository.dart';
 import 'package:nexus_estoque/features/picking/pages/picking_form/cubit/picking_save_cubit.dart';
+import 'package:nexus_estoque/features/picking/pages/picking_products_list/widgets/picking_product_card_wigdet.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity.dart';
 
 class PickingFormModal {
@@ -16,7 +18,7 @@ class PickingFormModal {
         isScrollControlled: true,
         builder: (BuildContext context) {
           return FractionallySizedBox(
-            heightFactor: 0.7,
+            heightFactor: 0.8,
             child: PickingForm(
               picking: picking,
             ),
@@ -48,6 +50,7 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
   final TextEditingController quantityController =
       TextEditingController(text: '1.00');
   final FocusNode productFocus = FocusNode();
+  bool checkProduct = false;
 
   @override
   void dispose() {
@@ -56,6 +59,12 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
     quantityController.dispose();
     productFocus.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    quantityController.text = widget.picking.separado.toString();
+    super.initState();
   }
 
   @override
@@ -91,9 +100,14 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
                 child: Form(
                   key: formKey,
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.only(right: 16.0, left: 16.0),
                     child: Column(
                       children: [
+                        PickingProductCard(
+                          data: widget.picking,
+                          onTap: (() {}),
+                        ),
+                        const Divider(),
                         TextFormField(
                           enabled: true,
                           validator: isNotEmpty,
@@ -111,9 +125,15 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
                         const Divider(),
                         TextFormField(
                           enabled: true,
-                          validator: isNotEmpty,
                           focusNode: productFocus,
                           controller: productController,
+                          onFieldSubmitted: (value) {
+                            if (validateData()) {
+                              productController.clear();
+                              productFocus.requestFocus();
+                              increment(1);
+                            }
+                          },
                           decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.qr_code),
                             label: Text("Confirmação do Produto"),
@@ -150,6 +170,26 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
     );
   }
 
+  void increment(double number) {
+    double isPositive = double.parse(quantityController.text) + number;
+
+    if (isPositive >= 0) {
+      if (isPositive > widget.picking.quantidade) {
+        showValidation(context, "Quantidade superior ao reservado!");
+        return;
+      }
+      setState(() {
+        checkProduct = true;
+      });
+      FlutterBeep.beep();
+      quantityController.text =
+          (double.parse(quantityController.text) + number).toStringAsFixed(2);
+
+      quantityController.selection =
+          TextSelection.collapsed(offset: quantityController.text.length);
+    }
+  }
+
   bool validateData() {
     bool addressValid = false;
     bool productValid = false;
@@ -169,31 +209,34 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
       }
     }
 
+    if (!(addressValid && productValid)) {
+      showValidation(context, "Produto ou Endereço inválido");
+    }
+
     return addressValid && productValid;
   }
 
   void submit(BuildContext context) {
     final isValid = formKey.currentState!.validate();
-
+    if (!checkProduct) {
+      showValidation(context, "Produto inválido ou não informado");
+      return;
+    }
     if (isValid) {
-      if (!validateData()) {
-        showValidation(context, "Produto ou Endereço inválido");
-      } else {
-        final double quantity = double.tryParse(quantityController.text) ?? 0.0;
+      final double quantity = double.tryParse(quantityController.text) ?? 0.0;
 
-        if (quantity <= 0) {
-          showValidation(context, "Quantidade inválida");
-          return;
-        }
-
-        if (quantity > widget.picking.quantidade) {
-          showValidation(context, "Quantidade superior ao reservado!");
-          return;
-        }
-
-        widget.picking.separado = quantity;
-        context.read<PickingSaveCubit>().postPicking(widget.picking);
+      if (quantity <= 0) {
+        showValidation(context, "Quantidade inválida");
+        return;
       }
+
+      if (quantity > widget.picking.quantidade) {
+        showValidation(context, "Quantidade superior ao reservado!");
+        return;
+      }
+
+      widget.picking.separado = quantity;
+      context.read<PickingSaveCubit>().postPicking(widget.picking);
     }
   }
 

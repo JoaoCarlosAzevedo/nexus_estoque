@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nexus_estoque/features/picking/data/model/picking_model.dart';
-import 'package:nexus_estoque/features/picking/pages/picking_form/picking_form_modal.dart';
+import 'package:go_router/go_router.dart';
+import 'package:nexus_estoque/features/picking/data/model/picking_order_model.dart';
 import 'package:nexus_estoque/features/picking/pages/picking_list/cubit/picking_cubit.dart';
 import 'package:nexus_estoque/features/picking/pages/picking_list/widgets/picking_card_widget.dart';
+import 'package:nexus_estoque/features/picking/pages/picking_products_list/picking_products_list_page.dart';
 
 class PickingPage extends StatefulWidget {
   const PickingPage({super.key});
@@ -14,8 +15,8 @@ class PickingPage extends StatefulWidget {
 
 class _PickingPageState extends State<PickingPage> {
   final TextEditingController controller = TextEditingController();
-  List<PickingModel> listProductAddress = [];
-  List<PickingModel> filterList = [];
+  List<PickingOrder> listProductAddress = [];
+  List<PickingOrder> filterList = [];
 
   @override
   void dispose() {
@@ -24,11 +25,17 @@ class _PickingPageState extends State<PickingPage> {
   }
 
   @override
+  void initState() {
+    context.read<PickingCubitCubit>().fetchPickingList();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text("Separacao"),
+        title: const Text("Separacao Pedidos"),
         centerTitle: true,
       ),
       body: RefreshIndicator(
@@ -57,7 +64,7 @@ class _PickingPageState extends State<PickingPage> {
                   },
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.search),
-                    label: Text("Pesquisar Ped./Cod/Endereco"),
+                    label: Text("Pesquisar Pedido/Cliente"),
                   ),
                 ),
                 Expanded(
@@ -88,6 +95,7 @@ class _PickingPageState extends State<PickingPage> {
                             child: Text("Nenhum registro encontrado."),
                           );
                         }
+
                         return ListView.builder(
                           keyboardDismissBehavior:
                               ScrollViewKeyboardDismissBehavior.onDrag,
@@ -96,14 +104,17 @@ class _PickingPageState extends State<PickingPage> {
                             return PickingCard(
                               data: filterList[index],
                               onTap: () async {
-                                final result = await PickingFormModal.show(
-                                    context, filterList[index]);
+                                /*      context.push(
+                                    '/separacao/itens/${filterList[index].pedido}'); */
 
-                                if (result == "ok") {
-                                  context
-                                      .read<PickingCubitCubit>()
-                                      .fetchPickingList();
-                                }
+                                final cubit = context.read<PickingCubitCubit>();
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => PickingProductPage(
+                                    cubit: cubit,
+                                    pedido: filterList[index].pedido,
+                                  ),
+                                ));
+                                //PickingProductPage
                               },
                             );
                           },
@@ -122,25 +133,17 @@ class _PickingPageState extends State<PickingPage> {
     );
   }
 
-  List<PickingModel> filter(String search) {
+  List<PickingOrder> filter(String search) {
     return listProductAddress.where((element) {
-      if (element.codigo.toUpperCase().contains(search.toUpperCase())) {
-        return true;
-      }
-
-      if (element.codEndereco.toUpperCase().contains(search.toUpperCase())) {
-        return true;
-      }
-
-      if (element.descEndereco.toUpperCase().contains(search.toUpperCase())) {
-        return true;
-      }
-
       if (element.pedido.toUpperCase().contains(search.toUpperCase())) {
         return true;
       }
 
-      if (element.codigobarras.toUpperCase().contains(search.toUpperCase())) {
+      if (element.codCliente.toUpperCase().contains(search.toUpperCase())) {
+        return true;
+      }
+
+      if (element.descCliente.toUpperCase().contains(search.toUpperCase())) {
         return true;
       }
 

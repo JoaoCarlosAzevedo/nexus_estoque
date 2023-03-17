@@ -19,6 +19,7 @@ import 'package:nexus_estoque/features/menu/presentation/pages/menu_page.dart';
 import 'package:nexus_estoque/features/picking/data/repositories/picking_repository.dart';
 import 'package:nexus_estoque/features/picking/pages/picking_list/cubit/picking_cubit.dart';
 import 'package:nexus_estoque/features/picking/pages/picking_list/picking_page.dart';
+import 'package:nexus_estoque/features/picking/pages/picking_products_list/picking_products_list_page.dart';
 import 'package:nexus_estoque/features/transaction/pages/transaction_form_page/transaction_page.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/transfer_page.dart';
 
@@ -64,6 +65,21 @@ final routerProvider = Provider<GoRouter>((ref) {
                       PickingCubitCubit(ref.read(pickingRepositoryProvider)),
                   child: const PickingPage(),
                 ))),
+/*         GoRoute(
+            path: "/separacao/itens/:pedido",
+            builder: ((context, state) {
+              final param = state.params['pedido'];
+              return BlocProvider(
+                create: (context) =>
+                    PickingCubitCubit(ref.read(pickingRepositoryProvider)),
+                child: PickingProductPage(
+                  pedido: param!,
+                ),
+              );
+              /*     return PickingProductPage(
+                pedido: param!,
+              ); */
+            })), */
         GoRoute(
           path: "/enderecar/form",
           builder: ((context, state) {
