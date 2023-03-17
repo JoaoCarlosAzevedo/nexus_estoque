@@ -1,6 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_beep/flutter_beep.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/mixins/validation_mixin.dart';
@@ -181,7 +180,7 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
       setState(() {
         checkProduct = true;
       });
-      FlutterBeep.beep();
+
       quantityController.text =
           (double.parse(quantityController.text) + number).toStringAsFixed(2);
 
