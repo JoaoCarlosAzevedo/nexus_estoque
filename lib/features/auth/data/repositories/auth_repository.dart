@@ -3,8 +3,8 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:nexus_estoque/core/constants/config.dart';
-import 'package:nexus_estoque/core/constants/dio_config.dart';
+import 'package:nexus_estoque/core/http/config.dart';
+import 'package:nexus_estoque/core/http/dio_config.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/core/http/http_provider.dart';
 import 'package:nexus_estoque/features/auth/model/user_model.dart';
@@ -15,7 +15,6 @@ final authRepositoryProvider =
 class AuthRepository {
   final Ref _ref;
   //late Dio dio;
-  final String url = Config.baseURL!;
   final options = DioConfig.dioBaseOption;
   final _storage = const FlutterSecureStorage();
 
@@ -25,6 +24,7 @@ class AuthRepository {
 
   Future<Either<Failure, UserModel>> auth(
       String username, String password) async {
+    final String url = await Config.baseURL;
     late dynamic response;
     final dio = _ref.read(httpProvider).dioInstance;
     try {
@@ -78,6 +78,7 @@ class AuthRepository {
   Future<Either<Failure, Map<String, dynamic>>> getUser(String userId) async {
     late dynamic response;
     final dio = _ref.read(httpProvider).dioInstance;
+    final String url = await Config.baseURL;
     try {
       response = await dio.get('$url/api/framework/v1/users/$userId');
 

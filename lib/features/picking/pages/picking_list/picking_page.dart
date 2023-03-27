@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/features/picking/data/model/picking_order_model.dart';
 import 'package:nexus_estoque/features/picking/pages/picking_list/cubit/picking_cubit.dart';
 import 'package:nexus_estoque/features/picking/pages/picking_list/widgets/picking_card_widget.dart';

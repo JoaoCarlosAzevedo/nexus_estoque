@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nexus_estoque/core/features/environment/provider/local_environment_provider.dart';
-import 'package:nexus_estoque/core/features/environment/provider/remote_environment_provider.dart';
-import 'package:nexus_estoque/core/features/environment/provider/url_provider.dart';
+import 'package:nexus_estoque/core/services/secure_store.dart';
 
 class EnvironmentConfigPage extends ConsumerStatefulWidget {
   const EnvironmentConfigPage({super.key});
@@ -18,6 +16,7 @@ class _EnvironmentConfigPageState extends ConsumerState<EnvironmentConfigPage> {
   @override
   void initState() {
     super.initState();
+    setUrl();
   }
 
   @override
@@ -26,13 +25,18 @@ class _EnvironmentConfigPageState extends ConsumerState<EnvironmentConfigPage> {
     super.dispose();
   }
 
+  void setUrl() async {
+    String url = await LocalStorage.getURL();
+    urlController.text = url;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final futureProvider =
+/*     final futureProvider =
         ref.watch(remoteEnvrionmentProvider(urlController.text));
     final urlFutureProvider = ref.watch(localEnvrionmentProvider);
     final urlProv = ref.watch(urlProvider);
-
+ */
     return Scaffold(
       appBar: AppBar(
         title: const Text("Configuração"),
@@ -51,7 +55,7 @@ class _EnvironmentConfigPageState extends ConsumerState<EnvironmentConfigPage> {
               const SizedBox(
                 height: 20,
               ),
-              futureProvider.when(
+              /*    futureProvider.when(
                 data: (data) {
                   return data.isNotEmpty
                       ? const Text("URL ok!")
@@ -66,21 +70,22 @@ class _EnvironmentConfigPageState extends ConsumerState<EnvironmentConfigPage> {
                   error.toString(),
                 ),
                 loading: () => const Center(child: CircularProgressIndicator()),
-              ),
-              Text("Provider: $urlProv"),
+              ), */
+              //Text("Provider: $urlProv"),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
                     flex: 1,
                     child: ElevatedButton(
-                      onPressed: () {
-                        setState(() {});
+                      onPressed: () async {
+                        //setState(() {});
+                        await LocalStorage.saveURL(urlController.text);
                       },
                       child: const Padding(
                         padding: EdgeInsets.all(12),
                         child: Center(
-                          child: Text("Testar"),
+                          child: Text("Salvar"),
                         ),
                       ),
                     ),

@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nexus_estoque/core/constants/config.dart';
-import 'package:nexus_estoque/core/constants/dio_config.dart';
+import 'package:nexus_estoque/core/http/config.dart';
+import 'package:nexus_estoque/core/http/dio_config.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/core/http/http_provider.dart';
 import 'package:nexus_estoque/features/picking/data/model/picking_model.dart';
@@ -13,7 +13,6 @@ final pickingRepositoryProvider =
 
 class PickingRepository {
   late Dio dio;
-  final String url = Config.baseURL!;
   final Ref _ref;
   final options = DioConfig.dioBaseOption;
 
@@ -22,11 +21,10 @@ class PickingRepository {
   }
 
   Future<Either<Failure, List<PickingOrder>>> fetchPickingList() async {
+    final String url = await Config.baseURL;
     try {
-      var response = await dio.get('$url/separacao/pedido/', queryParameters: {
-        'empresa': "01",
-        'filial': "01",
-      });
+      var response =
+          await dio.get('$url/separacao/pedido/', queryParameters: {});
 
       if (response.statusCode != 200) {
         return const Left(Failure("Server Error!", ErrorType.exception));
@@ -49,13 +47,12 @@ class PickingRepository {
   }
 
   Future<Either<Failure, String>> postPicking(PickingModel picking) async {
+    final String url = await Config.baseURL;
     try {
-      var response = await dio.post('$url/separacao/pedido/',
-          data: picking.toJson(),
-          queryParameters: {
-            'empresa': "01",
-            'filial': "01",
-          });
+      var response = await dio.post(
+        '$url/separacao/pedido/',
+        data: picking.toJson(),
+      );
 
       if (response.statusCode != 201) {
         return const Left(Failure("Server Error!", ErrorType.exception));

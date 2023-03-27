@@ -3,14 +3,15 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:nexus_estoque/core/constants/config.dart';
+import 'package:nexus_estoque/core/features/branches/data/model/branch_model.dart';
+import 'package:nexus_estoque/core/http/config.dart';
+import 'package:nexus_estoque/core/services/secure_store.dart';
 import 'package:nexus_estoque/features/auth/providers/login_controller_provider.dart';
 
 class AppInterceptors extends Interceptor {
   final _storage = const FlutterSecureStorage();
   final Dio _dio;
   final Ref _ref;
-  final _baseUrl = Config.baseURL!;
   String? accessToken;
 
   AppInterceptors(this._dio, this._ref);
@@ -22,13 +23,19 @@ class AppInterceptors extends Interceptor {
 
     //se for uma nova solicitacao de autenticacao, deleta os tokens anteriores
     if (options.path.contains('oauth2/v1/token')) {
-      await _storage.deleteAll();
+      await _storage.delete(key: 'refresh_token');
     }
 
     accessToken ??= await _storage.read(key: 'access_token');
 
     if (!options.path.contains('oauth2/v1/token')) {
+      final Branch? env = await LocalStorage.getBranch();
+
       options.headers['Authorization'] = 'Bearer $accessToken';
+      options.queryParameters['empresa'] = env?.groupCode.trim() ?? "";
+      options.queryParameters['filial'] = env?.branchCode.trim() ?? "";
+
+      log('REQUEST[${options.method}] => PARAMETERS: ${options.queryParameters.toString()}');
     }
 
     return super.onRequest(options, handler);
@@ -72,9 +79,10 @@ class AppInterceptors extends Interceptor {
   Future<void> refreshToken() async {
     final refreshToken = await _storage.read(key: 'refresh_token');
     final dio = Dio();
+    final String baseUrl = await Config.baseURL;
     try {
       final response =
-          await dio.post('$_baseUrl/api/oauth2/v1/token', queryParameters: {
+          await dio.post('$baseUrl/api/oauth2/v1/token', queryParameters: {
         'grant_type': 'refresh_token',
         'refresh_token': refreshToken,
       });
@@ -87,13 +95,13 @@ class AppInterceptors extends Interceptor {
         await _storage.write(key: 'refresh_token', value: newRefreshToken);
       } else {
         accessToken = null;
-        _storage.deleteAll();
+        await _storage.delete(key: 'refresh_token');
         _ref.read(loginControllerProvider.notifier).logout();
       }
     } on DioError catch (_) {
       //se o refreshtoken n deu certo, forca relogar;
       accessToken = null;
-      _storage.deleteAll();
+      await _storage.delete(key: 'refresh_token');
       _ref.read(loginControllerProvider.notifier).logout();
     }
 /* 

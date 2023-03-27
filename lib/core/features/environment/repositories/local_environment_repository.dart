@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nexus_estoque/core/utils/secure_store.dart';
+import 'package:nexus_estoque/core/services/secure_store.dart';
 
 final localEnvironmentRepository =
     Provider<LocalEnvironmentRepository>((ref) => LocalEnvironmentRepository());

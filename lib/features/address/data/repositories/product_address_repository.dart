@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nexus_estoque/core/constants/config.dart';
-import 'package:nexus_estoque/core/constants/dio_config.dart';
+import 'package:nexus_estoque/core/http/config.dart';
+import 'package:nexus_estoque/core/http/dio_config.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/core/http/http_provider.dart';
 
@@ -15,7 +15,6 @@ final productAddressRepository =
 
 class ProductAddressRepository {
   late Dio dio;
-  final String url = Config.baseURL!;
   final Ref _ref;
   final options = DioConfig.dioBaseOption;
 
@@ -25,10 +24,9 @@ class ProductAddressRepository {
 
   Future<Either<Failure, List<ProductAddressModel>>>
       fetchProductAddress() async {
+    final String url = await Config.baseURL;
     try {
       var response = await dio.get('$url/enderecamentos', queryParameters: {
-        'empresa': "01",
-        'filial': "01",
         'page': "1",
         'pageSize': "10000",
       });
@@ -55,6 +53,7 @@ class ProductAddressRepository {
 
   Future<Either<Failure, String>> addressProduct(
       String produto, String codeseq, String endereco, double quantity) async {
+    final String url = await Config.baseURL;
     try {
       final jsonMap = {
         'produto': produto,
@@ -65,11 +64,8 @@ class ProductAddressRepository {
 
       final json = jsonEncode(jsonMap);
 
-      var response =
-          await dio.post('$url/enderecamentos', data: json, queryParameters: {
-        'empresa': "01",
-        'filial': "01",
-      });
+      var response = await dio
+          .post('$url/enderecamentos', data: json, queryParameters: {});
 
       if (response.statusCode != 201) {
         return const Left(Failure("Server Error!", ErrorType.exception));

@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
-import 'package:nexus_estoque/features/picking/data/model/picking_model.dart';
 import 'package:nexus_estoque/features/picking/data/model/picking_order_model.dart';
 import 'package:nexus_estoque/features/picking/data/repositories/picking_repository.dart';
 

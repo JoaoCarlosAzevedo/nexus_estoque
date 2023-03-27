@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/core/constants/menus.dart';
+import 'package:nexus_estoque/core/services/secure_store.dart';
 import 'package:nexus_estoque/features/auth/pages/login/cubit/auth_cubit.dart';
 import 'package:nexus_estoque/features/auth/providers/login_controller_provider.dart';
 import 'package:nexus_estoque/features/menu/presentation/pages/widgets/menu_card_widget.dart';
@@ -42,17 +44,22 @@ class MenuPage extends ConsumerWidget {
         ),
         actions: [
           IconButton(
+            onPressed: () {
+              context.push('/filiais');
+            },
+            icon: const Icon(Icons.apartment_outlined),
+          ),
+          IconButton(
               onPressed: () {
                 ref.read(loginControllerProvider.notifier).logout();
                 authCubit.logout();
               },
               icon: const Icon(Icons.logout)),
-          /*   IconButton(
-            onPressed: () {
-              context.push('/filiais');
-            },
-            icon: const Icon(Icons.settings),
-          ) */
+          IconButton(
+              onPressed: () async {
+                await LocalStorage.deleteAll();
+              },
+              icon: const Icon(Icons.delete_forever)),
         ],
       ),
       body: SafeArea(

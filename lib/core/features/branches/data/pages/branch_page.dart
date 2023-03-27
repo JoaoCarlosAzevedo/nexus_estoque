@@ -5,14 +5,35 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/core/features/branches/data/provider/remote_branche_provider.dart';
+import 'package:nexus_estoque/core/services/secure_store.dart';
 
 import '../model/branch_model.dart';
 
-class BranchPange extends ConsumerWidget {
-  const BranchPange({super.key});
+class BranchPage extends ConsumerStatefulWidget {
+  const BranchPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _BranchPageState();
+}
+
+class _BranchPageState extends ConsumerState<BranchPage> {
+  String branchCode = '';
+  String groupCode = '';
+
+  void getBranch() async {
+    final Branch? branch = await LocalStorage.getBranch();
+    branchCode = branch?.branchCode.trim() ?? "";
+    groupCode = branch?.groupCode.trim() ?? "";
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getBranch();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final futureProvider = ref.watch(remoteBranchProvider);
     return Scaffold(
       appBar: AppBar(
@@ -27,27 +48,47 @@ class BranchPange extends ConsumerWidget {
         ],
       ),
       body: futureProvider.when(
-          skipLoadingOnRefresh: false,
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (err, stack) {
-            final Failure failure = err as Failure;
-            return Center(child: Text(failure.error));
-          },
-          data: (data) {
-            return BranchList(
-              data: data,
-            );
-          }),
+        skipLoadingOnRefresh: false,
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) {
+          final Failure failure = err as Failure;
+          return Center(child: Text(failure.error));
+        },
+        data: (data) {
+          return BranchList(
+            data: data,
+            branchCode: branchCode,
+            groupCode: groupCode,
+            onTap: (element) async {
+              await LocalStorage.saveBranch(element);
+              setState(() {
+                getBranch();
+              });
+            },
+          );
+        },
+      ),
     );
   }
 }
 
 class BranchList extends StatelessWidget {
-  const BranchList({super.key, required this.data});
+  const BranchList({
+    super.key,
+    required this.data,
+    required this.branchCode,
+    required this.groupCode,
+    required this.onTap,
+  });
+
   final List<Branch> data;
+  final String branchCode;
+  final String groupCode;
+  final void Function(Branch) onTap;
 
   @override
   Widget build(BuildContext context) {
+    bool isSelected = false;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -74,10 +115,22 @@ class BranchList extends StatelessWidget {
                 );
               },
               itemBuilder: (context, Branch element) {
+                if (element.branchCode == branchCode &&
+                    element.groupCode == groupCode) {
+                  isSelected = true;
+                } else {
+                  isSelected = false;
+                }
                 return Card(
+                  shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        width: 3,
+                        color: isSelected ? Colors.greenAccent : Colors.white,
+                      ),
+                      borderRadius: BorderRadius.circular(20.0)),
                   child: ListTile(
                     onTap: () {
-                      //Navigator.pop(context, data.);
+                      onTap(element);
                     },
                     title:
                         Text("${element.branchCode} - ${element.branchName}"),

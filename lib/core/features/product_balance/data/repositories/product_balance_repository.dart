@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nexus_estoque/core/constants/config.dart';
-import 'package:nexus_estoque/core/constants/dio_config.dart';
+import 'package:nexus_estoque/core/http/config.dart';
+import 'package:nexus_estoque/core/http/dio_config.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
 import 'package:nexus_estoque/core/http/http_provider.dart';
@@ -14,7 +14,6 @@ final productBalanceRepositoryProvider = Provider<ProductBalanceRepositoryv2>(
 
 class ProductBalanceRepositoryv2 {
   late Dio dio;
-  final String url = Config.baseURL!;
   final options = DioConfig.dioBaseOption;
   final Ref _ref;
 
@@ -25,10 +24,9 @@ class ProductBalanceRepositoryv2 {
   Future<Either<Failure, ProductBalanceModel>> fetchProductBalance(
       String barcode) async {
     late dynamic response;
+    final String url = await Config.baseURL;
     try {
       response = await dio.get('$url/produtos/saldos/', queryParameters: {
-        'empresa': "01",
-        'filial': "01",
         'barcode': barcode,
       });
 

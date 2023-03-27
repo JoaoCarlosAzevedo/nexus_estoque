@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nexus_estoque/core/constants/config.dart';
-import 'package:nexus_estoque/core/constants/dio_config.dart';
+import 'package:nexus_estoque/core/http/config.dart';
+import 'package:nexus_estoque/core/http/dio_config.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/core/http/http_provider.dart';
 import 'package:nexus_estoque/core/features/searches/warehouses/data/model/warehouse_model.dart';
@@ -12,7 +12,6 @@ final warehouseRepository =
 
 class WarehouseRepository {
   late Dio dio;
-  final String url = Config.baseURL!;
   final options = DioConfig.dioBaseOption;
   final Ref _ref;
 
@@ -21,12 +20,10 @@ class WarehouseRepository {
   }
 
   Future<List<WarehouseModel>> fetchWarehouses() async {
+    final String url = await Config.baseURL;
     late dynamic response;
     try {
-      response = await dio.get('$url/armazens/', queryParameters: {
-        'empresa': "01",
-        'filial': "01",
-      });
+      response = await dio.get('$url/armazens/', queryParameters: {});
 
       if (response.statusCode != 200) {
         throw const Failure("Server Error!", ErrorType.exception);

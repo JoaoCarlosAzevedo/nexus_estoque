@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nexus_estoque/core/constants/config.dart';
+import 'package:nexus_estoque/core/http/config.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/core/features/searches/batches/data/model/batch_model.dart';
 import 'package:nexus_estoque/core/http/http_provider.dart';
@@ -12,7 +12,6 @@ final batchRepositoryProvider =
 
 class BatchRepository {
   late Dio dio;
-  final String url = Config.baseURL!;
   final Ref _ref;
 
   BatchRepository(this._ref) {
@@ -21,11 +20,10 @@ class BatchRepository {
 
   Future<List<BatchModel>> fetchBatches(
       String product, String warehouse) async {
+    final String url = await Config.baseURL;
     late dynamic response;
     try {
       response = await dio.get('$url/lotes/', queryParameters: {
-        'empresa': "01",
-        'filial': "01",
         'page': "1",
         'pageSize': "10000",
         'produto': product,

@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nexus_estoque/core/constants/config.dart';
-import 'package:nexus_estoque/core/constants/dio_config.dart';
+import 'package:nexus_estoque/core/http/config.dart';
+import 'package:nexus_estoque/core/http/dio_config.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/core/http/http_provider.dart';
 
@@ -11,7 +11,6 @@ final productTransferRepository = Provider<ProductTransferRepository>(
 
 class ProductTransferRepository {
   late Dio dio;
-  final String url = Config.baseURL!;
   final options = DioConfig.dioBaseOption;
   final Ref _ref;
 
@@ -20,13 +19,10 @@ class ProductTransferRepository {
   }
 
   Future<Either<Failure, String>> postTransfer(String json) async {
+    final String url = await Config.baseURL;
     try {
       late dynamic response;
-      response =
-          await dio.post('$url/transferencias/', data: json, queryParameters: {
-        'empresa': "01",
-        'filial': "01",
-      });
+      response = await dio.post('$url/transferencias/', data: json);
 
       if (response.statusCode != 201) {
         return const Left(Failure("Server Error!", ErrorType.exception));

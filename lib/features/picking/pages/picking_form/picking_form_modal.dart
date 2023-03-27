@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/mixins/validation_mixin.dart';
-import 'package:nexus_estoque/core/utils/audio_player.dart';
+import 'package:nexus_estoque/core/services/audio_player.dart';
 import 'package:nexus_estoque/features/picking/data/model/picking_model.dart';
 import 'package:nexus_estoque/features/picking/data/repositories/picking_repository.dart';
 import 'package:nexus_estoque/features/picking/pages/picking_form/cubit/picking_save_cubit.dart';
 import 'package:nexus_estoque/features/picking/pages/picking_products_list/widgets/picking_product_card_wigdet.dart';
-import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity.dart';
 
 class PickingFormModal {
   static Future<dynamic> show(context, PickingModel picking) async {

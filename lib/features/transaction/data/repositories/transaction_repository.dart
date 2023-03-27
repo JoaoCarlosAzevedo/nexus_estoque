@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nexus_estoque/core/constants/config.dart';
-import 'package:nexus_estoque/core/constants/dio_config.dart';
+import 'package:nexus_estoque/core/http/config.dart';
+import 'package:nexus_estoque/core/http/dio_config.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/core/http/http_provider.dart';
 import 'package:nexus_estoque/features/transaction/data/model/transaction_model.dart';
@@ -12,7 +12,6 @@ final transactionRepository =
 
 class TransactionRepository {
   late Dio dio;
-  final String url = Config.baseURL!;
   final Ref _ref;
   final options = DioConfig.dioBaseOption;
 
@@ -22,12 +21,11 @@ class TransactionRepository {
 
   Future<Either<Failure, TransactionModel>> postTransaction(
       TransactionModel transaction, String tm) async {
+    final String url = await Config.baseURL;
     try {
       var response = await dio.post('$url/movimentos',
           data: transaction.toJson(),
           queryParameters: {
-            'empresa': "01",
-            'filial': "01",
             'tm': tm,
           });
 

@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nexus_estoque/core/constants/config.dart';
+import 'package:nexus_estoque/core/http/config.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/core/http/http_provider.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/data/model/address_model.dart';
@@ -12,7 +12,6 @@ final addressRepository =
 
 class AddressRepository {
   late Dio dio;
-  final String url = Config.baseURL!;
   final Ref _ref;
 
   AddressRepository(this._ref) {
@@ -23,11 +22,10 @@ class AddressRepository {
 
   Future<List<AddressModel>> fetchAddress() async {
     late dynamic response;
+    final String url = await Config.baseURL;
     try {
       response =
           await dio.get('$url/enderecamentos/enderecos', queryParameters: {
-        'empresa': "01",
-        'filial': "01",
         'page': "1",
         'pageSize': "10000",
       });

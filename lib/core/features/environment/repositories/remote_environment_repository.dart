@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nexus_estoque/core/utils/secure_store.dart';
+import 'package:nexus_estoque/core/services/secure_store.dart';
 import 'package:nexus_estoque/core/features/environment/provider/url_provider.dart';
 
 final remoteEnvironmentRepository = Provider<RemoteEnvironmentRepository>(

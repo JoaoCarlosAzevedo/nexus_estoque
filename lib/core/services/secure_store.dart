@@ -19,8 +19,15 @@ class LocalStorage {
     await storage.write(key: 'branch', value: branch.toJson());
   }
 
-  static Future<Branch> getBranch() async {
+  static Future<Branch?> getBranch() async {
     final branch = await storage.read(key: 'branch');
-    return Branch.fromJson(branch!);
+    if (branch == null) {
+      return null;
+    }
+    return Branch.fromJson(branch);
+  }
+
+  static Future<void> deleteAll() async {
+    await storage.deleteAll();
   }
 }

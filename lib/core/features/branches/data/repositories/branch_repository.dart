@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nexus_estoque/core/constants/config.dart';
+import 'package:nexus_estoque/core/http/config.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/core/features/branches/data/model/branch_model.dart';
 import 'package:nexus_estoque/core/http/http_provider.dart';
@@ -12,7 +12,6 @@ final branchRepository =
 
 class BranchRepository {
   final Ref _ref;
-  final String url = Config.baseURL!;
   late Dio dio;
 
   BranchRepository(this._ref) {
@@ -20,6 +19,7 @@ class BranchRepository {
   }
 
   Future<List<Branch>> fetchBranches() async {
+    final String url = await Config.baseURL;
     late dynamic response;
     try {
       response = await dio.get(
