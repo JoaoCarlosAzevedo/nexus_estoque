@@ -56,11 +56,6 @@ class AppInterceptors extends Interceptor {
         await refreshToken();
         return handler.resolve(await _retry(err.requestOptions));
       }
-      /* 
-      else {
-        //await getToken();
-        return handler.resolve(await _retry(err.requestOptions));
-      } */
     }
 
     return super.onError(err, handler);

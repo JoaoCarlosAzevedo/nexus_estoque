@@ -124,8 +124,8 @@ class BranchList extends StatelessWidget {
                 return Card(
                   shape: RoundedRectangleBorder(
                       side: BorderSide(
-                        width: 3,
-                        color: isSelected ? Colors.greenAccent : Colors.white,
+                        width: 4,
+                        color: isSelected ? Colors.grey : Colors.white,
                       ),
                       borderRadius: BorderRadius.circular(20.0)),
                   child: ListTile(
