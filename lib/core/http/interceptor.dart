@@ -32,8 +32,8 @@ class AppInterceptors extends Interceptor {
       final Branch? env = await LocalStorage.getBranch();
 
       options.headers['Authorization'] = 'Bearer $accessToken';
-      options.queryParameters['empresa'] = env?.groupCode.trim() ?? "";
-      options.queryParameters['filial'] = env?.branchCode.trim() ?? "";
+      options.queryParameters['empresa'] = env?.groupCode.trim() ?? "01";
+      options.queryParameters['filial'] = env?.branchCode.trim() ?? "01";
 
       log('REQUEST[${options.method}] => PARAMETERS: ${options.queryParameters.toString()}');
     }

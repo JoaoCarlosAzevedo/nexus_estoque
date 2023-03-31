@@ -129,21 +129,16 @@ class BranchList extends StatelessWidget {
                       ),
                       borderRadius: BorderRadius.circular(20.0)),
                   child: ListTile(
-                    onTap: () {
-                      onTap(element);
-                    },
-                    title:
-                        Text("${element.branchCode} - ${element.branchName}"),
-                    subtitle:
-                        Text("${element.groupCode} - ${element.groupName}"),
-                    trailing: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.memory(
-                        base64Decode(element.logo),
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ),
+                      onTap: () {
+                        onTap(element);
+                      },
+                      title:
+                          Text("${element.branchCode} - ${element.branchName}"),
+                      subtitle:
+                          Text("${element.groupCode} - ${element.groupName}"),
+                      trailing: LogoWidget(
+                        logo: element.logo,
+                      )),
                 );
               },
               useStickyGroupSeparators: true, // optional
@@ -173,6 +168,24 @@ class BranchList extends StatelessWidget {
             ), */
           ),
         ],
+      ),
+    );
+  }
+}
+
+class LogoWidget extends StatelessWidget {
+  const LogoWidget({super.key, required this.logo});
+  final String logo;
+  @override
+  Widget build(BuildContext context) {
+    if (logo.trim().isEmpty) {
+      return const Icon(Icons.business);
+    }
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Image.memory(
+        base64Decode(logo),
+        fit: BoxFit.contain,
       ),
     );
   }

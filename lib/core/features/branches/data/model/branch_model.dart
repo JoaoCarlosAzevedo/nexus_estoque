@@ -15,29 +15,28 @@ class Branch {
   });
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'codFilial': branchCode,
-      'descFilial': branchName,
-      'codGrupo': groupCode,
-      'descGrupo': groupName,
+    return {
+      'branchCode': branchCode,
+      'branchName': branchName,
+      'groupCode': groupCode,
+      'groupName': groupName,
       'logo': logo,
     };
   }
 
-  factory Branch.fromMap(Map<String, dynamic> map) {
-    return Branch(
-      branchCode: map['codFilial'] as String,
-      branchName: map['descFilial'] as String,
-      groupCode: map['codGrupo'] as String,
-      groupName: map['descGrupo'] as String,
-      logo: map['logo'] as String,
-    );
-  }
-
   String toJson() => json.encode(toMap());
 
-  factory Branch.fromJson(String source) =>
-      Branch.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Branch.fromJson(String source) => Branch.fromMap(json.decode(source));
+
+  factory Branch.fromMap(Map<String, dynamic> map) {
+    return Branch(
+      branchCode: map['codFilial'] ?? '',
+      branchName: map['descFilial'] ?? '',
+      groupCode: map['codGrupo'] ?? '',
+      groupName: map['descGrupo'] ?? '',
+      logo: map['logo'] ?? '',
+    );
+  }
 }
 
 
