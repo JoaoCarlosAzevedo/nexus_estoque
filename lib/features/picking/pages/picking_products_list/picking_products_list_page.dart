@@ -114,6 +114,7 @@ class _PickingProductPageState extends State<PickingProductPage> {
                                       context, filterList[index]);
 
                                   if (result == "ok") {
+                                    // ignore: use_build_context_synchronously
                                     context
                                         .read<PickingCubitCubit>()
                                         .fetchPickingList();

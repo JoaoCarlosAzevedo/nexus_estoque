@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/core/services/secure_store.dart';
 
 class EnvironmentConfigPage extends ConsumerStatefulWidget {
@@ -81,6 +82,8 @@ class _EnvironmentConfigPageState extends ConsumerState<EnvironmentConfigPage> {
                       onPressed: () async {
                         //setState(() {});
                         await LocalStorage.saveURL(urlController.text);
+                        // ignore: use_build_context_synchronously
+                        context.pop();
                       },
                       child: const Padding(
                         padding: EdgeInsets.all(12),

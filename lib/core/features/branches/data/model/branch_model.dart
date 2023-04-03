@@ -16,10 +16,10 @@ class Branch {
 
   Map<String, dynamic> toMap() {
     return {
-      'branchCode': branchCode,
-      'branchName': branchName,
-      'groupCode': groupCode,
-      'groupName': groupName,
+      'codFilial': branchCode,
+      'descFilial': branchName,
+      'codGrupo': groupCode,
+      'descGrupo': groupName,
       'logo': logo,
     };
   }
