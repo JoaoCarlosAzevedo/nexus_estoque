@@ -34,7 +34,7 @@ class AuthRepository {
         'grant_type': "password"
       });
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 201 || response.statusCode == 200) {
         final user = UserModel.fromMap(response.data);
 
         await _storage.write(key: 'access_token', value: user.accessToken);

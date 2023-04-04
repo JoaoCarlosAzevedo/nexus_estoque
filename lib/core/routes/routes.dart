@@ -16,6 +16,7 @@ import 'package:nexus_estoque/features/auth/providers/login_controller_provider.
 import 'package:nexus_estoque/features/auth/providers/login_state.dart';
 import 'package:nexus_estoque/features/auth/providers/router_notifier.dart';
 import 'package:nexus_estoque/features/menu/presentation/pages/menu_page.dart';
+import 'package:nexus_estoque/features/outflow_doc_check/pages/outflow_doc_page/outflow_doc_page.dart';
 import 'package:nexus_estoque/features/picking/data/repositories/picking_repository.dart';
 import 'package:nexus_estoque/features/picking/pages/picking_list/cubit/picking_cubit.dart';
 import 'package:nexus_estoque/features/picking/pages/picking_list/picking_page.dart';
@@ -112,6 +113,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/configuracoes",
             builder: ((context, state) => const EnvironmentConfigPage())),
+        GoRoute(
+            path: "/saidacheck",
+            builder: ((context, state) => const OutFlowDocCheckPage())),
       ]);
 });
 

@@ -39,4 +39,16 @@ final List menuItens = [
     color: Colors.red,
     route: 'separacao',
   ),
+  MenuItemInfo(
+    title: "Conferencia NFe Saida",
+    icon: FontAwesomeIcons.rightFromBracket,
+    color: Colors.red,
+    route: 'saidacheck',
+  ),
+/*   MenuItemInfo(
+    title: "Conferencia NFe Entrada",
+    icon: FontAwesomeIcons.rightToBracket,
+    color: Colors.red,
+    route: 'entradaCheck',
+  ), */
 ];
