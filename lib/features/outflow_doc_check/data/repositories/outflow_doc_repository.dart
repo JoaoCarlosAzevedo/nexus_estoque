@@ -19,27 +19,23 @@ class OutflowDocRepository {
     dio = _ref.read(httpProvider).dioInstance;
   }
 
-  Future<Either<Failure, List<OutFlowDoc>>> fetchOutflowDoc() async {
+  Future<Either<Failure, OutFlowDoc>> fetchOutflowDoc(String search) async {
     final String url = await Config.baseURL;
     try {
       var response =
           await dio.get('$url/conferencia_nf_saida', queryParameters: {
-        /*   'page': "1",
-        'pageSize': "10000", */
+        'pesquisa': search.trim(),
       });
 
       if (response.statusCode != 200) {
         return const Left(Failure("Server Error!", ErrorType.exception));
       }
 
-      if (response.data.isEmpty) {
-        return const Left(Failure("Nao Encontrado!", ErrorType.validation));
+      if (response.data["mensagem"] == "Nenhuma NF encontrada!") {
+        return const Left(
+            Failure("Nenhuma NF encontrada!", ErrorType.validation));
       }
-      final listDocs = (response.data['resultado'] as List).map((item) {
-        return OutFlowDoc.fromMap(item);
-      }).toList();
-
-      return Right(listDocs);
+      return Right(OutFlowDoc.fromMap(response.data));
     } on DioError catch (e) {
       if (e.type.name == "connectTimeout") {
         return const Left(Failure("Tempo Excedido", ErrorType.timeout));

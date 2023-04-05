@@ -18,6 +18,8 @@ class OutFlowDocError extends OutFlowDocState {
 }
 
 class OutFlowDocLoaded extends OutFlowDocState {
-  final List<OutFlowDoc> docs;
-  const OutFlowDocLoaded(this.docs);
+  final OutFlowDoc docs;
+  final Produtos? scannedProduct;
+  final bool notFound;
+  const OutFlowDocLoaded(this.docs, this.scannedProduct, this.notFound);
 }
