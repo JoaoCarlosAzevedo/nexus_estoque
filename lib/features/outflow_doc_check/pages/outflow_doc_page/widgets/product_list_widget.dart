@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/features/outflow_doc_check/data/model/outflow_doc_model.dart';
+import 'package:nexus_estoque/features/outflow_doc_check/pages/outflow_doc_page/widgets/barcode_scanned_widget.dart';
+import 'package:nexus_estoque/features/outflow_doc_check/pages/outflow_doc_page/widgets/product_card_widget.dart';
+
+import '../cubit/outflow_doc_cubit.dart';
 
 class OutFlowDocProductList extends ConsumerStatefulWidget {
   const OutFlowDocProductList(
@@ -9,12 +14,18 @@ class OutFlowDocProductList extends ConsumerStatefulWidget {
       required this.scannedProduct,
       required this.onSave,
       required this.notFound,
+      required this.barcodeScanned,
+      required this.onClose,
+      required this.onTapCard,
       super.key});
   final Function(String)? onSubmitted;
   final void Function()? onSave;
   final OutFlowDoc document;
   final Produtos? scannedProduct;
   final bool notFound;
+  final String? barcodeScanned;
+  final void Function()? onClose;
+  final void Function()? onTapCard;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -53,36 +64,26 @@ class _OutFlowDocProductListState extends ConsumerState<OutFlowDocProductList> {
                     focus.requestFocus();
                     controller.clear();
                   })),
-              if (widget.notFound)
-                const Text("Codigo ou Produto nao esta na NF"),
-              if (widget.scannedProduct != null)
-                Column(
-                  children: [
-                    Text("Produto Lido: ${widget.scannedProduct?.descricao}"),
-                    Text(
-                        "Quantidade Conferida: ${widget.scannedProduct?.checked}"),
-                  ],
-                ),
+              BarcodeScannedCard(
+                barcode: widget.barcodeScanned,
+                notFound: widget.notFound,
+                product: widget.scannedProduct,
+                onClose: widget.onClose,
+              ),
               Expanded(
                 child: ListView.builder(
                   keyboardDismissBehavior:
                       ScrollViewKeyboardDismissBehavior.onDrag,
                   itemCount: document.produtos.length,
                   itemBuilder: (context, index) {
-                    final products = document.produtos[index];
-                    return Card(
-                      child: ListTile(
-                        tileColor: Colors.white,
-                        title: Text("NF: ${products.descricao}"),
-                        trailing: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Qtd Prods: ${products.quantidade}"),
-                            Text("Qtd Check: ${products.checked}"),
-                          ],
-                        ),
-                        subtitle: Text("Cliente: ${products.codigo}"),
-                      ),
+                    final product = document.produtos[index];
+                    return ProductCheckCard(
+                      product: product,
+                      onTapCard: () {
+                        context
+                            .read<OutFlowDocCubit>()
+                            .resetProductCheck(index);
+                      },
                     );
                   },
                 ),

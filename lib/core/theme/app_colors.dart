@@ -13,4 +13,28 @@ class AppColors {
   static const shape = Color(0xFF7C7C7C);
   static const body = Color(0xFF7C7C7C);
   static const input = Color(0xFF7C7C7C);
+
+  static Color progression(double progress) {
+    if (progress <= 0.25) {
+      return Colors.orange;
+    }
+
+    if (progress > 0.25 && progress <= 0.50) {
+      return Colors.yellowAccent.shade400;
+    }
+
+    if (progress > 0.50 && progress <= 0.75) {
+      return Colors.yellowAccent.shade100;
+    }
+
+    if (progress >= 0.75 && progress <= 1.0) {
+      return Colors.green.shade400;
+    }
+
+    if (progress > 1.0) {
+      return Colors.red.shade400;
+    }
+
+    return Colors.grey;
+  }
 }

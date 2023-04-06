@@ -18,7 +18,7 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
     if (result.isRight()) {
       result.fold((l) => null, (r) {
         emit(
-          OutFlowDocLoaded(r, null, false),
+          OutFlowDocLoaded(r, null, false, null),
         );
       });
     } else {
@@ -26,17 +26,78 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
     }
   }
 
+  void postOutFlowDoc(OutFlowDoc doc) async {
+    emit(OutFlowDocLoading());
+
+    final result = await repository.postOutFlowDoc(doc);
+    if (result.isRight()) {
+      result.fold((l) => null, (r) {
+        emit(OutFlowDocInitial());
+      });
+    } else {
+      result.fold((l) {
+        emit(OutFlowDocPostError(l));
+        emit(OutFlowDocLoaded(doc, null, false, null));
+      }, (r) => null);
+    }
+  }
+
+  void reset() {
+    if (state is OutFlowDocLoaded) {
+      final aux = state as OutFlowDocLoaded;
+      emit(OutFlowDocLoading());
+      emit(OutFlowDocLoaded(aux.docs, null, false, null));
+    }
+  }
+
+  void resetProductCheck(int index) {
+    if (state is OutFlowDocLoaded) {
+      final aux = state as OutFlowDocLoaded;
+
+      aux.docs.produtos[index].checked = 0;
+
+      emit(OutFlowDocLoading());
+      emit(OutFlowDocLoaded(aux.docs, null, false, null));
+    }
+  }
+
   void checkProduct(String code) {
     if (state is OutFlowDocLoaded) {
       final aux = state as OutFlowDocLoaded;
-      final index = aux.docs.produtos
-          .indexWhere((element) => element.codigo.trim() == code.trim());
+      int index = aux.docs.produtos.indexWhere((element) {
+        if (element.codigo.trim() == code.trim() &&
+            (element.checked < element.quantidade)) {
+          return true;
+        }
+
+        if (element.barcode.trim() == code.trim() &&
+            (element.checked < element.quantidade)) {
+          return true;
+        }
+
+        return false;
+      });
+
+      if (index == -1) {
+        index = aux.docs.produtos.indexWhere((element) {
+          if (element.codigo.trim() == code.trim()) {
+            return true;
+          }
+
+          if (element.barcode.trim() == code.trim()) {
+            return true;
+          }
+
+          return false;
+        });
+      }
+
       emit(OutFlowDocLoading());
       if (index >= 0) {
         aux.docs.produtos[index].checked += 1;
-        emit(OutFlowDocLoaded(aux.docs, aux.docs.produtos[index], false));
+        emit(OutFlowDocLoaded(aux.docs, aux.docs.produtos[index], false, code));
       } else {
-        emit(OutFlowDocLoaded(aux.docs, null, true));
+        emit(OutFlowDocLoaded(aux.docs, null, true, code));
       }
     }
   }

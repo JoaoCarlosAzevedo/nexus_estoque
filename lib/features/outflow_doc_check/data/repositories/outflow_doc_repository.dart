@@ -43,4 +43,30 @@ class OutflowDocRepository {
       return const Left(Failure("Server Error!", ErrorType.exception));
     }
   }
+
+  Future<Either<Failure, OutFlowDoc>> postOutFlowDoc(OutFlowDoc doc) async {
+    final String url = await Config.baseURL;
+    try {
+      var response = await dio.post(
+        '$url/conferencia_nf_saida',
+        data: doc.toJson(),
+      );
+
+      if (response.data["mensagem"] == "Nenhum registro alterado!") {
+        return const Left(
+            Failure("Nenhuma NF encontrada!", ErrorType.validation));
+      }
+
+      if (response.statusCode != 201) {
+        return const Left(Failure("Server Error!", ErrorType.exception));
+      }
+
+      return Right(OutFlowDoc.fromMap(response.data));
+    } on DioError catch (e) {
+      if (e.type.name == "connectTimeout") {
+        return const Left(Failure("Tempo Excedido", ErrorType.timeout));
+      }
+      return const Left(Failure("Server Error!", ErrorType.exception));
+    }
+  }
 }

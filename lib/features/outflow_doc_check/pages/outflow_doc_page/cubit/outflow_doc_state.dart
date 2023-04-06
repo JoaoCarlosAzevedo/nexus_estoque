@@ -17,9 +17,17 @@ class OutFlowDocError extends OutFlowDocState {
   const OutFlowDocError(this.failure);
 }
 
+class OutFlowDocPostError extends OutFlowDocState {
+  final Failure failure;
+
+  const OutFlowDocPostError(this.failure);
+}
+
 class OutFlowDocLoaded extends OutFlowDocState {
   final OutFlowDoc docs;
   final Produtos? scannedProduct;
   final bool notFound;
-  const OutFlowDocLoaded(this.docs, this.scannedProduct, this.notFound);
+  final String? barcode;
+  const OutFlowDocLoaded(
+      this.docs, this.scannedProduct, this.notFound, this.barcode);
 }
