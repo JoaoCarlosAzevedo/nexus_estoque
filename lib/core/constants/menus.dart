@@ -40,15 +40,15 @@ final List menuItens = [
     route: 'separacao',
   ),
   MenuItemInfo(
+    title: "Separação por Rotas",
+    icon: FontAwesomeIcons.truckRampBox,
+    color: Colors.red,
+    route: 'separacao_rotas',
+  ),
+  MenuItemInfo(
     title: "Conferencia NFe Saida",
     icon: FontAwesomeIcons.rightFromBracket,
     color: Colors.red,
     route: 'saidacheck',
-  ),
-/*   MenuItemInfo(
-    title: "Conferencia NFe Entrada",
-    icon: FontAwesomeIcons.rightToBracket,
-    color: Colors.red,
-    route: 'entradaCheck',
-  ), */
+  )
 ];
