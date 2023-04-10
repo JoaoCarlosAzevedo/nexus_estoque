@@ -16,10 +16,9 @@ class PickingRoutesList extends StatelessWidget {
         return Card(
           child: ListTile(
             onTap: () {
-              context
-                  .read<PickingRoutesCubit>()
-                  .setRoute(pickingRoutes[index].codRota);
               final cubit = context.read<PickingRoutesCubit>();
+
+              cubit.setRoute(pickingRoutes[index]);
 
               Navigator.push(
                 context,

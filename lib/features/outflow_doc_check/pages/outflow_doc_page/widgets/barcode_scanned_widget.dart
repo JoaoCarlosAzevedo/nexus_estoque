@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nexus_estoque/core/services/audio_player.dart';
 import 'package:nexus_estoque/core/theme/app_colors.dart';
 import 'package:nexus_estoque/features/outflow_doc_check/data/model/outflow_doc_model.dart';
 import 'package:nexus_estoque/features/outflow_doc_check/pages/outflow_doc_page/widgets/progress_chart_widget.dart';
@@ -18,6 +19,14 @@ class BarcodeScannedCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (notFound) {
+      AudioService.error();
+    }
+
+    if (product != null) {
+      AudioService.beep();
+    }
+
     return product != null
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,

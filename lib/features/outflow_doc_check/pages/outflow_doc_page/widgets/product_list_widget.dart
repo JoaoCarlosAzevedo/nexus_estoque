@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/features/outflow_doc_check/data/model/outflow_doc_model.dart';
+import 'package:nexus_estoque/features/outflow_doc_check/pages/outflow_doc_page/cubit/outflow_doc_cubit.dart';
 import 'package:nexus_estoque/features/outflow_doc_check/pages/outflow_doc_page/widgets/barcode_scanned_widget.dart';
 import 'package:nexus_estoque/features/outflow_doc_check/pages/outflow_doc_page/widgets/product_card_widget.dart';
-
-import '../cubit/outflow_doc_cubit.dart';
+import 'package:nexus_estoque/features/outflow_doc_check/pages/outflow_doc_page/widgets/quantity_modal_wiget.dart';
 
 class OutFlowDocProductList extends ConsumerStatefulWidget {
   const OutFlowDocProductList(
@@ -46,6 +46,7 @@ class _OutFlowDocProductListState extends ConsumerState<OutFlowDocProductList> {
   @override
   Widget build(BuildContext context) {
     final document = widget.document;
+    final cubit = context.read<OutFlowDocCubit>();
     return CustomScrollView(
       slivers: [
         SliverFillRemaining(
@@ -79,10 +80,12 @@ class _OutFlowDocProductListState extends ConsumerState<OutFlowDocProductList> {
                     final product = document.produtos[index];
                     return ProductCheckCard(
                       product: product,
-                      onTapCard: () {
-                        context
-                            .read<OutFlowDocCubit>()
-                            .resetProductCheck(index);
+                      onTapCard: () async {
+                        double? newQuantity = await CheckQuantityModal.show(
+                            context, product, product.checked);
+                        if (newQuantity != null) {
+                          cubit.setProductCheck(index, newQuantity);
+                        }
                       },
                     );
                   },

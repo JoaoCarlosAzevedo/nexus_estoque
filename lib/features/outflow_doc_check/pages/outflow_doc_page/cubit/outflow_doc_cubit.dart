@@ -50,11 +50,11 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
     }
   }
 
-  void resetProductCheck(int index) {
+  void setProductCheck(int index, double checked) {
     if (state is OutFlowDocLoaded) {
       final aux = state as OutFlowDocLoaded;
 
-      aux.docs.produtos[index].checked = 0;
+      aux.docs.produtos[index].checked = checked;
 
       emit(OutFlowDocLoading());
       emit(OutFlowDocLoaded(aux.docs, null, false, null));
@@ -70,9 +70,11 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
           return true;
         }
 
-        if (element.barcode.trim() == code.trim() &&
-            (element.checked < element.quantidade)) {
-          return true;
+        if (code.trim().length >= 5) {
+          if (element.barcode.trim().contains(code.trim()) &&
+              (element.checked < element.quantidade)) {
+            return true;
+          }
         }
 
         return false;
@@ -84,8 +86,10 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
             return true;
           }
 
-          if (element.barcode.trim() == code.trim()) {
-            return true;
+          if (code.trim().length >= 5) {
+            if (element.barcode.trim().contains(code.trim())) {
+              return true;
+            }
           }
 
           return false;

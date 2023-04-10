@@ -19,11 +19,13 @@ class PickingRoutesError extends PickingRoutesState {
 
 class PickingRoutesLoaded extends PickingRoutesState {
   final List<PickingRouteModel> pickingRoutes;
-  final String routeSelected;
-  final String shippingSelected;
+  final PickingRouteModel? routeSelected;
+  final ShippingModel? shippingSelected;
+  final PickingOrder? pickingOrderSelected;
 
   const PickingRoutesLoaded(
       {required this.pickingRoutes,
       required this.routeSelected,
-      required this.shippingSelected});
+      required this.shippingSelected,
+      required this.pickingOrderSelected});
 }

@@ -15,8 +15,17 @@ class OutFlowDocCheckPage extends ConsumerStatefulWidget {
 }
 
 class _OutFlowDocCheckPageState extends ConsumerState<OutFlowDocCheckPage> {
+  final TextEditingController controller = TextEditingController();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: const Text("NF Saida")),
@@ -64,7 +73,9 @@ class _OutFlowDocCheckPageState extends ConsumerState<OutFlowDocCheckPage> {
                       notFound: state.notFound,
                       barcodeScanned: state.barcode,
                       onSubmitted: (value) {
-                        context.read<OutFlowDocCubit>().checkProduct(value);
+                        if (value.trim().isNotEmpty) {
+                          context.read<OutFlowDocCubit>().checkProduct(value);
+                        }
                       },
                       onSave: () {
                         context
@@ -81,6 +92,7 @@ class _OutFlowDocCheckPageState extends ConsumerState<OutFlowDocCheckPage> {
                     children: [
                       TextField(
                         autofocus: true,
+                        controller: controller,
                         decoration: const InputDecoration(
                           label: Text("Pesquisa NF ou Chave..."),
                         ),
@@ -89,7 +101,20 @@ class _OutFlowDocCheckPageState extends ConsumerState<OutFlowDocCheckPage> {
                               .read<OutFlowDocCubit>()
                               .fetchOutFlowDoc(value);
                         }),
-                      )
+                      ),
+                      const Divider(),
+                      ElevatedButton(
+                        onPressed: () {
+                          context
+                              .read<OutFlowDocCubit>()
+                              .fetchOutFlowDoc(controller.text);
+                        },
+                        child: SizedBox(
+                          height: height / 15,
+                          width: double.infinity,
+                          child: const Center(child: Text("Confirmar")),
+                        ),
+                      ),
                     ],
                   );
                 },
