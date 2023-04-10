@@ -35,6 +35,7 @@ class _BranchPageState extends ConsumerState<BranchPage> {
   @override
   Widget build(BuildContext context) {
     final futureProvider = ref.watch(remoteBranchProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Grupo / Filial"),
@@ -60,6 +61,7 @@ class _BranchPageState extends ConsumerState<BranchPage> {
             branchCode: branchCode,
             groupCode: groupCode,
             onTap: (element) async {
+              ref.invalidate(environmentProvider);
               await LocalStorage.saveBranch(element);
               setState(() {
                 getBranch();
@@ -179,7 +181,10 @@ class LogoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (logo.trim().isEmpty) {
-      return const Icon(Icons.business);
+      return const Icon(
+        Icons.business,
+        color: Colors.grey,
+      );
     }
     return Padding(
       padding: const EdgeInsets.all(8.0),

@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/core/constants/menus.dart';
+import 'package:nexus_estoque/core/features/branches/data/model/branch_model.dart';
+import 'package:nexus_estoque/core/features/branches/data/pages/branch_page.dart';
 import 'package:nexus_estoque/core/services/secure_store.dart';
 import 'package:nexus_estoque/features/auth/pages/login/cubit/auth_cubit.dart';
 import 'package:nexus_estoque/features/auth/providers/login_controller_provider.dart';
@@ -23,6 +25,7 @@ class MenuPage extends ConsumerWidget {
     final authCubit = context.read<AuthCubit>();
     //final state = authCubit.state as AuthLoaded;
     //final user = state.user;
+    AsyncValue<Branch?> environment = ref.watch(environmentProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -55,11 +58,11 @@ class MenuPage extends ConsumerWidget {
                 authCubit.logout();
               },
               icon: const Icon(Icons.logout)),
-          IconButton(
+          /*      IconButton(
               onPressed: () async {
                 await LocalStorage.deleteAll();
               },
-              icon: const Icon(Icons.delete_forever)),
+              icon: const Icon(Icons.delete_forever)), */
         ],
       ),
       body: SafeArea(
@@ -68,6 +71,39 @@ class MenuPage extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              environment.when(
+                loading: () => const CircularProgressIndicator(),
+                error: (err, stack) => Text('Error: $err'),
+                data: (environment) {
+                  if (environment == null) {
+                    return const Text("Nenhuma filial selecionada");
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 30,
+                          child: LogoWidget(
+                            logo: environment.logo,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: Text(
+                              "${environment.groupCode} / ${environment.branchCode} - ${environment.branchName}",
+                              overflow: TextOverflow.fade,
+                              textAlign: TextAlign.start),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
               /*   Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text('Olá, ${user.displayName}'),

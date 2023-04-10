@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:nexus_estoque/core/features/branches/data/model/branch_model.dart';
 
@@ -31,3 +32,7 @@ class LocalStorage {
     await storage.deleteAll();
   }
 }
+
+final environmentProvider = FutureProvider<Branch?>((ref) async {
+  return await LocalStorage.getBranch();
+});

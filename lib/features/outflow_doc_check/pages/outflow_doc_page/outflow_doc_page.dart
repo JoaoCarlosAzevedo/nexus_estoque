@@ -100,6 +100,7 @@ class _OutFlowDocCheckPageState extends ConsumerState<OutFlowDocCheckPage> {
                           context
                               .read<OutFlowDocCubit>()
                               .fetchOutFlowDoc(value);
+                          controller.clear();
                         }),
                       ),
                       const Divider(),
@@ -108,6 +109,7 @@ class _OutFlowDocCheckPageState extends ConsumerState<OutFlowDocCheckPage> {
                           context
                               .read<OutFlowDocCubit>()
                               .fetchOutFlowDoc(controller.text);
+                          controller.clear();
                         },
                         child: SizedBox(
                           height: height / 15,
