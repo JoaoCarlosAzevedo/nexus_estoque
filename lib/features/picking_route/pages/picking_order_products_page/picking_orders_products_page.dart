@@ -101,6 +101,9 @@ class _PickingOrderProductsPageState extends State<PickingOrderProductsPage> {
 
                             filterList = filter(controller.text);
 
+                            filterList.sort((a, b) =>
+                                a.descEndereco.compareTo(b.descEndereco));
+
                             if (filterList.isEmpty) {
                               return const Center(
                                 child: Text("Nenhum registro encontrado."),
