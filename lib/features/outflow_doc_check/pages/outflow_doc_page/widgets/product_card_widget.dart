@@ -56,7 +56,7 @@ class ProductCheckCard extends StatelessWidget {
                           style: Theme.of(context).textTheme.caption,
                         ),
                         Text(
-                          "${product.quantidade}",
+                          "${product.quantidade} ${product.um}",
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.bodyLarge,
@@ -102,7 +102,7 @@ class ProductCheckCard extends StatelessWidget {
                           style: Theme.of(context).textTheme.caption,
                         ),
                         Text(
-                          "${product.checked}",
+                          "${product.checked} ${product.um}",
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.bodyLarge,

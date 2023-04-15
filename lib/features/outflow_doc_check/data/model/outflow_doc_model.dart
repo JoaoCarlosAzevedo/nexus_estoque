@@ -65,6 +65,7 @@ class Produtos {
   double checked;
   String item;
   String codigo;
+  String um;
   Produtos({
     required this.descricao,
     required this.quantidade,
@@ -72,6 +73,7 @@ class Produtos {
     required this.checked,
     required this.item,
     required this.codigo,
+    required this.um,
   });
 
   Map<String, dynamic> toMap() {
@@ -82,6 +84,7 @@ class Produtos {
       'checked': checked,
       'item': item,
       'codigo': codigo,
+      'um': um,
     };
   }
 
@@ -93,6 +96,7 @@ class Produtos {
       checked: map['checked']?.toDouble() ?? 0,
       item: map['item'] ?? '',
       codigo: map['codigo'] ?? '',
+      um: map['um'] ?? '',
     );
   }
 

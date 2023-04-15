@@ -47,16 +47,12 @@ class _CheckQuantityState extends State<CheckQuantity> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: MediaQuery.of(context).viewInsets,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minWidth: MediaQuery.of(context).size.width,
-          minHeight: MediaQuery.of(context).size.height / 3,
-        ),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: MediaQuery.of(context).viewInsets,
         child: Container(
           padding: const EdgeInsets.all(16),
-          height: MediaQuery.of(context).size.height / 3,
+          //height: MediaQuery.of(context).size.height / 2,
           child: Column(
             children: [
               Text("${widget.produto.item} - ${widget.produto.descricao}",

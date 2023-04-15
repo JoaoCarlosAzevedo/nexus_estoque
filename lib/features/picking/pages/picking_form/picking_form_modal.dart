@@ -8,6 +8,7 @@ import 'package:nexus_estoque/features/picking/data/model/picking_model.dart';
 import 'package:nexus_estoque/features/picking/data/repositories/picking_repository.dart';
 import 'package:nexus_estoque/features/picking/pages/picking_form/cubit/picking_save_cubit.dart';
 import 'package:nexus_estoque/features/picking/pages/picking_products_list/widgets/picking_product_card_wigdet.dart';
+import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity.dart';
 
 class PickingFormModal {
   static Future<dynamic> show(context, PickingModel picking) async {
@@ -46,7 +47,7 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
 
   final TextEditingController productController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
-
+  final TextEditingController quantityController = TextEditingController();
   final FocusNode productFocus = FocusNode();
   bool checkProduct = false;
   double quantity = 0;
@@ -56,12 +57,25 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
     productController.dispose();
     addressController.dispose();
     productFocus.dispose();
+    quantityController.dispose();
+
     super.dispose();
   }
 
   @override
   void initState() {
     quantity = widget.picking.separado;
+    quantityController.text = quantity.toString();
+    quantityController.addListener(() {
+      final double? newQuantity = double.tryParse(quantityController.text);
+
+      if (newQuantity != null) {
+        print(newQuantity);
+        setState(() {
+          quantity = newQuantity;
+        });
+      }
+    });
     super.initState();
   }
 
@@ -139,10 +153,14 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
                             label: Text("Confirmação do Produto"),
                           ),
                         ),
+                        const Divider(),
+                        InputQuantity(
+                          controller: quantityController,
+                        ),
                         const SizedBox(
                           height: 20,
                         ),
-                        /*  ElevatedButton(
+                        ElevatedButton(
                           onPressed: () {
                             submit(context);
                           },
@@ -153,7 +171,7 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
                               child: Center(child: Text("Confirmar")),
                             ),
                           ),
-                        ), */
+                        ),
                       ],
                     ),
                   ),
@@ -177,6 +195,7 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
       AudioService.beep();
       setState(() {
         quantity = quantity + number;
+        quantityController.text = quantity.toString();
       });
 
       if (quantity == widget.picking.quantidade) {

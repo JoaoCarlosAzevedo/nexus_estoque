@@ -81,10 +81,12 @@ class _OutFlowDocProductListState extends ConsumerState<OutFlowDocProductList> {
                     return ProductCheckCard(
                       product: product,
                       onTapCard: () async {
-                        double? newQuantity = await CheckQuantityModal.show(
-                            context, product, product.checked);
-                        if (newQuantity != null) {
-                          cubit.setProductCheck(index, newQuantity);
+                        if (product.um.trim() == "L") {
+                          double? newQuantity = await CheckQuantityModal.show(
+                              context, product, product.checked);
+                          if (newQuantity != null) {
+                            cubit.setProductCheck(index, newQuantity);
+                          }
                         }
                       },
                     );
