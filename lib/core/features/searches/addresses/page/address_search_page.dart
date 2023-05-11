@@ -205,8 +205,19 @@ class _AddressListState extends ConsumerState<AddressList> {
                       children: [
                         Text(filterAddresses[index].lote),
                         if (filterAddresses[index].quantidade != 0)
-                          Text(
-                            "${filterAddresses[index].quantidade}",
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                "Saldo: ${filterAddresses[index].quantidade}",
+                                style: const TextStyle(color: Colors.green),
+                              ),
+                              Text(
+                                //"Empenho: ${filterAddresses[index].empenho}",
+                                "Empen.: ${filterAddresses[index].empenho}",
+                                style: const TextStyle(color: Colors.orange),
+                              ),
+                            ],
                           ),
                       ],
                     ),
