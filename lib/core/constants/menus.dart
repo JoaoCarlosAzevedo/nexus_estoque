@@ -50,11 +50,5 @@ final List menuItens = [
     icon: FontAwesomeIcons.rightFromBracket,
     color: Colors.red,
     route: 'saidacheck',
-  ),
-  MenuItemInfo(
-    title: "Reposição",
-    icon: FontAwesomeIcons.boxesPacking,
-    color: Colors.red,
-    route: 'reposicao',
   )
 ];
