@@ -55,6 +55,7 @@ dependencies:
   flutter_native_splash: ^2.2.16
   grouped_list: ^5.1.2
   audioplayers: ^0.20.1
+  timeline_tile: ^2.0.0
   
 dev_dependencies:
   flutter_test:
