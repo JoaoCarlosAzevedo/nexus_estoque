@@ -63,7 +63,7 @@ class RepositionCard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                    '${reposition.codEndereco} - ${reposition.descEndereco}'),
+                                    '${reposition.codEnderecoRetira} - ${reposition.descEnderecoRetira}'),
                                 Text(
                                   'Dispo. ${reposition.disponivel}',
                                   style: TextStyle(
@@ -104,9 +104,9 @@ class RepositionCard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                    '${reposition.codEnderecoRetira} - ${reposition.descEnderecoRetira}'),
+                                    '${reposition.codEndereco} - ${reposition.descEndereco}'),
                                 Text(
-                                  'Abast. ${reposition.quantAbastecer}',
+                                  'Saldo. ${reposition.quant}',
                                   style: TextStyle(
                                       color: Colors.green, fontSize: 17),
                                 ),
@@ -121,10 +121,10 @@ class RepositionCard extends StatelessWidget {
                 Column(
                   children: [
                     const Text(
-                      'Qtd. Local',
+                      'Abast.',
                     ),
                     Text(
-                      '${reposition.quant}',
+                      '${reposition.quantAbastecer}',
                       style: const TextStyle(color: Colors.green, fontSize: 25),
                     ),
                   ],
