@@ -8,6 +8,7 @@ import 'package:nexus_estoque/core/features/product_balance/data/model/product_b
 import 'package:nexus_estoque/core/features/searches/addresses/data/model/address_model.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/page/address_search_page.dart';
 import 'package:nexus_estoque/core/features/searches/batches/pages/batches_search_page.dart';
+import 'package:nexus_estoque/core/features/searches/warehouses/pages/warehouse_search_page.dart';
 import 'package:nexus_estoque/core/mixins/validation_mixin.dart';
 import 'package:nexus_estoque/core/widgets/form_input_search_widget.dart';
 import 'package:nexus_estoque/features/reposition/data/model/reposition_transfer_moderl.dart';
@@ -99,7 +100,7 @@ class _TransferFormPageState extends State<TransferFormPage>
                       ),
                     ),
                     const Divider(),
-                    /*    InputSearchWidget(
+                    InputSearchWidget(
                       label: "Local Origem",
                       controller: origWarehouseController,
                       autoFocus: false,
@@ -108,9 +109,10 @@ class _TransferFormPageState extends State<TransferFormPage>
                         final value = await WarehouseSearchModal.show(
                             context, widget.productDetail, Tm.saida);
                         origWarehouseController.text = value;
+                        destWarehouseController.text = value;
                       },
                       onSubmitted: (e) {},
-                    ), */
+                    ),
                     if (widget.productDetail.localizacao == 'S')
                       InputSearchWidget(
                         label: "Endereço Origem",
@@ -147,7 +149,7 @@ class _TransferFormPageState extends State<TransferFormPage>
                       ),
                     ),
                     const Divider(),
-                    /*  InputSearchWidget(
+                    /*   InputSearchWidget(
                       label: "Local Destino",
                       controller: destWarehouseController,
                       validator: isNotEmpty,
@@ -262,6 +264,8 @@ class _TransferFormPageState extends State<TransferFormPage>
   }
 
   void allAddressSearch() async {
+    destWarehouseController.text = origWarehouseController.text;
+
     final armz = destWarehouseController.text;
 
     final result =
@@ -275,6 +279,8 @@ class _TransferFormPageState extends State<TransferFormPage>
   void postTransfer() {
     final cubit = BlocProvider.of<ProductTransferCubit>(context);
     final double quantity = double.tryParse(quantityController.text) ?? 0.0;
+    //forca o armz de destino
+    destWarehouseController.text = origWarehouseController.text;
 
     final jsonOrig = {
       'produto': widget.productDetail.codigo,
