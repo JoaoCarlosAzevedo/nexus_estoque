@@ -1,14 +1,18 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nexus_estoque/core/features/product_balance/pages/product_selection/cubit/product_balance_cubit.dart';
 import 'package:nexus_estoque/core/features/searches/products/pages/products_search_page.dart';
 
+import '../../../../../../features/reposition/data/model/reposition_transfer_moderl.dart';
+
 class ProductSelectioForm extends StatefulWidget {
   const ProductSelectioForm(
-      {super.key, required this.title, required this.icon});
+      {super.key, required this.title, required this.icon, this.param});
   final String title;
   final IconData icon;
+  final dynamic param;
 
   @override
   State<ProductSelectioForm> createState() => _ProductSelectioFormState();
@@ -97,11 +101,34 @@ class _ProductSelectioFormState extends State<ProductSelectioForm> {
             ),
             ElevatedButton(
               onPressed: () {
+                final reposition = widget.param != null
+                    ? widget.param as RepositionTrasnferModel
+                    : null;
                 if (controller.text.isNotEmpty) {
-                  context
-                      .read<ProductBalanceCubit>()
-                      .fetchProductBalance(controller.text);
-                  controller.clear();
+                  if (reposition == null) {
+                    context
+                        .read<ProductBalanceCubit>()
+                        .fetchProductBalance(controller.text);
+                    controller.clear();
+                    return;
+                  }
+
+                  if ((reposition.product.trim() == controller.text.trim())) {
+                    context
+                        .read<ProductBalanceCubit>()
+                        .fetchProductBalance(controller.text);
+                    controller.clear();
+                  } else {
+                    AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.error,
+                            animType: AnimType.rightSlide,
+                            desc:
+                                "Produto informado não é o mesmo da reposição escolhida.",
+                            btnOkOnPress: () {},
+                            btnOkColor: Theme.of(context).primaryColor)
+                        .show();
+                  }
                 }
               },
               child: SizedBox(

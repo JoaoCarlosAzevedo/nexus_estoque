@@ -16,9 +16,11 @@ class ProductSelectionPage extends ConsumerWidget {
       {super.key,
       required this.title,
       required this.icon,
-      required this.builder});
+      required this.builder,
+      this.param});
   final String title;
   final IconData icon;
+  final dynamic param;
 
   final ProductBalanceWidgetBuilder builder;
 
@@ -32,6 +34,7 @@ class ProductSelectionPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final repository = ref.read(productBalanceRepositoryProvider);
+
     return Scaffold(
       appBar: AppBar(
           //backgroundColor: AppColors.background,
@@ -61,7 +64,11 @@ class ProductSelectionPage extends ConsumerWidget {
                     child: builder(context, state.productBalance));
               }
               hideKeyboard();
-              return ProductSelectioForm(title: title, icon: icon);
+              return ProductSelectioForm(
+                title: title,
+                icon: icon,
+                param: param,
+              );
             },
           ),
         ),

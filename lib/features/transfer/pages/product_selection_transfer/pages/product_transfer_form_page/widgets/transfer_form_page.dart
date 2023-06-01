@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,9 +8,9 @@ import 'package:nexus_estoque/core/features/product_balance/data/model/product_b
 import 'package:nexus_estoque/core/features/searches/addresses/data/model/address_model.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/page/address_search_page.dart';
 import 'package:nexus_estoque/core/features/searches/batches/pages/batches_search_page.dart';
-import 'package:nexus_estoque/core/features/searches/warehouses/pages/warehouse_search_page.dart';
 import 'package:nexus_estoque/core/mixins/validation_mixin.dart';
 import 'package:nexus_estoque/core/widgets/form_input_search_widget.dart';
+import 'package:nexus_estoque/features/reposition/data/model/reposition_transfer_moderl.dart';
 import 'package:nexus_estoque/features/transaction/pages/transaction_form_page/widgets/transaction_form.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/cubit/product_transfer_cubit.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity.dart';
@@ -18,8 +19,10 @@ import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer
 
 class TransferFormPage extends StatefulWidget {
   final ProductBalanceModel productDetail;
+  final RepositionTrasnferModel? reposition;
 
-  const TransferFormPage({super.key, required this.productDetail});
+  const TransferFormPage(
+      {super.key, required this.productDetail, this.reposition});
 
   @override
   State<TransferFormPage> createState() => _TransferFormPageState();
@@ -41,6 +44,9 @@ class _TransferFormPageState extends State<TransferFormPage>
 
   @override
   void initState() {
+    if (widget.reposition != null) {
+      quantityController.text = widget.reposition!.quantity.toString();
+    }
     super.initState();
     Future.delayed(
       const Duration(milliseconds: 500),
@@ -93,7 +99,7 @@ class _TransferFormPageState extends State<TransferFormPage>
                       ),
                     ),
                     const Divider(),
-                    InputSearchWidget(
+                    /*    InputSearchWidget(
                       label: "Local Origem",
                       controller: origWarehouseController,
                       autoFocus: false,
@@ -104,7 +110,7 @@ class _TransferFormPageState extends State<TransferFormPage>
                         origWarehouseController.text = value;
                       },
                       onSubmitted: (e) {},
-                    ),
+                    ), */
                     if (widget.productDetail.localizacao == 'S')
                       InputSearchWidget(
                         label: "Endereço Origem",
@@ -141,7 +147,7 @@ class _TransferFormPageState extends State<TransferFormPage>
                       ),
                     ),
                     const Divider(),
-                    InputSearchWidget(
+                    /*  InputSearchWidget(
                       label: "Local Destino",
                       controller: destWarehouseController,
                       validator: isNotEmpty,
@@ -151,7 +157,7 @@ class _TransferFormPageState extends State<TransferFormPage>
                         destWarehouseController.text = value;
                       },
                       onSubmitted: (e) {},
-                    ),
+                    ), */
                     if (widget.productDetail.localizacao == 'S')
                       InputSearchWidget(
                         label: "Endereço Destino",
@@ -187,7 +193,27 @@ class _TransferFormPageState extends State<TransferFormPage>
                       onPressed: () {
                         final isValid = formKey.currentState!.validate();
                         if (isValid) {
-                          postTransfer();
+                          if (widget.reposition != null) {
+                            if (widget.reposition!.origAddress.trim() ==
+                                    origAddressController.text.trim() &&
+                                widget.reposition!.destAddress.trim() ==
+                                    destAddressController.text.trim()) {
+                              postTransfer();
+                            } else {
+                              AwesomeDialog(
+                                      context: context,
+                                      dialogType: DialogType.error,
+                                      animType: AnimType.rightSlide,
+                                      desc:
+                                          "Endereço de Origem ou Destino diferente da reposição",
+                                      btnOkOnPress: () {},
+                                      btnOkColor:
+                                          Theme.of(context).primaryColor)
+                                  .show();
+                            }
+                          } else {
+                            postTransfer();
+                          }
                         }
                       },
                       child: const SizedBox(
