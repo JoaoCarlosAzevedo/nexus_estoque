@@ -37,7 +37,7 @@ class PickingProductCard extends StatelessWidget {
                       children: [
                         Text(
                           "Codigo",
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
                           data.codigo,
@@ -55,7 +55,7 @@ class PickingProductCard extends StatelessWidget {
                       children: [
                         Text(
                           "Quantidade",
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
                           "${data.quantidade}",
@@ -78,7 +78,7 @@ class PickingProductCard extends StatelessWidget {
                       children: [
                         Text(
                           "Endereço",
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,7 +107,7 @@ class PickingProductCard extends StatelessWidget {
                       children: [
                         Text(
                           "Separado",
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
                           data.separado.toString(),

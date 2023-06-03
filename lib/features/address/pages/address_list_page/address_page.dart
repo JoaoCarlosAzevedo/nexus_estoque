@@ -51,7 +51,6 @@ class _AddressPageState extends ConsumerState<AddressPage> {
           padding: const EdgeInsets.all(0),
           child: Container(
             padding: const EdgeInsets.all(10),
-            color: Theme.of(context).selectedRowColor,
             child: Column(
               children: [
                 TextField(
@@ -192,7 +191,7 @@ class AddressCard extends StatelessWidget {
                       children: [
                         Text(
                           "Codigo",
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
                           data.codigo,
@@ -210,7 +209,7 @@ class AddressCard extends StatelessWidget {
                       children: [
                         Text(
                           "Saldo",
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
                           "${data.saldo}",
@@ -233,7 +232,7 @@ class AddressCard extends StatelessWidget {
                       children: [
                         Text(
                           "Fornecedor",
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -262,7 +261,7 @@ class AddressCard extends StatelessWidget {
                       children: [
                         Text(
                           "Armazem",
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
                           data.armazem,

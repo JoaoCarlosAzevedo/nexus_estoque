@@ -136,28 +136,28 @@ class AppTheme {
 
   static TextTheme customTextTheme() {
     return const TextTheme(
-      headline1: TextStyle(
+      displayLarge: TextStyle(
           fontSize: 36.0, fontWeight: FontWeight.bold, color: AppColors.grey),
-      headline2: TextStyle(
+      displayMedium: TextStyle(
           fontSize: 30.0, fontWeight: FontWeight.bold, color: AppColors.grey),
-      headline3: TextStyle(
+      displaySmall: TextStyle(
           fontSize: 24.0, fontWeight: FontWeight.bold, color: AppColors.grey),
-      headline4: TextStyle(
+      headlineMedium: TextStyle(
           fontSize: 20.0, fontWeight: FontWeight.bold, color: AppColors.grey),
-      headline5: TextStyle(
+      headlineSmall: TextStyle(
           fontSize: 18.0, fontWeight: FontWeight.bold, color: AppColors.grey),
-      headline6: TextStyle(
+      titleLarge: TextStyle(
           fontSize: 16.0, fontWeight: FontWeight.bold, color: AppColors.grey),
-      bodyText1: TextStyle(
+      bodyLarge: TextStyle(
           fontSize: 16.0, fontFamily: 'Nunito Sans', color: AppColors.grey),
-      bodyText2: TextStyle(
+      bodyMedium: TextStyle(
           fontSize: 14.0,
           fontFamily: 'Nunito Sans',
           color: AppColors.grey,
           fontWeight: FontWeight.bold), //TextPadrao
-      subtitle1: TextStyle(
+      titleMedium: TextStyle(
           fontSize: 14.0, fontFamily: 'Nunito Sans', color: AppColors.grey),
-      caption: TextStyle(
+      bodySmall: TextStyle(
           fontSize: 12.0,
           fontFamily: 'Nunito Sans',
           color: AppColors.grey,

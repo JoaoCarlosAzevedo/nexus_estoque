@@ -46,7 +46,6 @@ class _PickingPageState extends State<PickingPage> {
           padding: const EdgeInsets.all(0),
           child: Container(
             padding: const EdgeInsets.all(10),
-            color: Theme.of(context).selectedRowColor,
             child: Column(
               children: [
                 TextField(

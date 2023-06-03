@@ -26,15 +26,15 @@ class RepositionCard extends StatelessWidget {
                   children: [
                     Text(
                       'UM: ${reposition.um}',
-                      style: Theme.of(context).textTheme.subtitle1,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
                       'Local: ${reposition.local}',
-                      style: Theme.of(context).textTheme.subtitle1,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
                       'Vol.: ${reposition.volume}',
-                      style: Theme.of(context).textTheme.subtitle1,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ],
                 ),

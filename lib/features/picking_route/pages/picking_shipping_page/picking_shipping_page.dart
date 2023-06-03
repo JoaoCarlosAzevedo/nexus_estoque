@@ -83,7 +83,7 @@ class PickingShippingPage extends StatelessWidget {
                                             "Transportadora",
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .caption,
+                                                .bodySmall,
                                           ),
                                           Text(
                                             shippingList[index].descTransp,
@@ -107,7 +107,7 @@ class PickingShippingPage extends StatelessWidget {
                                             "Qtd. Entregaas",
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .caption,
+                                                .bodySmall,
                                           ),
                                           Text(
                                             "${shippingList[index].qtdEntregas}",
@@ -137,7 +137,7 @@ class PickingShippingPage extends StatelessWidget {
                                             "Peso Carga",
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .caption,
+                                                .bodySmall,
                                           ),
                                           Column(
                                             crossAxisAlignment:
@@ -167,7 +167,7 @@ class PickingShippingPage extends StatelessWidget {
                                             "Qtd. Pedidos",
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .caption,
+                                                .bodySmall,
                                           ),
                                           Text(
                                             "${shippingList[index].pedidos.length}",

@@ -36,7 +36,7 @@ class ProductHeaderCard extends StatelessWidget {
                   Flexible(
                     child: Text(
                       productDetail.descricao,
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
                 ],
@@ -47,7 +47,7 @@ class ProductHeaderCard extends StatelessWidget {
                 children: [
                   Text(
                     "Código: ${productDetail.codigo}",
-                    style: Theme.of(context).textTheme.subtitle1,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ],
               ),
@@ -57,7 +57,7 @@ class ProductHeaderCard extends StatelessWidget {
                 children: [
                   Text(
                     productDetail.codigoBarras,
-                    style: Theme.of(context).textTheme.caption,
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right: 10, bottom: 10),

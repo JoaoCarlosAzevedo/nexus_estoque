@@ -38,7 +38,7 @@ class PickingCard extends StatelessWidget {
                       children: [
                         Text(
                           "Cliente",
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
                           data.descCliente,
@@ -56,7 +56,7 @@ class PickingCard extends StatelessWidget {
                       children: [
                         Text(
                           "Quantidade",
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
                           "${data.quantidade}",
@@ -79,7 +79,7 @@ class PickingCard extends StatelessWidget {
                       children: [
                         Text(
                           "Código Cliente",
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,7 +102,7 @@ class PickingCard extends StatelessWidget {
                       children: [
                         Text(
                           "Separado",
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
                           data.separado.toString(),

@@ -43,7 +43,7 @@ class BarcodeScannedCard extends StatelessWidget {
                     child: ListTile(
                       title: Text(
                         "${product?.item} ${product?.descricao}",
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       subtitle: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -54,7 +54,7 @@ class BarcodeScannedCard extends StatelessWidget {
                           ),
                           Text(
                             "Cód. Barras: ${barcode ?? ""}",
-                            style: Theme.of(context).textTheme.caption,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                           const SizedBox(
                             height: 5,
@@ -71,7 +71,8 @@ class BarcodeScannedCard extends StatelessWidget {
                             children: [
                               Text(
                                 "Conferido: ${product!.checked}",
-                                style: Theme.of(context).textTheme.headline4,
+                                style:
+                                    Theme.of(context).textTheme.headlineMedium,
                               ),
                             ],
                           ),

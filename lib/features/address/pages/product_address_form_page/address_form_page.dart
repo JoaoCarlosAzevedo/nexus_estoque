@@ -105,7 +105,6 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                     Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).selectedRowColor,
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: Column(

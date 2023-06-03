@@ -34,7 +34,7 @@ class ProductInfo extends StatelessWidget {
                     children: [
                       Text(
                         productAddress.descricao,
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                     ],
                   ),
@@ -50,7 +50,7 @@ class ProductInfo extends StatelessWidget {
                   children: [
                     Text(
                       "Codigo",
-                      style: Theme.of(context).textTheme.caption,
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                     Text(
                       productAddress.codigo,
@@ -65,7 +65,7 @@ class ProductInfo extends StatelessWidget {
                     children: [
                       Text(
                         "Fornecedor",
-                        style: Theme.of(context).textTheme.caption,
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 20),
@@ -90,7 +90,7 @@ class ProductInfo extends StatelessWidget {
                   children: [
                     Text(
                       "Armazem",
-                      style: Theme.of(context).textTheme.caption,
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                     Text(
                       productAddress.armazem,
@@ -104,7 +104,7 @@ class ProductInfo extends StatelessWidget {
                   children: [
                     Text(
                       "NF",
-                      style: Theme.of(context).textTheme.caption,
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                     Text(
                       '${productAddress.notafiscal} ${productAddress.serie}',
@@ -118,7 +118,7 @@ class ProductInfo extends StatelessWidget {
                   children: [
                     Text(
                       "Saldo a endereçar",
-                      style: Theme.of(context).textTheme.caption,
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                     Text(
                       "${productAddress.saldo} ${productAddress.um}",

@@ -42,7 +42,6 @@ class _PickingOrderProductsPageState extends State<PickingOrderProductsPage> {
           padding: const EdgeInsets.all(0),
           child: Container(
             padding: const EdgeInsets.all(10),
-            color: Theme.of(context).selectedRowColor,
             child: Column(
               children: [
                 TextField(

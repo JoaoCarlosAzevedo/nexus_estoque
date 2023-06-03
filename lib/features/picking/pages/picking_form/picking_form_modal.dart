@@ -70,7 +70,6 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
       final double? newQuantity = double.tryParse(quantityController.text);
 
       if (newQuantity != null) {
-        print(newQuantity);
         setState(() {
           quantity = newQuantity;
         });

@@ -35,7 +35,7 @@ class ProductCheckCard extends StatelessWidget {
                       children: [
                         Text(
                           "Cód Barras",
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
                           product.barcode,
@@ -53,7 +53,7 @@ class ProductCheckCard extends StatelessWidget {
                       children: [
                         Text(
                           "Quantidade",
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
                           "${product.quantidade} ${product.um}",
@@ -76,7 +76,7 @@ class ProductCheckCard extends StatelessWidget {
                       children: [
                         Text(
                           "Cód Prod.",
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,7 +99,7 @@ class ProductCheckCard extends StatelessWidget {
                       children: [
                         Text(
                           "Conferido",
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
                           "${product.checked} ${product.um}",
