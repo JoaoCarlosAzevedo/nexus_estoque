@@ -11,6 +11,7 @@ import 'package:nexus_estoque/core/mixins/validation_mixin.dart';
 import 'package:nexus_estoque/core/widgets/form_input_search_widget.dart';
 import 'package:nexus_estoque/features/transaction/data/model/transaction_model.dart';
 import 'package:nexus_estoque/features/transaction/pages/transaction_form_page/cubit/transaction_cubit.dart';
+import 'package:nexus_estoque/features/transaction/pages/transaction_form_page/widgets/date_input_field.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/produc_transfer_card.dart';
 
@@ -31,6 +32,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
   final TextEditingController warehouseController = TextEditingController();
   final TextEditingController batchController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
+  final TextEditingController batchDateController = TextEditingController();
   final TextEditingController quantityController =
       TextEditingController(text: '1.00');
 
@@ -46,6 +48,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     batchController.dispose();
     addressController.dispose();
     quantityController.dispose();
+    batchDateController.dispose();
     super.dispose();
   }
 
@@ -75,6 +78,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                             onChanged: (Tm? value) {
                               setState(() {
                                 tmSelected = value;
+                                batchDateController.clear();
                               });
                             },
                           ),
@@ -89,6 +93,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                             onChanged: (Tm? value) {
                               setState(() {
                                 tmSelected = value;
+                                batchDateController.clear();
                               });
                             },
                           ),
@@ -137,6 +142,11 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                         batchController.text = value;
                       },
                     ),
+                  if (widget.product.lote == 'L' && tmSelected! == Tm.entrada)
+                    DateTextField(
+                      controller: batchDateController,
+                      validator: isDate,
+                    ),
                   InputQuantity(
                     controller: quantityController,
                   ),
@@ -145,8 +155,6 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      //context.read<ProductBalanceCubit>().reset();
-
                       final isValid = formKey.currentState!.validate();
                       if (isValid) {
                         final tm = tmSelected == Tm.entrada ? '001' : '501';
@@ -155,12 +163,13 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                             local: warehouseController.text,
                             quantidade: double.parse(quantityController.text),
                             lote: batchController.text,
-                            endereco: addressController.text);
+                            endereco: addressController.text,
+                            validade: batchDateController.text);
+
                         context
                             .read<TransactionCubit>()
                             .postTransaction(transaction, tm);
                       }
-                      log(isValid.toString());
                     },
                     child: const SizedBox(
                       width: double.infinity,

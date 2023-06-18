@@ -7,13 +7,15 @@ class TransactionModel {
   double quantidade;
   String lote;
   String endereco;
-  TransactionModel({
-    required this.codigo,
-    required this.local,
-    required this.quantidade,
-    required this.lote,
-    required this.endereco,
-  });
+  String validade;
+
+  TransactionModel(
+      {required this.codigo,
+      required this.local,
+      required this.quantidade,
+      required this.lote,
+      required this.endereco,
+      required this.validade});
 
   Map<String, dynamic> toMap() {
     return {
@@ -22,6 +24,7 @@ class TransactionModel {
       'quantidade': quantidade,
       'lote': lote,
       'endereco': endereco,
+      'validade': validade
     };
   }
 
@@ -57,6 +60,7 @@ class TransactionModel {
       quantidade: map['quantidade']?.toDouble() ?? 0,
       lote: map['lote'] ?? '',
       endereco: map['endereco'] ?? '',
+      validade: map['validade'] ?? '',
     );
   }
 

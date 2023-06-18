@@ -60,7 +60,9 @@ class AppTheme {
         ),
       ),
       primaryTextTheme: customTextTheme(),
+
       inputDecorationTheme: InputDecorationTheme(
+        errorStyle: const TextStyle(color: Colors.red),
         iconColor: AppColors.grey,
         filled: true,
         enabledBorder: OutlineInputBorder(
