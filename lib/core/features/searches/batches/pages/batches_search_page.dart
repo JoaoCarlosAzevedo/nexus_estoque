@@ -138,7 +138,7 @@ class _BatchListState extends ConsumerState<BatchList> {
                       Navigator.pop(context, listBatches[index].lote);
                     },
                     title: Text(listBatches[index].lote),
-                    subtitle: Text(listBatches[index].lotefor),
+                    subtitle: Text('Validade: ${listBatches[index].validade}'),
                     trailing: Text(listBatches[index].saldo.toString()),
                   ),
                 );
