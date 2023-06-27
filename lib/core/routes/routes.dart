@@ -11,6 +11,7 @@ import 'package:nexus_estoque/features/address/data/repositories/product_address
 import 'package:nexus_estoque/features/address/pages/address_list_page/address_page.dart';
 import 'package:nexus_estoque/features/address/pages/address_list_page/cubit/product_address_cubit.dart';
 import 'package:nexus_estoque/features/address/pages/product_address_form_page/address_form_page.dart';
+import 'package:nexus_estoque/features/address_balance/pages/address_balance_page/address_balance_page.dart';
 import 'package:nexus_estoque/features/auth/pages/login/login_page.dart';
 import 'package:nexus_estoque/features/auth/providers/login_controller_provider.dart';
 import 'package:nexus_estoque/features/auth/providers/login_state.dart';
@@ -109,6 +110,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/reposicao",
             builder: ((context, state) => const RepositionPage())),
+        GoRoute(
+            path: "/saldo_endereco",
+            builder: ((context, state) => const AddressBalancePage())),
       ]);
 });
 
