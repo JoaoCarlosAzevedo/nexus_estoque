@@ -22,6 +22,7 @@ import 'package:nexus_estoque/features/picking/data/repositories/picking_reposit
 import 'package:nexus_estoque/features/picking/pages/picking_list/cubit/picking_cubit.dart';
 import 'package:nexus_estoque/features/picking/pages/picking_list/picking_page.dart';
 import 'package:nexus_estoque/features/picking_route/pages/picking_routes_page/picking_routes_list_page.dart';
+import 'package:nexus_estoque/features/product_balance/pages/product_balance/product_balance_page.dart';
 import 'package:nexus_estoque/features/reposition/pages/reposition_page/reposition_page.dart';
 import 'package:nexus_estoque/features/transaction/pages/transaction_form_page/transaction_page.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/transfer_page.dart';
@@ -113,6 +114,14 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/saldo_endereco",
             builder: ((context, state) => const AddressBalancePage())),
+        GoRoute(
+            path: "/saldo_produto/:productCode",
+            builder: ((context, state) {
+              final param = state.params['productCode'];
+              return ProductBalancePage(
+                productCode: param!,
+              );
+            })),
       ]);
 });
 

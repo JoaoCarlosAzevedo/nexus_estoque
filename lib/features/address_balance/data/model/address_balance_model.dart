@@ -2,6 +2,7 @@ import 'dart:convert';
 
 class AddressBalanceModel {
   final String descProd;
+  final String codProd;
   final String um;
   final String armazem;
   final String codEndereco;
@@ -12,6 +13,7 @@ class AddressBalanceModel {
 
   AddressBalanceModel({
     required this.descProd,
+    required this.codProd,
     required this.um,
     required this.armazem,
     required this.codEndereco,
@@ -24,6 +26,7 @@ class AddressBalanceModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'descProd': descProd,
+      'codProd': codProd,
       'UM': um,
       'armazem': armazem,
       'codEndereco': codEndereco,
@@ -37,6 +40,7 @@ class AddressBalanceModel {
   factory AddressBalanceModel.fromMap(Map<String, dynamic> map) {
     return AddressBalanceModel(
       descProd: map['descProd'] ?? '',
+      codProd: map['codProd'] ?? '',
       um: map['UM'] ?? '',
       armazem: map['armazem'] ?? '',
       codEndereco: map['codEndereco'] ?? '',
