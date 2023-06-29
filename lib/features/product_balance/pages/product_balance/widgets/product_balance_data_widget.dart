@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:grouped_list/grouped_list.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
+import 'package:nexus_estoque/core/features/searches/addresses/data/model/address_model.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/produc_transfer_card.dart';
 
 class ProductBalanceDataWidget extends ConsumerWidget {
@@ -9,6 +12,8 @@ class ProductBalanceDataWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final list = getAllAdresses();
+
     return Column(
       children: [
         Padding(
@@ -18,62 +23,77 @@ class ProductBalanceDataWidget extends ConsumerWidget {
           ),
         ),
         Expanded(
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: productBalance.armazem.length,
-            itemBuilder: (context, index) {
+          child: GroupedListView<AddressModel, String>(
+            elements: list,
+            useStickyGroupSeparators: true, // optional
+            //floatingHeader: true, // optional
+            order: GroupedListOrder.ASC,
+            itemComparator: (item1, item2) =>
+                item1.local.compareTo(item2.local), // optional
+            groupBy: (element) => element.local,
+            groupSeparatorBuilder: (String groupByValue) {
+              final warehouse = productBalance.armazem.firstWhere(
+                (element) => element.codigo.contains(groupByValue),
+              );
+
               return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                padding: const EdgeInsets.all(8.0),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
                         children: [
-                          Text(
-                              '${productBalance.armazem[index].codigo} - ${productBalance.armazem[index].descricao}'),
-                          Text(
-                              '${productBalance.armazem[index].saldoLocal} ${productBalance.uM}'),
+                          const Padding(
+                            padding: EdgeInsets.only(right: 8.0),
+                            child: FaIcon(FontAwesomeIcons.warehouse),
+                          ),
+                          Text('${warehouse.codigo} - ${warehouse.descricao}'),
                         ],
                       ),
-                    ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: productBalance.armazem[index].enderecos.length,
-                      itemBuilder: (context, innerIndex) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Card(
-                            child: ListTile(
-                              title: Text(productBalance
-                                  .armazem[index].enderecos[innerIndex].codigo),
-                              subtitle: Text(
-                                  "Endereço:  ${productBalance.armazem[index].enderecos[innerIndex].descricao}"),
-                              trailing: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    'Saldo: ${productBalance.armazem[index].enderecos[innerIndex].quantidade}',
-                                    style: const TextStyle(color: Colors.green),
-                                  ),
-                                  Text(
-                                      'Empen.: ${productBalance.armazem[index].enderecos[innerIndex].empenho}'),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                      Text('${warehouse.saldoLocal} ${productBalance.uM}'),
+                    ],
+                  ),
                 ),
               );
             },
+            itemBuilder: (context, AddressModel element) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                child: Card(
+                  child: ListTile(
+                    title: Text(element.codigo),
+                    subtitle: Text("Endereço:  ${element.descricao}"),
+                    trailing: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Saldo: ${element.quantidade}',
+                          style: const TextStyle(color: Colors.green),
+                        ),
+                        Text('Empen.: ${element.empenho}'),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+            // optional
           ),
         ),
       ],
     );
+  }
+
+  List<AddressModel> getAllAdresses() {
+    List<AddressModel> addresses = [];
+
+    for (var elements in productBalance.armazem) {
+      addresses.addAll(elements.enderecos);
+    }
+
+    return addresses;
   }
 }
