@@ -8,6 +8,9 @@ class TransactionModel {
   String lote;
   String endereco;
   String validade;
+  String codcli;
+  String lojacli;
+  String nomecli;
 
   TransactionModel(
       {required this.codigo,
@@ -15,6 +18,9 @@ class TransactionModel {
       required this.quantidade,
       required this.lote,
       required this.endereco,
+      required this.codcli,
+      required this.lojacli,
+      required this.nomecli,
       required this.validade});
 
   Map<String, dynamic> toMap() {
@@ -24,7 +30,10 @@ class TransactionModel {
       'quantidade': quantidade,
       'lote': lote,
       'endereco': endereco,
-      'validade': validade
+      'validade': validade,
+      'codcli': codcli,
+      'lojacli': lojacli,
+      'nomecli': nomecli
     };
   }
 
@@ -61,6 +70,9 @@ class TransactionModel {
       lote: map['lote'] ?? '',
       endereco: map['endereco'] ?? '',
       validade: map['validade'] ?? '',
+      codcli: map['codcli'] ?? '',
+      lojacli: map['lojacli'] ?? '',
+      nomecli: map['nomecli'] ?? '',
     );
   }
 

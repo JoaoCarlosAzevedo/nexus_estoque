@@ -27,12 +27,12 @@ final List menuItens = [
     color: Colors.red,
     route: 'transferencias',
   ),
-/*   MenuItemInfo(
+  MenuItemInfo(
     title: "Movimentos Internos",
     icon: FontAwesomeIcons.boxesPacking,
     color: Colors.red,
     route: 'movimentos',
-  ), */
+  ),
   MenuItemInfo(
     title: "Separação",
     icon: FontAwesomeIcons.dolly,

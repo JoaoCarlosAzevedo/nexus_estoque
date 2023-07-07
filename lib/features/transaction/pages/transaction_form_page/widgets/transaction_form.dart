@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/data/model/address_model.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/page/address_search_page.dart';
 import 'package:nexus_estoque/core/features/searches/batches/pages/batches_search_page.dart';
+import 'package:nexus_estoque/core/features/searches/clients/data/model/client_model.dart';
+import 'package:nexus_estoque/core/features/searches/clients/pages/client_search_page.dart';
 import 'package:nexus_estoque/core/features/searches/warehouses/pages/warehouse_search_page.dart';
 import 'package:nexus_estoque/core/mixins/validation_mixin.dart';
 import 'package:nexus_estoque/core/widgets/form_input_search_widget.dart';
@@ -33,6 +36,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
   final TextEditingController batchDateController = TextEditingController();
   final TextEditingController quantityController =
       TextEditingController(text: '1.00');
+  ClientModel? clientSelected;
 
   @override
   void initState() {
@@ -62,7 +66,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
               productDetail: widget.product,
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(right: 8.0, left: 8.0),
               child: Column(
                 children: [
                   Row(
@@ -97,6 +101,33 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                           ),
                           const Text("Saida")
                         ],
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          clientSelected != null
+                              ? clientSelected!.nome
+                              : 'Selecione o Cliente',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () async {
+                          final value = await ClientSearchModal.show(context);
+                          setState(() {
+                            clientSelected = value;
+                          });
+
+                          /*  if (value is AddressModel) {
+                        addressController.text = value.codigo;
+                        batchController.text = value.lote;
+                      } */
+                        },
+                        icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
                       ),
                     ],
                   ),
@@ -153,16 +184,30 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                   ),
                   ElevatedButton(
                     onPressed: () {
+                      var codcli = "";
+                      var lojacli = "";
+                      var nomecli = "";
+
                       final isValid = formKey.currentState!.validate();
                       if (isValid) {
                         final tm = tmSelected == Tm.entrada ? '001' : '501';
+
+                        if (clientSelected != null) {
+                          codcli = clientSelected!.codigo;
+                          lojacli = clientSelected!.loja;
+                          nomecli = clientSelected!.nome;
+                        }
+
                         final transaction = TransactionModel(
                             codigo: widget.product.codigo,
                             local: warehouseController.text,
                             quantidade: double.parse(quantityController.text),
                             lote: batchController.text,
                             endereco: addressController.text,
-                            validade: batchDateController.text);
+                            validade: batchDateController.text,
+                            codcli: codcli,
+                            lojacli: lojacli,
+                            nomecli: nomecli);
 
                         context
                             .read<TransactionCubit>()
