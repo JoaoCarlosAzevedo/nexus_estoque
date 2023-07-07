@@ -64,7 +64,7 @@ class _ClientSearchPageState extends ConsumerState<ClientSearchPage> {
   }
 }
 
-class ListClients extends StatelessWidget {
+class ListClients extends StatefulWidget {
   const ListClients({
     Key? key,
     required this.clients,
@@ -72,24 +72,46 @@ class ListClients extends StatelessWidget {
   final List<ClientModel> clients;
 
   @override
+  State<ListClients> createState() => _ListClientsState();
+}
+
+class _ListClientsState extends State<ListClients> {
+  List<ClientModel> filterClients = [];
+  bool resetFilter = true;
+
+  @override
   Widget build(BuildContext context) {
+    if (resetFilter) {
+      filterClients = widget.clients;
+      resetFilter = false;
+    }
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
+          TextField(
+            onChanged: (e) {
+              clientSearch(e);
+            },
+            decoration: const InputDecoration(
+              prefixIcon: Icon(Icons.search),
+              label: Text("Pesquisar"),
+            ),
+          ),
           Expanded(
             child: ListView.builder(
-              itemCount: clients.length,
+              itemCount: filterClients.length,
               itemBuilder: (context, index) {
                 return Card(
                   child: ListTile(
                     onTap: () {
-                      Navigator.pop(context, clients[index]);
+                      Navigator.pop(context, filterClients[index]);
                     },
-                    title: Text(clients[index].nome),
+                    title: Text(filterClients[index].nome),
                     subtitle: Text(
-                        '${clients[index].codigo}  ${clients[index].loja}'),
-                    trailing: Text('Filial ${clients[index].filial}'),
+                        '${filterClients[index].codigo}  ${filterClients[index].loja}'),
+                    trailing: Text('Filial ${filterClients[index].filial}'),
                   ),
                 );
               },
@@ -98,5 +120,26 @@ class ListClients extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void clientSearch(String value) {
+    if (value.isNotEmpty) {
+      setState(() {
+        filterClients = widget.clients.where((element) {
+          if (element.codigo.toUpperCase().contains(value.toUpperCase())) {
+            return true;
+          }
+
+          if (element.nome.toUpperCase().contains(value.toUpperCase())) {
+            return true;
+          }
+          return false;
+        }).toList();
+      });
+    } else {
+      setState(() {
+        resetFilter = true;
+      });
+    }
   }
 }
