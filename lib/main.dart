@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_localization/flutter_localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/routes/routes.dart';
 import 'package:nexus_estoque/core/theme/app_theme.dart';
 import 'package:nexus_estoque/features/auth/data/repositories/auth_repository.dart';
 import 'package:nexus_estoque/features/auth/pages/login/cubit/auth_cubit.dart';
-
-final FlutterLocalization localization = FlutterLocalization.instance;
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -32,28 +30,20 @@ class NexusEstoque extends ConsumerStatefulWidget {
 
 class _NexusEstoqueState extends ConsumerState<NexusEstoque> {
   @override
-  void initState() {
-    localization.init(
-      mapLocales: [],
-      initLanguageCode: 'en',
-    );
-    localization.onTranslatedLanguage = _onTranslatedLanguage;
-    super.initState();
-  }
-
-  void _onTranslatedLanguage(Locale? locale) {
-    setState(() {});
-  }
-
-  @override
   Widget build(BuildContext context) {
     final routes = ref.watch(routerProvider);
     return BlocProvider(
       create: (context) => AuthCubit(ref.read(authRepositoryProvider)),
       child: MaterialApp.router(
-        supportedLocales: const [Locale('pt', 'BR')],
-        localizationsDelegates: localization.localizationsDelegates,
         theme: AppTheme.defaultTheme,
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('pt', 'BR'),
+        ],
         debugShowCheckedModeBanner: false,
         routerDelegate: routes.routerDelegate,
         routeInformationParser: routes.routeInformationParser,
