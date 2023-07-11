@@ -115,7 +115,7 @@ class ProductInfo extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     Text(
-                      '${productAddress.data}',
+                      productAddress.data,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ],
