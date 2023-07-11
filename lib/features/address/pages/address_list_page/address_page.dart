@@ -198,7 +198,7 @@ class AddressCard extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.titleMedium,
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -265,6 +265,16 @@ class AddressCard extends StatelessWidget {
                         ),
                         Text(
                           data.armazem,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        Text(
+                          "Data",
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        Text(
+                          data.data,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.titleMedium,

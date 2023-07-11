@@ -8,6 +8,7 @@ class ProductAddressModel {
   final double saldo;
   final String serie;
   final String notafiscal;
+  final String data;
   final String um;
   final String armazem;
   final String codigo;
@@ -24,6 +25,7 @@ class ProductAddressModel {
     required this.saldo,
     required this.serie,
     required this.notafiscal,
+    required this.data,
     required this.um,
     required this.armazem,
     required this.codigo,
@@ -36,6 +38,7 @@ class ProductAddressModel {
   Map<String, dynamic> toMap() {
     return {
       'descricao': descricao,
+      'data': data,
       'numseq': numseq,
       'clifor': clifor,
       'lote': lote,
@@ -55,6 +58,7 @@ class ProductAddressModel {
   factory ProductAddressModel.fromMap(Map<String, dynamic> map) {
     return ProductAddressModel(
         descricao: map['descricao'] ?? '',
+        data: map['data'] ?? '',
         numseq: map['numseq'] ?? '',
         clifor: map['clifor'] ?? '',
         lote: map['lote'] ?? '',

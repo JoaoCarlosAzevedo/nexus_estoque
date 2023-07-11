@@ -110,6 +110,14 @@ class ProductInfo extends StatelessWidget {
                       '${productAddress.notafiscal} ${productAddress.serie}',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
+                    Text(
+                      "Data",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    Text(
+                      '${productAddress.data}',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                   ],
                 ),
                 Column(
