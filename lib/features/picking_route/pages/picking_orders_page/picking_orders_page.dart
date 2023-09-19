@@ -32,7 +32,7 @@ class PickingOrdersPage extends StatelessWidget {
           builder: (context, state) {
             if (state is PickingRoutesLoaded) {
               if (state.shippingSelected == null) {
-                return const Text("N encontrei");
+                return const Text("Não encontrado!");
               }
               final orders = state.shippingSelected!.pedidos;
               return Scaffold(

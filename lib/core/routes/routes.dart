@@ -27,6 +27,8 @@ import 'package:nexus_estoque/features/reposition/pages/reposition_page/repositi
 import 'package:nexus_estoque/features/transaction/pages/transaction_form_page/transaction_page.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/transfer_page.dart';
 
+import '../../features/address_inventory/pages/address_inventory_page/address_inventory_page.dart';
+
 final routerProvider = Provider<GoRouter>((ref) {
   final authService = RouterNotifier(ref);
   return GoRouter(
@@ -114,6 +116,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/saldo_endereco",
             builder: ((context, state) => const AddressBalancePage())),
+        GoRoute(
+            path: "/inventario_endereco",
+            builder: ((context, state) => const AddressInventoryPage())),
         GoRoute(
             path: "/saldo_produto/:productCode",
             builder: ((context, state) {

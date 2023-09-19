@@ -62,5 +62,11 @@ final List menuItens = [
     icon: FontAwesomeIcons.cubes,
     color: Colors.red,
     route: 'saldo_endereco',
+  ),
+  MenuItemInfo(
+    title: "Inventário por Endereço",
+    icon: FontAwesomeIcons.clipboardCheck,
+    color: Colors.red,
+    route: 'inventario_endereco',
   )
 ];

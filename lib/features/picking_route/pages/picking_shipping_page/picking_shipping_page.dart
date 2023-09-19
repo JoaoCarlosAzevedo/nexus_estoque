@@ -104,7 +104,7 @@ class PickingShippingPage extends StatelessWidget {
                                             CrossAxisAlignment.end,
                                         children: [
                                           Text(
-                                            "Qtd. Entregaas",
+                                            "Qtd. Entregas",
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodySmall,

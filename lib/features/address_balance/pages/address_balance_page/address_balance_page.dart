@@ -6,6 +6,9 @@ import 'package:nexus_estoque/features/address_balance/data/repositories/address
 import 'package:nexus_estoque/features/address_balance/pages/address_balance_page/cubit/address_balance_cubit.dart';
 import 'package:nexus_estoque/features/address_balance/pages/address_balance_page/widgets/address_product_balance_card.dart';
 
+import '../../../../core/features/searches/products/data/model/product_model.dart';
+import '../../../../core/features/searches/products/provider/remote_product_provider.dart';
+
 class AddressBalancePage extends ConsumerStatefulWidget {
   const AddressBalancePage({super.key});
 
