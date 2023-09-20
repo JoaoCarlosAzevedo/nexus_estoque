@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/features/searches/products/data/model/product_model.dart';
 import '../../../../core/features/searches/products/provider/remote_product_provider.dart';
@@ -22,7 +23,7 @@ class AddressInventoryPage extends ConsumerStatefulWidget {
 class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
     with ValidationMixi {
   final TextEditingController addressController = TextEditingController();
-  final TextEditingController productController = TextEditingController();
+
   final FocusNode addressFocus = FocusNode();
   List<AddressBalanceModel> listBalances = [];
   late AddressBalanceCubit cubit;
@@ -108,6 +109,10 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
                           itemCount: listBalances.length,
                           itemBuilder: (context, index) {
                             return ListTile(
+                              onTap: () {
+                                context.push("/inventario_endereco/form",
+                                    extra: listBalances[index]);
+                              },
                               title: Text(listBalances[index].armazemDesc),
                               subtitle: Text(listBalances[index].codEndereco),
                               trailing: Column(
@@ -131,23 +136,6 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
                   ),
                 ),
               ),
-              Expanded(
-                child: TextFormField(
-                  autofocus: true,
-                  textInputAction: TextInputAction.next,
-                  onFieldSubmitted: (e) {
-                    getProduct(e);
-                    productController.clear();
-                  },
-                  validator: isNotEmpty,
-                  controller: productController,
-                  decoration: const InputDecoration(
-                    label: Text("Produto"),
-                    border: InputBorder.none,
-                    prefixIcon: Icon(Icons.qr_code),
-                  ),
-                ),
-              ),
             ],
           ),
         ),
@@ -156,18 +144,4 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
   }
 
   void addressSearch(context) async {}
-
-  void getProduct(String product) {
-    //45160894
-    final List<ProductModel> listWatch =
-        ref.watch(remoteProductProvider).maybeWhen(
-              data: (data) => data,
-              orElse: () => [],
-            );
-    if (listWatch.isNotEmpty) {
-      final selectedProduct = listWatch
-          .firstWhere((element) => element.codigo.trim() == product.trim());
-      print('${selectedProduct.descricao}');
-    }
-  }
 }
