@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
-import '../../../../core/features/searches/products/data/model/product_model.dart';
-import '../../../../core/features/searches/products/provider/remote_product_provider.dart';
 import '../../../../core/mixins/validation_mixin.dart';
 
 import '../../../address_balance/data/model/address_balance_model.dart';
 import '../../../address_balance/data/repositories/address_balance_repository.dart';
 import '../../../address_balance/pages/address_balance_page/cubit/address_balance_cubit.dart';
-import '../../../address_balance/pages/address_balance_page/widgets/address_product_balance_card.dart';
+import 'widgets/products_status_widget.dart';
+
+const List<String> list = <String>['1', '2', '3', '4'];
 
 class AddressInventoryPage extends ConsumerStatefulWidget {
   const AddressInventoryPage({super.key});
@@ -27,6 +28,9 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
   final FocusNode addressFocus = FocusNode();
   List<AddressBalanceModel> listBalances = [];
   late AddressBalanceCubit cubit;
+  final DateFormat formatter = DateFormat('yyyyMMdd');
+
+  String dropdownValue = list.first;
 
   @override
   void dispose() {
@@ -37,111 +41,150 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
 
   @override
   Widget build(BuildContext context) {
+    final String doc = formatter.format(DateTime.now());
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Inventário"),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              const Text("Documento"),
-              TextFormField(
-                focusNode: addressFocus,
-                autofocus: true,
-                textInputAction: TextInputAction.next,
-                onFieldSubmitted: (e) {
-                  cubit.fetchAddressBalances(e);
-                  addressController.clear();
-                  addressFocus.requestFocus();
-                },
-                validator: isNotEmpty,
-                controller: addressController,
-                decoration: const InputDecoration(
-                  label: Text("Endereço"),
-                  border: InputBorder.none,
-                  prefixIcon: Icon(Icons.qr_code),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Documento: $doc$dropdownValue",
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "Contagem: ",
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
-              ),
-              BlocProvider(
-                create: (context) => AddressBalanceCubit(
-                    repository: ref.read(addressBalanceRepositoryProvider)),
-                child: Expanded(
-                  child: BlocBuilder<AddressBalanceCubit, AddressBalanceState>(
-                    builder: (context, state) {
-                      cubit = context.read<AddressBalanceCubit>();
-
-                      if (state is AddressBalanceLoading) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      if (state is AddressBalanceError) {
-                        return RefreshIndicator(
-                          onRefresh: () async {
-                            context
-                                .read<AddressBalanceCubit>()
-                                .fetchAddressBalances(addressController.text);
-                          },
-                          child: Center(
-                            child: Text(state.error.error),
-                          ),
-                        );
-                      }
-                      if (state is AddressBalanceLoaded) {
-                        final repositions = state.addressBalances;
-                        listBalances = repositions;
-
-                        if (listBalances.isEmpty) {
-                          return const Center(
-                            child: Text("Nenhum registro encontrado."),
-                          );
-                        }
-
-                        if (listBalances.length > 1) {
-                          return const Center(
-                            child: Text(
-                                "Endereço digitado possui saldo em mais de um armazém"),
-                          );
-                        }
-                        return ListView.builder(
-                          itemCount: listBalances.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              onTap: () {
-                                context.push("/inventario_endereco/form",
-                                    extra: listBalances[index]);
-                              },
-                              title: Text(listBalances[index].armazemDesc),
-                              subtitle: Text(listBalances[index].codEndereco),
-                              trailing: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(listBalances[index].armazem),
-                                  Text(listBalances[index].armazemDesc),
-                                ],
-                              ),
-                            );
-                            /* return AddressProductBalanceCard(
-                                productBalance: listBalances[index]); */
-                          },
-                        );
-                      }
-                      return const Center(
-                        child: Text("Informe o cód. do endereço"),
-                      );
+                Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: DropdownButton<String>(
+                    value: dropdownValue,
+                    icon: const Icon(Icons.arrow_downward),
+                    elevation: 16,
+                    style: Theme.of(context).textTheme.titleLarge,
+                    underline: Container(
+                      height: 2,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    onChanged: (String? value) {
+                      setState(() {
+                        dropdownValue = value!;
+                      });
                     },
+                    items: list.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
                   ),
                 ),
+              ],
+            ),
+            const ProductsStatusWidget(),
+            const Divider(),
+            TextFormField(
+              focusNode: addressFocus,
+              autofocus: true,
+              textInputAction: TextInputAction.next,
+              onFieldSubmitted: (e) {
+                cubit.fetchAddressBalances(e);
+                addressController.clear();
+                addressFocus.requestFocus();
+              },
+              validator: isNotEmpty,
+              controller: addressController,
+              decoration: const InputDecoration(
+                label: Text("Endereço"),
+                border: InputBorder.none,
+                prefixIcon: Icon(Icons.qr_code),
               ),
-            ],
-          ),
+            ),
+            Expanded(
+              child: BlocProvider(
+                create: (context) => AddressBalanceCubit(
+                    repository: ref.read(addressBalanceRepositoryProvider)),
+                child: BlocBuilder<AddressBalanceCubit, AddressBalanceState>(
+                  builder: (context, state) {
+                    cubit = context.read<AddressBalanceCubit>();
+
+                    if (state is AddressBalanceLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    if (state is AddressBalanceError) {
+                      return RefreshIndicator(
+                        onRefresh: () async {
+                          context
+                              .read<AddressBalanceCubit>()
+                              .fetchAddressBalances(addressController.text);
+                        },
+                        child: Center(
+                          child: Text(state.error.error),
+                        ),
+                      );
+                    }
+                    if (state is AddressBalanceLoaded) {
+                      final repositions = state.addressBalances;
+                      listBalances = repositions;
+
+                      if (listBalances.isEmpty) {
+                        return const Center(
+                          child: Text("Nenhum registro encontrado."),
+                        );
+                      }
+
+                      if (listBalances.length > 1) {
+                        return const Center(
+                          child: Text(
+                              "Endereço digitado possui saldo em mais de um armazém"),
+                        );
+                      }
+                      return ListView.builder(
+                        itemCount: listBalances.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            onTap: () {
+                              context.push(
+                                  "/inventario_endereco/form/$doc$dropdownValue",
+                                  extra: listBalances[index]);
+                            },
+                            title: Text(listBalances[index].armazemDesc),
+                            subtitle: Text(listBalances[index].codEndereco),
+                            trailing: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(listBalances[index].armazem),
+                                Text(listBalances[index].armazemDesc),
+                              ],
+                            ),
+                          );
+                          /* return AddressProductBalanceCard(
+                                productBalance: listBalances[index]); */
+                        },
+                      );
+                    }
+                    return const Center(
+                      child: Text("Informe o cód. do endereço"),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
-
-  void addressSearch(context) async {}
 }

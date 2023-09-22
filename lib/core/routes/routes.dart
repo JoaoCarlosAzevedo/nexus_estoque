@@ -122,11 +122,13 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: "/inventario_endereco",
             builder: ((context, state) => const AddressInventoryPage())),
         GoRoute(
-          path: "/inventario_endereco/form",
+          path: "/inventario_endereco/form/:doc",
           builder: ((context, state) {
+            final queryParam = state.params['doc'];
             final param = state.extra as AddressBalanceModel;
             return AddressInventoryFormPage(
               address: param,
+              doc: queryParam!,
             );
           }),
         ),
