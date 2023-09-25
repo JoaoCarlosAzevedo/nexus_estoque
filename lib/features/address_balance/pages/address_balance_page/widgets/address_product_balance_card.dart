@@ -11,7 +11,9 @@ class AddressProductBalanceCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
-        context.push('/saldo_produto/${productBalance.codProd}');
+        if (productBalance.codProd.isNotEmpty) {
+          context.push('/saldo_produto/${productBalance.codProd}');
+        }
       },
       child: Card(
         child: ListTile(

@@ -143,13 +143,14 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
                           child: Text("Nenhum registro encontrado."),
                         );
                       }
-
+/* 
                       if (listBalances.length > 1) {
                         return const Center(
                           child: Text(
                               "Endereço digitado possui saldo em mais de um armazém"),
                         );
-                      }
+                      } */
+
                       return ListView.builder(
                         itemCount: listBalances.length,
                         itemBuilder: (context, index) {
