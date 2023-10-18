@@ -86,7 +86,7 @@ class AddressProductBalanceCard extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                productBalance.codEndereco,
+                                '${productBalance.codEndereco}   ${productBalance.ultimoMov}',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: Theme.of(context).textTheme.titleMedium,

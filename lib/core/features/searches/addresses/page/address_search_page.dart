@@ -196,7 +196,7 @@ class _AddressListState extends ConsumerState<AddressList> {
                       Navigator.pop(context, filterAddresses[index]);
                     },
                     title: Text(
-                        "${filterAddresses[index].local} - ${filterAddresses[index].armzDesc}"),
+                        "${filterAddresses[index].local} - ${filterAddresses[index].armzDesc} -> ${filterAddresses[index].ultimoMov}"),
                     subtitle: Text(
                         "${filterAddresses[index].codigo} - ${filterAddresses[index].descricao}"),
                     trailing: Column(

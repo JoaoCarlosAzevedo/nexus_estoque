@@ -10,6 +10,7 @@ class AddressBalanceModel {
   final double empenho;
   final String endereDesc;
   final String armazemDesc;
+  final String ultimoMov;
 
   AddressBalanceModel({
     required this.descProd,
@@ -21,6 +22,7 @@ class AddressBalanceModel {
     required this.empenho,
     required this.endereDesc,
     required this.armazemDesc,
+    required this.ultimoMov,
   });
 
   Map<String, dynamic> toMap() {
@@ -34,6 +36,7 @@ class AddressBalanceModel {
       'empenho': empenho,
       'endereDesc': endereDesc,
       'armazemDesc': armazemDesc,
+      'ultimo_mov': ultimoMov,
     };
   }
 
@@ -48,6 +51,7 @@ class AddressBalanceModel {
       empenho: map['empenho']?.toDouble() ?? 0.0,
       endereDesc: map['endereDesc'] ?? '',
       armazemDesc: map['armazemDesc'] ?? '',
+      ultimoMov: map['ultimo_mov'] ?? '',
     );
   }
 
