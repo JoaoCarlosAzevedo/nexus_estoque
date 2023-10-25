@@ -22,6 +22,7 @@ class TransactionRepository {
   Future<Either<Failure, TransactionModel>> postTransaction(
       TransactionModel transaction, String tm) async {
     final String url = await Config.baseURL;
+
     try {
       var response = await dio.post('$url/movimentos',
           data: transaction.toJson(),

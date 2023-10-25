@@ -34,6 +34,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
   final TextEditingController batchController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController batchDateController = TextEditingController();
+  final TextEditingController chaveController = TextEditingController();
   final TextEditingController quantityController =
       TextEditingController(text: '1.00');
   ClientModel? clientSelected;
@@ -51,6 +52,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     addressController.dispose();
     quantityController.dispose();
     batchDateController.dispose();
+    chaveController.dispose();
     super.dispose();
   }
 
@@ -176,6 +178,18 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                       controller: batchDateController,
                       validator: isDate,
                     ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20.0),
+                    child: TextFormField(
+                      textInputAction: TextInputAction.next,
+                      controller: chaveController,
+                      decoration: const InputDecoration(
+                        label: Text("Chave NFE"),
+                        border: InputBorder.none,
+                        prefixIcon: Icon(Icons.article),
+                      ),
+                    ),
+                  ),
                   InputQuantity(
                     controller: quantityController,
                   ),
@@ -207,7 +221,8 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                             validade: batchDateController.text,
                             codcli: codcli,
                             lojacli: lojacli,
-                            nomecli: nomecli);
+                            nomecli: nomecli,
+                            chave: chaveController.text);
 
                         context
                             .read<TransactionCubit>()
