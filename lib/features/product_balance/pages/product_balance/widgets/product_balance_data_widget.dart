@@ -63,8 +63,14 @@ class ProductBalanceDataWidget extends ConsumerWidget {
                 padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                 child: Card(
                   child: ListTile(
-                    title: Text('${element.codigo}  ${element.ultimoMov}'),
-                    subtitle: Text("Endereço:  ${element.descricao}"),
+                    title: Text(element.codigo),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Endereço:  ${element.descricao}"),
+                        Text(element.ultimoMov),
+                      ],
+                    ),
                     trailing: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.end,
