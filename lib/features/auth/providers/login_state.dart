@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../model/user_model.dart';
+
 class LoginState extends Equatable {
   const LoginState();
 
@@ -22,7 +24,8 @@ class LoginStateLoading extends LoginState {
 }
 
 class LoginStateSuccess extends LoginState {
-  const LoginStateSuccess();
+  final UserModel user;
+  const LoginStateSuccess(this.user);
 
   @override
   List<Object> get props => [];

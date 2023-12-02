@@ -4,6 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/data/model/address_model.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/page/address_search_page.dart';
@@ -11,6 +12,7 @@ import 'package:nexus_estoque/core/features/searches/batches/pages/batches_searc
 import 'package:nexus_estoque/core/features/searches/warehouses/pages/warehouse_search_page.dart';
 import 'package:nexus_estoque/core/mixins/validation_mixin.dart';
 import 'package:nexus_estoque/core/widgets/form_input_search_widget.dart';
+import 'package:nexus_estoque/features/auth/providers/login_state.dart';
 import 'package:nexus_estoque/features/reposition/data/model/reposition_transfer_moderl.dart';
 import 'package:nexus_estoque/features/transaction/pages/transaction_form_page/widgets/transaction_form.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/cubit/product_transfer_cubit.dart';
@@ -18,7 +20,9 @@ import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/produc_transfer_card.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/warehouse_balance_search.dart';
 
-class TransferFormPage extends StatefulWidget {
+import '../../../../../../auth/providers/login_controller_provider.dart';
+
+class TransferFormPage extends ConsumerStatefulWidget {
   final ProductBalanceModel productDetail;
   final RepositionTrasnferModel? reposition;
 
@@ -26,10 +30,10 @@ class TransferFormPage extends StatefulWidget {
       {super.key, required this.productDetail, this.reposition});
 
   @override
-  State<TransferFormPage> createState() => _TransferFormPageState();
+  ConsumerState<TransferFormPage> createState() => _TransferFormPageState();
 }
 
-class _TransferFormPageState extends State<TransferFormPage>
+class _TransferFormPageState extends ConsumerState<TransferFormPage>
     with ValidationMixi {
   final formKey = GlobalKey<FormState>();
 
@@ -42,6 +46,7 @@ class _TransferFormPageState extends State<TransferFormPage>
 
   final TextEditingController quantityController =
       TextEditingController(text: '1.00');
+  bool canChangeWarehouse = false;
 
   @override
   void initState() {
@@ -73,9 +78,14 @@ class _TransferFormPageState extends State<TransferFormPage>
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.read(loginControllerProvider);
     origWarehouseController.text = widget.productDetail.localPadrao;
     destWarehouseController.text = widget.productDetail.localPadrao;
-
+    if (authState is LoginStateSuccess) {
+      if (authState.user.displayName.contains("Administrator")) {
+        canChangeWarehouse = true;
+      }
+    }
     return Scaffold(
       body: SingleChildScrollView(
         child: Form(
@@ -89,6 +99,8 @@ class _TransferFormPageState extends State<TransferFormPage>
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
+                    if (authState is LoginStateSuccess)
+                      Text(authState.user.displayName),
                     const Align(
                       alignment: Alignment.topLeft,
                       child: Text(
@@ -149,17 +161,18 @@ class _TransferFormPageState extends State<TransferFormPage>
                       ),
                     ),
                     const Divider(),
-                    /*   InputSearchWidget(
-                      label: "Local Destino",
-                      controller: destWarehouseController,
-                      validator: isNotEmpty,
-                      onPressed: () async {
-                        final value = await WarehouseSearchModal.show(
-                            context, widget.productDetail, Tm.saida);
-                        destWarehouseController.text = value;
-                      },
-                      onSubmitted: (e) {},
-                    ), */
+                    if (canChangeWarehouse)
+                      InputSearchWidget(
+                        label: "Local Destino",
+                        controller: destWarehouseController,
+                        validator: isNotEmpty,
+                        onPressed: () async {
+                          final value = await WarehouseSearchModal.show(
+                              context, widget.productDetail, Tm.saida);
+                          destWarehouseController.text = value;
+                        },
+                        onSubmitted: (e) {},
+                      ),
                     if (widget.productDetail.localizacao == 'S')
                       InputSearchWidget(
                         label: "Endereço Destino",

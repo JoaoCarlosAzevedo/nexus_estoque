@@ -10,6 +10,8 @@ import 'package:nexus_estoque/features/auth/pages/login/cubit/auth_cubit.dart';
 import 'package:nexus_estoque/features/auth/providers/login_controller_provider.dart';
 import 'package:nexus_estoque/features/menu/presentation/pages/widgets/menu_card_widget.dart';
 
+import '../../../auth/providers/login_state.dart';
+
 class MenuPage extends ConsumerWidget {
   const MenuPage({
     Key? key,
@@ -25,6 +27,8 @@ class MenuPage extends ConsumerWidget {
     final authCubit = context.read<AuthCubit>();
     //final state = authCubit.state as AuthLoaded;
     //final user = state.user;
+    final authUser = ref.read(loginControllerProvider);
+
     AsyncValue<Branch?> environment = ref.watch(environmentProvider);
 
     return Scaffold(
@@ -71,6 +75,12 @@ class MenuPage extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (authUser is LoginStateSuccess)
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, bottom: 8),
+                  child: Text(
+                      'Bem vindo, ${authUser.user.displayName} - ${authUser.user.title}'),
+                ),
               environment.when(
                 loading: () => const CircularProgressIndicator(),
                 error: (err, stack) => Text('Error: $err'),

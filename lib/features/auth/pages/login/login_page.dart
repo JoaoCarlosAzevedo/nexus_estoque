@@ -54,7 +54,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           }
 
           if (state is AuthLoaded) {
-            ref.read(loginControllerProvider.notifier).login();
+            ref.read(loginControllerProvider.notifier).login(state.user);
           }
         },
         child: BlocBuilder<AuthCubit, AuthState>(

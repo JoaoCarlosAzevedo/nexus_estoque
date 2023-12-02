@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class UserModel {
@@ -6,6 +7,8 @@ class UserModel {
   String displayName;
   String accessToken;
   String refreshToken;
+  String title;
+  String department;
 
   UserModel({
     required this.id,
@@ -13,6 +16,8 @@ class UserModel {
     required this.displayName,
     required this.accessToken,
     required this.refreshToken,
+    required this.title,
+    required this.department,
   });
 
   Map<String, dynamic> toMap() {
@@ -22,6 +27,8 @@ class UserModel {
       'displayName': displayName,
       'accessToken': accessToken,
       'refreshToken': refreshToken,
+      'title': title,
+      'department': department,
     };
   }
 
@@ -32,6 +39,8 @@ class UserModel {
       displayName: map['displayName'] ?? '',
       accessToken: map['access_token'] ?? '',
       refreshToken: map['refresh_token'] ?? '',
+      title: map['title'] ?? '',
+      department: map['department'] ?? '',
     );
   }
 

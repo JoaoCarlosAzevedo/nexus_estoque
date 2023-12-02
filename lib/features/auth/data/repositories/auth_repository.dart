@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:nexus_estoque/core/http/config.dart';
 import 'package:nexus_estoque/core/http/dio_config.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
@@ -40,20 +41,21 @@ class AuthRepository {
         await _storage.write(key: 'access_token', value: user.accessToken);
         await _storage.write(key: 'refresh_token', value: user.refreshToken);
 
-        //Map<String, dynamic> decodedToken = JwtDecoder.decode(user.accessToken);
-        // final String userId = decodedToken['userid'];
+        Map<String, dynamic> decodedToken = JwtDecoder.decode(user.accessToken);
+        final String userId = decodedToken['userid'];
 
-        /* final data = await getUser(userId);
+        final data = await getUser(userId);
 
         return data.fold((l) {
-          return Left(l); 
+          return Left(l);
         }, (r) {
           user.id = userId;
           user.userName = r['userName'];
           user.displayName = r['displayName'];
-          
-        }); */
-        return Right(user);
+          user.title = r['title'];
+          user.department = r['department'];
+          return Right(user);
+        });
       }
       return const Left(Failure("Server Error!", ErrorType.exception));
     } on DioError catch (e) {
@@ -88,7 +90,9 @@ class AuthRepository {
 
       return Right({
         'userName': response.data['userName'],
-        'displayName': response.data['displayName']
+        'displayName': response.data['displayName'],
+        'department': response.data['department'],
+        'title': response.data['title']
       });
     } on DioError catch (e) {
       if (e.type.name == "connectTimeout") {
