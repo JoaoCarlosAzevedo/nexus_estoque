@@ -82,7 +82,7 @@ class _TransferFormPageState extends ConsumerState<TransferFormPage>
     origWarehouseController.text = widget.productDetail.localPadrao;
     destWarehouseController.text = widget.productDetail.localPadrao;
     if (authState is LoginStateSuccess) {
-      if (authState.user.displayName.contains("Administrator")) {
+      if (authState.user.displayName.contains("SEPARADOR TRANSFERENCIA")) {
         canChangeWarehouse = true;
       }
     }

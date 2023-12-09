@@ -160,6 +160,13 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
                                   "/inventario_endereco/form/$doc$dropdownValue",
                                   extra: listBalances[index]);
                             },
+                            leading: IconButton(
+                                onPressed: () {
+                                  context.push(
+                                    '/inventario_endereco/consulta/${listBalances[index].armazem}/${listBalances[index].codEndereco}',
+                                  );
+                                },
+                                icon: const Icon(Icons.search)),
                             title: Text(listBalances[index].armazemDesc),
                             subtitle: Text(listBalances[index].codEndereco),
                             trailing: Column(

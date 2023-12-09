@@ -10,7 +10,6 @@ import '../../../../core/mixins/validation_mixin.dart';
 import '../../../address_balance/data/model/address_balance_model.dart';
 import 'state/address_inventory_provider.dart';
 import 'widgets/address_warehouse_card.dart';
-import 'widgets/inventory_quantity_input.dart';
 
 class AddressInventoryFormPage extends ConsumerStatefulWidget {
   const AddressInventoryFormPage(
@@ -130,7 +129,7 @@ class _AddressInventoryFormPageState
                         itemCount: productsInventory.length,
                         itemBuilder: (context, index) {
                           return ListTile(
-                            onTap: () async {
+                            /*   onTap: () async {
                               double? newQuantity =
                                   await InventoryQuantityModal.show(
                                       context,
@@ -142,7 +141,7 @@ class _AddressInventoryFormPageState
                                     .changeQuantity(
                                         productsInventory[index], newQuantity);
                               }
-                            },
+                            }, */
                             onLongPress: () {
                               ref
                                   .read(addressInventoryProvider.notifier)

@@ -29,6 +29,7 @@ import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer
 
 import '../../features/address_balance/data/model/address_balance_model.dart';
 import '../../features/address_inventory/pages/address_inventory_form_page/address_inventory_form_page.dart';
+import '../../features/address_inventory/pages/address_inventory_list/address_inventory_list_page.dart';
 import '../../features/address_inventory/pages/address_inventory_page/address_inventory_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -121,6 +122,17 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/inventario_endereco",
             builder: ((context, state) => const AddressInventoryPage())),
+        GoRoute(
+          path: "/inventario_endereco/consulta/:local/:endereco",
+          builder: ((context, state) {
+            final endereco = state.params['endereco'];
+            final local = state.params['local'];
+            return AddressInventoryListPage(
+              address: endereco!,
+              warehouse: local!,
+            );
+          }),
+        ),
         GoRoute(
           path: "/inventario_endereco/form/:doc",
           builder: ((context, state) {
