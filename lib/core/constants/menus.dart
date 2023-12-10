@@ -46,6 +46,12 @@ final List menuItens = [
     route: 'separacao_rotas',
   ),
   MenuItemInfo(
+    title: "Separação por Carga",
+    icon: FontAwesomeIcons.truckArrowRight,
+    color: Colors.red,
+    route: 'separacao_carga',
+  ),
+  MenuItemInfo(
     title: "Conferencia NFe Saida",
     icon: FontAwesomeIcons.rightFromBracket,
     color: Colors.red,

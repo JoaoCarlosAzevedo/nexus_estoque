@@ -98,6 +98,32 @@ class _AddressInventoryFormPageState
               AddressWarehouseCard(
                 address: widget.address,
               ),
+              ElevatedButton(
+                onPressed: () {
+                  ref.read(addressInventoryProvider.notifier).addProduct(
+                        ProductModel(
+                            descricao: 'Contagem 0',
+                            localPadrao: '',
+                            lote: '',
+                            codigoBarras: '',
+                            localizacao: '',
+                            tipo: '',
+                            saldoAtual: 0.0,
+                            qtdInvet: 0.0,
+                            um: '',
+                            codigo: '',
+                            error: ''),
+                      );
+                },
+                style: TextButton.styleFrom(backgroundColor: Colors.orange),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Contagem Vazia +",
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                ),
+              ),
               const Divider(),
               if (state.status != StateEnum.loading)
                 TextFormField(

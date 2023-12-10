@@ -31,6 +31,7 @@ import '../../features/address_balance/data/model/address_balance_model.dart';
 import '../../features/address_inventory/pages/address_inventory_form_page/address_inventory_form_page.dart';
 import '../../features/address_inventory/pages/address_inventory_list/address_inventory_list_page.dart';
 import '../../features/address_inventory/pages/address_inventory_page/address_inventory_page.dart';
+import '../../features/picking_load/pages/picking_load_list_page/picking_load_list_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authService = RouterNotifier(ref);
@@ -113,6 +114,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/separacao_rotas",
             builder: ((context, state) => const PickingRoutesListPage())),
+        GoRoute(
+            path: "/separacao_carga",
+            builder: ((context, state) => const PickingLoadListPage())),
         GoRoute(
             path: "/reposicao",
             builder: ((context, state) => const RepositionPage())),

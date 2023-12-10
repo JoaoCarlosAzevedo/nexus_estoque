@@ -17,25 +17,26 @@ class PickingModel {
   String chave;
   String codCli;
   String desCli;
+  String rua;
 
-  PickingModel({
-    required this.descricao,
-    required this.separado,
-    required this.codigobarras,
-    required this.quantidade,
-    required this.lote,
-    required this.codEndereco,
-    required this.descEndereco,
-    required this.pedido,
-    required this.itemPedido,
-    required this.local,
-    required this.origem,
-    required this.um,
-    required this.codigo,
-    required this.chave,
-    required this.codCli,
-    required this.desCli,
-  });
+  PickingModel(
+      {required this.descricao,
+      required this.separado,
+      required this.codigobarras,
+      required this.quantidade,
+      required this.lote,
+      required this.codEndereco,
+      required this.descEndereco,
+      required this.pedido,
+      required this.itemPedido,
+      required this.local,
+      required this.origem,
+      required this.um,
+      required this.codigo,
+      required this.chave,
+      required this.codCli,
+      required this.desCli,
+      required this.rua});
 
   Map<String, dynamic> toMap() {
     return {
@@ -76,6 +77,7 @@ class PickingModel {
       chave: map['chaveSDC'] ?? '',
       codCli: map['codCliente'] ?? '',
       desCli: map['descCliente'] ?? '',
+      rua: map['rua'] ?? '',
     );
   }
 

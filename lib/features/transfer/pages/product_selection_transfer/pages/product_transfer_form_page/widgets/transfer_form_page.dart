@@ -82,7 +82,7 @@ class _TransferFormPageState extends ConsumerState<TransferFormPage>
     origWarehouseController.text = widget.productDetail.localPadrao;
     destWarehouseController.text = widget.productDetail.localPadrao;
     if (authState is LoginStateSuccess) {
-      if (authState.user.displayName.contains("SEPARADOR TRANSFERENCIA")) {
+      if (authState.user.title.contains("SEPARADOR TRANSFERENCIA")) {
         canChangeWarehouse = true;
       }
     }
@@ -100,7 +100,7 @@ class _TransferFormPageState extends ConsumerState<TransferFormPage>
                 child: Column(
                   children: [
                     if (authState is LoginStateSuccess)
-                      Text(authState.user.displayName),
+                      Text(authState.user.title),
                     const Align(
                       alignment: Alignment.topLeft,
                       child: Text(
@@ -277,7 +277,7 @@ class _TransferFormPageState extends ConsumerState<TransferFormPage>
   }
 
   void allAddressSearch() async {
-    destWarehouseController.text = origWarehouseController.text;
+    //destWarehouseController.text = origWarehouseController.text;
 
     final armz = destWarehouseController.text;
 
@@ -293,7 +293,7 @@ class _TransferFormPageState extends ConsumerState<TransferFormPage>
     final cubit = BlocProvider.of<ProductTransferCubit>(context);
     final double quantity = double.tryParse(quantityController.text) ?? 0.0;
     //forca o armz de destino
-    destWarehouseController.text = origWarehouseController.text;
+    //destWarehouseController.text = origWarehouseController.text;
 
     final jsonOrig = {
       'produto': widget.productDetail.codigo,
