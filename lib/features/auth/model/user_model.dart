@@ -8,7 +8,6 @@ class UserModel {
   String accessToken;
   String refreshToken;
   String title;
-  String department;
 
   UserModel({
     required this.id,
@@ -17,7 +16,6 @@ class UserModel {
     required this.accessToken,
     required this.refreshToken,
     required this.title,
-    required this.department,
   });
 
   Map<String, dynamic> toMap() {
@@ -28,19 +26,17 @@ class UserModel {
       'accessToken': accessToken,
       'refreshToken': refreshToken,
       'title': title,
-      'department': department,
     };
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
       id: map['id'] ?? '',
-      userName: map['userName'] ?? '',
-      displayName: map['displayName'] ?? '',
+      userName: map['nome'] ?? '',
+      displayName: map['nome'] ?? '',
       accessToken: map['access_token'] ?? '',
       refreshToken: map['refresh_token'] ?? '',
-      title: map['title'] ?? '',
-      department: map['department'] ?? '',
+      title: map['cargo'] ?? '',
     );
   }
 

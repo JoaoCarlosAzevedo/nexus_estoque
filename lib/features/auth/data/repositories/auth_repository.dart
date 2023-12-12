@@ -50,10 +50,10 @@ class AuthRepository {
           return Left(l);
         }, (r) {
           user.id = userId;
-          user.userName = r['userName'];
-          user.displayName = r['displayName'];
-          user.title = r['title'];
-          user.department = r['department'];
+          user.userName = r['nome'];
+          user.displayName = r['nome'];
+          user.title = r['cargo'];
+
           return Right(user);
         });
       }
@@ -82,18 +82,14 @@ class AuthRepository {
     final dio = _ref.read(httpProvider).dioInstance;
     final String url = await Config.baseURL;
     try {
-      response = await dio.get('$url/api/framework/v1/users/$userId');
+      response = await dio.get('$url/filial/$userId');
 
       if (response.statusCode != 200) {
         return const Left(Failure("Server Error!", ErrorType.exception));
       }
 
-      return Right({
-        'userName': response.data['userName'],
-        'displayName': response.data['displayName'],
-        'department': response.data['department'],
-        'title': response.data['title']
-      });
+      return Right(
+          {'nome': response.data['nome'], 'cargo': response.data['cargo']});
     } on DioError catch (e) {
       if (e.type.name == "connectTimeout") {
         return const Left(Failure("Tempo Excedido", ErrorType.timeout));
