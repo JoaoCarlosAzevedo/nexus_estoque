@@ -31,12 +31,12 @@ class AddressInventoryNotifier extends StateNotifier<AddressInventoryState> {
         (element) => element.codigo.trim() == product.codigo.trim());
     if (index >= 0) {
       if (list[index].codigo.isNotEmpty) {
-        list[index].qtdInvet = list[index].qtdInvet + 1;
+        //list[index].qtdInvet = list[index].qtdInvet + 1;
       }
       state = state.copyWith(products: list);
     } else {
       if (product.codigo.isNotEmpty) {
-        product.qtdInvet = 1;
+        product.qtdInvet = 0;
       }
       state = state.copyWith(products: [...state.products, product]);
     }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/repositories/product_balance_repository.dart';
 import 'package:nexus_estoque/core/features/product_balance/pages/product_selection/cubit/product_balance_cubit.dart';
@@ -56,10 +57,11 @@ class ProductSelectionPage extends ConsumerWidget {
               }
 
               if (state is ProductBalanceCubitLoaded) {
-                return WillPopScope(
-                    onWillPop: () async {
+                return PopScope(
+                    onPopInvoked: (didPop) async {
+                      if (didPop) return;
                       context.read<ProductBalanceCubit>().reset();
-                      return false;
+                      context.pop();
                     },
                     child: builder(context, state.productBalance));
               }

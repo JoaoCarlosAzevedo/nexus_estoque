@@ -4,7 +4,7 @@ import 'package:nexus_estoque/core/theme/app_colors.dart';
 class AppTheme {
   static ThemeData get defaultTheme {
     return ThemeData(
-      //useMaterial3: true,
+      useMaterial3: true,
       // Define the default brightness and colors.
       /*   brightness: Brightness.light,
       secondaryHeaderColor: AppColors.primaryGrey,
@@ -52,9 +52,11 @@ class AppTheme {
         elevation: 0,
         iconTheme: IconThemeData(color: AppColors.grey),
       ),
+
       cardColor: AppColors.background,
       cardTheme: CardTheme(
-        elevation: 2,
+        color: AppColors.background,
+        elevation: 5,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.0),
         ),
@@ -113,6 +115,29 @@ class AppTheme {
         prefixIconColor: AppColors.grey,
         suffixIconColor: AppColors.grey,
       ),
+
+      listTileTheme: ListTileThemeData(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        //contentPadding: EdgeInsets.all(18),
+        textColor: AppColors.grey,
+        tileColor: AppColors.background,
+        iconColor: AppColors.grey,
+        leadingAndTrailingTextStyle: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+      iconButtonTheme: IconButtonThemeData(
+        style: ButtonStyle(
+          //overlayColor: MaterialStateProperty.all(Colors.transparent),
+          //iconSize: MaterialStateProperty.resolveWith((states) => 36),
+          iconColor:
+              MaterialStateProperty.resolveWith((states) => AppColors.grey),
+        ),
+      ),
+      //primaryIconTheme: IconThemeData(color: Colors.red),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           disabledBackgroundColor: Colors.grey.shade500,
@@ -128,6 +153,7 @@ class AppTheme {
         ),
       ),
       iconTheme: const IconThemeData(color: AppColors.grey),
+
       // Define the default `TextTheme`. Use this to specify the default
       // text styling for headlines, titles, bodies of text, and more.
       textTheme: customTextTheme(),

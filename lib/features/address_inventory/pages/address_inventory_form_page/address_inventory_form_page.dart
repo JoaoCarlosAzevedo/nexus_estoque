@@ -2,9 +2,12 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nexus_estoque/features/address_inventory/pages/address_inventory_form_page/widgets/inventory_quantity_input.dart';
 
 import '../../../../core/features/searches/products/data/model/product_model.dart';
+import '../../../../core/features/searches/products/pages/products_search_page.dart';
 import '../../../../core/features/searches/products/provider/remote_product_provider.dart';
 import '../../../../core/mixins/validation_mixin.dart';
 import '../../../address_balance/data/model/address_balance_model.dart';
@@ -134,14 +137,25 @@ class _AddressInventoryFormPageState
                     getProduct(e);
                     productController.clear();
                     focus.requestFocus();
-                    hideKeyboard();
+                    //hideKeyboard();
                   },
                   validator: isNotEmpty,
                   controller: productController,
-                  decoration: const InputDecoration(
-                    label: Text("Produto"),
+                  decoration: InputDecoration(
+                    label: const Text("Produto"),
                     border: InputBorder.none,
-                    prefixIcon: Icon(Icons.qr_code),
+                    prefixIcon: const Icon(Icons.qr_code),
+                    suffixIcon: IconButton(
+                      onPressed: () async {
+                        //productSearchPage();
+                        productController.text =
+                            await ProductSearchModal.show(context);
+                        getProduct(productController.text);
+                        productController.clear();
+                        focus.requestFocus();
+                      },
+                      icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
+                    ),
                   ),
                 ),
               state.status == StateEnum.loading
@@ -154,42 +168,44 @@ class _AddressInventoryFormPageState
                       child: ListView.builder(
                         itemCount: productsInventory.length,
                         itemBuilder: (context, index) {
-                          return ListTile(
-                            /*   onTap: () async {
-                              double? newQuantity =
-                                  await InventoryQuantityModal.show(
-                                      context,
-                                      productsInventory[index],
-                                      productsInventory[index].qtdInvet);
-                              if (newQuantity != null) {
+                          return Card(
+                            child: ListTile(
+                              onTap: () async {
+                                double? newQuantity =
+                                    await InventoryQuantityModal.show(
+                                        context,
+                                        productsInventory[index],
+                                        productsInventory[index].qtdInvet);
+                                if (newQuantity != null) {
+                                  ref
+                                      .read(addressInventoryProvider.notifier)
+                                      .changeQuantity(productsInventory[index],
+                                          newQuantity);
+                                }
+                              },
+                              onLongPress: () {
                                 ref
                                     .read(addressInventoryProvider.notifier)
-                                    .changeQuantity(
-                                        productsInventory[index], newQuantity);
-                              }
-                            }, */
-                            onLongPress: () {
-                              ref
-                                  .read(addressInventoryProvider.notifier)
-                                  .removeProduct(productsInventory[index]);
-                            },
-                            title: Text(
-                              '${productsInventory[index].codigo} - ${productsInventory[index].codigoBarras}',
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(productsInventory[index].descricao),
-                                if (productsInventory[index].error.isNotEmpty)
-                                  Text(
-                                    productsInventory[index].error,
-                                    style: const TextStyle(color: Colors.red),
-                                  )
-                              ],
-                            ),
-                            trailing: Text(
-                              'Qtd: ${productsInventory[index].qtdInvet}',
-                              style: const TextStyle(color: Colors.green),
+                                    .removeProduct(productsInventory[index]);
+                              },
+                              title: Text(
+                                '${productsInventory[index].codigo} - ${productsInventory[index].codigoBarras}',
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(productsInventory[index].descricao),
+                                  if (productsInventory[index].error.isNotEmpty)
+                                    Text(
+                                      productsInventory[index].error,
+                                      style: const TextStyle(color: Colors.red),
+                                    )
+                                ],
+                              ),
+                              trailing: Text(
+                                'Qtd: ${productsInventory[index].qtdInvet}',
+                                style: const TextStyle(color: Colors.green),
+                              ),
                             ),
                           );
                         },

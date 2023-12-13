@@ -154,28 +154,30 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
                       return ListView.builder(
                         itemCount: listBalances.length,
                         itemBuilder: (context, index) {
-                          return ListTile(
-                            onTap: () {
-                              context.push(
-                                  "/inventario_endereco/form/$doc$dropdownValue",
-                                  extra: listBalances[index]);
-                            },
-                            leading: IconButton(
-                                onPressed: () {
-                                  context.push(
-                                    '/inventario_endereco/consulta/${listBalances[index].armazem}/${listBalances[index].codEndereco}',
-                                  );
-                                },
-                                icon: const Icon(Icons.search)),
-                            title: Text(listBalances[index].armazemDesc),
-                            subtitle: Text(listBalances[index].codEndereco),
-                            trailing: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(listBalances[index].armazem),
-                                Text(listBalances[index].armazemDesc),
-                              ],
+                          return Card(
+                            child: ListTile(
+                              onTap: () {
+                                context.push(
+                                    "/inventario_endereco/form/$doc$dropdownValue",
+                                    extra: listBalances[index]);
+                              },
+                              leading: IconButton(
+                                  onPressed: () {
+                                    context.push(
+                                      '/inventario_endereco/consulta/${listBalances[index].armazem}/${listBalances[index].codEndereco}',
+                                    );
+                                  },
+                                  icon: const Icon(Icons.search)),
+                              title: Text(listBalances[index].armazemDesc),
+                              subtitle: Text(listBalances[index].codEndereco),
+                              trailing: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(listBalances[index].armazem),
+                                  Text(listBalances[index].armazemDesc),
+                                ],
+                              ),
                             ),
                           );
                           /* return AddressProductBalanceCard(

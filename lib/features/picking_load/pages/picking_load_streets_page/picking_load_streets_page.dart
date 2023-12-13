@@ -78,12 +78,7 @@ class PickingLoadStreetsPage extends ConsumerWidget {
                       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                       child: Card(
                         child: ListTile(
-                          title: Text('Endereço $groupByValue'),
-                          subtitle:
-                              Text("Local ${groupByValue.substring(0, 2)}"),
-                          trailing: groupByValue.contains("AREA")
-                              ? const Text("")
-                              : Text("Rua ${groupByValue.substring(3, 6)}"),
+                          title: Text("Rua $groupByValue"),
                           onTap: () {
                             Navigator.push(
                               context,
