@@ -21,7 +21,7 @@ class PickingLoadStreetsPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Ruas"),
+        title: Text("Carga $load"),
         actions: [
           IconButton(
               onPressed: () {

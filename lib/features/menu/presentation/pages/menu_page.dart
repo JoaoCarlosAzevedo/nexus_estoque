@@ -25,11 +25,22 @@ class MenuPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authCubit = context.read<AuthCubit>();
-    //final state = authCubit.state as AuthLoaded;
-    //final user = state.user;
+
     final authUser = ref.read(loginControllerProvider);
 
+    List menus = menuItens;
+
     AsyncValue<Branch?> environment = ref.watch(environmentProvider);
+
+    if (authUser is LoginStateSuccess) {
+      if (!authUser.user.title.contains("SEPARADOR TRANSFERENCIA")) {
+        //copia;
+        menus = [
+          for (final newMenu in menuItens)
+            if (newMenu.route != "separacao") newMenu,
+        ];
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -127,7 +138,7 @@ class MenuPage extends ConsumerWidget {
                   child: GridView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: menuItens.length,
+                    itemCount: menus.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: crossAxisCount,
                       crossAxisSpacing: 15,
@@ -135,7 +146,7 @@ class MenuPage extends ConsumerWidget {
                       //childAspectRatio: childAspectRatio,
                     ),
                     itemBuilder: (context, index) =>
-                        MenuCard(info: menuItens[index]),
+                        MenuCard(info: menus[index]),
                   ),
                 ),
               ),

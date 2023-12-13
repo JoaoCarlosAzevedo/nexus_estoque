@@ -32,7 +32,12 @@ class _PickingLoadProductListPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Produtos - Rua ${widget.warehouseStreets}"),
+        title: Column(
+          children: [
+            Text("Carga: ${widget.load}"),
+            Text("Rua ${widget.warehouseStreets}"),
+          ],
+        ),
         actions: [
           IconButton(
               onPressed: () {
@@ -94,6 +99,9 @@ class _PickingLoadProductListPageState
                     .where((element) => element.rua == widget.warehouseStreets)
                     .toList();
 
+                /* products
+                    .sort(((a, b) => a.descEndereco.compareTo(b.descEndereco))); */
+
                 if (state.loads.isEmpty) {
                   return const Center(
                     child: Text("Nenhum produto nessa rua."),
@@ -101,7 +109,7 @@ class _PickingLoadProductListPageState
                 }
                 return GroupedListView<PickingModel, String>(
                   elements: products,
-                  groupBy: (element) => element.descEndereco,
+                  groupBy: (element) => element.descEndereco.substring(7),
                   groupSeparatorBuilder: (String groupByValue) {
                     return Padding(
                       padding: const EdgeInsets.only(top: 12, left: 8),
@@ -124,7 +132,8 @@ class _PickingLoadProductListPageState
                     );
                   },
                   itemComparator: (item1, item2) => item1.descEndereco
-                      .compareTo(item2.descEndereco), // optional
+                      .substring(7)
+                      .compareTo(item2.descEndereco.substring(7)), // optional
                   useStickyGroupSeparators: false, // optional
                   floatingHeader: false, // optional
                   order: GroupedListOrder.ASC, // optional

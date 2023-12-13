@@ -34,17 +34,17 @@ final List menuItens = [
     route: 'movimentos',
   ), */
   MenuItemInfo(
-    title: "Separação",
+    title: "Separação por Pedido",
     icon: FontAwesomeIcons.dolly,
     color: Colors.red,
     route: 'separacao',
   ),
-  MenuItemInfo(
+  /* MenuItemInfo(
     title: "Separação por Rotas",
     icon: FontAwesomeIcons.truckRampBox,
     color: Colors.red,
     route: 'separacao_rotas',
-  ),
+  ), */
   MenuItemInfo(
     title: "Separação por Carga",
     icon: FontAwesomeIcons.truckArrowRight,

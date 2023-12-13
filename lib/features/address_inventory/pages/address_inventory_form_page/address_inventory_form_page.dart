@@ -137,7 +137,7 @@ class _AddressInventoryFormPageState
                     getProduct(e);
                     productController.clear();
                     focus.requestFocus();
-                    //hideKeyboard();
+                    hideKeyboard();
                   },
                   validator: isNotEmpty,
                   controller: productController,
@@ -153,6 +153,7 @@ class _AddressInventoryFormPageState
                         getProduct(productController.text);
                         productController.clear();
                         focus.requestFocus();
+                        hideKeyboard();
                       },
                       icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
                     ),

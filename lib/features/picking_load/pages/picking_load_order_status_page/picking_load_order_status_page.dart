@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:nexus_estoque/core/theme/app_theme.dart';
 
 import '../../../outflow_doc_check/pages/outflow_doc_page/widgets/progress_indicator_widget.dart';
 import '../../../picking/data/model/picking_model.dart';
@@ -22,7 +23,12 @@ class PickingLoadOrderStatusPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Status Pedidos"),
+        title: Column(
+          children: [
+            Text("Carga: $load"),
+            const Text("Status Pedidos"),
+          ],
+        ),
         actions: [
           IconButton(
               onPressed: () {
@@ -88,13 +94,16 @@ class PickingLoadOrderStatusPage extends ConsumerWidget {
                       );
 
                       return Padding(
-                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        padding: const EdgeInsets.only(
+                            left: 8.0, right: 8.0, top: 14),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Pedido $groupByValue'),
-                            const Divider(),
+                            Text(
+                              'Pedido $groupByValue',
+                              style: AppTheme.customTextTheme().titleLarge,
+                            ),
                             if (qtd > 0)
                               ProgressIndicatorWidget(
                                 value: checked / qtd,
