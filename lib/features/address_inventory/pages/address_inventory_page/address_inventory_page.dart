@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
 
 import '../../../../core/mixins/validation_mixin.dart';
 
@@ -42,6 +43,8 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
   @override
   Widget build(BuildContext context) {
     final String doc = formatter.format(DateTime.now());
+    Future.delayed(const Duration(),
+        () => SystemChannels.textInput.invokeMethod('TextInput.hide'));
 
     return Scaffold(
       appBar: AppBar(
@@ -96,7 +99,12 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
               focusNode: addressFocus,
               autofocus: true,
               textInputAction: TextInputAction.next,
+              // textInputAction: TextInputAction.next,
               onFieldSubmitted: (e) {
+                Future.delayed(
+                    const Duration(),
+                    () => SystemChannels.textInput
+                        .invokeMethod('TextInput.hide'));
                 cubit.fetchAddressBalances(e);
                 addressController.clear();
                 addressFocus.requestFocus();
@@ -113,88 +121,108 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
               child: BlocProvider(
                 create: (context) => AddressBalanceCubit(
                     repository: ref.read(addressBalanceRepositoryProvider)),
-                child: BlocBuilder<AddressBalanceCubit, AddressBalanceState>(
-                  builder: (context, state) {
-                    cubit = context.read<AddressBalanceCubit>();
-
-                    if (state is AddressBalanceLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    if (state is AddressBalanceError) {
-                      return RefreshIndicator(
-                        onRefresh: () async {
-                          context
-                              .read<AddressBalanceCubit>()
-                              .fetchAddressBalances(addressController.text);
-                        },
-                        child: Center(
-                          child: Text(state.error.error),
-                        ),
-                      );
-                    }
+                child: BlocListener<AddressBalanceCubit, AddressBalanceState>(
+                  listener: (context, state) {
                     if (state is AddressBalanceLoaded) {
-                      final repositions = state.addressBalances;
-                      listBalances = repositions;
+                      if (state.addressBalances.isNotEmpty) {
+                        context.read<AddressBalanceCubit>().resetState();
 
-                      if (listBalances.isEmpty) {
+                        context.push(
+                            "/inventario_endereco/form/$doc$dropdownValue",
+                            extra: state.addressBalances.first);
+                      }
+                    }
+                  },
+                  child: BlocBuilder<AddressBalanceCubit, AddressBalanceState>(
+                    builder: (context, state) {
+                      cubit = context.read<AddressBalanceCubit>();
+
+                      if (state is AddressBalanceLoading) {
                         return const Center(
-                          child: Text("Nenhum registro encontrado."),
+                          child: CircularProgressIndicator(),
                         );
                       }
-/* 
-                      if (listBalances.length > 1) {
-                        return const Center(
-                          child: Text(
-                              "Endereço digitado possui saldo em mais de um armazém"),
+                      if (state is AddressBalanceError) {
+                        return RefreshIndicator(
+                          onRefresh: () async {
+                            context
+                                .read<AddressBalanceCubit>()
+                                .fetchAddressBalances(addressController.text);
+                          },
+                          child: Center(
+                            child: Text(state.error.error),
+                          ),
                         );
-                      } */
+                      }
+                      if (state is AddressBalanceLoaded) {
+                        final repositions = state.addressBalances;
+                        listBalances = repositions;
 
-                      return ListView.builder(
-                        itemCount: listBalances.length,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            child: ListTile(
-                              onTap: () {
-                                context.push(
-                                    "/inventario_endereco/form/$doc$dropdownValue",
-                                    extra: listBalances[index]);
-                              },
-                              leading: IconButton(
-                                  onPressed: () {
-                                    context.push(
-                                      '/inventario_endereco/consulta/${listBalances[index].armazem}/${listBalances[index].codEndereco}',
-                                    );
-                                  },
-                                  icon: const Icon(Icons.search)),
-                              title: Text(listBalances[index].armazemDesc),
-                              subtitle: Text(listBalances[index].codEndereco),
-                              trailing: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(listBalances[index].armazem),
-                                  Text(listBalances[index].armazemDesc),
-                                ],
-                              ),
-                            ),
+                        if (listBalances.isEmpty) {
+                          return const Center(
+                            child: Text("Nenhum registro encontrado."),
                           );
-                          /* return AddressProductBalanceCard(
-                                productBalance: listBalances[index]); */
-                        },
+                        }
+                        /* 
+                                                  if (listBalances.length > 1) {
+                                                    return const Center(
+                                                      child: Text(
+                                                          "Endereço digitado possui saldo em mais de um armazém"),
+                                                    );
+                                                  } */
+
+                        return ListView.builder(
+                          itemCount: listBalances.length,
+                          itemBuilder: (context, index) {
+                            return Card(
+                              child: ListTile(
+                                onTap: () {
+                                  context.push(
+                                      "/inventario_endereco/form/$doc$dropdownValue",
+                                      extra: listBalances[index]);
+                                },
+                                /*       leading: IconButton(
+                                                  onPressed: () {
+                                                    context.push(
+                                                      '/inventario_endereco/consulta/${listBalances[index].armazem}/${listBalances[index].codEndereco}',
+                                                    );
+                                                  },
+                                                  icon: const Icon(Icons.search)), */
+                                title: Text(listBalances[index].armazemDesc),
+                                subtitle: Text(listBalances[index].codEndereco),
+                                trailing: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(listBalances[index].armazem),
+                                    Text(listBalances[index].armazemDesc),
+                                  ],
+                                ),
+                              ),
+                            );
+                            /* return AddressProductBalanceCard(
+                                                            productBalance: listBalances[index]); */
+                          },
+                        );
+                      }
+                      return const Center(
+                        child: Text("Informe o cód. do endereço"),
                       );
-                    }
-                    return const Center(
-                      child: Text("Informe o cód. do endereço"),
-                    );
-                  },
+                    },
+                  ),
                 ),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  void hideKeyboard() async {
+    await Future.delayed(
+      const Duration(milliseconds: 100),
+      () => SystemChannels.textInput.invokeMethod('TextInput.hide'),
     );
   }
 }

@@ -11,6 +11,7 @@ import '../../../../core/features/searches/products/pages/products_search_page.d
 import '../../../../core/features/searches/products/provider/remote_product_provider.dart';
 import '../../../../core/mixins/validation_mixin.dart';
 import '../../../address_balance/data/model/address_balance_model.dart';
+import '../../data/model/inventory_model.dart';
 import 'state/address_inventory_provider.dart';
 import 'widgets/address_warehouse_card.dart';
 
@@ -30,6 +31,7 @@ class _AddressInventoryFormPageState
   final FocusNode focus = FocusNode();
   List<ProductModel> productsInventory = [];
   late List<ProductModel> listWatch = [];
+  late List<InventoryModel> inventoryData = [];
 
   void hideKeyboard() {
     Future.delayed(
@@ -40,7 +42,7 @@ class _AddressInventoryFormPageState
 
   @override
   void initState() {
-    hideKeyboard();
+    //hideKeyboard();
     super.initState();
 
     //executa no final do build
@@ -64,6 +66,9 @@ class _AddressInventoryFormPageState
 
   @override
   Widget build(BuildContext context) {
+    Future.delayed(const Duration(),
+        () => SystemChannels.textInput.invokeMethod('TextInput.hide'));
+
     AddressInventoryState state = ref.watch(addressInventoryProvider);
     ref.listen(addressInventoryProvider, (previous, current) {
       if (current.status == StateEnum.error) {
@@ -172,16 +177,21 @@ class _AddressInventoryFormPageState
                           return Card(
                             child: ListTile(
                               onTap: () async {
-                                double? newQuantity =
-                                    await InventoryQuantityModal.show(
-                                        context,
-                                        productsInventory[index],
-                                        productsInventory[index].qtdInvet);
-                                if (newQuantity != null) {
-                                  ref
-                                      .read(addressInventoryProvider.notifier)
-                                      .changeQuantity(productsInventory[index],
-                                          newQuantity);
+                                if (productsInventory[index]
+                                    .codigo
+                                    .isNotEmpty) {
+                                  double? newQuantity =
+                                      await InventoryQuantityModal.show(
+                                          context,
+                                          productsInventory[index],
+                                          productsInventory[index].qtdInvet);
+                                  if (newQuantity != null) {
+                                    ref
+                                        .read(addressInventoryProvider.notifier)
+                                        .changeQuantity(
+                                            productsInventory[index],
+                                            newQuantity);
+                                  }
                                 }
                               },
                               onLongPress: () {

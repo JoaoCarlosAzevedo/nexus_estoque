@@ -69,6 +69,12 @@ class _InventoryQuantityState extends State<InventoryQuantity> {
               ),
               InputQuantity(
                 controller: controller,
+                onSubmitted: (e) {
+                  final double? quantity = double.tryParse(controller.text);
+                  if (quantity != null) {
+                    Navigator.of(context).pop(quantity);
+                  }
+                },
               ),
               const SizedBox(
                 height: 10,

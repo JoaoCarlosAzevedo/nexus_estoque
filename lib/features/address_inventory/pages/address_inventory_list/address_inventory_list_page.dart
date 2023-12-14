@@ -16,6 +16,18 @@ class AddressInventoryListPage extends ConsumerWidget {
     AsyncValue<List<InventoryModel>> inventory =
         ref.watch(remoteGetInventoryProvider(address));
 
+    ref.listen(
+      remoteGetInventoryProvider(address),
+      (AsyncValue<List<InventoryModel>>? _,
+          AsyncValue<List<InventoryModel>> next) {
+        if (next.hasValue) {
+          if (next.asData!.value.isEmpty) {
+            //context.push("/inventario_endereco/form/aaaa", extra: addressModel);
+          }
+        }
+      },
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Consulta Inventário"),

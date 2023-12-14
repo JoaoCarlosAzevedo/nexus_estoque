@@ -6,8 +6,10 @@ class InputQuantity extends StatefulWidget {
   const InputQuantity({
     Key? key,
     required this.controller,
+    this.onSubmitted,
   }) : super(key: key);
   final TextEditingController controller;
+  final Function(String)? onSubmitted;
   @override
   State<InputQuantity> createState() => _InputQuantityState();
 }
@@ -40,7 +42,7 @@ class _InputQuantityState extends State<InputQuantity> {
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'))
             ],
-            onSubmitted: (e) {},
+            onSubmitted: widget.onSubmitted,
             onChanged: (e) {
               var doubleParsed = double.tryParse(e);
 

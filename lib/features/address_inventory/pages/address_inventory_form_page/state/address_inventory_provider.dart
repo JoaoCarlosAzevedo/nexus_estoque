@@ -25,10 +25,12 @@ class AddressInventoryNotifier extends StateNotifier<AddressInventoryState> {
             status: StateEnum.initial));
 
   void addProduct(ProductModel product) {
-    final list = state.products;
-
+    //final list = state.products;
+    product.qtdInvet = 0.0;
+    state = state.copyWith(products: [product]);
+/* 
     final index = list.indexWhere(
-        (element) => element.codigo.trim() == product.codigo.trim());
+        (element) => element.codigo.trim() == product.codigo.trim()); 
     if (index >= 0) {
       if (list[index].codigo.isNotEmpty) {
         //list[index].qtdInvet = list[index].qtdInvet + 1;
@@ -39,7 +41,7 @@ class AddressInventoryNotifier extends StateNotifier<AddressInventoryState> {
         product.qtdInvet = 0;
       }
       state = state.copyWith(products: [...state.products, product]);
-    }
+    } */
   }
 
   void removeProduct(ProductModel product) {

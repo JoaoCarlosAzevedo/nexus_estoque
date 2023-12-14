@@ -4,7 +4,7 @@ import 'package:nexus_estoque/core/theme/app_colors.dart';
 class AppTheme {
   static ThemeData get defaultTheme {
     return ThemeData(
-      useMaterial3: true,
+      //useMaterial3: true,
       // Define the default brightness and colors.
       /*   brightness: Brightness.light,
       secondaryHeaderColor: AppColors.primaryGrey,

@@ -12,6 +12,10 @@ class AddressBalanceCubit extends Cubit<AddressBalanceState> {
   AddressBalanceCubit({required this.repository})
       : super(AddressBalanceInitial());
 
+  void resetState() {
+    emit(AddressBalanceInitial());
+  }
+
   void fetchAddressBalances(String address) async {
     emit(AddressBalanceLoading());
 

@@ -14,6 +14,7 @@ class InventoryDeleteIcon extends ConsumerStatefulWidget {
 
 class _InventoryDeleteIconState extends ConsumerState<InventoryDeleteIcon> {
   Future<bool>? future;
+
   @override
   Widget build(BuildContext context) {
     final repository = ref.read(inventoryRepository);

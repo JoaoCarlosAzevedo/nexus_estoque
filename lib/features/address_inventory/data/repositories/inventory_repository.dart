@@ -57,12 +57,14 @@ class InventoryRepository {
 
   Future<List<InventoryModel>> getInventory(String date, String address) async {
     final String url = await Config.baseURL;
+    final param = address.split('|');
     try {
       var response = await dio.get(
         '$url/inventario',
         queryParameters: {
           'emissao': date,
-          'endereco': address,
+          'endereco': param[0],
+          'Doc': param[1]
         },
       );
 

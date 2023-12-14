@@ -28,8 +28,9 @@ import 'package:nexus_estoque/features/transaction/pages/transaction_form_page/t
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/transfer_page.dart';
 
 import '../../features/address_balance/data/model/address_balance_model.dart';
-import '../../features/address_inventory/pages/address_inventory_form_page/address_inventory_form_page.dart';
+
 import '../../features/address_inventory/pages/address_inventory_list/address_inventory_list_page.dart';
+import '../../features/address_inventory/pages/address_inventory_new_form_page/address_inventory_new_form_page.dart';
 import '../../features/address_inventory/pages/address_inventory_page/address_inventory_page.dart';
 import '../../features/picking_load/pages/picking_load_list_page/picking_load_list_page.dart';
 
@@ -141,8 +142,9 @@ final routerProvider = Provider<GoRouter>((ref) {
           path: "/inventario_endereco/form/:doc",
           builder: ((context, state) {
             final queryParam = state.params['doc'];
-            final param = state.extra as AddressBalanceModel;
-            return AddressInventoryFormPage(
+            final param =
+                state.extra as AddressBalanceModel; // AddressInventoryFormPage(
+            return InventoryAddressNewFormPage(
               address: param,
               doc: queryParam!,
             );
