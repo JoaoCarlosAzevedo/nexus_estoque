@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity.dart';
 
 import '../../../../../core/features/searches/products/data/model/product_model.dart';
+import '../../../../transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity_int.dart';
 
 class InventoryQuantityModal {
   static Future<double?> show(
@@ -61,13 +61,13 @@ class _InventoryQuantityState extends State<InventoryQuantity> {
                   style: Theme.of(context).textTheme.bodyLarge,
                   overflow: TextOverflow.ellipsis),
               const Divider(),
-              Text("Qtd: ${widget.produto.qtdInvet}",
+              Text("Qtd: ${widget.produto.qtdInvet.toStringAsFixed(0)}",
                   style: Theme.of(context).textTheme.displayMedium,
                   overflow: TextOverflow.ellipsis),
               const SizedBox(
                 height: 10,
               ),
-              InputQuantity(
+              InputQuantityInt(
                 controller: controller,
                 onSubmitted: (e) {
                   final double? quantity = double.tryParse(controller.text);

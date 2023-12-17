@@ -154,7 +154,7 @@ class _AddressInventoryFormPageState
                       onPressed: () async {
                         //productSearchPage();
                         productController.text =
-                            await ProductSearchModal.show(context);
+                            await ProductSearchModal.show(context, false);
                         getProduct(productController.text);
                         productController.clear();
                         focus.requestFocus();

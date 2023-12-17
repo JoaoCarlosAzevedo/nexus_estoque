@@ -86,7 +86,7 @@ class _ProductSelectioFormState extends State<ProductSelectioForm> {
                         onPressed: () async {
                           //productSearchPage();
                           controller.text =
-                              await ProductSearchModal.show(context);
+                              await ProductSearchModal.show(context, null);
                         },
                         icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
                       ),

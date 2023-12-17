@@ -5,15 +5,17 @@ import 'package:nexus_estoque/core/features/searches/products/data/model/product
 import 'package:nexus_estoque/core/features/searches/products/provider/remote_product_provider.dart';
 
 class ProductSearchModal {
-  static Future<String> show(context) async {
+  static Future<String> show(BuildContext context, bool? hideBalance) async {
     {
       final result = await showModalBottomSheet<dynamic>(
         context: context,
         isScrollControlled: true,
         builder: (BuildContext context) {
-          return const FractionallySizedBox(
+          return FractionallySizedBox(
             heightFactor: 0.9,
-            child: ProductSearchPage(),
+            child: ProductSearchPage(
+              hideBalance: hideBalance,
+            ),
           );
         },
       );
@@ -28,7 +30,8 @@ class ProductSearchModal {
 }
 
 class ProductSearchPage extends ConsumerStatefulWidget {
-  const ProductSearchPage({super.key});
+  const ProductSearchPage({this.hideBalance, super.key});
+  final bool? hideBalance;
 
   @override
   ConsumerState<ProductSearchPage> createState() => _ProductSearchPageState();
@@ -103,17 +106,19 @@ class _ProductSearchPageState extends ConsumerState<ProductSearchPage> {
                                   children: [
                                     Text(
                                         'Tipo ${filterListProducts[index].tipo}'),
-                                    Text(
-                                        'Local ${filterListProducts[index].localPadrao}'),
+                                    if (widget.hideBalance ?? false)
+                                      Text(
+                                          'Local ${filterListProducts[index].localPadrao}'),
                                   ],
                                 ),
                               ],
                             ),
                             trailing: Column(
                               children: [
-                                Text(filterListProducts[index]
-                                    .saldoAtual
-                                    .toString()),
+                                if (widget.hideBalance ?? true)
+                                  Text(filterListProducts[index]
+                                      .saldoAtual
+                                      .toString()),
                                 Text(filterListProducts[index].um),
                               ],
                             ),
