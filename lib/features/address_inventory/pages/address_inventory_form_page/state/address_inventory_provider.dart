@@ -25,23 +25,26 @@ class AddressInventoryNotifier extends StateNotifier<AddressInventoryState> {
             status: StateEnum.initial));
 
   void addProduct(ProductModel product) {
-    //final list = state.products;
-    product.qtdInvet = 0.0;
-    state = state.copyWith(products: [product]);
-/* 
-    final index = list.indexWhere(
-        (element) => element.codigo.trim() == product.codigo.trim()); 
-    if (index >= 0) {
-      if (list[index].codigo.isNotEmpty) {
-        //list[index].qtdInvet = list[index].qtdInvet + 1;
+    final list = state.products;
+
+    if (state.address.isEmpty) {
+      final index = list.indexWhere(
+          (element) => element.codigo.trim() == product.codigo.trim());
+      if (index >= 0) {
+        if (list[index].codigo.isNotEmpty) {
+          //list[index].qtdInvet = list[index].qtdInvet + 1;
+        }
+        state = state.copyWith(products: list);
+      } else {
+        if (product.codigo.isNotEmpty) {
+          product.qtdInvet = 0;
+        }
+        state = state.copyWith(products: [...state.products, product]);
       }
-      state = state.copyWith(products: list);
     } else {
-      if (product.codigo.isNotEmpty) {
-        product.qtdInvet = 0;
-      }
-      state = state.copyWith(products: [...state.products, product]);
-    } */
+      product.qtdInvet = 0.0;
+      state = state.copyWith(products: [product]);
+    }
   }
 
   void removeProduct(ProductModel product) {
@@ -110,8 +113,9 @@ class AddressInventoryNotifier extends StateNotifier<AddressInventoryState> {
               'codigo': e.codigo,
               'doc': state.doc,
               'quant': e.qtdInvet,
-              'local': state.warehouse,
-              'localizacao': state.address,
+              'local':
+                  state.warehouse.isEmpty ? e.localPadrao : state.warehouse,
+              'localizacao': state.address.isEmpty ? '' : state.address,
             })
         .toList();
 

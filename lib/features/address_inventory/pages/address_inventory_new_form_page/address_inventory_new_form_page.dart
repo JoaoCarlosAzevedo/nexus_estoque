@@ -22,6 +22,7 @@ class InventoryAddressNewFormPage extends ConsumerStatefulWidget {
 
 class _InventoryAddressNewFormPageState
     extends ConsumerState<InventoryAddressNewFormPage> {
+  bool invForm = false;
   @override
   Widget build(BuildContext context) {
     AsyncValue<List<InventoryModel>> inventory = ref.watch(
@@ -30,7 +31,26 @@ class _InventoryAddressNewFormPageState
 
     return inventory.when(
       skipLoadingOnRefresh: false,
-      loading: () => SafeArea(
+      loading: () => Scaffold(
+        appBar: AppBar(
+          title: const Text("Contagem Produtos"),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  ref.invalidate(remoteGetInventoryProvider(
+                      '${widget.address.codEndereco}|${widget.doc}'));
+                },
+                icon: const Icon(Icons.refresh)),
+          ],
+        ),
+        resizeToAvoidBottomInset: false,
+        body: const SafeArea(
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      ),
+      error: (error, stackTrace) => Center(
         child: Scaffold(
           appBar: AppBar(
             title: const Text("Contagem Produtos"),
@@ -44,54 +64,35 @@ class _InventoryAddressNewFormPageState
             ],
           ),
           resizeToAvoidBottomInset: false,
-          body: const Center(
-            child: CircularProgressIndicator(),
-          ),
-        ),
-      ),
-      error: (error, stackTrace) => Center(
-        child: SafeArea(
-          child: Scaffold(
-            appBar: AppBar(
-              title: const Text("Contagem Produtos"),
-              actions: [
-                IconButton(
-                    onPressed: () {
-                      ref.invalidate(remoteGetInventoryProvider(
-                          '${widget.address.codEndereco}|${widget.doc}'));
-                    },
-                    icon: const Icon(Icons.refresh)),
-              ],
-            ),
-            resizeToAvoidBottomInset: false,
-            body: Center(
+          body: SafeArea(
+            child: Center(
               child: Text(stackTrace.toString()),
             ),
           ),
         ),
       ),
       data: (List<InventoryModel> data) {
-        if (data.isEmpty) {
+        if (data.isEmpty || invForm) {
           return AddressInventoryFormPage(
             address: widget.address,
             doc: widget.doc,
           );
         }
-        return SafeArea(
-          child: Scaffold(
-            appBar: AppBar(
-              title: const Text("Contagem Produtos"),
-              actions: [
-                IconButton(
-                  onPressed: () {
-                    ref.invalidate(remoteGetInventoryProvider(
-                        '${widget.address.codEndereco}|${widget.doc}'));
-                  },
-                  icon: const Icon(Icons.refresh),
-                ),
-              ],
-            ),
-            body: Padding(
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text("Contagem Produtos"),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  ref.invalidate(remoteGetInventoryProvider(
+                      '${widget.address.codEndereco}|${widget.doc}'));
+                },
+                icon: const Icon(Icons.refresh),
+              ),
+            ],
+          ),
+          body: SafeArea(
+            child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,6 +104,23 @@ class _InventoryAddressNewFormPageState
                   AddressWarehouseCard(
                     address: widget.address,
                   ),
+                  if (widget.address.codEndereco.isEmpty)
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          invForm = true;
+                        });
+                      },
+                      style:
+                          TextButton.styleFrom(backgroundColor: Colors.green),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Contagem +",
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ),
+                    ),
                   Expanded(
                     child: ListView.builder(
                       itemCount: data.length,

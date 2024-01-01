@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,6 +11,9 @@ import '../../../../core/mixins/validation_mixin.dart';
 import '../../../address_balance/data/model/address_balance_model.dart';
 import '../../../address_balance/data/repositories/address_balance_repository.dart';
 import '../../../address_balance/pages/address_balance_page/cubit/address_balance_cubit.dart';
+import '../../../auth/providers/login_controller_provider.dart';
+import '../../../auth/providers/login_state.dart';
+import '../../data/repositories/inventory_repository.dart';
 import 'widgets/products_status_widget.dart';
 
 const List<String> list = <String>['1', '2', '3', '4'];
@@ -32,6 +36,8 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
   final DateFormat formatter = DateFormat('yyyyMMdd');
 
   String dropdownValue = list.first;
+  String doc = "";
+  String user = "";
 
   @override
   void dispose() {
@@ -42,7 +48,15 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
 
   @override
   Widget build(BuildContext context) {
-    final String doc = formatter.format(DateTime.now());
+    //final docProvider = ref.
+    final authUser = ref.read(loginControllerProvider);
+
+    if (authUser is LoginStateSuccess) {
+      user = authUser.user.id;
+    }
+
+    final docProvider = ref.watch(remoteGetInventoryDocProvider(user));
+
     Future.delayed(const Duration(),
         () => SystemChannels.textInput.invokeMethod('TextInput.hide'));
 
@@ -56,42 +70,88 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Documento: $doc$dropdownValue",
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Contagem: ",
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16),
-                  child: DropdownButton<String>(
-                    value: dropdownValue,
-                    icon: const Icon(Icons.arrow_downward),
-                    elevation: 16,
-                    style: Theme.of(context).textTheme.titleLarge,
-                    underline: Container(
-                      height: 2,
-                      color: Theme.of(context).primaryColor,
+            docProvider.when(
+              skipLoadingOnRefresh: false,
+              data: (data) {
+                doc = data;
+                return Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Text(
+                      'Documento: $data',
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    onChanged: (String? value) {
-                      setState(() {
-                        dropdownValue = value!;
-                      });
-                    },
-                    items: list.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        final address = AddressBalanceModel(
+                            descProd: '',
+                            codProd: '',
+                            um: '',
+                            armazem: '',
+                            codEndereco: '',
+                            quantidade: 0.0,
+                            empenho: 0.0,
+                            endereDesc: '',
+                            armazemDesc: '',
+                            ultimoMov: '');
+                        context.push("/inventario_endereco/form/$doc",
+                            extra: address);
+                      },
+                      style:
+                          TextButton.styleFrom(backgroundColor: Colors.orange),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Contagem s/ Endereço",
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        ref.invalidate(remoteGetInventoryDocProvider);
+                      },
+                      icon: const Icon(Icons.refresh),
+                    ),
+                  ],
+                );
+              },
+              error: ((error, stackTrace) => Row(
+                    children: [
+                      const Icon(
+                        Icons.error,
+                        color: Colors.red,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(error.toString()),
+                      IconButton(
+                        onPressed: () {
+                          ref.invalidate(remoteGetInventoryDocProvider);
+                        },
+                        icon: const Icon(Icons.refresh),
+                      ),
+                    ],
+                  )),
+              loading: () => Row(
+                children: [
+                  Text(
+                    "Documento: ",
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
-                ),
-              ],
+                  const SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                    ),
+                  ),
+                ],
+              ),
             ),
             const ProductsStatusWidget(),
             const Divider(),
@@ -126,10 +186,24 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
                     if (state is AddressBalanceLoaded) {
                       if (state.addressBalances.isNotEmpty) {
                         context.read<AddressBalanceCubit>().resetState();
+                        state.addressBalances
+                            .sort((a, b) => a.armazem.compareTo(b.armazem));
 
-                        context.push(
-                            "/inventario_endereco/form/$doc$dropdownValue",
-                            extra: state.addressBalances.first);
+                        if (doc.isEmpty) {
+                          AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.error,
+                                  animType: AnimType.rightSlide,
+                                  //title: 'Alerta',
+                                  desc: "Erro ao carregar contagem",
+                                  //btnCancelOnPress: () {},
+                                  btnOkOnPress: () {},
+                                  btnOkColor: Theme.of(context).primaryColor)
+                              .show();
+                        } else {
+                          context.push("/inventario_endereco/form/$doc",
+                              extra: state.addressBalances.first);
+                        }
                       }
                     }
                   },

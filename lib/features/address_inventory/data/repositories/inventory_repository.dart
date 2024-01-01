@@ -26,6 +26,12 @@ final remoteDeleteInventoryProvider =
   return repository.deleteInventory(param);
 });
 
+final remoteGetInventoryDocProvider =
+    FutureProvider.autoDispose.family<String, String>((ref, param) async {
+  final repository = ref.read(inventoryRepository);
+  return repository.getInventoryDoc(param);
+});
+
 class InventoryRepository {
   late Dio dio;
   final Ref _ref;
@@ -33,6 +39,24 @@ class InventoryRepository {
 
   InventoryRepository(this._ref) {
     dio = _ref.read(httpProvider).dioInstance;
+  }
+
+  Future<String> getInventoryDoc(String user) async {
+    final String url = await Config.baseURL;
+
+    try {
+      var response = await dio.get(
+        '$url/inventario/contagem/',
+        queryParameters: {'usuario': user},
+      );
+
+      if (response.statusCode == 200) {
+        return response.data["doc"];
+      }
+      throw const Failure("Nenhum registro encontrado.", ErrorType.validation);
+    } on DioError catch (_) {
+      throw const Failure("Erro de conexão.", ErrorType.exception);
+    }
   }
 
   Future<bool> deleteInventory(int recno) async {
