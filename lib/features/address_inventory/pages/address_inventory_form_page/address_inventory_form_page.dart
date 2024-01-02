@@ -90,7 +90,9 @@ class _AddressInventoryFormPageState
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Contagem Produtos"),
+        title: state.doc.isEmpty
+            ? const Text("Contagem")
+            : Text("Contagem ${state.doc.substring(state.doc.length - 1)}"),
       ),
       resizeToAvoidBottomInset: false,
       body: SafeArea(

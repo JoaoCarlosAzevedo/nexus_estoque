@@ -64,6 +64,7 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
       appBar: AppBar(
         title: const Text("Inventário"),
       ),
+      resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -77,12 +78,28 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
                 return Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    Text(
-                      'Documento: $data',
-                      style: Theme.of(context).textTheme.titleLarge,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Contagem: ${doc.substring(doc.length - 1)}',
+                          style: Theme.of(context).textTheme.displayMedium,
+                        ),
+                        Text(
+                          'Documento: $data',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                      ],
                     ),
                     const SizedBox(
                       width: 20,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        ref.invalidate(remoteGetInventoryDocProvider);
+                      },
+                      icon: const Icon(Icons.refresh),
                     ),
                     ElevatedButton(
                       onPressed: () {
@@ -109,12 +126,6 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
                           style: Theme.of(context).textTheme.labelMedium,
                         ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        ref.invalidate(remoteGetInventoryDocProvider);
-                      },
-                      icon: const Icon(Icons.refresh),
                     ),
                   ],
                 );
@@ -237,13 +248,6 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
                             child: Text("Nenhum registro encontrado."),
                           );
                         }
-                        /* 
-                                                  if (listBalances.length > 1) {
-                                                    return const Center(
-                                                      child: Text(
-                                                          "Endereço digitado possui saldo em mais de um armazém"),
-                                                    );
-                                                  } */
 
                         return ListView.builder(
                           itemCount: listBalances.length,

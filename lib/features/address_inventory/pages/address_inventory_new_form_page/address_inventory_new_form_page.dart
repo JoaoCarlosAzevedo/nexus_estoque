@@ -33,7 +33,8 @@ class _InventoryAddressNewFormPageState
       skipLoadingOnRefresh: false,
       loading: () => Scaffold(
         appBar: AppBar(
-          title: const Text("Contagem Produtos"),
+          title:
+              Text("Contagem ${widget.doc.substring(widget.doc.length - 1)}"),
           actions: [
             IconButton(
                 onPressed: () {
@@ -53,7 +54,8 @@ class _InventoryAddressNewFormPageState
       error: (error, stackTrace) => Center(
         child: Scaffold(
           appBar: AppBar(
-            title: const Text("Contagem Produtos"),
+            title:
+                Text("Contagem ${widget.doc.substring(widget.doc.length - 1)}"),
             actions: [
               IconButton(
                   onPressed: () {
@@ -80,7 +82,8 @@ class _InventoryAddressNewFormPageState
         }
         return Scaffold(
           appBar: AppBar(
-            title: const Text("Contagem Produtos"),
+            title:
+                Text("Contagem ${widget.doc.substring(widget.doc.length - 1)}"),
             actions: [
               IconButton(
                 onPressed: () {
