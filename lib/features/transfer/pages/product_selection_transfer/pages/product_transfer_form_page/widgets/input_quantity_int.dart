@@ -46,7 +46,8 @@ class _InputQuantityIntState extends State<InputQuantityInt> {
               signed: false,
             ),
             inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.allow(RegExp(r'^\d+\d{0,0}'))
+              //FilteringTextInputFormatter.allow(RegExp(r'^\d+\d{0,0}'))
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
             ],
             onSubmitted: widget.onSubmitted,
             onChanged: (e) {
@@ -81,15 +82,19 @@ class _InputQuantityIntState extends State<InputQuantityInt> {
       widget.controller.text = '0';
     }
 
-    double isPositive = double.parse(widget.controller.text) + number;
+    if (widget.controller.text.contains('0.0')) {
+      widget.controller.text = "";
+    } else {
+      double isPositive = double.parse(widget.controller.text) + number;
 
-    if (isPositive >= 0) {
-      /* widget.controller.text =
+      if (isPositive >= 0) {
+        /* widget.controller.text =
           (double.parse(widget.controller.text) + number).toStringAsFixed(2); */
-      widget.controller.text =
-          (double.parse(widget.controller.text) + number).toStringAsFixed(0);
-      /* widget.controller.selection =
+        widget.controller.text =
+            (double.parse(widget.controller.text) + number).toStringAsFixed(0);
+        /* widget.controller.selection =
           TextSelection.collapsed(offset: widget.controller.text.length); */
+      }
     }
   }
 }
