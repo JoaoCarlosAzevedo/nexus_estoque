@@ -16,6 +16,7 @@ class ProductAddressModel {
   final String validade;
   final String chave;
   final String codigoBarras;
+  final String codigoBarras2;
 
   ProductAddressModel({
     required this.descricao,
@@ -33,6 +34,7 @@ class ProductAddressModel {
     required this.validade,
     required this.chave,
     required this.codigoBarras,
+    required this.codigoBarras2,
   });
 
   Map<String, dynamic> toMap() {
@@ -52,6 +54,7 @@ class ProductAddressModel {
       'validade': validade,
       'chave': chave,
       'codigobarras': codigoBarras,
+      'codigoBarras2': codigoBarras2,
     };
   }
 
@@ -71,7 +74,8 @@ class ProductAddressModel {
         fornecedor: map['fornecedor'] ?? '',
         validade: map['validade'] ?? '',
         chave: map['chave'] ?? '',
-        codigoBarras: map['codigobarras'] ?? '');
+        codigoBarras: map['codigobarras'] ?? '',
+        codigoBarras2: map['codigobarras2'] ?? '');
   }
 
   String toJson() => json.encode(toMap());

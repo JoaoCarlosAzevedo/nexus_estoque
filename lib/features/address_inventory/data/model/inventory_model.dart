@@ -7,6 +7,7 @@ class InventoryModel {
   String descPro;
   String uM;
   String codigoBarras;
+  String codigoBarras2;
   String local;
   double quantInvent;
   String tipoPro;
@@ -22,6 +23,7 @@ class InventoryModel {
     required this.descPro,
     required this.uM,
     required this.codigoBarras,
+    required this.codigoBarras2,
     required this.local,
     required this.quantInvent,
     required this.tipoPro,
@@ -40,6 +42,7 @@ class InventoryModel {
       'descPro': descPro,
       'uM': uM,
       'codigoBarras': codigoBarras,
+      'codigoBarras2': codigoBarras2,
       'local': local,
       'quantInvent': quantInvent,
       'tipoPro': tipoPro,
@@ -59,6 +62,7 @@ class InventoryModel {
       descPro: map['DescPro'] ?? '',
       uM: map['UM'] ?? '',
       codigoBarras: map['CodigoBarras'] ?? '',
+      codigoBarras2: map['CodigoBarras2'] ?? '',
       local: map['Local'] ?? '',
       quantInvent: map['QuantInvent']?.toDouble() ?? 0.0,
       tipoPro: map['TipoPro'] ?? '',

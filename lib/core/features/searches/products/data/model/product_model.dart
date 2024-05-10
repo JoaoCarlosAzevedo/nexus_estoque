@@ -6,6 +6,7 @@ class ProductModel {
   String localPadrao;
   String lote;
   String codigoBarras;
+  String codigoBarras2;
   String localizacao;
   String tipo;
   double saldoAtual;
@@ -26,22 +27,23 @@ class ProductModel {
     required this.um,
     required this.codigo,
     required this.error,
+    required this.codigoBarras2,
   });
 
   factory ProductModel.fromMap(Map<String, dynamic> map) {
     return ProductModel(
-      descricao: map['descricao'] ?? '',
-      localPadrao: map['localpadrao'] ?? '',
-      codigoBarras: map['codigobarras'] ?? '',
-      lote: map['lotes'] ?? '',
-      localizacao: map['localizacao'] ?? '',
-      tipo: map['tipo'] ?? '',
-      saldoAtual: map['saldo']?.toDouble() ?? 0.0,
-      qtdInvet: map['qtdInvet']?.toDouble() ?? 0.0,
-      um: map['um'] ?? '',
-      codigo: map['codigo'] ?? '',
-      error: map['error'] ?? '',
-    );
+        descricao: map['descricao'] ?? '',
+        localPadrao: map['localpadrao'] ?? '',
+        codigoBarras: map['codigobarras'] ?? '',
+        lote: map['lotes'] ?? '',
+        localizacao: map['localizacao'] ?? '',
+        tipo: map['tipo'] ?? '',
+        saldoAtual: map['saldo']?.toDouble() ?? 0.0,
+        qtdInvet: map['qtdInvet']?.toDouble() ?? 0.0,
+        um: map['um'] ?? '',
+        codigo: map['codigo'] ?? '',
+        error: map['error'] ?? '',
+        codigoBarras2: map['codigobarras2'] ?? '');
   }
 
   factory ProductModel.fromJson(String source) =>
@@ -59,6 +61,7 @@ class ProductModel {
     String? um,
     String? codigo,
     String? error,
+    String? codigoBarras2,
   }) {
     return ProductModel(
       descricao: descricao ?? this.descricao,
@@ -72,6 +75,7 @@ class ProductModel {
       um: um ?? this.um,
       codigo: codigo ?? this.codigo,
       error: error ?? this.error,
+      codigoBarras2: codigoBarras2 ?? this.codigoBarras2,
     );
   }
 }

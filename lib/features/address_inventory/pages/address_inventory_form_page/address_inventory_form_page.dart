@@ -117,6 +117,7 @@ class _AddressInventoryFormPageState
                               localPadrao: '',
                               lote: '',
                               codigoBarras: '',
+                              codigoBarras2: '',
                               localizacao: '',
                               tipo: '',
                               saldoAtual: 0.0,
@@ -265,6 +266,11 @@ class _AddressInventoryFormPageState
               .contains(product.toUpperCase())) {
             return true;
           }
+          if (element.codigoBarras2
+              .toUpperCase()
+              .contains(product.toUpperCase())) {
+            return true;
+          }
 
           return false;
         },
@@ -273,6 +279,7 @@ class _AddressInventoryFormPageState
             localPadrao: '',
             lote: '',
             codigoBarras: '',
+            codigoBarras2: '',
             localizacao: '',
             tipo: '',
             saldoAtual: 0.0,

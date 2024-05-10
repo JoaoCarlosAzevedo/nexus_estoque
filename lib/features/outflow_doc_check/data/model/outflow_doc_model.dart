@@ -62,6 +62,7 @@ class Produtos {
   String descricao;
   double quantidade;
   String barcode;
+  String barcode2;
   double checked;
   String item;
   String codigo;
@@ -70,6 +71,7 @@ class Produtos {
     required this.descricao,
     required this.quantidade,
     required this.barcode,
+    required this.barcode2,
     required this.checked,
     required this.item,
     required this.codigo,
@@ -81,6 +83,7 @@ class Produtos {
       'descricao': descricao,
       'quantidade': quantidade,
       'barcode': barcode,
+      'barcode2': barcode2,
       'checked': checked,
       'item': item,
       'codigo': codigo,
@@ -93,6 +96,7 @@ class Produtos {
       descricao: map['descricao'] ?? '',
       quantidade: map['quantidade']?.toDouble() ?? 0,
       barcode: map['barcode'] ?? '',
+      barcode2: map['barcode2'] ?? '',
       checked: map['checked']?.toDouble() ?? 0,
       item: map['item'] ?? '',
       codigo: map['codigo'] ?? '',

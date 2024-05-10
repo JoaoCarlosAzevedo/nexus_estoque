@@ -109,7 +109,7 @@ class _PickingLoadProductListPageState
                 }
                 return GroupedListView<PickingModel, String>(
                   elements: products,
-                  groupBy: (element) => element.descEndereco.substring(7),
+                  groupBy: (element) => element.descEndereco.substring(6),
                   groupSeparatorBuilder: (String groupByValue) {
                     return Padding(
                       padding: const EdgeInsets.only(top: 12, left: 8),

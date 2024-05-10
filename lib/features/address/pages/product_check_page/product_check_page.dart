@@ -116,6 +116,12 @@ class _ProductCheckPageState extends State<ProductCheckPage> {
       cubit.checkProduct();
       return;
     }
+
+    if (widget.productAddress.codigoBarras2.contains(code.trim()) &&
+        code.trim().length > 6) {
+      cubit.checkProduct();
+      return;
+    }
     setState(() {
       _validate = true;
     });

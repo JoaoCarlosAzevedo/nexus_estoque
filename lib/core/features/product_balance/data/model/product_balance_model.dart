@@ -8,6 +8,7 @@ class ProductBalanceModel {
   String descricao;
   String localPadrao;
   String codigoBarras;
+  String codigoBarras2;
   String lote;
   String localizacao;
   String tipo;
@@ -29,6 +30,7 @@ class ProductBalanceModel {
     required this.uM,
     required this.armazem,
     required this.codigo,
+    required this.codigoBarras2,
   });
 
   factory ProductBalanceModel.fromMap(Map<String, dynamic> map) {
@@ -43,6 +45,7 @@ class ProductBalanceModel {
       armazem: List<BalanceWarehouse>.from(
           map['armazem']?.map((x) => BalanceWarehouse.fromMap(x))),
       codigo: map['codigo'] ?? '',
+      codigoBarras2: map['codigobarras2'] ?? '',
     );
   }
 

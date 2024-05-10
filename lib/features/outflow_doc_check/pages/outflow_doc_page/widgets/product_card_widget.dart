@@ -4,9 +4,13 @@ import 'package:nexus_estoque/features/outflow_doc_check/pages/outflow_doc_page/
 
 class ProductCheckCard extends StatelessWidget {
   const ProductCheckCard(
-      {super.key, required this.product, required this.onTapCard});
+      {super.key,
+      required this.product,
+      required this.onTapCard,
+      required this.onDelete});
   final Produtos product;
   final Function()? onTapCard;
+  final Function()? onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +20,23 @@ class ProductCheckCard extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: ListTile(
           onTap: onTapCard,
-          title: Text(
-            "${product.item} ${product.descricao}",
-            style: Theme.of(context).textTheme.bodyMedium,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                child: Text(
+                  overflow: TextOverflow.ellipsis,
+                  "${product.item} ${product.descricao}",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ),
+              if (product.checked > product.quantidade)
+                IconButton(
+                  onPressed: onDelete,
+                  icon: const Icon(Icons.delete_forever),
+                  color: Colors.red,
+                )
+            ],
           ),
           subtitle: Column(
             mainAxisAlignment: MainAxisAlignment.start,

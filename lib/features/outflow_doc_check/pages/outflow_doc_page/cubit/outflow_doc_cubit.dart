@@ -4,6 +4,8 @@ import 'package:nexus_estoque/core/error/failure.dart';
 import 'package:nexus_estoque/features/outflow_doc_check/data/model/outflow_doc_model.dart';
 import 'package:nexus_estoque/features/outflow_doc_check/data/repositories/outflow_doc_repository.dart';
 
+import '../../../../../core/services/audio_player.dart';
+
 part 'outflow_doc_state.dart';
 
 class OutFlowDocCubit extends Cubit<OutFlowDocState> {
@@ -75,6 +77,11 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
               (element.checked < element.quantidade)) {
             return true;
           }
+
+          if (element.barcode2.trim().contains(code.trim()) &&
+              (element.checked < element.quantidade)) {
+            return true;
+          }
         }
 
         return false;
@@ -91,6 +98,11 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
               return true;
             }
           }
+          if (code.trim().length >= 5) {
+            if (element.barcode2.trim().contains(code.trim())) {
+              return true;
+            }
+          }
 
           return false;
         });
@@ -99,8 +111,11 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
       emit(OutFlowDocLoading());
       if (index >= 0) {
         aux.docs.produtos[index].checked += 1;
+
+        AudioService.beep();
         emit(OutFlowDocLoaded(aux.docs, aux.docs.produtos[index], false, code));
       } else {
+        AudioService.error();
         emit(OutFlowDocLoaded(aux.docs, null, true, code));
       }
     }

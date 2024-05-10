@@ -4,6 +4,7 @@ class PickingModel {
   String descricao;
   double separado;
   String codigobarras;
+  String codigobarras2;
   double quantidade;
   String lote;
   String codEndereco;
@@ -23,6 +24,7 @@ class PickingModel {
       {required this.descricao,
       required this.separado,
       required this.codigobarras,
+      required this.codigobarras2,
       required this.quantidade,
       required this.lote,
       required this.codEndereco,
@@ -43,6 +45,7 @@ class PickingModel {
       'descricao': descricao,
       'separado': separado,
       'codigobarras': codigobarras,
+      'codigobarras2': codigobarras2,
       'quantidade': quantidade,
       'lote': lote,
       'codEndereco': codEndereco,
@@ -64,6 +67,7 @@ class PickingModel {
       descricao: map['descricao'] ?? '',
       separado: map['separado']?.toDouble() ?? 0.0,
       codigobarras: map['codigobarras'] ?? '',
+      codigobarras2: map['codigobarras2'] ?? '',
       quantidade: map['quantidade']?.toDouble() ?? 0.0,
       lote: map['lote'] ?? '',
       codEndereco: map['codEndereco'] ?? '',

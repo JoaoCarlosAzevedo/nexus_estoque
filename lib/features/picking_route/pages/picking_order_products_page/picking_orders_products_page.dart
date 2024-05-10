@@ -162,6 +162,9 @@ class _PickingOrderProductsPageState extends State<PickingOrderProductsPage> {
       if (element.codigobarras.toUpperCase().contains(search.toUpperCase())) {
         return true;
       }
+      if (element.codigobarras2.toUpperCase().contains(search.toUpperCase())) {
+        return true;
+      }
 
       return false;
     }).toList();

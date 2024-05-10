@@ -89,6 +89,9 @@ class _OutFlowDocProductListState extends ConsumerState<OutFlowDocProductList> {
                           }
                         }
                       },
+                      onDelete: () {
+                        cubit.setProductCheck(index, 0);
+                      },
                     );
                   },
                 ),
