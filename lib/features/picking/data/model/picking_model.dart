@@ -20,6 +20,13 @@ class PickingModel {
   String desCli;
   String rua;
 
+  String descEndereco2;
+  String rua2;
+  String deposito;
+  String predio;
+  String nivel;
+  String apartamento;
+
   PickingModel(
       {required this.descricao,
       required this.separado,
@@ -38,6 +45,12 @@ class PickingModel {
       required this.chave,
       required this.codCli,
       required this.desCli,
+      required this.descEndereco2,
+      required this.rua2,
+      required this.deposito,
+      required this.predio,
+      required this.nivel,
+      required this.apartamento,
       required this.rua});
 
   Map<String, dynamic> toMap() {
@@ -59,6 +72,12 @@ class PickingModel {
       'chaveSDC': chave,
       'codCliente': codCli,
       'descCliente': desCli,
+      'descEndereco2': descEndereco2,
+      'rua2': rua2,
+      'deposito': deposito,
+      'predio': predio,
+      'nivel': nivel,
+      'apartamento': apartamento,
     };
   }
 
@@ -82,6 +101,12 @@ class PickingModel {
       codCli: map['codCliente'] ?? '',
       desCli: map['descCliente'] ?? '',
       rua: map['rua'] ?? '',
+      descEndereco2: map['descEnderecov2'] ?? '',
+      rua2: map['rua_v2'] ?? '',
+      deposito: map['deposito'] ?? '',
+      predio: map['predio'] ?? '',
+      nivel: map['nivel'] ?? '',
+      apartamento: map['aparatamento'] ?? '',
     );
   }
 

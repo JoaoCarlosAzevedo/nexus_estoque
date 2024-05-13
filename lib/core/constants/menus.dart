@@ -45,11 +45,17 @@ final List menuItens = [
     color: Colors.red,
     route: 'separacao_rotas',
   ), */
-  MenuItemInfo(
+  /* MenuItemInfo(
     title: "Separação por Carga",
     icon: FontAwesomeIcons.truckArrowRight,
     color: Colors.red,
     route: 'separacao_carga',
+  ), */
+  MenuItemInfo(
+    title: "Separação por Carga",
+    icon: FontAwesomeIcons.truckArrowRight,
+    color: Colors.red,
+    route: 'separacao_carga_v2',
   ),
   MenuItemInfo(
     title: "Conferencia NFe Saida",

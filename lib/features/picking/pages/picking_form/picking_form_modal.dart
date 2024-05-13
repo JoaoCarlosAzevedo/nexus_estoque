@@ -222,6 +222,11 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
           .contains(productController.text.trim())) {
         productValid = true;
       }
+      if (widget.picking.codigobarras2
+          .trim()
+          .contains(productController.text.trim())) {
+        productValid = true;
+      }
     }
 
     if (!(addressValid && productValid)) {

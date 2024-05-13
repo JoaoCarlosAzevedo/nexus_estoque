@@ -33,6 +33,7 @@ import '../../features/address_inventory/pages/address_inventory_list/address_in
 import '../../features/address_inventory/pages/address_inventory_new_form_page/address_inventory_new_form_page.dart';
 import '../../features/address_inventory/pages/address_inventory_page/address_inventory_page.dart';
 import '../../features/picking_load/pages/picking_load_list_page/picking_load_list_page.dart';
+import '../../features/picking_load_v2/pages/picking_load_list_page/picking_load_v2_list_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authService = RouterNotifier(ref);
@@ -118,6 +119,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/separacao_carga",
             builder: ((context, state) => const PickingLoadListPage())),
+        GoRoute(
+            path: "/separacao_carga_v2",
+            builder: ((context, state) => const PickingLoadListPagev2())),
         GoRoute(
             path: "/reposicao",
             builder: ((context, state) => const RepositionPage())),
