@@ -6,12 +6,14 @@ class Branch {
   String groupCode;
   String groupName;
   String logo;
+  bool isSelected;
   Branch({
     required this.branchCode,
     required this.branchName,
     required this.groupCode,
     required this.groupName,
     required this.logo,
+    this.isSelected = false,
   });
 
   Map<String, dynamic> toMap() {

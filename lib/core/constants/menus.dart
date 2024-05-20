@@ -64,6 +64,12 @@ final List menuItens = [
     route: 'saidacheck',
   ),
   MenuItemInfo(
+    title: "Conferencia NFe Entrada",
+    icon: FontAwesomeIcons.rightToBracket,
+    color: Colors.red,
+    route: 'entradacheck',
+  ),
+  MenuItemInfo(
     title: "Reposição",
     icon: FontAwesomeIcons.boxesPacking,
     color: Colors.red,

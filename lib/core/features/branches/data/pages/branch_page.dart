@@ -22,8 +22,10 @@ class _BranchPageState extends ConsumerState<BranchPage> {
 
   void getBranch() async {
     final Branch? branch = await LocalStorage.getBranch();
-    branchCode = branch?.branchCode.trim() ?? "";
-    groupCode = branch?.groupCode.trim() ?? "";
+    setState(() {
+      branchCode = branch?.branchCode.trim() ?? "";
+      groupCode = branch?.groupCode.trim() ?? "";
+    });
   }
 
   @override
@@ -56,16 +58,24 @@ class _BranchPageState extends ConsumerState<BranchPage> {
           return Center(child: Text(failure.error));
         },
         data: (data) {
+          for (var element in data) {
+            if (element.branchCode == branchCode &&
+                element.groupCode == groupCode) {
+              element.isSelected = true;
+            } else {
+              element.isSelected = false;
+            }
+          }
+
           return BranchList(
             data: data,
             branchCode: branchCode,
             groupCode: groupCode,
             onTap: (element) async {
-              ref.invalidate(environmentProvider);
               await LocalStorage.saveBranch(element);
-              setState(() {
-                getBranch();
-              });
+              getBranch();
+              ref.invalidate(environmentProvider);
+              //setState(() {});
             },
           );
         },
@@ -90,7 +100,7 @@ class BranchList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isSelected = false;
+    //bool isSelected = false;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -117,30 +127,31 @@ class BranchList extends StatelessWidget {
                 );
               },
               itemBuilder: (context, Branch element) {
-                if (element.branchCode == branchCode &&
+                /*  if (element.branchCode == branchCode &&
                     element.groupCode == groupCode) {
                   isSelected = true;
                 } else {
                   isSelected = false;
-                }
+                } */
                 return Card(
                   shape: RoundedRectangleBorder(
                       side: BorderSide(
                         width: 4,
-                        color: isSelected ? Colors.grey : Colors.white,
+                        color: element.isSelected ? Colors.grey : Colors.white,
                       ),
                       borderRadius: BorderRadius.circular(20.0)),
                   child: ListTile(
-                      onTap: () {
-                        onTap(element);
-                      },
-                      title:
-                          Text("${element.branchCode} - ${element.branchName}"),
-                      subtitle:
-                          Text("${element.groupCode} - ${element.groupName}"),
-                      trailing: LogoWidget(
-                        logo: element.logo,
-                      )),
+                    onTap: () {
+                      onTap(element);
+                    },
+                    title:
+                        Text("${element.branchCode} - ${element.branchName}"),
+                    subtitle:
+                        Text("${element.groupCode} - ${element.groupName}"),
+                    trailing: LogoWidget(
+                      logo: element.logo,
+                    ),
+                  ),
                 );
               },
               useStickyGroupSeparators: true, // optional

@@ -34,6 +34,7 @@ import '../../features/address_inventory/pages/address_inventory_new_form_page/a
 import '../../features/address_inventory/pages/address_inventory_page/address_inventory_page.dart';
 import '../../features/picking_load/pages/picking_load_list_page/picking_load_list_page.dart';
 import '../../features/picking_load_v2/pages/picking_load_list_page/picking_load_v2_list_page.dart';
+import '../../features/purchase_invoice_check/pages/purchase_invoice_list/purchase_invoice_list_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authService = RouterNotifier(ref);
@@ -113,6 +114,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/saidacheck",
             builder: ((context, state) => const OutFlowDocCheckPage())),
+        GoRoute(
+            path: "/entradacheck",
+            builder: ((context, state) => const PurchaseInvoiceListPage())),
         GoRoute(
             path: "/separacao_rotas",
             builder: ((context, state) => const PickingRoutesListPage())),
