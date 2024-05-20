@@ -1,26 +1,37 @@
-
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
   width: 100%;
 } 
- 
-#flutter_target {
 
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
- 
-  width: 390px;
-  height: 844px;  
-  border-radius: 34px;
-  border: 1px solid #000;
-  overflow: hidden;
+@media (max-width: 600px) {
+  #flutter_target {
+    height: 844px;  
+    overflow: hidden;
+  }
 }
+
+@media (min-width: 600px) {
+  #flutter_target {
+
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+   
+    width: 390px;
+    height: 844px;  
+    border-radius: 14px;
+    border: 5px solid #000;
+    overflow: hidden;
+  }
+}
+
+
+
 .center { 
   margin: 0;
   position: absolute;
