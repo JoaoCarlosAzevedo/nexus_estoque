@@ -68,13 +68,13 @@ class PurchaseInvoiceRepository {
     try {
       var response =
           await dio.get('$url/conferencia_nf_entrada/lista/', queryParameters: {
-        /*    'dataIni': datetimeToYYYYMMDD(DateTime.now()),
+        'dataIni': datetimeToYYYYMMDD(DateTime.now()),
         'dataFim': datetimeToYYYYMMDD(DateTime.now()),
-        'filtro': 'DA3.DA3_COD is not null', */
-
+        'filtro': 'DA3.DA3_COD is not null',
+/*  
         'dataIni': '20240517',
         'dataFim': '20240517',
-        'filtro': 'DA3.DA3_COD is not null',
+        'filtro': 'DA3.DA3_COD is not null', */
       });
 
       if (response.statusCode != 200) {
