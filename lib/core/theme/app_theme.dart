@@ -153,7 +153,13 @@ class AppTheme {
         ),
       ),
       iconTheme: const IconThemeData(color: AppColors.grey),
-
+      /*    datePickerTheme: DatePickerThemeData(
+        dayBackgroundColor: MaterialStateProperty.all(AppColors.grey),
+        dayForegroundColor: MaterialStateProperty.all(AppColors.primaryGrey),
+        rangePickerBackgroundColor: Colors.grey.shade700,
+        rangePickerHeaderBackgroundColor: AppColors.grey,
+        rangeSelectionBackgroundColor: Colors.white,
+      ), */
       // Define the default `TextTheme`. Use this to specify the default
       // text styling for headlines, titles, bodies of text, and more.
       textTheme: customTextTheme(),

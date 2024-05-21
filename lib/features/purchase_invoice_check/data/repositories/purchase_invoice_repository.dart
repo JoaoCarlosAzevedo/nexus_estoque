@@ -8,14 +8,15 @@ import '../../../../core/error/failure.dart';
 import '../../../../core/http/config.dart';
 import '../../../../core/http/dio_config.dart';
 import '../../../../core/http/http_provider.dart';
-import '../../../../core/utils/datetime_formatter.dart';
+
 import '../model/purchase_invoice_model.dart';
 
-final purchaseInvoicesProvider =
-    FutureProvider.autoDispose<List<PurchaseInvoice>>((ref) async {
+final purchaseInvoicesProvider = FutureProvider.autoDispose
+    .family<List<PurchaseInvoice>, String>((ref, filter) async {
+  final param = filter.split("/");
   final result = await ref
       .read(purchaseInvoiceRepositoryProvider)
-      .fetchPurchaseInvoiceList();
+      .fetchPurchaseInvoiceList(param[0], param[1]);
   return result.fold((l) => Future.error('Error na API'), (r) => r);
 });
 
@@ -62,17 +63,17 @@ class PurchaseInvoiceRepository {
     }
   }
 
-  Future<Either<Failure, List<PurchaseInvoice>>>
-      fetchPurchaseInvoiceList() async {
+  Future<Either<Failure, List<PurchaseInvoice>>> fetchPurchaseInvoiceList(
+      String dayIni, String dayEnd) async {
     final String url = await Config.baseURL;
     try {
       var response =
           await dio.get('$url/conferencia_nf_entrada/lista/', queryParameters: {
-        'dataIni': datetimeToYYYYMMDD(DateTime.now()),
-        'dataFim': datetimeToYYYYMMDD(DateTime.now()),
+        'dataIni': dayIni,
+        'dataFim': dayEnd,
         'filtro': 'DA3.DA3_COD is not null',
 /*  
-        'dataIni': '20240517',
+        'dataIni': '20240517',datetimeToYYYYMMDD(DateTime.now())
         'dataFim': '20240517',
         'filtro': 'DA3.DA3_COD is not null', */
       });
