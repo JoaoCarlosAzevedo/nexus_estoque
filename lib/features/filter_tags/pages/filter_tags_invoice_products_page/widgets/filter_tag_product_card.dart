@@ -8,10 +8,10 @@ class FilterTagProductCard extends StatelessWidget {
   final GestureTapCallback onTap;
 
   const FilterTagProductCard({
-    Key? key,
+    super.key,
     required this.data,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

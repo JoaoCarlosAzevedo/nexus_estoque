@@ -50,7 +50,7 @@ class Pickingv2Repository {
       }
 
       return const Right("Created");
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.type.name == "connectTimeout") {
         return const Left(Failure("Tempo Excedido", ErrorType.timeout));
       }
@@ -83,7 +83,7 @@ class Pickingv2Repository {
       }).toList();
 
       return Right(listRoutes);
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.type.name == "connectTimeout") {
         return const Left(Failure("Tempo Excedido", ErrorType.timeout));
       }

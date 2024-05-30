@@ -38,7 +38,7 @@ class PickingRepository {
       }).toList();
 
       return Right(listProducts);
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.type.name == "connectTimeout") {
         return const Left(Failure("Tempo Excedido", ErrorType.timeout));
       }
@@ -63,7 +63,7 @@ class PickingRepository {
       }
 
       return const Right("Created");
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.type.name == "connectTimeout") {
         return const Left(Failure("Tempo Excedido", ErrorType.timeout));
       }

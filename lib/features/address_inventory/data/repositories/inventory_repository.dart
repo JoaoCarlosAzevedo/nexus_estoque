@@ -54,7 +54,7 @@ class InventoryRepository {
         return response.data["doc"];
       }
       throw const Failure("Nenhum registro encontrado.", ErrorType.validation);
-    } on DioError catch (_) {
+    } on DioException catch (_) {
       throw const Failure("Erro de conexão.", ErrorType.exception);
     }
   }
@@ -74,7 +74,7 @@ class InventoryRepository {
         return false;
       }
       throw const Failure("Nenhum registro encontrado.", ErrorType.validation);
-    } on DioError catch (_) {
+    } on DioException catch (_) {
       throw const Failure("Erro de conexão.", ErrorType.exception);
     }
   }
@@ -99,7 +99,7 @@ class InventoryRepository {
         return listProds;
       }
       throw const Failure("Nenhum registro encontrado.", ErrorType.validation);
-    } on DioError catch (_) {
+    } on DioException catch (_) {
       throw const Failure("Erro de conexão.", ErrorType.exception);
     }
   }
@@ -119,7 +119,7 @@ class InventoryRepository {
         return listProds;
       }
       throw const Failure("Nenhum registro encontrado.", ErrorType.validation);
-    } on DioError catch (_) {
+    } on DioException catch (_) {
       throw const Failure("Erro de conexão.", ErrorType.exception);
     }
   }

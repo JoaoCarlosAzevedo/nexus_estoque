@@ -14,10 +14,10 @@ import '../../../auth/providers/login_state.dart';
 
 class MenuPage extends ConsumerWidget {
   const MenuPage({
-    Key? key,
+    super.key,
     this.crossAxisCount = 2,
     this.childAspectRatio = 2,
-  }) : super(key: key);
+  });
 
   final int crossAxisCount;
   final double childAspectRatio;

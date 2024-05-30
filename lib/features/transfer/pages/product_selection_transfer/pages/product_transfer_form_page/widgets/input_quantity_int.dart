@@ -4,10 +4,10 @@ import 'package:nexus_estoque/core/theme/app_colors.dart';
 
 class InputQuantityInt extends StatefulWidget {
   const InputQuantityInt({
-    Key? key,
+    super.key,
     required this.controller,
     this.onSubmitted,
-  }) : super(key: key);
+  });
   final TextEditingController controller;
   final Function(String)? onSubmitted;
   @override

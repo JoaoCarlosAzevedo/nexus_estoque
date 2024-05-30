@@ -7,10 +7,10 @@ class PickingProductCardv2 extends StatelessWidget {
   final GestureTapCallback onTap;
 
   const PickingProductCardv2({
-    Key? key,
+    super.key,
     required this.data,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

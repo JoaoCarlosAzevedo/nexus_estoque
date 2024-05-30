@@ -46,9 +46,9 @@ final routerProvider = Provider<GoRouter>((ref) {
       redirect: (context, state) {
         //final isAuthenticated = authService.isAuthenticated;
         final loginState = ref.read(loginControllerProvider);
-        final isLoginRoute = state.subloc == '/login';
+        final isLoginRoute = state.matchedLocation == '/login';
 
-        if (state.subloc == "/configuracoes") {
+        if (state.matchedLocation == "/configuracoes") {
           return null;
         }
         if (loginState is LoginStateInitial) {
@@ -91,7 +91,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/enderecos/:armazem",
             builder: ((context, state) {
-              final param = state.params['armazem'];
+              final param = state.pathParameters['armazem'];
               return AddressSearchPage(
                 warehouse: param!,
                 data: const [],
@@ -142,8 +142,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
           path: "/inventario_endereco/consulta/:local/:endereco",
           builder: ((context, state) {
-            final endereco = state.params['endereco'];
-            final local = state.params['local'];
+            final endereco = state.pathParameters['endereco'];
+            final local = state.pathParameters['local'];
             return AddressInventoryListPage(
               address: endereco!,
               warehouse: local!,
@@ -153,7 +153,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
           path: "/inventario_endereco/form/:doc",
           builder: ((context, state) {
-            final queryParam = state.params['doc'];
+            final queryParam = state.pathParameters['doc'];
             final param =
                 state.extra as AddressBalanceModel; // AddressInventoryFormPage(
             return InventoryAddressNewFormPage(
@@ -165,7 +165,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/saldo_produto/:productCode",
             builder: ((context, state) {
-              final param = state.params['productCode'];
+              final param = state.pathParameters['productCode'];
               return ProductBalancePage(
                 productCode: param!,
               );
@@ -177,9 +177,9 @@ class DefaultPage extends StatelessWidget {
   final String title;
 
   const DefaultPage({
-    Key? key,
+    super.key,
     required this.title,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

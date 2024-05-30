@@ -33,7 +33,7 @@ class ProductTransferRepository {
       }
 
       return const Right("success");
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.response?.statusCode == 400) {
         return Left(Failure(e.response?.data["message"], ErrorType.validation));
       }

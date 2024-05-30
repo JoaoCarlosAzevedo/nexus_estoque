@@ -4,8 +4,7 @@ import 'package:nexus_estoque/core/theme/app_colors.dart';
 class ProgressIndicatorWidget extends StatelessWidget {
   final double value;
 
-  const ProgressIndicatorWidget({Key? key, required this.value})
-      : super(key: key);
+  const ProgressIndicatorWidget({super.key, required this.value});
 
   @override
   Widget build(BuildContext context) {

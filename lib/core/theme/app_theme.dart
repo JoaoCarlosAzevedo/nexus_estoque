@@ -14,10 +14,8 @@ class AppTheme {
       primaryColor: AppColors.secondaryGrey,
       colorScheme: const ColorScheme(
         primaryContainer: AppColors.primaryGrey,
-        background: AppColors.primaryGrey,
         brightness: Brightness.light,
         error: AppColors.primaryGrey,
-        onBackground: AppColors.primaryGrey,
         onError: AppColors.primaryGrey,
         onPrimary: AppColors.primaryGrey,
         onSecondary: AppColors.primaryGrey,
@@ -35,7 +33,7 @@ class AppTheme {
       ),
       // Define the default font family.
       radioTheme: RadioThemeData(
-          fillColor: MaterialStateProperty.all(AppColors.grey),
+          fillColor: WidgetStateProperty.all(AppColors.grey),
           visualDensity: VisualDensity.standard
           //overlayColor:
           ),
@@ -131,7 +129,7 @@ class AppTheme {
           //overlayColor: MaterialStateProperty.all(Colors.transparent),
           //iconSize: MaterialStateProperty.resolveWith((states) => 36),
           iconColor:
-              MaterialStateProperty.resolveWith((states) => AppColors.grey),
+              WidgetStateProperty.resolveWith((states) => AppColors.grey),
         ),
       ),
       //primaryIconTheme: IconThemeData(color: Colors.red),
@@ -171,7 +169,7 @@ class AppTheme {
           color: Colors.amberAccent,
         ), */
         overlayColor:
-            MaterialStateProperty.resolveWith((states) => AppColors.background),
+            WidgetStateProperty.resolveWith((states) => AppColors.background),
       ),
     );
   }

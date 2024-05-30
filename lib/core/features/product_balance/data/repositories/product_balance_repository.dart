@@ -46,7 +46,7 @@ class ProductBalanceRepositoryv2 {
       final productBalance = ProductBalanceModel.fromMap(response.data);
 
       return Right(productBalance);
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       log(e.type.name);
       return const Left(Failure("Server Error!", ErrorType.exception));
     }

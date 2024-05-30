@@ -37,7 +37,7 @@ class FilterTagRepository {
       }
 
       return Right(response.data['etiqueta']);
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.type.name == "connectTimeout") {
         return const Left(Failure("Tempo Excedido", ErrorType.timeout));
       }
@@ -60,7 +60,7 @@ class FilterTagRepository {
       final listRoutes = Load.fromMap(response.data);
 
       return Right(listRoutes);
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.type.name == "connectTimeout") {
         return const Left(Failure("Tempo Excedido", ErrorType.timeout));
       }
@@ -91,7 +91,7 @@ class FilterTagRepository {
       }).toList();
 
       return Right(listTags);
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.type.name == "connectTimeout") {
         return const Left(Failure("Tempo Excedido", ErrorType.timeout));
       }
@@ -118,7 +118,7 @@ class FilterTagRepository {
       }
 
       return Right(response.data['Message']);
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.type.name == "connectTimeout") {
         return const Left(Failure("Tempo Excedido", ErrorType.timeout));
       }

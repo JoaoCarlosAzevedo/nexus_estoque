@@ -8,9 +8,9 @@ class MenuCard extends StatelessWidget {
   final MenuItemInfo info;
 
   const MenuCard({
-    Key? key,
+    super.key,
     required this.info,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     return Card(

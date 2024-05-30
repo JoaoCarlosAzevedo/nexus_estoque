@@ -39,7 +39,7 @@ class WarehouseRepository {
       }).toList();
 
       return listWarehouses;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       log(e.type.name);
       return throw const Failure("Server Error!", ErrorType.exception);
     }

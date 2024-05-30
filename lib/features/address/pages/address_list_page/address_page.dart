@@ -160,10 +160,10 @@ class AddressCard extends StatelessWidget {
   final GestureTapCallback onTap;
 
   const AddressCard({
-    Key? key,
+    super.key,
     required this.data,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

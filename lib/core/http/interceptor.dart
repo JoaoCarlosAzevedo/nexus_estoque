@@ -50,7 +50,7 @@ class AppInterceptors extends Interceptor {
   }
 
   @override
-  void onError(DioError err, ErrorInterceptorHandler handler) async {
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
     log('ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}');
 
     if (err.response?.statusCode == 401) {
@@ -95,7 +95,7 @@ class AppInterceptors extends Interceptor {
         await _storage.delete(key: 'refresh_token');
         _ref.read(loginControllerProvider.notifier).logout();
       }
-    } on DioError catch (_) {
+    } on DioException catch (_) {
       //se o refreshtoken n deu certo, forca relogar;
       accessToken = null;
       await _storage.delete(key: 'refresh_token');

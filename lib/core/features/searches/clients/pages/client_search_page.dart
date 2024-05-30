@@ -66,9 +66,9 @@ class _ClientSearchPageState extends ConsumerState<ClientSearchPage> {
 
 class ListClients extends StatefulWidget {
   const ListClients({
-    Key? key,
+    super.key,
     required this.clients,
-  }) : super(key: key);
+  });
   final List<ClientModel> clients;
 
   @override

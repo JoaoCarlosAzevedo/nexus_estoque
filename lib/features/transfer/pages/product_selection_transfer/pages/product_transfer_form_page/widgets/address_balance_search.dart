@@ -5,9 +5,9 @@ class AddressBalance extends StatelessWidget {
   final List<AddressModel> addressBalance;
 
   const AddressBalance({
-    Key? key,
+    super.key,
     required this.addressBalance,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

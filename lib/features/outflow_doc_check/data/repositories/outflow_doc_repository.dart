@@ -36,7 +36,7 @@ class OutflowDocRepository {
             Failure("Nenhuma NF encontrada!", ErrorType.validation));
       }
       return Right(OutFlowDoc.fromMap(response.data));
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.type.name == "connectTimeout") {
         return const Left(Failure("Tempo Excedido", ErrorType.timeout));
       }
@@ -62,7 +62,7 @@ class OutflowDocRepository {
       }
 
       return Right(OutFlowDoc.fromMap(response.data));
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.type.name == "connectTimeout") {
         return const Left(Failure("Tempo Excedido", ErrorType.timeout));
       }

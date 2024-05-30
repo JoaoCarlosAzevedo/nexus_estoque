@@ -48,8 +48,8 @@ class BatchRepository {
       }).toList();
 
       return batches;
-    } on DioError catch (e) {
-      log(e.message);
+    } on DioException catch (e) {
+      log(e.message.toString());
       throw const Failure("Erro ao conectar!", ErrorType.exception);
     }
   }

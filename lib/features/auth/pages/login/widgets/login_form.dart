@@ -4,11 +4,11 @@ import 'package:rive/rive.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({
-    Key? key,
+    super.key,
     required this.userController,
     required this.passwordController,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   final TextEditingController userController;
   final TextEditingController passwordController;
@@ -99,9 +99,9 @@ class LoginForm extends StatelessWidget {
 
 class PasswordInput extends StatefulWidget {
   const PasswordInput({
-    Key? key,
+    super.key,
     required this.passwordController,
-  }) : super(key: key);
+  });
 
   final TextEditingController passwordController;
 

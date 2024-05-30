@@ -22,7 +22,7 @@ class RemoteEnvironmentRepository {
         _ref.read(urlProvider.notifier).state = url;
         return url;
       }
-    } on DioError catch (_) {
+    } on DioException catch (_) {
       _ref.read(urlProvider.notifier).state = '';
       return '';
     }

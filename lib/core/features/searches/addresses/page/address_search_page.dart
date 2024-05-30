@@ -150,8 +150,7 @@ class RemoteAddress extends ConsumerWidget {
 }
 
 class AddressList extends ConsumerStatefulWidget {
-  const AddressList({Key? key, required this.warehouse, required this.data})
-      : super(key: key);
+  const AddressList({super.key, required this.warehouse, required this.data});
   final String warehouse;
   final List<AddressModel> data;
 

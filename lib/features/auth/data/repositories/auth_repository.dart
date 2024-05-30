@@ -58,7 +58,7 @@ class AuthRepository {
         });
       }
       return const Left(Failure("Server Error!", ErrorType.exception));
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       log('auth ${e.type.name}');
 
       if (e.type.name == "connectTimeout") {
@@ -90,7 +90,7 @@ class AuthRepository {
 
       return Right(
           {'nome': response.data['nome'], 'cargo': response.data['cargo']});
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.type.name == "connectTimeout") {
         return const Left(Failure("Tempo Excedido", ErrorType.timeout));
       }

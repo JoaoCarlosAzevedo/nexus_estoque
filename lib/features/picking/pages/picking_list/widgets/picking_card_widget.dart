@@ -6,10 +6,10 @@ class PickingCard extends StatelessWidget {
   final GestureTapCallback onTap;
 
   const PickingCard({
-    Key? key,
+    super.key,
     required this.data,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

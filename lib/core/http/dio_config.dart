@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 class DioConfig {
   static BaseOptions get dioBaseOption => BaseOptions(
         //baseUrl: Config.baseURL!,
-        connectTimeout: 20000,
-        receiveTimeout: 20000,
+        connectTimeout: const Duration(seconds: 20),
+        receiveTimeout: const Duration(seconds: 20),
       );
 }

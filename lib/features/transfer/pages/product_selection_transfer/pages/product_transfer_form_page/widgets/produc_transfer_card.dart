@@ -6,9 +6,9 @@ import 'package:nexus_estoque/core/theme/app_colors.dart';
 class ProductHeaderCard extends StatelessWidget {
   final ProductBalanceModel productDetail;
   const ProductHeaderCard({
-    Key? key,
+    super.key,
     required this.productDetail,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

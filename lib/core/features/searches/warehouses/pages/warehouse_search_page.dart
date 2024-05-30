@@ -82,9 +82,9 @@ class _WarehouseSearchPageState extends ConsumerState<WarehouseSearchPage> {
 
 class AllWarehouses extends StatelessWidget {
   const AllWarehouses({
-    Key? key,
+    super.key,
     required this.warehouses,
-  }) : super(key: key);
+  });
   final List<WarehouseModel> warehouses;
 
   @override
@@ -118,9 +118,9 @@ class AllWarehouses extends StatelessWidget {
 
 class BalanceWarehouses extends StatelessWidget {
   const BalanceWarehouses({
-    Key? key,
+    super.key,
     required this.product,
-  }) : super(key: key);
+  });
   final ProductBalanceModel product;
 
   @override

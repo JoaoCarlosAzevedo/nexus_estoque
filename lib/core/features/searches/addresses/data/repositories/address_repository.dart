@@ -46,7 +46,7 @@ class AddressRepository {
 /*       return listAddress
           .where((element) => element.local.contains(warehouse))
           .toList(); */
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       log(e.type.name);
       throw const Failure("Server Error!", ErrorType.exception);
     }

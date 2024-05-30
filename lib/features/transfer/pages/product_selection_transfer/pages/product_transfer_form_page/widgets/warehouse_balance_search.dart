@@ -5,9 +5,9 @@ class WarehouseBalanceSearch extends StatelessWidget {
   final List<BalanceWarehouse> warehouseBalances;
 
   const WarehouseBalanceSearch({
-    Key? key,
+    super.key,
     required this.warehouseBalances,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

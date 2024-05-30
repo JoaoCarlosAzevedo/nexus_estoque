@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/http/config.dart';
@@ -39,8 +37,7 @@ class BranchRepository {
         return Branch.fromMap(item);
       }).toList();
       return listAddress;
-    } on DioError catch (e) {
-      log(e.message);
+    } on DioException catch (_) {
       throw const Failure("Server Error!", ErrorType.exception);
     }
   }

@@ -26,7 +26,7 @@ class FilterTagInvoiceCubit extends Cubit<FilterTagInvoiceState> {
   void deleteTag(FilterTagModel tag) async {
     emit(FilterTagInvoiceLoading());
 
-    final result = await repository.deleteTag(tag);
+    final _ = await repository.deleteTag(tag);
 
     fetchFilterTags(tag.nf, tag.serie);
 

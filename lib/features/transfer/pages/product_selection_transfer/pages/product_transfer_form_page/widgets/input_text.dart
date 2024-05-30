@@ -11,15 +11,14 @@ class InputText extends StatefulWidget {
   final bool autoFocus;
 
   const InputText(
-      {Key? key,
+      {super.key,
       required this.controller,
       required this.label,
       required this.enabled,
       required this.onPressed,
       required this.onSubmitted,
       required this.focus,
-      this.autoFocus = false})
-      : super(key: key);
+      this.autoFocus = false});
 
   @override
   State<InputText> createState() => _InputTextState();
