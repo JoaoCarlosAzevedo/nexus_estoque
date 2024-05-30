@@ -5,9 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:grouped_list/grouped_list.dart';
 
-import '../../../picking/data/model/picking_model.dart';
-
-import '../../../picking_load/pages/picking_load_list_page/cubit/picking_load_cubit.dart';
+import '../../data/model/pickingv2_model.dart';
+import '../picking_load_list_page/cubit/picking_loadv2_cubit.dart';
 import '../picking_load_produts_list_page/picking_load_v2_product_list_page.dart';
 
 class PickingLoadStreetsPagev2 extends ConsumerWidget {
@@ -15,11 +14,11 @@ class PickingLoadStreetsPagev2 extends ConsumerWidget {
       {required this.cubit, required this.load, super.key});
 
   final String load;
-  final PickingLoadCubit cubit;
+  final PickingLoadv2Cubit cubit;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    late List<PickingModel> products;
+    late List<Pickingv2Model> products;
 
     return Scaffold(
       appBar: AppBar(
@@ -34,9 +33,9 @@ class PickingLoadStreetsPagev2 extends ConsumerWidget {
       ),
       body: BlocProvider.value(
         value: cubit,
-        child: BlocListener<PickingLoadCubit, PickingLoadState>(
+        child: BlocListener<PickingLoadv2Cubit, PickingLoadv2State>(
           listener: (context, state) {
-            if (state is PickingLoadLoaded) {
+            if (state is PickingLoadv2Loaded) {
               if (state.loads.isEmpty) {
                 context.pop();
                 return;
@@ -49,20 +48,20 @@ class PickingLoadStreetsPagev2 extends ConsumerWidget {
               }
             }
           },
-          child: BlocBuilder<PickingLoadCubit, PickingLoadState>(
+          child: BlocBuilder<PickingLoadv2Cubit, PickingLoadv2State>(
             builder: (context, state) {
-              if (state is PickingLoadLoading) {
+              if (state is PickingLoadv2Loading) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
-              if (state is PickingLoadError) {
+              if (state is PickingLoadv2Error) {
                 return Center(
                   child: Text("Erro: ${state.error.error}"),
                 );
               }
 
-              if (state is PickingLoadLoaded) {
+              if (state is PickingLoadv2Loaded) {
                 final index = state.loads
                     .indexWhere((element) => element.codCarga == load);
                 if (index == -1) {
@@ -70,7 +69,7 @@ class PickingLoadStreetsPagev2 extends ConsumerWidget {
                     child: Text("Nenhum registro encontrado!"),
                   );
                 }
-                products = state.loads[index].produtos;
+                products = state.loads[index].pedidos;
                 final listOfStreets = <Map<String, String>>{};
                 final list = products
                     .map(

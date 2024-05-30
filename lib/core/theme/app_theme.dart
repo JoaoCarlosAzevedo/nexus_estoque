@@ -52,7 +52,6 @@ class AppTheme {
         elevation: 0,
         iconTheme: IconThemeData(color: AppColors.grey),
       ),
-
       cardColor: AppColors.background,
       cardTheme: CardTheme(
         color: AppColors.background,
@@ -62,7 +61,6 @@ class AppTheme {
         ),
       ),
       primaryTextTheme: customTextTheme(),
-
       inputDecorationTheme: InputDecorationTheme(
         errorStyle: const TextStyle(color: Colors.red),
         iconColor: AppColors.grey,
@@ -115,7 +113,6 @@ class AppTheme {
         prefixIconColor: AppColors.grey,
         suffixIconColor: AppColors.grey,
       ),
-
       listTileTheme: ListTileThemeData(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
@@ -165,6 +162,17 @@ class AppTheme {
       textTheme: customTextTheme(),
       progressIndicatorTheme: const ProgressIndicatorThemeData(
           circularTrackColor: AppColors.primaryGrey, color: AppColors.grey),
+      tabBarTheme: TabBarTheme(
+        dividerColor: AppColors.tertiaryGrey,
+        labelColor: AppColors.grey,
+        indicatorColor: AppColors.grey,
+        unselectedLabelColor: Colors.grey.shade400,
+        /*  indicator: BoxDecoration(
+          color: Colors.amberAccent,
+        ), */
+        overlayColor:
+            MaterialStateProperty.resolveWith((states) => AppColors.background),
+      ),
     );
   }
 

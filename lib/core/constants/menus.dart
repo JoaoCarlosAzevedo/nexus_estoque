@@ -86,5 +86,11 @@ final List menuItens = [
     icon: FontAwesomeIcons.clipboardCheck,
     color: Colors.red,
     route: 'inventario_endereco',
+  ),
+  MenuItemInfo(
+    title: "Etiquetas Filtro",
+    icon: FontAwesomeIcons.print,
+    color: Colors.red,
+    route: 'etiqueta_filtros',
   )
 ];

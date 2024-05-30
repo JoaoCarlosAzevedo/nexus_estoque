@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../picking_route/data/model/shipping_model.dart';
+import '../../../data/model/shippingv2_model.dart';
 
-class LoadCardWidget extends ConsumerWidget {
-  const LoadCardWidget(
+class Loadv2CardWidget extends ConsumerWidget {
+  const Loadv2CardWidget(
       {required this.load,
       required this.onTap,
       required this.onSearch,
       super.key});
-  final ShippingModel load;
+  final Shippingv2Model load;
   final void Function()? onTap;
   final void Function()? onSearch;
   @override
@@ -33,6 +33,7 @@ class LoadCardWidget extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (load.isFaturado()) const Text("Status: Faturado"),
               const Divider(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

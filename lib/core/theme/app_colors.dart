@@ -5,6 +5,7 @@ class AppColors {
   static const black = Color(0xFF000000);
   static const primaryGrey = Color(0xFFF2F3F2);
   static const secondaryGrey = Color(0xFF7C7C7C);
+  static const tertiaryGrey = Colors.grey;
   static const background = Color(0xFFFFFFFF);
 
   static const heading = Color(0xFF7C7C7C);

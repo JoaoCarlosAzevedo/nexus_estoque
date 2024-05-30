@@ -6,8 +6,9 @@ import 'package:go_router/go_router.dart';
 import 'package:grouped_list/grouped_list.dart';
 
 import '../../../picking/data/model/picking_model.dart';
-import '../../../picking/pages/picking_form/picking_form_modal.dart';
-import '../../../picking_load/pages/picking_load_list_page/cubit/picking_load_cubit.dart';
+import '../../data/model/pickingv2_model.dart';
+import '../picking_form_v2_page/picking_form_v2_modal.dart';
+import '../picking_load_list_page/cubit/picking_loadv2_cubit.dart';
 import 'widgets/picking_product_card_v2.dart';
 
 class PickingLoadProductListPage2 extends ConsumerStatefulWidget {
@@ -21,7 +22,7 @@ class PickingLoadProductListPage2 extends ConsumerStatefulWidget {
   final String warehouseStreets;
   final String department;
   final String load;
-  final PickingLoadCubit cubit;
+  final PickingLoadv2Cubit cubit;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -59,9 +60,9 @@ class _PickingLoadProductListPage2State
       ),
       body: BlocProvider.value(
         value: widget.cubit,
-        child: BlocListener<PickingLoadCubit, PickingLoadState>(
+        child: BlocListener<PickingLoadv2Cubit, PickingLoadv2State>(
           listener: (context, state) {
-            if (state is PickingLoadLoaded) {
+            if (state is PickingLoadv2Loaded) {
               if (state.loads.isEmpty) {
                 context.pop();
                 return;
@@ -73,7 +74,7 @@ class _PickingLoadProductListPage2State
                 return;
               }
 
-              final index2 = state.loads[index].produtos.indexWhere((element) =>
+              final index2 = state.loads[index].pedidos.indexWhere((element) =>
                   element.rua2 == widget.warehouseStreets &&
                   element.deposito == widget.department);
 
@@ -83,20 +84,20 @@ class _PickingLoadProductListPage2State
               }
             }
           },
-          child: BlocBuilder<PickingLoadCubit, PickingLoadState>(
+          child: BlocBuilder<PickingLoadv2Cubit, PickingLoadv2State>(
             builder: (context, state) {
-              if (state is PickingLoadLoading) {
+              if (state is PickingLoadv2Loading) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
-              if (state is PickingLoadError) {
+              if (state is PickingLoadv2Error) {
                 return Center(
                   child: Text("Erro: ${state.error.error}"),
                 );
               }
 
-              if (state is PickingLoadLoaded) {
+              if (state is PickingLoadv2Loaded) {
                 final index = state.loads
                     .indexWhere((element) => element.codCarga == widget.load);
                 if (index == -1) {
@@ -107,7 +108,7 @@ class _PickingLoadProductListPage2State
 
                 final loads = state.loads[index];
 
-                final products = loads.produtos
+                final products = loads.pedidos
                     .where((element) =>
                         element.rua2 == widget.warehouseStreets &&
                         element.deposito == widget.department)
@@ -121,7 +122,7 @@ class _PickingLoadProductListPage2State
                     child: Text("Nenhum produto nessa rua."),
                   );
                 }
-                return GroupedListView<PickingModel, String>(
+                return GroupedListView<Pickingv2Model, String>(
                   elements: products,
                   groupBy: (element) => element.predio,
                   groupSeparatorBuilder: (String groupByValue) {
@@ -139,14 +140,14 @@ class _PickingLoadProductListPage2State
                       ],
                     );
                   },
-                  itemBuilder: (context, PickingModel element) {
+                  itemBuilder: (context, Pickingv2Model element) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: PickingProductCardv2(
                         data: element,
                         onTap: () async {
                           final result =
-                              await PickingFormModal.show(context, element);
+                              await PickingFormv2v2Modal.show(context, element);
                           if (result == "ok") {
                             widget.cubit.fetchPickingLoads();
                           }

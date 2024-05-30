@@ -32,6 +32,7 @@ import '../../features/address_balance/data/model/address_balance_model.dart';
 import '../../features/address_inventory/pages/address_inventory_list/address_inventory_list_page.dart';
 import '../../features/address_inventory/pages/address_inventory_new_form_page/address_inventory_new_form_page.dart';
 import '../../features/address_inventory/pages/address_inventory_page/address_inventory_page.dart';
+import '../../features/filter_tags/pages/filter_tags_load_page/filter_tags_load_page.dart';
 import '../../features/picking_load/pages/picking_load_list_page/picking_load_list_page.dart';
 import '../../features/picking_load_v2/pages/picking_load_list_page/picking_load_v2_list_page.dart';
 import '../../features/purchase_invoice_check/pages/purchase_invoice_list/purchase_invoice_list_page.dart';
@@ -135,6 +136,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/inventario_endereco",
             builder: ((context, state) => const AddressInventoryPage())),
+        GoRoute(
+            path: "/etiqueta_filtros",
+            builder: ((context, state) => const FilterTagsLoadPage())),
         GoRoute(
           path: "/inventario_endereco/consulta/:local/:endereco",
           builder: ((context, state) {

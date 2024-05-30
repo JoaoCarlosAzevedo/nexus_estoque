@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:nexus_estoque/features/picking/data/model/picking_model.dart';
+
+import '../../../data/model/pickingv2_model.dart';
 
 class PickingProductCardv2 extends StatelessWidget {
-  final PickingModel data;
+  final Pickingv2Model data;
   final GestureTapCallback onTap;
 
   const PickingProductCardv2({
@@ -53,6 +54,10 @@ class PickingProductCardv2 extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text(
+                    "Status: ${data.status}",
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
                   const Divider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -71,7 +76,7 @@ class PickingProductCardv2 extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context).textTheme.titleMedium,
-                            )
+                            ),
                           ],
                         ),
                       ),
