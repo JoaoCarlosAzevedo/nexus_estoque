@@ -9,7 +9,8 @@ import '../filter_tags_invoice_products_page/filter_tags_invoice_products_page.d
 import 'cubit/filter_tag_load_cubit.dart';
 
 class FilterTagsLoadPage extends ConsumerStatefulWidget {
-  const FilterTagsLoadPage({super.key});
+  const FilterTagsLoadPage({super.key, required this.load});
+  final String load;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -18,8 +19,7 @@ class FilterTagsLoadPage extends ConsumerStatefulWidget {
 
 class _FilterTagsLoadPageState extends ConsumerState<FilterTagsLoadPage> {
   bool filterFaturado = false;
-  final TextEditingController controller =
-      TextEditingController(text: '092225');
+  final TextEditingController controller = TextEditingController();
 
   @override
   void dispose() {
@@ -31,8 +31,8 @@ class _FilterTagsLoadPageState extends ConsumerState<FilterTagsLoadPage> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     return BlocProvider(
-      create: (context) =>
-          FilterTagLoadCubit(ref.read(filterTagRepositoryProvider)),
+      create: (context) => FilterTagLoadCubit(
+          ref.read(filterTagRepositoryProvider), widget.load),
       child: BlocBuilder<FilterTagLoadCubit, FilterTagLoadState>(
         builder: (context, state) {
           return Scaffold(
@@ -41,9 +41,9 @@ class _FilterTagsLoadPageState extends ConsumerState<FilterTagsLoadPage> {
               actions: [
                 IconButton(
                     onPressed: () {
-                      context
-                          .read<FilterTagLoadCubit>()
-                          .fetchLoad(controller.text);
+                      context.read<FilterTagLoadCubit>().fetchLoad(
+                          widget.load.isEmpty ? controller.text : widget.load,
+                          "");
                     },
                     icon: const Icon(Icons.refresh))
               ],
@@ -63,17 +63,21 @@ class _FilterTagsLoadPageState extends ConsumerState<FilterTagsLoadPage> {
                               label: Text("Informe o número da carga..."),
                             ),
                             onSubmitted: ((value) {
-                              context
-                                  .read<FilterTagLoadCubit>()
-                                  .fetchLoad(controller.text);
+                              if (value.trim().isNotEmpty) {
+                                context
+                                    .read<FilterTagLoadCubit>()
+                                    .fetchLoad(controller.text, "");
+                              }
                             }),
                           ),
                           const Divider(),
                           ElevatedButton(
                             onPressed: () {
-                              context
-                                  .read<FilterTagLoadCubit>()
-                                  .fetchLoad(controller.text);
+                              if (controller.text.trim().isNotEmpty) {
+                                context
+                                    .read<FilterTagLoadCubit>()
+                                    .fetchLoad(controller.text, "");
+                              }
                             },
                             child: SizedBox(
                               height: height / 15,

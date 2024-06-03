@@ -117,7 +117,8 @@ class FilterTagRepository {
             Failure("Erro ao excluir etiqueta!", ErrorType.validation));
       }
 
-      return Right(response.data['Message']);
+      //return Right( response.data['message'] );
+      return const Right('deletado');
     } on DioException catch (e) {
       if (e.type.name == "connectTimeout") {
         return const Left(Failure("Tempo Excedido", ErrorType.timeout));

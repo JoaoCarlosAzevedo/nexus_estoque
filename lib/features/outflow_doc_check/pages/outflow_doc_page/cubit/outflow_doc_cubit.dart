@@ -63,60 +63,90 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
     }
   }
 
-  void checkProduct(String code) {
+  void checkProduct(String code) async {
     if (state is OutFlowDocLoaded) {
-      final aux = state as OutFlowDocLoaded;
-      int index = aux.docs.produtos.indexWhere((element) {
-        if (element.codigo.trim() == code.trim() &&
-            (element.checked < element.quantidade)) {
-          return true;
+      if (code.startsWith("ETIQ/")) {
+        final currState = state as OutFlowDocLoaded;
+        emit(OutFlowDocLoading());
+        //caso faz a coleta de uma etiqueta, busca os produtos;
+        final result = await repository.fetchFilterTag(code);
+        if (result.isRight()) {
+          result.fold((l) => null, (r) {
+            final products = r;
+            for (var productTag in products) {
+              int index = currState.docs.produtos.indexWhere((element) {
+                if (element.codigo.trim() == productTag.produto.trim()) {
+                  return true;
+                }
+                return false;
+              });
+
+              if (index >= 0) {
+                currState.docs.produtos[index].checked += productTag.quatidade;
+              }
+            }
+          });
+          AudioService.beep();
+          emit(OutFlowDocLoaded(currState.docs, null, false, code));
+        } else {
+          AudioService.error();
+          emit(OutFlowDocLoaded(currState.docs, null, true, code));
         }
-
-        if (code.trim().length >= 5) {
-          if (element.barcode.trim().contains(code.trim()) &&
+      } else {
+        final aux = state as OutFlowDocLoaded;
+        int index = aux.docs.produtos.indexWhere((element) {
+          if (element.codigo.trim() == code.trim() &&
               (element.checked < element.quantidade)) {
-            return true;
-          }
-
-          if (element.barcode2.trim().contains(code.trim()) &&
-              (element.checked < element.quantidade)) {
-            return true;
-          }
-        }
-
-        return false;
-      });
-
-      if (index == -1) {
-        index = aux.docs.produtos.indexWhere((element) {
-          if (element.codigo.trim() == code.trim()) {
             return true;
           }
 
           if (code.trim().length >= 5) {
-            if (element.barcode.trim().contains(code.trim())) {
+            if (element.barcode.trim().contains(code.trim()) &&
+                (element.checked < element.quantidade)) {
               return true;
             }
-          }
-          if (code.trim().length >= 5) {
-            if (element.barcode2.trim().contains(code.trim())) {
+
+            if (element.barcode2.trim().contains(code.trim()) &&
+                (element.checked < element.quantidade)) {
               return true;
             }
           }
 
           return false;
         });
-      }
 
-      emit(OutFlowDocLoading());
-      if (index >= 0) {
-        aux.docs.produtos[index].checked += 1;
+        if (index == -1) {
+          index = aux.docs.produtos.indexWhere((element) {
+            if (element.codigo.trim() == code.trim()) {
+              return true;
+            }
 
-        AudioService.beep();
-        emit(OutFlowDocLoaded(aux.docs, aux.docs.produtos[index], false, code));
-      } else {
-        AudioService.error();
-        emit(OutFlowDocLoaded(aux.docs, null, true, code));
+            if (code.trim().length >= 5) {
+              if (element.barcode.trim().contains(code.trim())) {
+                return true;
+              }
+            }
+            if (code.trim().length >= 5) {
+              if (element.barcode2.trim().contains(code.trim())) {
+                return true;
+              }
+            }
+
+            return false;
+          });
+        }
+
+        emit(OutFlowDocLoading());
+        if (index >= 0) {
+          aux.docs.produtos[index].checked += 1;
+
+          AudioService.beep();
+          emit(OutFlowDocLoaded(
+              aux.docs, aux.docs.produtos[index], false, code));
+        } else {
+          AudioService.error();
+          emit(OutFlowDocLoaded(aux.docs, null, true, code));
+        }
       }
     }
   }

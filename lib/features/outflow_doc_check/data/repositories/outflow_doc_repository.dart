@@ -7,6 +7,8 @@ import 'package:nexus_estoque/core/http/dio_config.dart';
 import 'package:nexus_estoque/core/http/http_provider.dart';
 import 'package:nexus_estoque/features/outflow_doc_check/data/model/outflow_doc_model.dart';
 
+import '../../../filter_tags/data/model/filter_tag_model.dart';
+
 final outflowDocRepository =
     Provider<OutflowDocRepository>((ref) => OutflowDocRepository(ref));
 
@@ -62,6 +64,36 @@ class OutflowDocRepository {
       }
 
       return Right(OutFlowDoc.fromMap(response.data));
+    } on DioException catch (e) {
+      if (e.type.name == "connectTimeout") {
+        return const Left(Failure("Tempo Excedido", ErrorType.timeout));
+      }
+      return const Left(Failure("Server Error!", ErrorType.exception));
+    }
+  }
+
+  Future<Either<Failure, List<FilterTagProductModel>>> fetchFilterTag(
+      String qrcode) async {
+    final String url = await Config.baseURL;
+    try {
+      var response = await dio.get('$url/etiqueta_filtro/', queryParameters: {
+        'qrcode': qrcode,
+      });
+
+      if (response.statusCode != 200) {
+        return const Left(Failure("Server Error!", ErrorType.exception));
+      }
+
+      if (response.data.isEmpty) {
+        return const Left(
+            Failure("Nenhum registro encontrado!", ErrorType.validation));
+      }
+
+      final listTags = (response.data as List).map((item) {
+        return FilterTagProductModel.fromMap(item);
+      }).toList();
+
+      return Right(listTags);
     } on DioException catch (e) {
       if (e.type.name == "connectTimeout") {
         return const Left(Failure("Tempo Excedido", ErrorType.timeout));

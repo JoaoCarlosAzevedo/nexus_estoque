@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nexus_estoque/core/services/bt_printer.dart';
 import 'package:nexus_estoque/core/services/secure_store.dart';
+
+import '../../bluetooth_printer/bluetooth_printer.dart';
 
 class EnvironmentConfigPage extends ConsumerStatefulWidget {
   const EnvironmentConfigPage({super.key});
@@ -56,6 +59,7 @@ class _EnvironmentConfigPageState extends ConsumerState<EnvironmentConfigPage> {
               const SizedBox(
                 height: 20,
               ),
+
               /*    futureProvider.when(
                 data: (data) {
                   return data.isNotEmpty
@@ -94,6 +98,39 @@ class _EnvironmentConfigPageState extends ConsumerState<EnvironmentConfigPage> {
                     ),
                   ),
                 ],
+              ),
+              /*  const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  //BluetoothPageModal.show(context);
+                  BluetoothPrinter.disconnect();
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Center(
+                    child: Text("Configuraçao Impressora "),
+                  ),
+                ),
+              ), */
+              const SizedBox(
+                height: 20,
+              ),
+
+              ElevatedButton(
+                onPressed: () async {
+                  await BluetoothPrinter.disconnect();
+
+                  // ignore: use_build_context_synchronously
+                  BluetoothPageModal.show(context);
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Center(
+                    child: Text("Configurar Impressora BT"),
+                  ),
+                ),
               ),
             ],
           ),

@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 
+import '../../../../../core/features/bluetooth_printer/bluetooth_printer.dart';
+
 class LoginForm extends StatelessWidget {
   const LoginForm({
     super.key,
@@ -27,10 +29,20 @@ class LoginForm extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      "assets/NexusIcon.png",
-                      fit: BoxFit.scaleDown,
-                      width: 40,
+                    GestureDetector(
+                      onLongPress: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const BluetoothPage(),
+                          ),
+                        );
+                      },
+                      child: Image.asset(
+                        "assets/NexusIcon.png",
+                        fit: BoxFit.scaleDown,
+                        width: 40,
+                      ),
                     ),
                     const SizedBox(
                       width: 10,
@@ -87,7 +99,7 @@ class LoginForm extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Text('Versão 1.1.4'),
+                const Text('Versão 1.1.5'),
               ],
             ),
           ),

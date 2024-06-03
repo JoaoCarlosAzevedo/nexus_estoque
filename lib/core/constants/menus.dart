@@ -91,6 +91,6 @@ final List menuItens = [
     title: "Etiquetas Filtro",
     icon: FontAwesomeIcons.print,
     color: Colors.red,
-    route: 'etiqueta_filtros',
+    route: 'etiqueta_filtros/0',
   )
 ];

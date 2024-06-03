@@ -7,8 +7,10 @@ import 'package:nexus_estoque/features/filter_tags/data/model/filter_tag_load_mo
 import '../filter_tags_load_page/cubit/filter_tag_load_cubit.dart';
 
 class FilterTagTab2 extends ConsumerStatefulWidget {
-  const FilterTagTab2({super.key, required this.invoice});
+  const FilterTagTab2(
+      {super.key, required this.invoice, required this.etiqueta});
   final Invoice invoice;
+  final String etiqueta;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _FilterTagTab2State();

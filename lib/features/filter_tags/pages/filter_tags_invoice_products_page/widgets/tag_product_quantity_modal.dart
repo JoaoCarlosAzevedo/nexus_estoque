@@ -63,7 +63,7 @@ class _FilterTagProductQuantityState extends State<FilterTagProductQuantity> {
                   style: Theme.of(context).textTheme.bodyLarge,
                   overflow: TextOverflow.ellipsis),
               const Divider(),
-              Text("Emabaldo: ${widget.produto.novaQuantidade}",
+              Text("Embalado: ${widget.produto.novaQuantidade}",
                   style: Theme.of(context).textTheme.displayMedium,
                   overflow: TextOverflow.ellipsis),
               const SizedBox(

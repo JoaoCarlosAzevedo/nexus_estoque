@@ -5,9 +5,7 @@ import 'package:nexus_estoque/features/picking_load_v2/pages/picking_load_list_p
 
 import '../../data/model/shippingv2_model.dart';
 import '../../data/repositories/pickingv2_repository.dart';
-import '../picking_load_streets_list_page/picking_load_v2_streets_page.dart';
-import '../picking_load_v2_order_page/picking_load_v2_order_page.dart';
-import 'widgets/load_v2_card_widget.dart';
+import 'widgets/picking_load_v2_list_widget.dart';
 
 class PickingLoadListPagev2 extends ConsumerStatefulWidget {
   const PickingLoadListPagev2({super.key});
@@ -19,6 +17,7 @@ class PickingLoadListPagev2 extends ConsumerStatefulWidget {
 
 class _PickingLoadListPagev2State extends ConsumerState<PickingLoadListPagev2> {
   bool filterFaturado = false;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -55,82 +54,17 @@ class _PickingLoadListPagev2State extends ConsumerState<PickingLoadListPagev2> {
                     }
 
                     if (state is PickingLoadv2Loaded) {
-                      List<Shippingv2Model> data = [];
+                      String load = "";
 
-                      if (filterFaturado) {
-                        data = state.loads
-                            .where((element) => element.isFaturado())
-                            .toList();
-                      } else {
-                        //data = state.loads;
-                        data = state.loads
-                            .where((element) => !element.isFaturado())
-                            .toList();
+                      if (state.load.isNotEmpty) {
+                        load = state.load;
                       }
 
-                      return Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              const Text("Filtra Faturados? "),
-                              const SizedBox(
-                                width: 15,
-                              ),
-                              Switch(
-                                value: filterFaturado,
-                                activeColor: Colors.green,
-                                inactiveTrackColor: Colors.grey,
-                                onChanged: (bool value) {
-                                  // This is called when the user toggles the switch.
-                                  setState(() {
-                                    filterFaturado = value;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: data.length,
-                              itemBuilder: (context, index) {
-                                return Loadv2CardWidget(
-                                  load: data[index],
-                                  onSearch: () {
-                                    final cubit =
-                                        context.read<PickingLoadv2Cubit>();
+                      List<Shippingv2Model> data = state.loads;
 
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            PickingLoadv2OrderStatusPage(
-                                          cubit: cubit,
-                                          load: data[index].codCarga,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  onTap: () {
-                                    final cubit =
-                                        context.read<PickingLoadv2Cubit>();
-
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            PickingLoadStreetsPagev2(
-                                          cubit: cubit,
-                                          load: data[index].codCarga,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                          ),
-                        ],
+                      return PickingLoadV2ListWidget(
+                        data: data,
+                        load: load,
                       );
                     }
                     return const Text("Initial");

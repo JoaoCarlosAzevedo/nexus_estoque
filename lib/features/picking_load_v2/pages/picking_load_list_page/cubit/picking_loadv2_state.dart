@@ -10,16 +10,25 @@ class PickingLoadv2State extends Equatable {
 
 class PickingLoadv2Initial extends PickingLoadv2State {}
 
+class PickingLoadv2Redirect extends PickingLoadv2State {
+  final String load;
+  const PickingLoadv2Redirect({
+    required this.load,
+  });
+}
+
 class PickingLoadv2Loading extends PickingLoadv2State {}
 
 class PickingLoadv2Loaded extends PickingLoadv2State {
   final List<Shippingv2Model> loads;
+  final String load;
 
-  const PickingLoadv2Loaded({required this.loads});
+  const PickingLoadv2Loaded({required this.loads, required this.load});
 }
 
 class PickingLoadv2Error extends PickingLoadv2State {
   final Failure error;
+
   const PickingLoadv2Error({
     required this.error,
   });

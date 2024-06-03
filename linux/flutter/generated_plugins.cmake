@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_linux
+  bluetooth_print_plus
   flutter_secure_storage_linux
   rive_common
 )

@@ -12,10 +12,15 @@ class FilterTagLoadInitial extends FilterTagLoadState {}
 class FilterTagLoadLoading extends FilterTagLoadState {}
 
 class FilterTagLoadLoaded extends FilterTagLoadState {
+  final String error;
+  final String etiqueta;
   final Load load;
   final Invoice? selectedInvoice;
   const FilterTagLoadLoaded(
-      {required this.load, required this.selectedInvoice});
+      {required this.load,
+      required this.selectedInvoice,
+      required this.error,
+      required this.etiqueta});
 }
 
 class FilterTagLoadError extends FilterTagLoadState {

@@ -137,8 +137,13 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: "/inventario_endereco",
             builder: ((context, state) => const AddressInventoryPage())),
         GoRoute(
-            path: "/etiqueta_filtros",
-            builder: ((context, state) => const FilterTagsLoadPage())),
+            path: "/etiqueta_filtros/:carga",
+            builder: ((context, state) {
+              final param = state.pathParameters['carga'];
+              return FilterTagsLoadPage(
+                load: param == '0' ? '' : param ?? '',
+              );
+            })),
         GoRoute(
           path: "/inventario_endereco/consulta/:local/:endereco",
           builder: ((context, state) {

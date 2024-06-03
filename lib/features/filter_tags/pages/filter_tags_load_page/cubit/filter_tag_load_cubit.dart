@@ -9,7 +9,12 @@ part 'filter_tag_load_state.dart';
 
 class FilterTagLoadCubit extends Cubit<FilterTagLoadState> {
   final FilterTagRepository repostiory;
-  FilterTagLoadCubit(this.repostiory) : super(FilterTagLoadInitial());
+  FilterTagLoadCubit(this.repostiory, String load)
+      : super(FilterTagLoadInitial()) {
+    if (load.isNotEmpty) {
+      fetchLoad(load, "");
+    }
+  }
 
   void setSelectedInvoice(Invoice invoice) {
     if (state is FilterTagLoadLoaded) {
@@ -17,7 +22,10 @@ class FilterTagLoadCubit extends Cubit<FilterTagLoadState> {
 
       emit(FilterTagLoadLoading());
       emit(FilterTagLoadLoaded(
-          load: currentState.load, selectedInvoice: invoice));
+          load: currentState.load,
+          selectedInvoice: invoice,
+          error: '',
+          etiqueta: ''));
     }
   }
 
@@ -30,6 +38,8 @@ class FilterTagLoadCubit extends Cubit<FilterTagLoadState> {
   void selectProduct(String barcode, double quantity, double add) {
     if (state is FilterTagLoadLoaded) {
       final currentState = state as FilterTagLoadLoaded;
+      String error = "";
+
       if (currentState.selectedInvoice != null) {
         int index = currentState.selectedInvoice!.itens.indexWhere((element) {
           if (element.codigo.trim() == barcode.trim()) {
@@ -50,15 +60,34 @@ class FilterTagLoadCubit extends Cubit<FilterTagLoadState> {
         });
         if (index != -1) {
           emit(FilterTagLoadLoading());
+          final nEtiq =
+              currentState.selectedInvoice!.itens[index].quantidaetiqueta;
+          final nNfQuant =
+              currentState.selectedInvoice!.itens[index].quantidade;
+          final nNovaqt =
+              currentState.selectedInvoice!.itens[index].novaQuantidade;
           if (add > 0) {
-            currentState.selectedInvoice!.itens[index].novaQuantidade += add;
+            //verifica se excedeu a quantidade da NF  / ja impresso
+            if (nNovaqt + add > (nNfQuant - nEtiq)) {
+              error = "Excedeu a quantidade da NF";
+            } else {
+              currentState.selectedInvoice!.itens[index].novaQuantidade += add;
+            }
           } else {
-            currentState.selectedInvoice!.itens[index].novaQuantidade =
-                quantity;
+            if (quantity > (nNfQuant - nEtiq)) {
+              error = "Excedeu a quantidade da NF";
+            } else {
+              currentState.selectedInvoice!.itens[index].novaQuantidade =
+                  quantity;
+            }
           }
-          emit(FilterTagLoadLoaded(
-              load: currentState.load,
-              selectedInvoice: currentState.selectedInvoice));
+          emit(
+            FilterTagLoadLoaded(
+                load: currentState.load,
+                selectedInvoice: currentState.selectedInvoice,
+                error: error,
+                etiqueta: ''),
+          );
         }
       }
     }
@@ -72,11 +101,7 @@ class FilterTagLoadCubit extends Cubit<FilterTagLoadState> {
         final result = await repostiory.postTag(currentState.selectedInvoice!);
         if (result.isRight()) {
           result.fold((l) => null, (r) {
-            /*  emit(
-              FilterTagLoadLoaded(
-                  load: currentState.load, selectedInvoice: null),
-            ); */
-            fetchLoad(currentState.load.carga);
+            fetchLoad(currentState.load.carga, r);
           });
         } else {
           result.fold((l) => emit(FilterTagLoadError(error: l)), (r) => null);
@@ -85,14 +110,15 @@ class FilterTagLoadCubit extends Cubit<FilterTagLoadState> {
     }
   }
 
-  void fetchLoad(String load) async {
+  void fetchLoad(String load, String etiqueta) async {
     emit(FilterTagLoadLoading());
 
     final result = await repostiory.fetchLoad(load);
     if (result.isRight()) {
       result.fold((l) => null, (r) {
         emit(
-          FilterTagLoadLoaded(load: r, selectedInvoice: null),
+          FilterTagLoadLoaded(
+              load: r, selectedInvoice: null, error: '', etiqueta: etiqueta),
         );
       });
     } else {

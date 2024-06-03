@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -53,7 +55,9 @@ class _PickingLoadProductListPage2State
         actions: [
           IconButton(
               onPressed: () {
-                widget.cubit.fetchPickingLoads();
+                //widget.cubit.fetchPickingLoads();
+                widget.cubit
+                    .fetchPickingLoadsDeparment(widget.load, widget.department);
               },
               icon: const Icon(Icons.refresh))
         ],
@@ -63,13 +67,17 @@ class _PickingLoadProductListPage2State
         child: BlocListener<PickingLoadv2Cubit, PickingLoadv2State>(
           listener: (context, state) {
             if (state is PickingLoadv2Loaded) {
+              //se for filtro e retornar vazio significa q liberou toda a carga de filtro
               if (state.loads.isEmpty) {
+                log("pop -> product_list -> state.loads empty");
                 context.pop();
                 return;
               }
+
               final index = state.loads
                   .indexWhere((element) => element.codCarga == widget.load);
               if (index == -1) {
+                log("pop -> product_list -> state.loads sem carga");
                 context.pop();
                 return;
               }
@@ -79,6 +87,7 @@ class _PickingLoadProductListPage2State
                   element.deposito == widget.department);
 
               if (index2 == -1) {
+                log("pop -> product_list -> state.loads sem dep/rua");
                 context.pop();
                 return;
               }
@@ -149,7 +158,8 @@ class _PickingLoadProductListPage2State
                           final result =
                               await PickingFormv2v2Modal.show(context, element);
                           if (result == "ok") {
-                            widget.cubit.fetchPickingLoads();
+                            widget.cubit.fetchPickingLoadsDeparment(
+                                widget.load, widget.department);
                           }
                         },
                       ),

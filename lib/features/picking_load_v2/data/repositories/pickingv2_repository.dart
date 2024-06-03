@@ -67,8 +67,9 @@ class Pickingv2Repository {
     final String url = await Config.baseURL;
     try {
       var response = await dio.get('$url/separacao/rota/', queryParameters: {
-        //'tipo': " DAK_DATA = '20240527' ",
-        'tipo': " DAK_COD IN ('095263','095224') ",
+        'tipo': "separacaov2",
+        //'tipo':
+        //    " DAK_COD IN ('095263','095224', '095303') and ( DC_ZZQTDAT < IIF(DC_QUANT<>0,DC_QUANT,DC_QTDORIG) ) ",
       });
 
       if (response.statusCode != 200) {

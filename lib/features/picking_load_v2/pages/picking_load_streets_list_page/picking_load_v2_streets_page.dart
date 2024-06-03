@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,12 +39,15 @@ class PickingLoadStreetsPagev2 extends ConsumerWidget {
           listener: (context, state) {
             if (state is PickingLoadv2Loaded) {
               if (state.loads.isEmpty) {
+                log("pop -> street_page -> state.loads empty");
                 context.pop();
                 return;
               }
+
               final index =
                   state.loads.indexWhere((element) => element.codCarga == load);
               if (index == -1) {
+                log("pop -> street_page -> state.loads sem carga");
                 context.pop();
                 return;
               }

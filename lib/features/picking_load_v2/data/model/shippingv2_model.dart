@@ -47,7 +47,7 @@ class Shippingv2Model {
 
   bool isFaturado() {
     for (var element in pedidos) {
-      if (element.status.contains("Faturado")) {
+      if (element.status.trim() == "Faturado") {
         return true;
       }
     }
