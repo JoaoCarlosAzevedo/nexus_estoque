@@ -6,13 +6,13 @@ import 'package:nexus_estoque/core/mixins/validation_mixin.dart';
 import 'package:nexus_estoque/core/services/audio_player.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity.dart';
 
-import '../../data/model/pickingv2_model.dart';
-import '../../data/repositories/pickingv2_repository.dart';
-import '../picking_load_produts_list_page/widgets/picking_product_card_v2.dart';
-import 'cubit/picking_save_v2_cubit.dart';
+import '../../../data/model/pickingv2_model.dart';
+import '../../../data/repositories/pickingv2_repository.dart';
+import '../../picking_form_v2_page/cubit/picking_save_v2_cubit.dart';
+import 'picking_product_grouped_card_v2.dart';
 
-class PickingFormv2v2Modal {
-  static Future<dynamic> show(context, Pickingv2Model picking) async {
+class PickingFormv2GroupedGroupedModal {
+  static Future<dynamic> show(context, LoadGroupProdModel picking) async {
     {
       final result = await showModalBottomSheet<dynamic>(
         context: context,
@@ -20,7 +20,7 @@ class PickingFormv2v2Modal {
         builder: (BuildContext context) {
           return FractionallySizedBox(
             heightFactor: 0.8,
-            child: PickingFormv2(
+            child: PickingFormv2Grouped(
               picking: picking,
             ),
           );
@@ -35,15 +35,16 @@ class PickingFormv2v2Modal {
   }
 }
 
-class PickingFormv2 extends ConsumerStatefulWidget {
-  const PickingFormv2({super.key, required this.picking});
-  final Pickingv2Model picking;
+class PickingFormv2Grouped extends ConsumerStatefulWidget {
+  const PickingFormv2Grouped({super.key, required this.picking});
+  final LoadGroupProdModel picking;
 
   @override
-  ConsumerState<PickingFormv2> createState() => _PickingFormv2State();
+  ConsumerState<PickingFormv2Grouped> createState() =>
+      _PickingFormv2GroupedState();
 }
 
-class _PickingFormv2State extends ConsumerState<PickingFormv2>
+class _PickingFormv2GroupedState extends ConsumerState<PickingFormv2Grouped>
     with ValidationMixi {
   final formKey = GlobalKey<FormState>();
 
@@ -66,7 +67,7 @@ class _PickingFormv2State extends ConsumerState<PickingFormv2>
 
   @override
   void initState() {
-    quantity = widget.picking.separado;
+    quantity = widget.picking.getTotalSeparado();
     quantityController.text = quantity.toString();
     quantityController.addListener(() {
       final double? newQuantity = double.tryParse(quantityController.text);
@@ -116,7 +117,7 @@ class _PickingFormv2State extends ConsumerState<PickingFormv2>
                     padding: const EdgeInsets.only(right: 16.0, left: 16.0),
                     child: Column(
                       children: [
-                        PickingProductCardv2(
+                        PickingProductGroupedCardv2(
                           data: widget.picking,
                           onTap: (() {}),
                         ),
@@ -199,8 +200,8 @@ class _PickingFormv2State extends ConsumerState<PickingFormv2>
         quantityController.text = quantity.toString();
       });
 
-      if (quantity == widget.picking.quantidade) {
-        //showValidation(context, "Quantidade superior ao reservado!");
+      if (quantity > widget.picking.getTotalQuantity()) {
+        showValidation(context, "Quantidade superior ao reservado!");
         submit(context);
         return;
       }
@@ -210,21 +211,21 @@ class _PickingFormv2State extends ConsumerState<PickingFormv2>
   bool validateData() {
     bool addressValid = false;
     bool productValid = false;
-    if (widget.picking.codEndereco.trim() == addressController.text.trim()) {
+    if (widget.picking.address.trim() == addressController.text.trim()) {
       addressValid = true;
     }
 
-    if (widget.picking.codigo.trim() == productController.text.trim()) {
+    if (widget.picking.product.trim() == productController.text.trim()) {
       productValid = true;
     }
 
     if (productController.text.trim().length >= 5) {
-      if (widget.picking.codigobarras
+      if (widget.picking.barcode1
           .trim()
           .contains(productController.text.trim())) {
         productValid = true;
       }
-      if (widget.picking.codigobarras2
+      if (widget.picking.barcode2
           .trim()
           .contains(productController.text.trim())) {
         productValid = true;
@@ -250,13 +251,16 @@ class _PickingFormv2State extends ConsumerState<PickingFormv2>
         return;
       }
 
-      if (quantity > widget.picking.quantidade) {
+      if (quantity > widget.picking.getTotalQuantity()) {
         showValidation(context, "Quantidade superior ao reservado!");
         return;
       }
 
-      widget.picking.separado = quantity;
-      context.read<PickingSavev2Cubit>().postPicking(widget.picking);
+      widget.picking.setQuantity(quantity);
+
+      context
+          .read<PickingSavev2Cubit>()
+          .postGroupedPicking(widget.picking.products);
     }
   }
 

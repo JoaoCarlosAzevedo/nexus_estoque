@@ -11,7 +11,7 @@ class BarcodeScannedCard extends StatelessWidget {
       required this.barcode,
       required this.notFound,
       required this.onClose});
-  final Produtos? product;
+  final GroupedProducts? product;
   final String? barcode;
   final bool notFound;
   final void Function()? onClose;
@@ -41,7 +41,7 @@ class BarcodeScannedCard extends StatelessWidget {
                   Card(
                     child: ListTile(
                       title: Text(
-                        "${product?.item} ${product?.descricao}",
+                        "${product?.descricao}",
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       subtitle: Column(
@@ -59,7 +59,7 @@ class BarcodeScannedCard extends StatelessWidget {
                             height: 5,
                           ),
                           Text(
-                            "SKU: ${product!.codigo}",
+                            "SKU: ${product!.produto}",
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                           const SizedBox(
@@ -68,11 +68,26 @@ class BarcodeScannedCard extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Text(
-                                "Conferido: ${product!.checked}",
+                              /*     Text(
+                                "Conferido: ${product!.getTotalConferido()} / ${product!.getTotalNF()}",
                                 style:
                                     Theme.of(context).textTheme.headlineMedium,
-                              ),
+                              ), */
+                              RichText(
+                                text: TextSpan(
+                                  text:
+                                      "Conferido: ${product!.getTotalConferido()} / ",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium,
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                        text: '${product!.getTotalNF()}',
+                                        style: const TextStyle(
+                                            color: Colors.green)),
+                                  ],
+                                ),
+                              )
                             ],
                           ),
                         ],
@@ -84,8 +99,8 @@ class BarcodeScannedCard extends StatelessWidget {
                               width: 30,
                               height: 30,
                               child: ProgressChart(
-                                  value:
-                                      product!.checked / product!.quantidade)),
+                                  value: product!.getTotalConferido() /
+                                      product!.getTotalNF())),
                         ],
                       ),
                     ),

@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_const
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
@@ -30,6 +32,25 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
 
   void postOutFlowDoc(OutFlowDoc doc) async {
     emit(OutFlowDocLoading());
+
+    for (final product in doc.produtos) {
+      if (product.checked < product.quantidade) {
+        emit(const OutFlowDocPostError(Failure(
+            "Existem produtos com conferência INFERIOR a NF",
+            ErrorType.validation)));
+
+        emit(OutFlowDocLoaded(doc, null, false, null));
+        return;
+      }
+
+      if (product.checked > product.quantidade) {
+        emit(const OutFlowDocPostError(Failure(
+            "Existem produtos com conferência SUPERIOR a NF",
+            ErrorType.validation)));
+        emit(OutFlowDocLoaded(doc, null, false, null));
+        return;
+      }
+    }
 
     final result = await repository.postOutFlowDoc(doc);
     if (result.isRight()) {
@@ -140,9 +161,23 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
         if (index >= 0) {
           aux.docs.produtos[index].checked += 1;
 
+          GroupedProducts grouped = GroupedProducts(
+              produto: aux.docs.produtos[index].codigo,
+              descricao: aux.docs.produtos[index].descricao,
+              barcode1: aux.docs.produtos[index].barcode,
+              barcode2: aux.docs.produtos[index].barcode2,
+              products: []);
+
+          final listProds = aux.docs.produtos
+              .where((elemente) =>
+                  elemente.codigo.trim() == grouped.produto.trim())
+              .toList();
+
+          grouped.products = listProds;
+
+          //TODO criar aqui
           AudioService.beep();
-          emit(OutFlowDocLoaded(
-              aux.docs, aux.docs.produtos[index], false, code));
+          emit(OutFlowDocLoaded(aux.docs, grouped, false, code));
         } else {
           AudioService.error();
           emit(OutFlowDocLoaded(aux.docs, null, true, code));

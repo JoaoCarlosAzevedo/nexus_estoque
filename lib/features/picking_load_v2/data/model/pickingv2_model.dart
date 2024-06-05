@@ -1,4 +1,8 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:nexus_estoque/core/utils/safe_array_search_extension.dart';
 
 class Pickingv2Model {
   String descricao;
@@ -127,5 +131,87 @@ class Pickingv2Model {
   @override
   String toString() {
     return 'Pickingv2Model(descricao: $descricao, separado: $separado, codigobarras: $codigobarras, quantidade: $quantidade, lote: $lote, codEndereco: $codEndereco, descEndereco: $descEndereco, pedido: $pedido, itemPedido: $itemPedido, local: $local, origem: $origem, um: $um, codigo: $codigo)';
+  }
+}
+
+class LoadGroupProdModel {
+  String load;
+  String local;
+  double quantity;
+  double quantityCheck;
+  String product;
+  String descrition;
+  String address;
+  String addressDescription;
+
+  String barcode1;
+  String barcode2;
+
+  String rua2;
+  String deposito;
+  String predio;
+  String nivel;
+  String apartamento;
+
+  List<Pickingv2Model> products;
+  LoadGroupProdModel({
+    required this.load,
+    required this.local,
+    required this.quantity,
+    required this.quantityCheck,
+    required this.product,
+    required this.descrition,
+    required this.address,
+    required this.addressDescription,
+    required this.barcode1,
+    required this.barcode2,
+    required this.rua2,
+    required this.deposito,
+    required this.predio,
+    required this.nivel,
+    required this.apartamento,
+    required this.products,
+  });
+
+  double getTotalQuantity() {
+    return products.fold(0.0, (a, b) => a + b.quantidade);
+  }
+
+  double getTotalSeparado() {
+    return products.fold(0.0, (a, b) => a + b.separado);
+  }
+
+  void setQuantity(double quantity) {
+    double saldo = quantity;
+
+    //zera antes de distribuir
+    for (var element in products) {
+      element.separado = 0;
+    }
+
+    for (var produto in products) {
+      if (produto.separado < produto.quantidade) {
+        //se a quantidade exceder a quantidade do primeiro pedido, preenche como completo e controla o saldo
+        if ((saldo + produto.separado) > produto.quantidade) {
+          double necessario = produto.quantidade - produto.separado;
+          produto.separado = produto.separado + necessario;
+          saldo = saldo - necessario;
+          //esse produto ja foi atendido
+          continue;
+        }
+
+        if (saldo > 0) {
+          produto.separado = produto.separado + saldo;
+          saldo = 0;
+        }
+      }
+    }
+    //se ainda sobrou saldo extra, joga no ultimo
+    if (saldo > 0) {
+      if (product.isNotEmpty) {
+        Pickingv2Model ultimPed = products.last;
+        ultimPed.separado = ultimPed.separado + saldo;
+      }
+    }
   }
 }

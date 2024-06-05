@@ -25,7 +25,7 @@ class OutFlowDocPostError extends OutFlowDocState {
 
 class OutFlowDocLoaded extends OutFlowDocState {
   final OutFlowDoc docs;
-  final Produtos? scannedProduct;
+  final GroupedProducts? scannedProduct;
   final bool notFound;
   final String? barcode;
   const OutFlowDocLoaded(

@@ -24,4 +24,18 @@ class PickingSavev2Cubit extends Cubit<PickingSavev2State> {
       result.fold((l) => emit(PickingSavev2Error(failure: l)), (r) => null);
     }
   }
+
+  void postGroupedPicking(List<Pickingv2Model> picking) async {
+    emit(PickingSavev2Loading());
+    final result = await pickingRepository.postGroupedPicking(picking);
+    if (result.isRight()) {
+      result.fold((l) => null, (r) {
+        emit(
+          PickingSavev2Loaded(),
+        );
+      });
+    } else {
+      result.fold((l) => emit(PickingSavev2Error(failure: l)), (r) => null);
+    }
+  }
 }

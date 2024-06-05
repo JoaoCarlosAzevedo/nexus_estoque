@@ -21,7 +21,7 @@ class OutFlowDocProductList extends ConsumerStatefulWidget {
   final Function(String)? onSubmitted;
   final void Function()? onSave;
   final OutFlowDoc document;
-  final Produtos? scannedProduct;
+  final GroupedProducts? scannedProduct;
   final bool notFound;
   final String? barcodeScanned;
   final void Function()? onClose;

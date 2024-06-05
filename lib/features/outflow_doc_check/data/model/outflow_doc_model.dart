@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class OutFlowDoc {
@@ -108,4 +109,27 @@ class Produtos {
 
   factory Produtos.fromJson(String source) =>
       Produtos.fromMap(json.decode(source));
+}
+
+class GroupedProducts {
+  String produto;
+  String descricao;
+  String barcode1;
+  String barcode2;
+  List<Produtos> products;
+  GroupedProducts({
+    required this.produto,
+    required this.descricao,
+    required this.barcode1,
+    required this.barcode2,
+    required this.products,
+  });
+
+  double getTotalConferido() {
+    return products.fold(0.0, (a, b) => a + b.checked);
+  }
+
+  double getTotalNF() {
+    return products.fold(0.0, (a, b) => a + b.quantidade);
+  }
 }

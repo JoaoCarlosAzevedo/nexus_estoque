@@ -9,6 +9,7 @@ import 'package:grouped_list/grouped_list.dart';
 
 import '../../data/model/pickingv2_model.dart';
 import '../picking_load_list_page/cubit/picking_loadv2_cubit.dart';
+import '../picking_load_produts_list_grouped_page/picking_load_v2_product_grouped_page.dart';
 import '../picking_load_produts_list_page/picking_load_v2_product_list_page.dart';
 
 class PickingLoadStreetsPagev2 extends ConsumerWidget {
@@ -121,11 +122,23 @@ class PickingLoadStreetsPagev2 extends ConsumerWidget {
                           title: Text('Rua: ${element['rua']}'),
                           leading: const FaIcon(FontAwesomeIcons.road),
                           onTap: () {
-                            Navigator.push(
+                            /*  Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
                                     PickingLoadProductListPage2(
+                                  warehouseStreets: element['rua'],
+                                  department: element['departamento'],
+                                  cubit: cubit,
+                                  load: load,
+                                ),
+                              ),
+                            ); */
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    PickingLoadProductListGroupedPage2(
                                   warehouseStreets: element['rua'],
                                   department: element['departamento'],
                                   cubit: cubit,
