@@ -10,8 +10,9 @@ part 'picking_loadv2_state.dart';
 
 class PickingLoadv2Cubit extends Cubit<PickingLoadv2State> {
   final Pickingv2Repository repository;
-  PickingLoadv2Cubit(this.repository) : super(PickingLoadv2Initial()) {
-    fetchPickingLoads();
+  PickingLoadv2Cubit(this.repository, String dateIni, String dateEnd)
+      : super(PickingLoadv2Initial()) {
+    fetchPickingLoads(dateIni, dateEnd);
   }
 
   void setRedirect(String load) {
@@ -21,19 +22,20 @@ class PickingLoadv2Cubit extends Cubit<PickingLoadv2State> {
     }
   }
 
-  void fetchPickingLoads() async {
+  void fetchPickingLoads(String dateIni, String dateEnd) async {
     emit(PickingLoadv2Loading());
 
-    final data = await repository.fetchPickingLoadList();
+    final data = await repository.fetchPickingLoadList(dateIni, dateEnd);
 
     data.fold((l) => emit(PickingLoadv2Error(error: l)),
         (r) => emit(PickingLoadv2Loaded(loads: r, load: '')));
   }
 
-  void fetchPickingLoadsDeparment(String load, String deparment) async {
+  void fetchPickingLoadsDeparment(
+      String load, String deparment, String dateIni, String dateEnd) async {
     emit(PickingLoadv2Loading());
 
-    final data = await repository.fetchPickingLoadList();
+    final data = await repository.fetchPickingLoadList(dateIni, dateEnd);
 
     data.fold((l) => emit(PickingLoadv2Error(error: l)), (r) {
       if (deparment.trim() == "03") {

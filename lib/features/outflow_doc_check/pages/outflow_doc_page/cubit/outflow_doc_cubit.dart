@@ -87,6 +87,7 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
   void checkProduct(String code) async {
     if (state is OutFlowDocLoaded) {
       if (code.startsWith("ETIQ/")) {
+        String error = "";
         final currState = state as OutFlowDocLoaded;
         emit(OutFlowDocLoading());
         //caso faz a coleta de uma etiqueta, busca os produtos;
@@ -104,9 +105,27 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
 
               if (index >= 0) {
                 currState.docs.produtos[index].checked += productTag.quatidade;
+                if (currState.docs.produtos[index].checked >
+                    currState.docs.produtos[index].quantidade) {
+                  error =
+                      "Produto: ${currState.docs.produtos[index].descricao.trim()} Conferido ${currState.docs.produtos[index].checked} de ${currState.docs.produtos[index].quantidade}";
+                  break;
+                }
+              } else {
+                error =
+                    "Produto ${productTag.descricao.trim()} não encontrado na NF";
+                break;
               }
             }
           });
+
+          if (error.isNotEmpty) {
+            AudioService.error();
+            emit(OutFlowDocError(Failure(error, ErrorType.validation)));
+            emit(OutFlowDocLoaded(currState.docs, null, false, code));
+            return;
+          }
+
           AudioService.beep();
           emit(OutFlowDocLoaded(currState.docs, null, false, code));
         } else {
@@ -175,7 +194,6 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
 
           grouped.products = listProds;
 
-          //TODO criar aqui
           AudioService.beep();
           emit(OutFlowDocLoaded(aux.docs, grouped, false, code));
         } else {

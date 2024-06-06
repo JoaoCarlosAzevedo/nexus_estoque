@@ -34,6 +34,7 @@ class Loadv2CardWidget extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (load.isFaturado()) const Text("Status: Faturado"),
+              if (load.descRota.isNotEmpty) Text("Rota: ${load.descRota}"),
               const Divider(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

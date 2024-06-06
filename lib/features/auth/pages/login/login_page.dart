@@ -7,6 +7,8 @@ import 'package:nexus_estoque/features/auth/pages/login/cubit/auth_cubit.dart';
 import 'package:nexus_estoque/features/auth/pages/login/widgets/login_form.dart';
 import 'package:nexus_estoque/features/auth/providers/login_controller_provider.dart';
 
+import '../../../../core/features/barcode_scanner/barcode_scanner.dart';
+
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
@@ -35,7 +37,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               context.push('/configuracoes');
             },
             icon: const Icon(Icons.settings),
-          )
+          ),
+          /*   IconButton(
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+                return const BarcodeScanerPage();
+              }));
+            },
+            icon: const Icon(Icons.barcode_reader),
+          ) */
         ],
       ),
       body: BlocListener<AuthCubit, AuthState>(

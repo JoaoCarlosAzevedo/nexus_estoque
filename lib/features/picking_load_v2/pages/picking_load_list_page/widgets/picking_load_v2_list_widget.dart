@@ -12,9 +12,15 @@ import 'load_v2_card_widget.dart';
 
 class PickingLoadV2ListWidget extends ConsumerStatefulWidget {
   const PickingLoadV2ListWidget(
-      {super.key, required this.data, required this.load});
+      {super.key,
+      required this.data,
+      required this.load,
+      required this.dateIni,
+      required this.dateEnd});
   final List<Shippingv2Model> data;
   final String load;
+  final String dateIni;
+  final String dateEnd;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _PickingLoadV2ListWidgetState();
@@ -96,6 +102,8 @@ class _PickingLoadV2ListWidgetState
                       builder: (context) => PickingLoadv2OrderStatusPage(
                         cubit: cubit,
                         load: loads[index].codCarga,
+                        dateIni: widget.dateIni,
+                        dateEnd: widget.dateEnd,
                       ),
                     ),
                   );
@@ -109,6 +117,8 @@ class _PickingLoadV2ListWidgetState
                       builder: (context) => PickingLoadStreetsPagev2(
                         cubit: cubit,
                         load: loads[index].codCarga,
+                        dateIni: widget.dateIni,
+                        dateEnd: widget.dateEnd,
                       ),
                     ),
                   );

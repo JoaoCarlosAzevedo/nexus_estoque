@@ -104,11 +104,14 @@ class Pickingv2Repository {
     }
   }
 
-  Future<Either<Failure, List<Shippingv2Model>>> fetchPickingLoadList() async {
+  Future<Either<Failure, List<Shippingv2Model>>> fetchPickingLoadList(
+      String dateIni, String dateEnd) async {
     final String url = await Config.baseURL;
     try {
       var response = await dio.get('$url/separacao/rota/', queryParameters: {
         'tipo': "separacaov2",
+        'data_ini': dateIni,
+        'data_fim': dateEnd,
         //'tipo':
         //    " DAK_COD IN ('095263','095224', '095303') and ( DC_ZZQTDAT < IIF(DC_QUANT<>0,DC_QUANT,DC_QTDORIG) ) ",
       });

@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 class Load {
   String filialcarga;
   String carga;
@@ -118,6 +120,22 @@ class Invoice {
     }
   }
 
+  Color? statusTags() {
+    final double quantityTags =
+        itens.fold(0, (sum, element) => sum + element.quantidaetiqueta);
+    final double quantityInvoice =
+        itens.fold(0, (sum, element) => sum + element.quantidade);
+
+    if (quantityTags >= quantityInvoice) {
+      return Colors.green;
+    }
+
+    if (quantityTags < quantityInvoice && quantityTags > 0) {
+      return Colors.blue;
+    }
+    return Colors.grey.shade300;
+  }
+
   factory Invoice.fromJson(String source) =>
       Invoice.fromMap(json.decode(source) as Map<String, dynamic>);
 }
@@ -173,6 +191,19 @@ class InvoiceProduct {
   }
 
   String toJson() => json.encode(toMap());
+
+  Color statusTags() {
+    if (quantidaetiqueta + novaQuantidade >= quantidade) {
+      return Colors.green;
+    }
+
+    if (quantidaetiqueta + novaQuantidade < quantidade &&
+        quantidaetiqueta + novaQuantidade > 0) {
+      return Colors.blue;
+    }
+
+    return Colors.grey.shade300;
+  }
 
   factory InvoiceProduct.fromJson(String source) =>
       InvoiceProduct.fromMap(json.decode(source) as Map<String, dynamic>);

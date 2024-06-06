@@ -148,9 +148,10 @@ class _FilterTagsLoadPageState extends ConsumerState<FilterTagsLoadPage> {
                                               );
                                               //FilterTagsLoadPage
                                             },
-                                            icon: const FaIcon(
+                                            icon: FaIcon(
                                               FontAwesomeIcons.boxOpen,
-                                              color: Colors.green,
+                                              color:
+                                                  data.nfs[index].statusTags(),
                                             ),
                                           )
                                         : FaIcon(

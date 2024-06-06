@@ -18,6 +18,8 @@ class PickingLoadProductListPage2 extends ConsumerStatefulWidget {
       {required this.warehouseStreets,
       required this.cubit,
       required this.load,
+      required this.dateIni,
+      required this.dateEnd,
       required this.department,
       super.key});
   //final List<PickingModel> products;
@@ -25,6 +27,8 @@ class PickingLoadProductListPage2 extends ConsumerStatefulWidget {
   final String department;
   final String load;
   final PickingLoadv2Cubit cubit;
+  final String dateIni;
+  final String dateEnd;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -55,9 +59,8 @@ class _PickingLoadProductListPage2State
         actions: [
           IconButton(
               onPressed: () {
-                //widget.cubit.fetchPickingLoads();
-                widget.cubit
-                    .fetchPickingLoadsDeparment(widget.load, widget.department);
+                widget.cubit.fetchPickingLoadsDeparment(widget.load,
+                    widget.department, widget.dateIni, widget.dateEnd);
               },
               icon: const Icon(Icons.refresh))
         ],
@@ -159,7 +162,10 @@ class _PickingLoadProductListPage2State
                               await PickingFormv2v2Modal.show(context, element);
                           if (result == "ok") {
                             widget.cubit.fetchPickingLoadsDeparment(
-                                widget.load, widget.department);
+                                widget.load,
+                                widget.department,
+                                widget.dateIni,
+                                widget.dateEnd);
                           }
                         },
                       ),

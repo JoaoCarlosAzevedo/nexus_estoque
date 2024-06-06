@@ -133,14 +133,6 @@ class _PurchaseInvoiceListPageState
     final DateTimeRange dateRange =
         DateTimeRange(start: DateTime.now(), end: DateTime.now());
 
-    /*  DateTimeRange? datePicked = await showDateRangePicker(
-      context: ctx,
-      initialDateRange: dateRange,
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
-      initialEntryMode: DatePickerEntryMode.calendar,
-    ); */
-
     final themeData = Theme.of(context);
     DateTimeRange? datePicked = await showDateRangePicker(
         context: context,

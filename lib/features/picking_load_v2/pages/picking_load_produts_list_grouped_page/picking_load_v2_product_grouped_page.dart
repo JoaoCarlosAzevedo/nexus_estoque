@@ -20,12 +20,16 @@ class PickingLoadProductListGroupedPage2 extends ConsumerStatefulWidget {
       {required this.warehouseStreets,
       required this.cubit,
       required this.load,
+      required this.dateIni,
+      required this.dateEnd,
       required this.department,
       super.key});
   //final List<PickingModel> products;
   final String warehouseStreets;
   final String department;
   final String load;
+  final String dateIni;
+  final String dateEnd;
   final PickingLoadv2Cubit cubit;
 
   @override
@@ -57,9 +61,8 @@ class _PickingLoadProductListGroupedPage2State
         actions: [
           IconButton(
               onPressed: () {
-                //widget.cubit.fetchPickingLoads();
-                widget.cubit
-                    .fetchPickingLoadsDeparment(widget.load, widget.department);
+                widget.cubit.fetchPickingLoadsDeparment(widget.load,
+                    widget.department, widget.dateIni, widget.dateEnd);
               },
               icon: const Icon(Icons.refresh))
         ],
@@ -200,7 +203,10 @@ class _PickingLoadProductListGroupedPage2State
                                   context, element);
                           if (result == "ok") {
                             widget.cubit.fetchPickingLoadsDeparment(
-                                widget.load, widget.department);
+                                widget.load,
+                                widget.department,
+                                widget.dateIni,
+                                widget.dateEnd);
                           }
                         },
                       ),

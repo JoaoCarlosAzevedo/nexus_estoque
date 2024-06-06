@@ -88,6 +88,15 @@ class FilterTagLoadCubit extends Cubit<FilterTagLoadState> {
                 error: error,
                 etiqueta: ''),
           );
+        } else {
+          emit(FilterTagLoadLoading());
+          emit(
+            FilterTagLoadLoaded(
+                load: currentState.load,
+                selectedInvoice: currentState.selectedInvoice,
+                error: "Produto não encontrado!",
+                etiqueta: ''),
+          );
         }
       }
     }

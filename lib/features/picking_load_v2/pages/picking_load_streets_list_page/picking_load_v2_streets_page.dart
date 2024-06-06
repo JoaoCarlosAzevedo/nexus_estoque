@@ -10,14 +10,20 @@ import 'package:grouped_list/grouped_list.dart';
 import '../../data/model/pickingv2_model.dart';
 import '../picking_load_list_page/cubit/picking_loadv2_cubit.dart';
 import '../picking_load_produts_list_grouped_page/picking_load_v2_product_grouped_page.dart';
-import '../picking_load_produts_list_page/picking_load_v2_product_list_page.dart';
 
 class PickingLoadStreetsPagev2 extends ConsumerWidget {
   const PickingLoadStreetsPagev2(
-      {required this.cubit, required this.load, super.key});
+      {required this.cubit,
+      required this.load,
+      super.key,
+      required this.dateIni,
+      required this.dateEnd});
 
   final String load;
   final PickingLoadv2Cubit cubit;
+
+  final String dateIni;
+  final String dateEnd;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,7 +35,7 @@ class PickingLoadStreetsPagev2 extends ConsumerWidget {
         actions: [
           IconButton(
               onPressed: () {
-                cubit.fetchPickingLoads();
+                cubit.fetchPickingLoads(dateIni, dateEnd);
               },
               icon: const Icon(Icons.refresh))
         ],
@@ -143,6 +149,8 @@ class PickingLoadStreetsPagev2 extends ConsumerWidget {
                                   department: element['departamento'],
                                   cubit: cubit,
                                   load: load,
+                                  dateIni: dateIni,
+                                  dateEnd: dateEnd,
                                 ),
                               ),
                             );

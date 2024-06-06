@@ -8,6 +8,8 @@ class Shippingv2Model {
   int qtdEntregas;
   String codTransp;
   String descTransp;
+  String codRota;
+  String descRota;
   List<Pickingv2Model> pedidos;
 
   Shippingv2Model({
@@ -16,6 +18,8 @@ class Shippingv2Model {
     required this.qtdEntregas,
     required this.codTransp,
     required this.descTransp,
+    required this.codRota,
+    required this.descRota,
     required this.pedidos,
   });
 
@@ -26,6 +30,8 @@ class Shippingv2Model {
       'QtdEntregas': qtdEntregas,
       'CodTransp': codTransp,
       'DescTransp': descTransp,
+      'codRota': codRota,
+      'descRota': descRota,
       'Pedidos': pedidos.map((x) => x.toMap()).toList(),
     };
   }
@@ -37,6 +43,8 @@ class Shippingv2Model {
       qtdEntregas: map['QtdEntregas']?.toInt() ?? 0,
       codTransp: map['CodTransp'] ?? '',
       descTransp: map['DescTransp'] ?? '',
+      codRota: map['codigoRota'] ?? '',
+      descRota: map['descRota'] ?? '',
       pedidos: List<Pickingv2Model>.from(
         map['Pedidos']?.map((x) => Pickingv2Model.fromMap(x)),
       ),

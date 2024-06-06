@@ -12,9 +12,15 @@ import '../picking_load_produts_list_page/widgets/picking_product_card_v2.dart';
 
 class PickingLoadv2OrderStatusPage extends ConsumerWidget {
   const PickingLoadv2OrderStatusPage(
-      {required this.cubit, required this.load, super.key});
+      {required this.cubit,
+      required this.load,
+      super.key,
+      required this.dateIni,
+      required this.dateEnd});
 
   final String load;
+  final String dateIni;
+  final String dateEnd;
   final PickingLoadv2Cubit cubit;
 
   @override
@@ -32,7 +38,7 @@ class PickingLoadv2OrderStatusPage extends ConsumerWidget {
         actions: [
           IconButton(
               onPressed: () {
-                cubit.fetchPickingLoads();
+                cubit.fetchPickingLoads(dateIni, dateEnd);
               },
               icon: const Icon(Icons.refresh))
         ],
