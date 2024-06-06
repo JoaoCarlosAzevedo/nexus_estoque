@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/features/filter_tags/pages/filter_tags_invoice_products_page/widgets/tag_product_quantity_modal.dart';
 
+import '../../../../core/widgets/form_input_no_keyboard_widget.dart';
 import '../../data/model/filter_tag_load_model.dart';
 import '../filter_tags_load_page/cubit/filter_tag_load_cubit.dart';
 import 'widgets/filter_tag_product_card.dart';
@@ -38,7 +39,19 @@ class _FilterTagTab1State extends ConsumerState<FilterTagTab1> {
           Text("Cliente: ${widget.invoice.nomeCliente}"),
           Padding(
             padding: const EdgeInsets.only(top: 16.0),
-            child: TextField(
+            child: NoKeyboardTextForm(
+              autoFocus: true,
+              focusNode: focus,
+              controller: controller,
+              label: "Cód. Barras ou SKU...",
+              onSubmitted: (value) {
+                context.read<FilterTagLoadCubit>().addProduct(value);
+                focus.requestFocus();
+                controller.clear();
+              },
+            ),
+
+            /*  TextField(
               autofocus: true,
               focusNode: focus,
               controller: controller,
@@ -48,9 +61,9 @@ class _FilterTagTab1State extends ConsumerState<FilterTagTab1> {
               onSubmitted: ((value) {
                 context.read<FilterTagLoadCubit>().addProduct(value);
                 focus.requestFocus();
-                controller.clear();
+                controller.clear(); 
               }),
-            ),
+            ), */
           ),
           Expanded(
             child: ListView.builder(

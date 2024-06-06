@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/features/purchase_invoice_check/pages/purchase_invoice_products/widge/purchase_quantity_widget.dart';
 
+import '../../../../core/widgets/form_input_no_keyboard_widget.dart';
 import '../../../address/pages/product_address_form_page/address_form_page.dart';
 import '../../data/model/purchase_invoice_model.dart';
 import '../../data/repositories/purchase_invoice_repository.dart';
@@ -80,7 +81,7 @@ class _PurchaseInvoiceProdutctsState
 
                             return Column(
                               children: [
-                                TextField(
+                                /*  TextField(
                                   autofocus: true,
                                   focusNode: focus,
                                   controller: controller,
@@ -93,7 +94,20 @@ class _PurchaseInvoiceProdutctsState
                                         .checkBarcode(value.trim());
                                     focus.requestFocus();
                                     controller.clear();
-                                  }),
+                                  }), 
+                                ), */
+                                NoKeyboardTextForm(
+                                  autoFocus: true,
+                                  focusNode: focus,
+                                  controller: controller,
+                                  label: "Cód. Barras ou SKU...",
+                                  onSubmitted: (value) {
+                                    context
+                                        .read<PurchaseInvoiceProductsCubit>()
+                                        .checkBarcode(value.trim());
+                                    focus.requestFocus();
+                                    controller.clear();
+                                  },
                                 ),
                                 PurchaseScannedCard(
                                   barcode: state.barcode,

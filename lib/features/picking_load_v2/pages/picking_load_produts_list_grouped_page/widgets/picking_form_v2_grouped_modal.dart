@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/mixins/validation_mixin.dart';
 import 'package:nexus_estoque/core/services/audio_player.dart';
+import 'package:nexus_estoque/core/widgets/form_input_no_keyboard_widget.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity.dart';
 
 import '../../../data/model/pickingv2_model.dart';
@@ -122,7 +123,7 @@ class _PickingFormv2GroupedState extends ConsumerState<PickingFormv2Grouped>
                           onTap: (() {}),
                         ),
                         const Divider(),
-                        TextFormField(
+                        /*   TextFormField(
                           enabled: true,
                           validator: isNotEmpty,
                           onEditingComplete: () {},
@@ -135,11 +136,20 @@ class _PickingFormv2GroupedState extends ConsumerState<PickingFormv2Grouped>
                             prefixIcon: Icon(Icons.qr_code),
                             label: Text("Confirmação do Endereço"),
                           ),
+                        ), */
+                        NoKeyboardTextForm(
+                          autoFocus: true,
+                          validator: isNotEmpty,
+                          onSubmitted: (value) {
+                            productFocus.requestFocus();
+                          },
+                          controller: addressController,
+                          label: "Confirmação do Endereço",
                         ),
                         const Divider(),
                         Text("Quant. Separada: $quantity"),
                         const Divider(),
-                        TextFormField(
+                        /*  TextFormField(
                           enabled: true,
                           focusNode: productFocus,
                           controller: productController,
@@ -154,6 +164,20 @@ class _PickingFormv2GroupedState extends ConsumerState<PickingFormv2Grouped>
                             prefixIcon: Icon(Icons.qr_code),
                             label: Text("Confirmação do Produto"),
                           ),
+                        ), */
+                        NoKeyboardTextForm(
+                          autoFocus: true,
+                          validator: isNotEmpty,
+                          focusNode: productFocus,
+                          onSubmitted: (value) {
+                            if (validateData()) {
+                              productFocus.requestFocus();
+                              increment(context, 1);
+                            }
+                            productController.clear();
+                          },
+                          controller: productController,
+                          label: "Confirmação do Produto",
                         ),
                         const Divider(),
                         InputQuantity(

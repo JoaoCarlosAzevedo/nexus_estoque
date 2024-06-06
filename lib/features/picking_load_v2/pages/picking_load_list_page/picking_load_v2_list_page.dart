@@ -58,6 +58,7 @@ class _PickingLoadListPagev2State extends ConsumerState<PickingLoadListPagev2> {
                 IconButton(
                     onPressed: () async {
                       await pickeDateRange(context);
+                      // ignore: use_build_context_synchronously
                       context
                           .read<PickingLoadv2Cubit>()
                           .fetchPickingLoads(dateIni, dateEnd);

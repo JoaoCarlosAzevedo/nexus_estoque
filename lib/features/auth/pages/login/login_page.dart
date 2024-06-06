@@ -7,8 +7,6 @@ import 'package:nexus_estoque/features/auth/pages/login/cubit/auth_cubit.dart';
 import 'package:nexus_estoque/features/auth/pages/login/widgets/login_form.dart';
 import 'package:nexus_estoque/features/auth/providers/login_controller_provider.dart';
 
-import '../../../../core/features/barcode_scanner/barcode_scanner.dart';
-
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 

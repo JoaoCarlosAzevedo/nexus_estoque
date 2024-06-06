@@ -7,6 +7,8 @@ import 'package:nexus_estoque/features/outflow_doc_check/pages/outflow_doc_page/
 import 'package:nexus_estoque/features/outflow_doc_check/pages/outflow_doc_page/widgets/product_card_widget.dart';
 import 'package:nexus_estoque/features/outflow_doc_check/pages/outflow_doc_page/widgets/quantity_modal_wiget.dart';
 
+import '../../../../../core/widgets/form_input_no_keyboard_widget.dart';
+
 class OutFlowDocProductList extends ConsumerStatefulWidget {
   const OutFlowDocProductList(
       {this.onSubmitted,
@@ -53,7 +55,18 @@ class _OutFlowDocProductListState extends ConsumerState<OutFlowDocProductList> {
           hasScrollBody: true,
           child: Column(
             children: [
-              TextField(
+              NoKeyboardTextForm(
+                autoFocus: true,
+                focusNode: focus,
+                controller: controller,
+                label: "Cód. Barras ou SKU...",
+                onSubmitted: (value) {
+                  widget.onSubmitted!(value);
+                  focus.requestFocus();
+                  controller.clear();
+                },
+              ),
+              /*  TextField(
                   autofocus: true,
                   focusNode: focus,
                   controller: controller,
@@ -64,7 +77,7 @@ class _OutFlowDocProductListState extends ConsumerState<OutFlowDocProductList> {
                     widget.onSubmitted!(value);
                     focus.requestFocus();
                     controller.clear();
-                  })),
+                  })), */
               BarcodeScannedCard(
                 barcode: widget.barcodeScanned,
                 notFound: widget.notFound,

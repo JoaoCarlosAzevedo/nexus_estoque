@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../widgets/form_input_no_keyboard_widget.dart';
+
 class BarcodeScanerPage extends ConsumerStatefulWidget {
   const BarcodeScanerPage({super.key});
 
@@ -16,6 +18,10 @@ class BarcodeScanerPage extends ConsumerStatefulWidget {
 class _BarcodeScanerPageState extends ConsumerState<BarcodeScanerPage> {
   final FocusNode _focusNode = FocusNode();
   final TextEditingController _controller = TextEditingController();
+
+  final FocusNode _focusNode2 = FocusNode();
+  final TextEditingController _controller2 = TextEditingController();
+
   bool showKeyboard = false;
   List<String> barcodes = [];
 
@@ -23,12 +29,13 @@ class _BarcodeScanerPageState extends ConsumerState<BarcodeScanerPage> {
   void dispose() {
     _focusNode.dispose();
     _controller.dispose();
+    _focusNode2.dispose();
+    _controller2.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    log("passei no build");
     return Scaffold(
       appBar: AppBar(
         title: Text('External Keyboard Input $showKeyboard'),
@@ -45,8 +52,7 @@ class _BarcodeScanerPageState extends ConsumerState<BarcodeScanerPage> {
                   showKeyboard ? TextInputType.text : TextInputType.none,
               textInputAction: TextInputAction.done,
               onSubmitted: (e) {
-                log(e);
-                barcodes.add(e);
+                log("Input 1: $e");
                 _controller.clear();
                 _focusNode.requestFocus();
                 setState(() {});
@@ -86,6 +92,19 @@ class _BarcodeScanerPageState extends ConsumerState<BarcodeScanerPage> {
               ),
             ),
             ...barcodes.map((e) => Text(e)),
+            const SizedBox(
+              height: 10,
+            ),
+            NoKeyboardTextForm(
+              label: 'Teste',
+              controller: _controller2,
+              focusNode: _focusNode2,
+              onSubmitted: (e) {
+                log("Input 2: $e");
+                _controller2.clear();
+                _focusNode2.requestFocus();
+              },
+            ),
           ],
         ),
       ),
