@@ -166,7 +166,6 @@ class _PickingFormv2State extends ConsumerState<PickingFormv2>
                           ),
                         ), */
                         NoKeyboardTextForm(
-                          validator: isNotEmpty,
                           autoFocus: true,
                           focusNode: productFocus,
                           controller: productController,

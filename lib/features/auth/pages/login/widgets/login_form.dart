@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 
+import '../../../../../core/features/barcode_scanner/barcode_scanner.dart';
 import '../../../../../core/features/bluetooth_printer/bluetooth_printer.dart';
 
 class LoginForm extends StatelessWidget {
@@ -31,12 +32,16 @@ class LoginForm extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onLongPress: () {
-                        Navigator.push(
+                        /*  Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const BluetoothPage(),
                           ),
-                        );
+                        ); */
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (ctx) {
+                          return const BarcodeScanerPage();
+                        }));
                       },
                       child: Image.asset(
                         "assets/NexusIcon.png",
@@ -99,7 +104,7 @@ class LoginForm extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Text('Versão 1.1.8'),
+                const Text('Versão 1.1.9'),
               ],
             ),
           ),

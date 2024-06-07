@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -10,6 +12,8 @@ class NoKeyboardTextForm extends StatefulWidget {
       this.onSubmitted,
       this.focusNode,
       this.autoFocus,
+      this.onChange,
+      this.prefixIcon,
       required this.controller});
   final String? Function(String?)? validator;
   final void Function()? onPressed;
@@ -18,6 +22,9 @@ class NoKeyboardTextForm extends StatefulWidget {
   final FocusNode? focusNode;
   final TextEditingController controller;
   final bool? autoFocus;
+  final bool? onChange;
+  final Widget? prefixIcon;
+
   @override
   State<NoKeyboardTextForm> createState() => _NoKeyboardTextFormState();
 }
@@ -30,16 +37,21 @@ class _NoKeyboardTextFormState extends State<NoKeyboardTextForm> {
       padding: const EdgeInsets.only(bottom: 20.0),
       child: TextFormField(
         autofocus: widget.autoFocus ?? true,
-        textInputAction: TextInputAction.next,
+        textInputAction: TextInputAction.done,
         keyboardType: showKeyboard ? TextInputType.text : TextInputType.none,
         focusNode: widget.focusNode,
         onFieldSubmitted: widget.onSubmitted,
         validator: widget.validator,
         controller: widget.controller,
+        onChanged: widget.onChange ?? false
+            ? !showKeyboard
+                ? widget.onSubmitted
+                : null
+            : null,
         decoration: InputDecoration(
           label: Text(widget.label),
           border: InputBorder.none,
-          prefixIcon: const Icon(Icons.qr_code),
+          prefixIcon: widget.prefixIcon ?? const Icon(Icons.qr_code),
           suffixIcon: IconButton(
             onPressed: () {
               setState(() {

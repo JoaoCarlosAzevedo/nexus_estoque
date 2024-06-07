@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,6 +20,7 @@ class _BarcodeScanerPageState extends ConsumerState<BarcodeScanerPage> {
   final TextEditingController _controller2 = TextEditingController();
 
   bool showKeyboard = false;
+  bool isOnChangeOn = false;
   List<String> barcodes = [];
 
   @override
@@ -38,13 +36,13 @@ class _BarcodeScanerPageState extends ConsumerState<BarcodeScanerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('External Keyboard Input $showKeyboard'),
+        title: const Text('Teste de Leitor'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(
+            /*  TextField(
               autofocus: true,
               controller: _controller,
               focusNode: _focusNode,
@@ -91,19 +89,61 @@ class _BarcodeScanerPageState extends ConsumerState<BarcodeScanerPage> {
                 label: const Text("Pesquisar"),
               ),
             ),
-            ...barcodes.map((e) => Text(e)),
+            ...barcodes.map((e) => Text(e)), */
+
             const SizedBox(
               height: 10,
             ),
             NoKeyboardTextForm(
-              label: 'Teste',
+              autoFocus: true,
+              label: 'Com onChange: true',
+              controller: _controller,
+              focusNode: _focusNode,
+              onChange: true,
+              onSubmitted: (e) {
+                setState(() {
+                  barcodes.add(e);
+                });
+
+                _controller.clear();
+                _focusNode.requestFocus();
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            NoKeyboardTextForm(
+              autoFocus: true,
+              label: 'com onChange: false',
               controller: _controller2,
               focusNode: _focusNode2,
+              onChange: false,
               onSubmitted: (e) {
-                log("Input 2: $e");
+                setState(() {
+                  barcodes.add(e);
+                });
+
                 _controller2.clear();
                 _focusNode2.requestFocus();
               },
+            ),
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    barcodes.clear();
+                  });
+                },
+                icon: const Icon(
+                  Icons.delete_forever,
+                  color: Colors.red,
+                )),
+            Expanded(
+              child: ListView.builder(
+                itemCount: barcodes.length,
+                itemBuilder: (context, index) {
+                  return Text("Codigo Lido: ${barcodes[index]}");
+                },
+              ),
             ),
           ],
         ),

@@ -167,7 +167,6 @@ class _PickingFormv2GroupedState extends ConsumerState<PickingFormv2Grouped>
                         ), */
                         NoKeyboardTextForm(
                           autoFocus: true,
-                          validator: isNotEmpty,
                           focusNode: productFocus,
                           onSubmitted: (value) {
                             if (validateData()) {
