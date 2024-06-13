@@ -87,10 +87,22 @@ final List menuItens = [
     color: Colors.red,
     route: 'inventario_endereco',
   ),
-  MenuItemInfo(
+  /* MenuItemInfo(
     title: "Etiquetas Filtro",
     icon: FontAwesomeIcons.print,
     color: Colors.red,
     route: 'etiqueta_filtros/0',
+  ), */
+  /*  MenuItemInfo(
+    title: "Etiquetas Filtro",
+    icon: FontAwesomeIcons.print,
+    color: Colors.red,
+    route: 'etiqueta_filtros_pedidos/0',
+  ), */
+  MenuItemInfo(
+    title: "Etiquetas Filtro",
+    icon: FontAwesomeIcons.print,
+    color: Colors.red,
+    route: 'etiqueta_filtros_cargas',
   )
 ];

@@ -45,8 +45,11 @@ class _PickingLoadV2ListWidgetState
             context.pop();
           },
           btnOkOnPress: () {
-            context.pushReplacement(
+            /*  context.pushReplacement(
               '/etiqueta_filtros/${widget.load}',
+            ); */
+            context.pushReplacement(
+              '/etiqueta_filtros_pedidos/${widget.load}',
             );
           },
         ).show();

@@ -33,6 +33,8 @@ import '../../features/address_inventory/pages/address_inventory_list/address_in
 import '../../features/address_inventory/pages/address_inventory_new_form_page/address_inventory_new_form_page.dart';
 import '../../features/address_inventory/pages/address_inventory_page/address_inventory_page.dart';
 import '../../features/filter_tags/pages/filter_tags_load_page/filter_tags_load_page.dart';
+import '../../features/filter_tags_orders/pages/filter_tags_load_list_page/filter_tags_order_load_list_page.dart';
+import '../../features/filter_tags_orders/pages/filter_tags_order_load_page/filter_tags_order_load_page.dart';
 import '../../features/picking_load/pages/picking_load_list_page/picking_load_list_page.dart';
 import '../../features/picking_load_v2/pages/picking_load_list_page/picking_load_v2_list_page.dart';
 import '../../features/purchase_invoice_check/pages/purchase_invoice_list/purchase_invoice_list_page.dart';
@@ -137,10 +139,21 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: "/inventario_endereco",
             builder: ((context, state) => const AddressInventoryPage())),
         GoRoute(
+            path: "/etiqueta_filtros_cargas",
+            builder: ((context, state) => const FilterTagsOrderLoadListPage())),
+        GoRoute(
             path: "/etiqueta_filtros/:carga",
             builder: ((context, state) {
               final param = state.pathParameters['carga'];
               return FilterTagsLoadPage(
+                load: param == '0' ? '' : param ?? '',
+              );
+            })),
+        GoRoute(
+            path: "/etiqueta_filtros_pedidos/:carga",
+            builder: ((context, state) {
+              final param = state.pathParameters['carga'];
+              return FilterTagsOrderLoadPage(
                 load: param == '0' ? '' : param ?? '',
               );
             })),
