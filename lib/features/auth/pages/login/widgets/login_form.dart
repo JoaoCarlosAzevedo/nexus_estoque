@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 
 import '../../../../../core/features/barcode_scanner/barcode_scanner.dart';
-import '../../../../../core/features/bluetooth_printer/bluetooth_printer.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({

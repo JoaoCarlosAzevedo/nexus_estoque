@@ -1,7 +1,7 @@
 PODS:
   - audioplayers_darwin (0.0.1):
     - Flutter
-  - bluetooth_print_plus (1.5.2):
+  - bluetooth_print_plus (2.0.1):
     - Flutter
     - GSDK (= 0.0.7)
   - Flutter (1.0.0)
@@ -47,7 +47,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
-  bluetooth_print_plus: 02a9243af59a8ded0b2a043f7d50b941acf4e815
+  bluetooth_print_plus: d5672aa0ab0cb6ecb24bb393ec2aa2059279c198
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_native_splash: edf599c81f74d093a4daf8e17bd7a018854bc778
   flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
@@ -55,6 +55,6 @@ SPEC CHECKSUMS:
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   rive_common: cbbac3192af00d7341f19dae2f26298e9e37d99e
 
-PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
+PODFILE CHECKSUM: 6e700dec67e6deac9b1c69bb14c49a2217a12d15
 
 COCOAPODS: 1.15.2

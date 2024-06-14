@@ -196,7 +196,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     setState(() {
                       _isLoading = true;
                     });
-                    final aux = await BluetoothPrinter.disconnect();
+                    final _ = await BluetoothPrinter.disconnect();
                   },
                 ),
               ),
