@@ -79,7 +79,7 @@ class _FilterTagsOrderProductsPageState
                       return;
                     }
 
-                    if (isPrinted) {
+                    if (isPrinted && state.selectedInvoice == null) {
                       // ignore: use_build_context_synchronously
                       Navigator.pop(context);
                       return;

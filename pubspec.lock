@@ -133,10 +133,10 @@ packages:
     dependency: "direct main"
     description:
       name: bluetooth_print_plus
-      sha256: "08045df28f003d8d154ab1c4edd802086ddcd6eb8a0a4319f5479ec2296a85e8"
+      sha256: "89b3a580c82310a78b022a12db0eb55bc3160223058f0602a53ec0da629eae48"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "1.5.2"
   boolean_selector:
     dependency: transitive
     description:

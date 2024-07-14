@@ -12,7 +12,7 @@ class FilterTagLoadOrderCubit extends Cubit<FilterTagLoadOrderState> {
   FilterTagLoadOrderCubit(this.repostiory, String load)
       : super(FilterTagLoadInitial()) {
     if (load.isNotEmpty) {
-      fetchLoad(load, "");
+      fetchLoad(load, "", null);
     }
   }
 
@@ -110,7 +110,7 @@ class FilterTagLoadOrderCubit extends Cubit<FilterTagLoadOrderState> {
         final result = await repostiory.postTag(currentState.selectedInvoice!);
         if (result.isRight()) {
           result.fold((l) => null, (r) {
-            fetchLoad(currentState.load.carga, r);
+            fetchLoad(currentState.load.carga, r, currentState.selectedInvoice);
           });
         } else {
           result.fold((l) => emit(FilterTagLoadError(error: l)), (r) => null);
@@ -119,16 +119,29 @@ class FilterTagLoadOrderCubit extends Cubit<FilterTagLoadOrderState> {
     }
   }
 
-  void fetchLoad(String load, String etiqueta) async {
+  void fetchLoad(String load, String etiqueta, Orders? order) async {
     emit(FilterTagLoadLoading());
 
     final result = await repostiory.fetchLoad(load);
     if (result.isRight()) {
       result.fold((l) => null, (r) {
-        emit(
-          FilterTagLoadLoaded(
-              load: r, selectedInvoice: null, error: '', etiqueta: etiqueta),
-        );
+        if (order != null) {
+          final newOrder = r.pedidos.firstWhere(
+            (element) => element.pedido.trim() == order.pedido.trim(),
+          );
+          emit(
+            FilterTagLoadLoaded(
+                load: r,
+                selectedInvoice: newOrder,
+                error: '',
+                etiqueta: etiqueta),
+          );
+        } else {
+          emit(
+            FilterTagLoadLoaded(
+                load: r, selectedInvoice: null, error: '', etiqueta: etiqueta),
+          );
+        }
       });
     } else {
       result.fold((l) => emit(FilterTagLoadError(error: l)), (r) => null);

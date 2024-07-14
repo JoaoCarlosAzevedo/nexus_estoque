@@ -45,7 +45,8 @@ class _FilterTagsOrderLoadPageState
                     onPressed: () {
                       context.read<FilterTagLoadOrderCubit>().fetchLoad(
                           widget.load.isEmpty ? controller.text : widget.load,
-                          "");
+                          "",
+                          null);
                     },
                     icon: const Icon(Icons.refresh))
               ],
@@ -69,7 +70,7 @@ class _FilterTagsOrderLoadPageState
                               if (value.trim().isNotEmpty) {
                                 context
                                     .read<FilterTagLoadOrderCubit>()
-                                    .fetchLoad(controller.text, "");
+                                    .fetchLoad(controller.text, "", null);
                               }
                             }),
                           ),
@@ -79,7 +80,7 @@ class _FilterTagsOrderLoadPageState
                               if (controller.text.trim().isNotEmpty) {
                                 context
                                     .read<FilterTagLoadOrderCubit>()
-                                    .fetchLoad(controller.text, "");
+                                    .fetchLoad(controller.text, "", null);
                               }
                             },
                             child: SizedBox(

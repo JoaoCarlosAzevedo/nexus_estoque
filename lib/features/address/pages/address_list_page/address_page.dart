@@ -41,6 +41,13 @@ class _AddressPageState extends ConsumerState<AddressPage> {
       appBar: AppBar(
         title: const Text("Endereçamento"),
         centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                context.read<ProductAddressCubit>().fetchProductAddress();
+              },
+              icon: const Icon(Icons.refresh))
+        ],
       ),
       body: RefreshIndicator(
         onRefresh: () async {

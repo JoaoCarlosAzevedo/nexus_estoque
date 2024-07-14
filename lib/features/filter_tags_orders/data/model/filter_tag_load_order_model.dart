@@ -144,6 +144,7 @@ class OrdersProduct {
   String codigobarras2;
   double quantidaetiqueta;
   double novaQuantidade;
+  String carga;
 
   OrdersProduct(
       {required this.codigo,
@@ -154,7 +155,8 @@ class OrdersProduct {
       required this.codigobarras,
       required this.codigobarras2,
       required this.novaQuantidade,
-      required this.quantidaetiqueta});
+      required this.quantidaetiqueta,
+      required this.carga});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -167,6 +169,7 @@ class OrdersProduct {
       'codigobarras2': codigobarras2,
       'quantidaetiqueta': quantidaetiqueta,
       'nova_quantidade': novaQuantidade,
+      'carga': carga,
     };
   }
 
@@ -181,6 +184,7 @@ class OrdersProduct {
       codigobarras2: map['codigobarras2'] ?? '',
       quantidaetiqueta: map['quantida_etiqueta'].toDouble() ?? 0.0,
       novaQuantidade: 0.0,
+      carga: map['carga'] ?? '',
     );
   }
 
