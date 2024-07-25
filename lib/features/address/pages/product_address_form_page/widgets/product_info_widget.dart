@@ -139,6 +139,11 @@ class ProductInfo extends StatelessWidget {
                 ),
               ],
             ),
+            if (productAddress.lote.trim().isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text("Lote: ${productAddress.lote}"),
+              ),
           ],
         ),
       ),

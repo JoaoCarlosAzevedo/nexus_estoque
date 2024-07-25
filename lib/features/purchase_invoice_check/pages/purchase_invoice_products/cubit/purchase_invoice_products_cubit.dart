@@ -46,11 +46,12 @@ class PurchaseInvoiceProductsCubit extends Cubit<PurchaseInvoiceProductsState> {
     }
   }
 
-  void checkBarcode(String barcode) {
+  void checkBarcodeOld(String barcode) {
     if (state is PurchaseInvoiceProductsLChecking) {
       final currentState = state as PurchaseInvoiceProductsLChecking;
       var currentInvoices = currentState.invoices;
       var found = false;
+
       for (var element in currentInvoices) {
         //busca apenas q nao foram completados
         int index = element.purchaseInvoiceProducts.indexWhere((element) {
@@ -111,6 +112,174 @@ class PurchaseInvoiceProductsCubit extends Cubit<PurchaseInvoiceProductsState> {
           break;
         }
       }
+      if (!found) {
+        //nao encontrou nenhum elemento
+        AudioService.error();
+        emit(
+          PurchaseInvoiceProductsLChecking(
+              show: true,
+              invoices: currentInvoices,
+              barcode: barcode.trim(),
+              product: null),
+        );
+      }
+    }
+  }
+
+  void setNewQuantity(double newQuantity, PurchaseInvoiceProduct product) {
+    if (state is PurchaseInvoiceProductsLChecking) {
+      final currentState = state as PurchaseInvoiceProductsLChecking;
+      var currentInvoices = currentState.invoices;
+      final products = currentInvoices
+          .fold(<PurchaseInvoiceProduct>[], (previousValue, element) {
+            previousValue.addAll(element.purchaseInvoiceProducts);
+            return previousValue;
+          })
+          .where((element) => element.codigo.trim() == product.codigo.trim())
+          .toList();
+
+      double saldo = newQuantity;
+      //zera antes de distribuir
+      for (var element in products) {
+        element.checked = 0;
+      }
+
+      for (var produto in products) {
+        if (produto.checked < produto.quantidade) {
+          //se a quantidade exceder a quantidade do primeiro pedido, preenche como completo e controla o saldo
+          if ((saldo + produto.checked) > produto.quantidade) {
+            double necessario = produto.quantidade - produto.checked;
+            produto.checked = produto.checked + necessario;
+            saldo = saldo - necessario;
+            //esse produto ja foi atendido
+            continue;
+          }
+
+          if (saldo > 0) {
+            produto.checked = produto.checked + saldo;
+            saldo = 0;
+          }
+        }
+      }
+      //se ainda sobrou saldo extra, joga no ultimo
+      if (saldo > 0) {
+        PurchaseInvoiceProduct ultimo = products.last;
+        ultimo.checked = ultimo.checked + saldo;
+      }
+
+      emit(PurchaseInvoiceProductsLoading());
+      emit(
+        PurchaseInvoiceProductsLChecking(
+            show: true,
+            invoices: currentInvoices,
+            barcode: currentState.barcode,
+            product: currentState.product),
+      );
+    }
+  }
+/* 
+  void setQuantity(double quantity) {
+    double saldo = quantity;
+
+    //zera antes de distribuir
+    for (var element in products) {
+      element.separado = 0;
+    }
+
+    for (var produto in products) {
+      if (produto.separado < produto.quantidade) {
+        //se a quantidade exceder a quantidade do primeiro pedido, preenche como completo e controla o saldo
+        if ((saldo + produto.separado) > produto.quantidade) {
+          double necessario = produto.quantidade - produto.separado;
+          produto.separado = produto.separado + necessario;
+          saldo = saldo - necessario;
+          //esse produto ja foi atendido
+          continue;
+        }
+
+        if (saldo > 0) {
+          produto.separado = produto.separado + saldo;
+          saldo = 0;
+        }
+      }
+    }
+    //se ainda sobrou saldo extra, joga no ultimo
+    if (saldo > 0) {
+      if (product.isNotEmpty) {
+        Pickingv2Model ultimPed = products.last;
+        ultimPed.separado = ultimPed.separado + saldo;
+      }
+    }
+  }
+   */
+
+  void checkBarcode(String barcode) {
+    if (state is PurchaseInvoiceProductsLChecking) {
+      final currentState = state as PurchaseInvoiceProductsLChecking;
+      var currentInvoices = currentState.invoices;
+      final products = currentInvoices.fold(<PurchaseInvoiceProduct>[],
+          (previousValue, element) {
+        previousValue.addAll(element.purchaseInvoiceProducts);
+        return previousValue;
+      });
+      var found = false;
+
+      int index = products.indexWhere((element) {
+        if (element.codigo.trim() == barcode.trim() &&
+            (element.checked < element.quantidade)) {
+          return true;
+        }
+
+        if (barcode.trim().length >= 5) {
+          if (element.barcode.trim().contains(barcode.trim()) &&
+              (element.checked < element.quantidade)) {
+            return true;
+          }
+
+          if (element.barcode2.trim().contains(barcode.trim()) &&
+              (element.checked < element.quantidade)) {
+            return true;
+          }
+        }
+        return false;
+      });
+
+      //caso nenhum tenha sido encotrado, procura sem o filtro de checagem completa
+      if (index == -1) {
+        index = products.indexWhere((element) {
+          if (element.codigo.trim() == barcode.trim()) {
+            return true;
+          }
+
+          if (barcode.trim().length >= 5) {
+            if (element.barcode.trim().contains(barcode.trim())) {
+              return true;
+            }
+          }
+          if (barcode.trim().length >= 5) {
+            if (element.barcode2.trim().contains(barcode.trim())) {
+              return true;
+            }
+          }
+
+          return false;
+        });
+      }
+
+      emit(PurchaseInvoiceProductsLoading());
+      if (index >= 0) {
+        products[index].checked += 1;
+        found = true;
+        AudioService.beep();
+        emit(
+          PurchaseInvoiceProductsLChecking(
+              show: true,
+              invoices: currentInvoices,
+              barcode: barcode.trim(),
+              product: products[index]),
+        );
+      }
+
       if (!found) {
         //nao encontrou nenhum elemento
         AudioService.error();

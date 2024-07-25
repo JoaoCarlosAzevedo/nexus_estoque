@@ -30,8 +30,12 @@ class AddressForm extends ConsumerStatefulWidget {
 
 class _AddressFormState extends ConsumerState<AddressForm> {
   final TextEditingController addressController = TextEditingController();
+  final TextEditingController batchController = TextEditingController();
   final TextEditingController quantityController =
       TextEditingController(text: '0');
+
+  final addressFocus = FocusNode();
+  final batchFocus = FocusNode();
 
   @override
   void initState() {
@@ -44,8 +48,11 @@ class _AddressFormState extends ConsumerState<AddressForm> {
 
   @override
   void dispose() {
+    addressFocus.dispose();
+    batchFocus.dispose();
     addressController.dispose();
     quantityController.dispose();
+    batchController.dispose();
     super.dispose();
   }
 
@@ -117,14 +124,48 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                             onPressed: () async {
                               addressSearchPage();
                             },
-                            onSubmitted: () {},
-                            focus: FocusNode(),
+                            onSubmitted: () {
+                              batchFocus.requestFocus();
+                            },
+                            focus: addressFocus,
                           ),
+                          const Divider(),
+                          if (widget.productAddress.lote.trim().isNotEmpty)
+                            TextField(
+                              enabled: true,
+                              controller: batchController,
+                              focusNode: batchFocus,
+                              onSubmitted: (e) {},
+                              decoration: const InputDecoration(
+                                label: Text("Lote"),
+                                border: InputBorder.none,
+                                prefixIcon: Icon(Icons.qr_code),
+                              ),
+                            ),
                           const Divider(),
                           InputQuantity(controller: quantityController),
                           const Divider(),
                           ElevatedButton(
                             onPressed: () {
+                              if (widget.productAddress.lote
+                                  .trim()
+                                  .isNotEmpty) {
+                                if (batchController.text.trim().isEmpty) {
+                                  AwesomeDialog(
+                                          context: context,
+                                          dialogType: DialogType.error,
+                                          animType: AnimType.rightSlide,
+                                          //title: 'Alerta',
+                                          desc: "Campo Lote não preenchido!",
+                                          //btnCancelOnPress: () {},
+                                          btnOkOnPress: () {},
+                                          btnOkColor:
+                                              Theme.of(context).primaryColor)
+                                      .show();
+                                  return;
+                                }
+                              }
+
                               final cubit =
                                   BlocProvider.of<ProductAddressFormCubit>(
                                       context);
@@ -132,7 +173,8 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                                   widget.productAddress.codigo,
                                   widget.productAddress.numseq,
                                   addressController.text,
-                                  double.parse(quantityController.text));
+                                  double.parse(quantityController.text),
+                                  batchController.text);
                             },
                             child: const SizedBox(
                               width: double.infinity,

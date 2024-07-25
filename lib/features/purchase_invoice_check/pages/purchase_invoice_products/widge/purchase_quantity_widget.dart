@@ -62,9 +62,9 @@ class _PurchaseCheckQuantityState extends State<PurchaseCheckQuantity> {
                   style: Theme.of(context).textTheme.bodyLarge,
                   overflow: TextOverflow.ellipsis),
               const Divider(),
-              Text("Conferido: ${widget.produto.checked}",
+              /*   Text("Conferido: ${widget.produto.checked}",
                   style: Theme.of(context).textTheme.displayMedium,
-                  overflow: TextOverflow.ellipsis),
+                  overflow: TextOverflow.ellipsis), */
               const SizedBox(
                 height: 10,
               ),

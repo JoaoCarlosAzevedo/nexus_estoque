@@ -8,8 +8,8 @@ import '../../../address/pages/product_address_form_page/address_form_page.dart'
 import '../../data/model/purchase_invoice_model.dart';
 import '../../data/repositories/purchase_invoice_repository.dart';
 import 'cubit/purchase_invoice_products_cubit.dart';
+import 'widge/grouped_product_purchase_scanned_widget.dart';
 import 'widge/invoice_product_widget.dart';
-import 'widge/purchase_scanned_product_widget.dart';
 
 class PurchaseInvoiceProdutcts extends ConsumerStatefulWidget {
   const PurchaseInvoiceProdutcts({required this.invoices, super.key});
@@ -109,21 +109,25 @@ class _PurchaseInvoiceProdutctsState
                                     controller.clear();
                                   },
                                 ),
-                                PurchaseScannedCard(
+                                GroupedProductScannedCard(
                                   barcode: state.barcode,
+                                  listInvoices: state.invoices,
                                   notFound: state.show,
                                   product: state.product,
                                   onPressed: () async {
                                     final double? newQuantity =
                                         await PurchasePurchaseCheckQuantityModal
-                                            .show(context, state.product!,
-                                                state.product!.checked);
+                                            .show(context, state.product!, 0.0);
                                     if (newQuantity != null) {
+                                      /*    context
+                                          .read<PurchaseInvoiceProductsCubit>()
+                                          .setProductQuantity(
+                                              state.product!, newQuantity); */
                                       // ignore: use_build_context_synchronously
                                       context
                                           .read<PurchaseInvoiceProductsCubit>()
-                                          .setProductQuantity(
-                                              state.product!, newQuantity);
+                                          .setNewQuantity(
+                                              newQuantity, state.product!);
                                     }
                                   },
                                   onClose: () {

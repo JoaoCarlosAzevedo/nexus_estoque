@@ -76,8 +76,8 @@ class _OutFlowDocCheckPageState extends ConsumerState<OutFlowDocCheckPage> {
                         if (value.trim().isNotEmpty) {
                           context.read<OutFlowDocCubit>().checkProduct(value);
                         }
-                      },
-                      onSave: () {
+                      }, 
+                      onSave: () { 
                         context
                             .read<OutFlowDocCubit>()
                             .postOutFlowDoc(state.docs);

@@ -251,13 +251,27 @@ class AddressCard extends StatelessWidget {
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
                             Text(
-                              invoiceOrBatch(data.notafiscal, data.lote),
+                              'NF ${data.notafiscal}',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
                           ],
-                        )
+                        ),
+                        if (data.lote.trim().isNotEmpty)
+                          RichText(
+                            text: TextSpan(
+                              text: "LOTE: ",
+                              style: Theme.of(context).textTheme.bodySmall,
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: data.lote,
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
+                                ),
+                              ],
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -297,22 +311,6 @@ class AddressCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String invoiceOrBatch(String invoice, String batch) {
-    if (invoice.isEmpty && batch.isEmpty) {
-      return '';
-    }
-
-    if (invoice.isEmpty) {
-      return "Lote: $batch";
-    }
-
-    if (batch.isEmpty) {
-      return "NF: $invoice";
-    }
-
-    return '';
   }
 }
 

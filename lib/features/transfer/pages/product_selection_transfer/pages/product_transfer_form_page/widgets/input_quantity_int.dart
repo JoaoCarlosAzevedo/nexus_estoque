@@ -29,6 +29,7 @@ class _InputQuantityIntState extends State<InputQuantityInt> {
         IconButton(
           onPressed: () {
             _setValue(-1.0);
+            setState(() {});
           },
           iconSize: 30,
           icon: const Icon(
@@ -67,6 +68,7 @@ class _InputQuantityIntState extends State<InputQuantityInt> {
           iconSize: 30,
           onPressed: () {
             _setValue(1.0);
+            setState(() {});
           },
           icon: const Icon(
             Icons.add,

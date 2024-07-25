@@ -8,7 +8,7 @@ import 'package:nexus_estoque/features/picking/data/model/picking_model.dart';
 import 'package:nexus_estoque/features/picking/data/repositories/picking_repository.dart';
 import 'package:nexus_estoque/features/picking/pages/picking_form/cubit/picking_save_cubit.dart';
 import 'package:nexus_estoque/features/picking/pages/picking_products_list/widgets/picking_product_card_wigdet.dart';
-import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity.dart';
+import '../../../transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity_int.dart';
 
 class PickingFormModal {
   static Future<dynamic> show(context, PickingModel picking) async {
@@ -58,6 +58,7 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
     addressController.dispose();
     productFocus.dispose();
     quantityController.dispose();
+    quantityController.removeListener(_quantityListener);
 
     super.dispose();
   }
@@ -66,16 +67,18 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
   void initState() {
     quantity = widget.picking.separado;
     quantityController.text = quantity.toString();
-    quantityController.addListener(() {
-      final double? newQuantity = double.tryParse(quantityController.text);
-
-      if (newQuantity != null) {
-        setState(() {
-          quantity = newQuantity;
-        });
-      }
-    });
+    quantityController.addListener(_quantityListener);
     super.initState();
+  }
+
+  void _quantityListener() {
+    final double? newQuantity = double.tryParse(quantityController.text);
+
+    if (newQuantity != null && newQuantity != quantity) {
+      setState(() {
+        quantity = newQuantity;
+      });
+    }
   }
 
   @override
@@ -134,7 +137,7 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
                           ),
                         ),
                         const Divider(),
-                        Text("Quant. Separada: $quantity"),
+                        Text("Quant. Separada: ${quantity.toInt()}"),
                         const Divider(),
                         TextFormField(
                           enabled: true,
@@ -153,7 +156,10 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
                           ),
                         ),
                         const Divider(),
-                        InputQuantity(
+                        /*  InputQuantity(
+                          controller: quantityController,
+                        ), */
+                        InputQuantityInt(
                           controller: quantityController,
                         ),
                         const SizedBox(

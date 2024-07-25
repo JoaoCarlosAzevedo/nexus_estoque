@@ -52,16 +52,24 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
       }
     }
 
-    final result = await repository.postOutFlowDoc(doc);
-    if (result.isRight()) {
-      result.fold((l) => null, (r) {
-        emit(OutFlowDocInitial());
-      });
-    } else {
-      result.fold((l) {
-        emit(OutFlowDocPostError(l));
-        emit(OutFlowDocLoaded(doc, null, false, null));
-      }, (r) => null);
+    try {
+      final result = await repository.postOutFlowDoc(doc);
+      if (result.isRight()) {
+        result.fold((l) => null, (r) {
+          emit(OutFlowDocInitial());
+        });
+      } else {
+        result.fold((l) {
+          emit(OutFlowDocPostError(l));
+          emit(OutFlowDocLoaded(doc, null, false, null));
+        }, (r) => null);
+      }
+    } catch (e) {
+      emit(
+        const OutFlowDocPostError(
+            Failure("Erro desconhecido", ErrorType.validation)),
+      );
+      emit(OutFlowDocLoaded(doc, null, false, null));
     }
   }
 

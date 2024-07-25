@@ -48,6 +48,7 @@ class OutflowDocRepository {
 
   Future<Either<Failure, OutFlowDoc>> postOutFlowDoc(OutFlowDoc doc) async {
     final String url = await Config.baseURL;
+
     try {
       var response = await dio.post(
         '$url/conferencia_nf_saida',

@@ -13,12 +13,12 @@ class ProductAddressFormCubit extends Cubit<ProductAddressFormState> {
     emit(ProductAddressFormInitial());
   }
 
-  void postProductAddress(
-      String produto, String codeseq, String endereco, double quantity) async {
+  void postProductAddress(String produto, String codeseq, String endereco,
+      double quantity, String lote) async {
     emit(ProductAddressFormLoading());
 
     final result = await productAddressRepository.addressProduct(
-        produto, codeseq, endereco, quantity);
+        produto, codeseq, endereco, quantity, lote);
 
     if (result.isRight()) {
       result.fold((l) => null, (r) {

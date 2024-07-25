@@ -50,6 +50,12 @@ class PurchaseInvoiceRepository {
         return const Left(Failure("Server Error!", ErrorType.exception));
       }
 
+      if (response.data.runtimeType != List<dynamic>) {
+        if (response.data["mensagem"] != null) {
+          return Right(invoices);
+        }
+      }
+
       final listPurchaseInvoices = (response.data as List).map((item) {
         return PurchaseInvoice.fromMap(item);
       }).toList();
