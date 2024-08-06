@@ -17,6 +17,7 @@ class ProductAddressModel {
   final String chave;
   final String codigoBarras;
   final String codigoBarras2;
+  final String enderecoFiltro;
 
   ProductAddressModel({
     required this.descricao,
@@ -34,6 +35,7 @@ class ProductAddressModel {
     required this.validade,
     required this.chave,
     required this.codigoBarras,
+    required this.enderecoFiltro,
     required this.codigoBarras2,
   });
 
@@ -55,6 +57,7 @@ class ProductAddressModel {
       'chave': chave,
       'codigobarras': codigoBarras,
       'codigoBarras2': codigoBarras2,
+      'enderecoFiltro': enderecoFiltro,
     };
   }
 
@@ -75,6 +78,7 @@ class ProductAddressModel {
         validade: map['validade'] ?? '',
         chave: map['chave'] ?? '',
         codigoBarras: map['codigobarras'] ?? '',
+        enderecoFiltro: map['endereco_filtro'] ?? '',
         codigoBarras2: map['codigobarras2'] ?? '');
   }
 

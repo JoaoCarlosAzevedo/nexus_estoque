@@ -272,6 +272,19 @@ class AddressCard extends StatelessWidget {
                               ],
                             ),
                           ),
+                        if (data.enderecoFiltro.trim().isNotEmpty)
+                          RichText(
+                            text: TextSpan(
+                              text: "Endereço Filtro ",
+                              style: Theme.of(context).textTheme.bodySmall,
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: data.enderecoFiltro,
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
+                              ],
+                            ),
+                          ),
                       ],
                     ),
                   ),
