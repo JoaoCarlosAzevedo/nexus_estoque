@@ -22,7 +22,7 @@ final List menuItens = [
     route: 'enderecar',
   ),
   MenuItemInfo(
-    title: "Transferências", 
+    title: "Transferências",
     icon: FontAwesomeIcons.cartFlatbed,
     color: Colors.red,
     route: 'transferencias',
@@ -56,7 +56,13 @@ final List menuItens = [
     icon: FontAwesomeIcons.truckArrowRight,
     color: Colors.red,
     route: 'separacao_carga_v2',
-  ), 
+  ),
+  MenuItemInfo(
+    title: "Separação por Pedido v2",
+    icon: FontAwesomeIcons.dolly,
+    color: Colors.red,
+    route: 'separacao_carga_v2_pedido',
+  ),
   MenuItemInfo(
     title: "Conferencia NFe Saida",
     icon: FontAwesomeIcons.rightFromBracket,
@@ -68,7 +74,7 @@ final List menuItens = [
     icon: FontAwesomeIcons.rightToBracket,
     color: Colors.red,
     route: 'entradacheck',
-  ), 
+  ),
   MenuItemInfo(
     title: "Reposição",
     icon: FontAwesomeIcons.boxesPacking,
@@ -104,5 +110,5 @@ final List menuItens = [
     icon: FontAwesomeIcons.print,
     color: Colors.red,
     route: 'etiqueta_filtros_cargas',
-  ) 
+  )
 ];

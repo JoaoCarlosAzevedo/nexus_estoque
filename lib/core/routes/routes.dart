@@ -36,6 +36,7 @@ import '../../features/filter_tags/pages/filter_tags_load_page/filter_tags_load_
 import '../../features/filter_tags_orders/pages/filter_tags_load_list_page/filter_tags_order_load_list_page.dart';
 import '../../features/filter_tags_orders/pages/filter_tags_order_load_page/filter_tags_order_load_page.dart';
 import '../../features/picking_load/pages/picking_load_list_page/picking_load_list_page.dart';
+import '../../features/picking_load_orders/picking_loads/picking_load_orders_page.dart';
 import '../../features/picking_load_v2/pages/picking_load_list_page/picking_load_v2_list_page.dart';
 import '../../features/purchase_invoice_check/pages/purchase_invoice_list/purchase_invoice_list_page.dart';
 
@@ -129,6 +130,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/separacao_carga_v2",
             builder: ((context, state) => const PickingLoadListPagev2())),
+        GoRoute(
+            path: "/separacao_carga_v2_pedido",
+            builder: ((context, state) => const PickingLoadOrdersList())),
         GoRoute(
             path: "/reposicao",
             builder: ((context, state) => const RepositionPage())),
