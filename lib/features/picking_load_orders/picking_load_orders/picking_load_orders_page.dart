@@ -9,6 +9,7 @@ import 'package:grouped_list/grouped_list.dart';
 
 import '../../picking_load_v2/data/model/pickingv2_model.dart';
 import '../../picking_load_v2/pages/picking_load_list_page/cubit/picking_loadv2_cubit.dart';
+import '../picking_load_orders_products/picking_load_order_products_page.dart';
 
 class PickingLoadOrdersPage extends ConsumerWidget {
   const PickingLoadOrdersPage(
@@ -95,7 +96,21 @@ class PickingLoadOrdersPage extends ConsumerWidget {
                           .toList();
                       return GestureDetector(
                         onTap: () {
-                          print(groupByValue);
+                          final cubit = context.read<PickingLoadv2Cubit>();
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  PickingLoadOrderProductsPage(
+                                cubit: cubit,
+                                load: load,
+                                order: groupByValue,
+                                dateIni: dateIni,
+                                dateEnd: dateEnd,
+                              ),
+                            ),
+                          );
                         },
                         child: Card(
                           child: ListTile(
