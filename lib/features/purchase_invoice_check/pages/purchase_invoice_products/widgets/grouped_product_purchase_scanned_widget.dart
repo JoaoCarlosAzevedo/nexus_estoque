@@ -42,55 +42,80 @@ class GroupedProductScannedCard extends StatelessWidget {
               Stack(
                 children: [
                   Card(
-                    child: ListTile(
-                      title: Text(
-                        "${product?.item} ${product?.descricao}",
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      subtitle: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            "Cód. Barras: ${barcode ?? ""}",
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            "SKU: ${product!.codigo}",
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Conferido: $checked",
-                                style:
-                                    Theme.of(context).textTheme.headlineMedium,
-                              ),
-                            ],
-                          ),
-                          if (checked > quantityOriginal)
-                            Text(
-                              "Total Itens da NF: $quantityOriginal",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineMedium!
-                                  .copyWith(color: Colors.red),
+                    elevation: 6.0,
+                    color: isAvisoInferior()
+                        ? Colors.orangeAccent
+                        : isAvisoSuperior()
+                            ? Colors.red
+                            : Colors.grey,
+                    clipBehavior: Clip.hardEdge,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          right: (isAvisoInferior() || isAvisoSuperior())
+                              ? 10
+                              : 0),
+                      child: ListTile(
+                        title: Text(
+                          "${product?.item} ${product?.descricao}",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        subtitle: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 10,
                             ),
-                        ],
-                      ),
-                      trailing: IconButton(
-                        onPressed: onPressed,
-                        icon: const FaIcon(FontAwesomeIcons.penToSquare),
+                            Text(
+                              "Cód. Barras: ${(barcode ?? "") == "avisoAbaixo" ? '' : barcode}",
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "SKU: ${product!.codigo}",
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Conferido: $checked",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium,
+                                ),
+                              ],
+                            ),
+                            if (isAvisoInferior())
+                              Text(
+                                "Conferência com pendencias",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineMedium!
+                                    .copyWith(color: Colors.orange),
+                              ),
+                            if (checked > quantityOriginal)
+                              Text(
+                                "Total Itens da NF: $quantityOriginal",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineMedium!
+                                    .copyWith(color: Colors.red),
+                              ),
+                          ],
+                        ),
+                        trailing: IconButton(
+                          onPressed: onPressed,
+                          icon: const FaIcon(FontAwesomeIcons.penToSquare),
+                        ),
                       ),
                     ),
                   ),
@@ -160,6 +185,22 @@ class GroupedProductScannedCard extends StatelessWidget {
                 ],
               )
             : Container();
+  }
+
+  bool isAvisoInferior() {
+    if (barcode != null) {
+      if (barcode == 'avisoAbaixo') {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool isAvisoSuperior() {
+    if (checked > quantityOriginal) {
+      return true;
+    }
+    return false;
   }
 
   void getChecked() {

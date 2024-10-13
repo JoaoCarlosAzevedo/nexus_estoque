@@ -275,7 +275,7 @@ class AddressCard extends StatelessWidget {
                         if (data.enderecoFiltro.trim().isNotEmpty)
                           RichText(
                             text: TextSpan(
-                              text: "Endereço Filtro ",
+                              text: "Endereço ",
                               style: Theme.of(context).textTheme.bodySmall,
                               children: <TextSpan>[
                                 TextSpan(

@@ -1,6 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
@@ -10,6 +9,7 @@ import '../../../../core/features/searches/products/data/model/product_model.dar
 import '../../../../core/features/searches/products/pages/products_search_page.dart';
 import '../../../../core/features/searches/products/provider/remote_product_provider.dart';
 import '../../../../core/mixins/validation_mixin.dart';
+import '../../../../core/widgets/form_input_no_keyboard_search_widget.dart';
 import '../../../address_balance/data/model/address_balance_model.dart';
 import '../../data/model/inventory_model.dart';
 import 'state/address_inventory_provider.dart';
@@ -32,13 +32,6 @@ class _AddressInventoryFormPageState
   List<ProductModel> productsInventory = [];
   late List<ProductModel> listWatch = [];
   late List<InventoryModel> inventoryData = [];
-
-  void hideKeyboard() {
-    Future.delayed(
-      const Duration(milliseconds: 100),
-      () => SystemChannels.textInput.invokeMethod('TextInput.hide'),
-    );
-  }
 
   @override
   void initState() {
@@ -66,9 +59,6 @@ class _AddressInventoryFormPageState
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(const Duration(),
-        () => SystemChannels.textInput.invokeMethod('TextInput.hide'));
-
     AddressInventoryState state = ref.watch(addressInventoryProvider);
     ref.listen(addressInventoryProvider, (previous, current) {
       if (current.status == StateEnum.error) {
@@ -138,7 +128,30 @@ class _AddressInventoryFormPageState
                 ),
               const Divider(),
               if (state.status != StateEnum.loading)
-                TextFormField(
+                NoKeyboardTextSearchForm(
+                  label: 'Produto',
+                  autoFocus: true,
+                  focusNode: focus,
+                  onSubmitted: (e) {
+                    getProduct(e);
+                    productController.clear();
+                    focus.requestFocus();
+                  },
+                  validator: isNotEmpty,
+                  controller: productController,
+                  prefixIcon: IconButton(
+                    onPressed: () async {
+                      //productSearchPage();
+                      productController.text =
+                          await ProductSearchModal.show(context, false);
+                      getProduct(productController.text);
+                      productController.clear();
+                      focus.requestFocus();
+                    },
+                    icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
+                  ),
+                ),
+              /* TextFormField(
                   autofocus: true,
                   focusNode: focus,
                   textInputAction: TextInputAction.next,
@@ -167,7 +180,7 @@ class _AddressInventoryFormPageState
                       icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
                     ),
                   ),
-                ),
+                ), */
               state.status == StateEnum.loading
                   ? const Expanded(
                       child: Center(

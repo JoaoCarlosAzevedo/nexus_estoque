@@ -32,6 +32,32 @@ class PurchaseInvoiceRepository {
     dio = _ref.read(httpProvider).dioInstance;
   }
 
+  Future<bool> postPlateNumber(
+      String plateNumber, List<PurchaseInvoice> invoices) async {
+    final String url = await Config.baseURL;
+
+    final jsonMap = {
+      'placa': plateNumber,
+      'nfs': invoices.map((e) => e.toMapRecno()).toList(),
+    };
+
+    final json = jsonEncode(jsonMap);
+
+    try {
+      var response = await dio.post(
+        '$url/conferencia_nf_entrada/placa',
+        data: json,
+      );
+      if (response.statusCode != 201) {
+        return false;
+      }
+      return true;
+    } on DioException catch (_) {
+      return false;
+      //throw (e.error.toString());
+    }
+  }
+
   Future<Either<Failure, List<PurchaseInvoice>>> postPurchaseInvoicesChecked(
       List<PurchaseInvoice> invoices) async {
     final String url = await Config.baseURL;
@@ -77,11 +103,8 @@ class PurchaseInvoiceRepository {
           await dio.get('$url/conferencia_nf_entrada/lista/', queryParameters: {
         'dataIni': dayIni,
         'dataFim': dayEnd,
-        'filtro': 'DA3.DA3_COD is not null',
-/*  
-        'dataIni': '20240517',datetimeToYYYYMMDD(DateTime.now())
-        'dataFim': '20240517',
-        'filtro': 'DA3.DA3_COD is not null', */
+        'filtro': " ( (DA3.DA3_COD is not null) or (SF1.F1_PLACA != ' ') ) ",
+        //'filtro': 'DA3.DA3_COD is not null',
       });
 
       if (response.statusCode != 200) {

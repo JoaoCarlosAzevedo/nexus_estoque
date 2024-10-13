@@ -190,6 +190,19 @@ class InvoiceProduct {
     );
   }
 
+  Color status() {
+    if (quantidaetiqueta + novaQuantidade >= quantidade) {
+      return Colors.green;
+    }
+
+    if (quantidaetiqueta + novaQuantidade < quantidade &&
+        quantidaetiqueta + novaQuantidade > 0) {
+      return Colors.blue;
+    }
+
+    return Colors.grey.shade300;
+  }
+
   String toJson() => json.encode(toMap());
 
   Color statusTags() {

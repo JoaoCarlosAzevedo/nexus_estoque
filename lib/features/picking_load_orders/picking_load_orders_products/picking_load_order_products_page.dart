@@ -6,7 +6,7 @@ import 'package:grouped_list/grouped_list.dart';
 import 'package:nexus_estoque/core/theme/app_theme.dart';
 
 import '../../picking_load_v2/data/model/pickingv2_model.dart';
-import '../../picking_load_v2/pages/picking_form_v2_page/picking_form_v2_modal.dart';
+import '../../picking_load_v2/pages/picking_form_v2_page/picking_form_v3_modal.dart';
 import '../../picking_load_v2/pages/picking_load_list_page/cubit/picking_loadv2_cubit.dart';
 import '../../picking_load_v2/pages/picking_load_produts_list_page/widgets/picking_product_card_v2.dart';
 
@@ -117,7 +117,7 @@ class PickingLoadOrderProductsPage extends ConsumerWidget {
                         data: element,
                         onTap: () async {
                           final result =
-                              await PickingFormv2v2Modal.show(context, element);
+                              await PickingFormv3Modal.show(context, element);
                           if (result == "ok") {
                             //cubit.fetchPickingLoads(dateIni, dateEnd);
                             cubit.fetchPickingLoadsDeparment(

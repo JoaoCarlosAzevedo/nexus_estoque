@@ -25,6 +25,22 @@ class PurchaseInvoiceProductsCubit extends Cubit<PurchaseInvoiceProductsState> {
 
       emit(PurchaseInvoiceProductsLoading());
 
+      for (final invoices in currentState.invoices) {
+        for (final product in invoices.purchaseInvoiceProducts) {
+          if (product.checked < product.quantidade) {
+            AudioService.error();
+            emit(
+              PurchaseInvoiceProductsLChecking(
+                  show: true,
+                  invoices: currentState.invoices,
+                  barcode: 'avisoAbaixo',
+                  product: product),
+            );
+            return;
+          }
+        }
+      }
+
       final result =
           await repository.postPurchaseInvoicesChecked(currentState.invoices);
 
@@ -172,7 +188,7 @@ class PurchaseInvoiceProductsCubit extends Cubit<PurchaseInvoiceProductsState> {
         PurchaseInvoiceProductsLChecking(
             show: true,
             invoices: currentInvoices,
-            barcode: currentState.barcode,
+            barcode: currentState.product!.barcode,
             product: currentState.product),
       );
     }

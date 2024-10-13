@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 class PurchaseInvoice {
   String filial;
   String notaFiscal;
@@ -14,6 +16,8 @@ class PurchaseInvoice {
   String codVeiculo;
   String descVeiculo;
   String placaVeiculo;
+  String placaNF;
+  int nfRecno;
 
   List<PurchaseInvoiceProduct> purchaseInvoiceProducts;
 
@@ -30,8 +34,19 @@ class PurchaseInvoice {
     required this.codVeiculo,
     required this.descVeiculo,
     required this.placaVeiculo,
+    required this.placaNF,
+    required this.nfRecno,
     required this.purchaseInvoiceProducts,
   });
+
+  bool isCompleted() {
+    for (var product in purchaseInvoiceProducts) {
+      if (product.checkedBd < product.quantidade) {
+        return false;
+      }
+    }
+    return true;
+  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -47,8 +62,24 @@ class PurchaseInvoice {
       'codVeiculo': codVeiculo,
       'descVeiculo': descVeiculo,
       'placaVeiculo': placaVeiculo,
+      'placa_nf': placaNF,
+      'doc_recno': nfRecno,
       'produtos': purchaseInvoiceProducts.map((x) => x.toMap()).toList(),
     };
+  }
+
+  Map<String, dynamic> toMapRecno() {
+    return <String, dynamic>{
+      'doc_recno': nfRecno,
+    };
+  }
+
+  String getAggregator() {
+    if (placaNF.trim().isNotEmpty) {
+      return placaNF;
+    }
+
+    return '$placaVeiculo - $descVeiculo';
   }
 
   factory PurchaseInvoice.fromMap(Map<String, dynamic> map) {
@@ -65,6 +96,8 @@ class PurchaseInvoice {
       codVeiculo: map['codVeiculo'] ?? '',
       descVeiculo: map['descVeiculo'] ?? '',
       placaVeiculo: map['placaVeiculo'] ?? '',
+      placaNF: map['placa_nf'] ?? '',
+      nfRecno: map['doc_recno'] ?? '',
       purchaseInvoiceProducts: List<PurchaseInvoiceProduct>.from(
         (map['produtos'] as List<dynamic>).map<PurchaseInvoiceProduct>(
           (x) => PurchaseInvoiceProduct.fromMap(x as Map<String, dynamic>),
@@ -88,6 +121,7 @@ class PurchaseInvoiceProduct {
   String barcode2;
   String um;
   double checked;
+  double checkedBd;
   String sd1Chave;
 
   PurchaseInvoiceProduct({
@@ -99,8 +133,27 @@ class PurchaseInvoiceProduct {
     required this.barcode2,
     required this.um,
     required this.checked,
+    required this.checkedBd,
     required this.sd1Chave,
   });
+
+  Color statusConferencia() {
+    if (checkedBd > 0 && checkedBd < quantidade) {
+      return Colors.orange;
+    }
+    if (checkedBd < quantidade) {
+      return Colors.grey;
+    }
+
+    if (checkedBd > quantidade) {
+      return Colors.red;
+    }
+    if (checkedBd == quantidade) {
+      return Colors.green;
+    }
+
+    return Colors.grey.shade300;
+  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -112,6 +165,7 @@ class PurchaseInvoiceProduct {
       'barcode2': barcode2,
       'um': um,
       'checked': checked,
+      'checkedBd': checkedBd,
       'SD1Chave': sd1Chave,
     };
   }
@@ -126,6 +180,7 @@ class PurchaseInvoiceProduct {
       barcode2: map['barcode2'] ?? '',
       um: map['um'] ?? '',
       checked: map['checked']?.toDouble() ?? 0,
+      checkedBd: map['checked']?.toDouble() ?? 0,
       sd1Chave: map['SD1Chave'] ?? '',
     );
   }

@@ -55,17 +55,23 @@ class _OutFlowDocProductListState extends ConsumerState<OutFlowDocProductList> {
           hasScrollBody: true,
           child: Column(
             children: [
-              NoKeyboardTextForm(
-                autoFocus: true,
-                focusNode: focus,
-                controller: controller,
-                label: "Cód. Barras ou SKU...",
-                onSubmitted: (value) {
-                  widget.onSubmitted!(value);
-                  focus.requestFocus();
-                  controller.clear();
-                },
-              ),
+              if (document.isCompleted())
+                Text(
+                  "Documento já conferido!",
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              if (!document.isCompleted())
+                NoKeyboardTextForm(
+                  autoFocus: true,
+                  focusNode: focus,
+                  controller: controller,
+                  label: "Cód. Barras ou SKU...",
+                  onSubmitted: (value) {
+                    widget.onSubmitted!(value);
+                    focus.requestFocus();
+                    controller.clear();
+                  },
+                ),
               /*  TextField(
                   autofocus: true,
                   focusNode: focus,
@@ -109,15 +115,16 @@ class _OutFlowDocProductListState extends ConsumerState<OutFlowDocProductList> {
                   },
                 ),
               ),
-              ElevatedButton(
-                onPressed: widget.onSave,
-                child: const Padding(
-                  padding: EdgeInsets.all(12),
-                  child: Center(
-                    child: Text("Salvar"),
+              if (!document.isCompleted())
+                ElevatedButton(
+                  onPressed: widget.onSave,
+                  child: const Padding(
+                    padding: EdgeInsets.all(12),
+                    child: Center(
+                      child: Text("Salvar"),
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ),

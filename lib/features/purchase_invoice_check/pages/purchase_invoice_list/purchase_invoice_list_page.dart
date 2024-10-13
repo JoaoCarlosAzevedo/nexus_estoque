@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:nexus_estoque/core/theme/app_colors.dart';
+import 'package:nexus_estoque/features/purchase_invoice_check/pages/purchase_invoice_list/widgets/plate_input_modarl.dart';
 
 import '../../../../core/utils/datetime_formatter.dart';
 import '../../data/model/purchase_invoice_model.dart';
@@ -70,38 +71,60 @@ class _PurchaseInvoiceListPageState
           }
           return GroupedListView<PurchaseInvoice, String>(
             elements: data,
-            groupBy: (element) =>
-                "${element.codVeiculo}/${element.descVeiculo}/${element.placaVeiculo}",
+            groupBy: (element) => element.getAggregator(),
             groupSeparatorBuilder: (String groupByValue) {
-              final split = groupByValue.split('/');
-              final codVeic = split[0];
-              final descveic = split[1];
-              final placa = split[2];
               return Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  child: ListTile(
-                    onTap: () {
-                      final invoices = data
-                          .where(
-                              (element) => element.codVeiculo.contains(codVeic))
-                          .toList();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PurchaseInvoiceProdutcts(
-                            invoices: invoices,
-                          ),
-                        ),
-                      );
-                    },
-                    leading: const FaIcon(FontAwesomeIcons.truck),
-                    title: Text(
-                      "$codVeic - $placa",
-                      overflow: TextOverflow.visible,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20.0),
+                  child: Card(
+                    shape: Border(
+                      left: BorderSide(
+                          color: statusInvoices(data
+                                  .where((element) => element
+                                      .getAggregator()
+                                      .contains(groupByValue))
+                                  .toList())
+                              ? Colors.green
+                              : Colors.red,
+                          width: 5),
                     ),
-                    subtitle: Text(descveic),
-                    //trailing: const FaIcon(FontAwesomeIcons.magnifyingGlass),
+                    child: ListTile(
+                      onTap: isEditable(groupByValue)
+                          ? null
+                          : () {
+                              redirect(data
+                                  .where((element) => element
+                                      .getAggregator()
+                                      .contains(groupByValue))
+                                  .toList());
+                            },
+                      leading: FaIcon(
+                        FontAwesomeIcons.truck,
+                        color: isEditable(groupByValue) ? Colors.red : null,
+                      ),
+                      title: Text(
+                        groupByValue,
+                        overflow: TextOverflow.visible,
+                      ),
+                      trailing: isEditable(groupByValue)
+                          ? IconButton(
+                              onPressed: () async {
+                                showPlateInputModal(
+                                    context,
+                                    data
+                                        .where((element) => element
+                                            .getAggregator()
+                                            .contains(groupByValue))
+                                        .toList());
+                              },
+                              icon: const FaIcon(
+                                FontAwesomeIcons.penToSquare,
+                                color: Colors.green,
+                              ),
+                            )
+                          : null,
+                    ),
                   ),
                 ),
               );
@@ -111,14 +134,6 @@ class _PurchaseInvoiceListPageState
                 visible: false,
                 child: Text(""),
               );
-              /*  return Card(
-                child: ListTile(
-                  onTap: () {},
-                  title: Text("${element.nomeCliente}}"),
-                  subtitle: Text(
-                      "NF ${element.notaFiscal} - Itens ${element.purchaseInvoiceProducts.length}"),
-                ),
-              ); */
             },
             useStickyGroupSeparators: true, // optional
             floatingHeader: true, // optional
@@ -127,6 +142,35 @@ class _PurchaseInvoiceListPageState
         },
       ),
     );
+  }
+
+  bool statusInvoices(List<PurchaseInvoice> invoices) {
+    for (var invoice in invoices) {
+      for (var product in invoice.purchaseInvoiceProducts) {
+        if (product.checkedBd < product.quantidade) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  void redirect(List<PurchaseInvoice> invoices) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PurchaseInvoiceProdutcts(
+          invoices: invoices,
+        ),
+      ),
+    );
+  }
+
+  bool isEditable(String value) {
+    if (value.trim().contains('CARGA')) {
+      return true;
+    }
+    return false;
   }
 
   Future pickeDateRange(BuildContext ctx) async {

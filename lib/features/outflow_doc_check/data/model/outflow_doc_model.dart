@@ -24,6 +24,15 @@ class OutFlowDoc {
     required this.chaveNFe,
   });
 
+  bool isCompleted() {
+    for (var product in produtos) {
+      if (product.checkedBd < product.quantidade) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'CodigoTransp': codigoTransp,
@@ -65,6 +74,7 @@ class Produtos {
   String barcode;
   String barcode2;
   double checked;
+  double checkedBd;
   String item;
   String codigo;
   String um;
@@ -74,6 +84,7 @@ class Produtos {
     required this.barcode,
     required this.barcode2,
     required this.checked,
+    required this.checkedBd,
     required this.item,
     required this.codigo,
     required this.um,
@@ -86,6 +97,7 @@ class Produtos {
       'barcode': barcode,
       'barcode2': barcode2,
       'checked': checked,
+      'checkedBd': checkedBd,
       'item': item,
       'codigo': codigo,
       'um': um,
@@ -99,6 +111,7 @@ class Produtos {
       barcode: map['barcode'] ?? '',
       barcode2: map['barcode2'] ?? '',
       checked: map['checked']?.toDouble() ?? 0,
+      checkedBd: map['checked']?.toDouble() ?? 0,
       item: map['item'] ?? '',
       codigo: map['codigo'] ?? '',
       um: map['um'] ?? '',

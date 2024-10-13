@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 
 import '../../../../core/mixins/validation_mixin.dart';
 
+import '../../../../core/widgets/form_input_no_keyboard_search_widget.dart';
 import '../../../address_balance/data/model/address_balance_model.dart';
 import '../../../address_balance/data/repositories/address_balance_repository.dart';
 import '../../../address_balance/pages/address_balance_page/cubit/address_balance_cubit.dart';
@@ -56,9 +57,6 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
     }
 
     final docProvider = ref.watch(remoteGetInventoryDocProvider(user));
-
-    Future.delayed(const Duration(),
-        () => SystemChannels.textInput.invokeMethod('TextInput.hide'));
 
     return Scaffold(
       appBar: AppBar(
@@ -166,28 +164,39 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
             ),
             const ProductsStatusWidget(),
             const Divider(),
-            TextFormField(
+            NoKeyboardTextSearchForm(
               focusNode: addressFocus,
-              autofocus: true,
-              textInputAction: TextInputAction.next,
-              // textInputAction: TextInputAction.next,
-              onFieldSubmitted: (e) {
-                Future.delayed(
-                    const Duration(),
-                    () => SystemChannels.textInput
-                        .invokeMethod('TextInput.hide'));
+              label: 'Endereço',
+              autoFocus: true,
+              onSubmitted: (e) {
                 cubit.fetchAddressBalances(e);
                 addressController.clear();
                 addressFocus.requestFocus();
               },
               validator: isNotEmpty,
               controller: addressController,
+            ),
+            /* TextFormField(
+              focusNode: addressFocus,
+              autofocus: true,
+              textInputAction: TextInputAction.next,
+              onFieldSubmitted: (e) {
+                Future.delayed(
+                    const Duration(),
+                    () => SystemChannels.textInput 
+                        .invokeMethod('TextInput.hide'));
+                cubit.fetchAddressBalances(e);
+                addressController.clear();
+                addressFocus.requestFocus(); 
+              },
+              validator: isNotEmpty, 
+              controller: addressController,
               decoration: const InputDecoration(
                 label: Text("Endereço"),
                 border: InputBorder.none,
                 prefixIcon: Icon(Icons.qr_code),
               ),
-            ),
+            ), */
             Expanded(
               child: BlocProvider(
                 create: (context) => AddressBalanceCubit(
