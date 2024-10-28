@@ -7,6 +7,7 @@ import 'package:nexus_estoque/features/outflow_doc_check/data/model/outflow_doc_
 import 'package:nexus_estoque/features/outflow_doc_check/data/repositories/outflow_doc_repository.dart';
 
 import '../../../../../core/services/audio_player.dart';
+import '../../../../filter_tags/data/model/filter_tag_model.dart';
 
 part 'outflow_doc_state.dart';
 
@@ -96,47 +97,61 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
     if (state is OutFlowDocLoaded) {
       if (code.startsWith("ETIQ/")) {
         String error = "";
+        int index = 0;
+
         final currState = state as OutFlowDocLoaded;
         emit(OutFlowDocLoading());
         //caso faz a coleta de uma etiqueta, busca os produtos;
         final result = await repository.fetchFilterTag(code);
         if (result.isRight()) {
           result.fold((l) => null, (r) {
-            final products = r;
-            for (var productTag in products) {
-              int index = currState.docs.produtos.indexWhere((element) {
-                if (element.codigo.trim() == productTag.produto.trim()) {
-                  return true;
-                }
-                return false;
-              });
+            //volta o estado anterior
+            String error = "";
+            late FilterTagProductModel checkedProd;
+            emit(currState);
 
-              if (index >= 0) {
-                currState.docs.produtos[index].checked += productTag.quatidade;
-                if (currState.docs.produtos[index].checked >
-                    currState.docs.produtos[index].quantidade) {
-                  error =
-                      "Produto: ${currState.docs.produtos[index].descricao.trim()} Conferido ${currState.docs.produtos[index].checked} de ${currState.docs.produtos[index].quantidade}";
-                  break;
-                }
-              } else {
-                error =
-                    "Produto ${productTag.descricao.trim()} não encontrado na NF";
+            final products = r;
+            index = products.length;
+            for (var productTag in products) {
+              error = checkProducts(productTag.produto.trim(), true, currState,
+                  productTag.quatidade);
+              if (error.isNotEmpty) {
+                checkedProd = productTag;
                 break;
               }
+              checkedProd = productTag;
             }
+
+            if (error.isNotEmpty) {
+              AudioService.error();
+              emit(OutFlowDocError(Failure(error, ErrorType.validation)));
+              emit(OutFlowDocLoaded(currState.docs, null, false, code));
+              return;
+            }
+
+            GroupedProducts grouped = GroupedProducts(
+                produto: checkedProd.produto,
+                descricao: checkedProd.descricao,
+                barcode1: checkedProd.produto,
+                barcode2: checkedProd.produto,
+                products: []);
+
+            final listProds = currState.docs.produtos
+                .where((elemente) =>
+                    elemente.codigo.trim() == grouped.produto.trim())
+                .toList();
+
+            grouped.products = listProds;
+
+            emit(OutFlowDocLoading());
+            AudioService.beep();
+            emit(OutFlowDocLoaded(currState.docs, grouped, false, code));
           });
 
-          if (error.isNotEmpty) {
-            AudioService.error();
-            emit(OutFlowDocError(Failure(error, ErrorType.validation)));
-            emit(OutFlowDocLoaded(currState.docs, null, false, code));
-            return;
-          }
-
-          AudioService.beep();
-          emit(OutFlowDocLoaded(currState.docs, null, false, code));
+          //AudioService.beep();
+          //emit(OutFlowDocLoaded(currState.docs, null, false, code));
         } else {
+          emit(OutFlowDocLoading());
           AudioService.error();
           emit(OutFlowDocLoaded(currState.docs, null, true, code));
         }
@@ -209,6 +224,80 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
           emit(OutFlowDocLoaded(aux.docs, null, true, code));
         }
       }
+    }
+  }
+
+  String checkProducts(
+      String code, bool isTag, OutFlowDocLoaded aux, double checked) {
+    //final aux = state as OutFlowDocLoaded;
+    int index = aux.docs.produtos.indexWhere((element) {
+      if (element.codigo.trim() == code.trim() &&
+          (element.checked < element.quantidade)) {
+        return true;
+      }
+
+      if (code.trim().length >= 5) {
+        if (element.barcode.trim().contains(code.trim()) &&
+            (element.checked < element.quantidade)) {
+          return true;
+        }
+
+        if (element.barcode2.trim().contains(code.trim()) &&
+            (element.checked < element.quantidade)) {
+          return true;
+        }
+      }
+
+      return false;
+    });
+
+    if (index == -1) {
+      index = aux.docs.produtos.indexWhere((element) {
+        if (element.codigo.trim() == code.trim()) {
+          return true;
+        }
+
+        if (code.trim().length >= 5) {
+          if (element.barcode.trim().contains(code.trim())) {
+            return true;
+          }
+        }
+        if (code.trim().length >= 5) {
+          if (element.barcode2.trim().contains(code.trim())) {
+            return true;
+          }
+        }
+
+        return false;
+      });
+    }
+
+    //emit(OutFlowDocLoading());
+    if (index >= 0) {
+      aux.docs.produtos[index].checked += checked;
+
+      GroupedProducts grouped = GroupedProducts(
+          produto: aux.docs.produtos[index].codigo,
+          descricao: aux.docs.produtos[index].descricao,
+          barcode1: aux.docs.produtos[index].barcode,
+          barcode2: aux.docs.produtos[index].barcode2,
+          products: []);
+
+      final listProds = aux.docs.produtos
+          .where((elemente) => elemente.codigo.trim() == grouped.produto.trim())
+          .toList();
+
+      grouped.products = listProds;
+
+      if (aux.docs.produtos[index].checked >
+          aux.docs.produtos[index].quantidade) {
+        return "Produto ${aux.docs.produtos[index].descricao} excedeu a quantidade! ";
+      }
+
+      //emit(OutFlowDocLoaded(aux.docs, grouped, false, code));
+      return "";
+    } else {
+      return "Produto ${code.trim()} não encontrado na NF";
     }
   }
 }

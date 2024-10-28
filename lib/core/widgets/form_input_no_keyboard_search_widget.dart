@@ -58,20 +58,23 @@ class _NoKeyboardTextSearchFormState extends State<NoKeyboardTextSearchForm> {
               setState(() {
                 showKeyboard = !showKeyboard;
                 if (showKeyboard) {
-                  widget.focusNode?.requestFocus();
+                  widget.focusNode?.unfocus();
                 } else {
                   Future.delayed(
                     const Duration(milliseconds: 100),
-                    () {
-                      SystemChannels.textInput.invokeMethod('TextInput.hide');
-                      widget.focusNode?.requestFocus();
-                    },
+                    () =>
+                        SystemChannels.textInput.invokeMethod('TextInput.hide'),
                   );
                 }
               });
 
               Future.delayed(const Duration(milliseconds: 500), () {
-                widget.focusNode?.requestFocus();
+                setState(() {
+                  if (showKeyboard) {
+                    widget.focusNode?.requestFocus();
+                  }
+                  // Here you can write your code for open new view
+                });
               });
             },
             icon: Icon(

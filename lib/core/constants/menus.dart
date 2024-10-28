@@ -27,7 +27,7 @@ final List menuItens = [
     color: Colors.red,
     route: 'transferencias',
   ),
-/*   MenuItemInfo(
+  /*  MenuItemInfo(
     title: "Movimentos Internos",
     icon: FontAwesomeIcons.boxesPacking,
     color: Colors.red,
@@ -39,13 +39,14 @@ final List menuItens = [
     color: Colors.red,
     route: 'separacao',
   ),
+  /*
   MenuItemInfo(
     title: "Separação por Rotas",
     icon: FontAwesomeIcons.truckRampBox,
     color: Colors.red,
     route: 'separacao_rotas',
   ),
-/*   MenuItemInfo(
+   MenuItemInfo(
     title: "Separação por Carga",
     icon: FontAwesomeIcons.truckArrowRight,
     color: Colors.red,

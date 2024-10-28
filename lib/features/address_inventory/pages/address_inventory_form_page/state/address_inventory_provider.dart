@@ -32,18 +32,32 @@ class AddressInventoryNotifier extends StateNotifier<AddressInventoryState> {
           (element) => element.codigo.trim() == product.codigo.trim());
       if (index >= 0) {
         if (list[index].codigo.isNotEmpty) {
-          list[index].qtdInvet = list[index].qtdInvet + 1;
+          list[index] =
+              list[index].copyWith(qtdInvet: list[index].qtdInvet + 1);
         }
         state = state.copyWith(products: list);
       } else {
         if (product.codigo.isNotEmpty) {
-          product.qtdInvet = 1;
+          product = product.copyWith(qtdInvet: 1);
         }
         state = state.copyWith(products: [...state.products, product]);
       }
     } else {
-      product.qtdInvet = product.qtdInvet + 1;
-      state = state.copyWith(products: [product]);
+      final index = list.indexWhere(
+          (element) => element.codigo.trim() == product.codigo.trim());
+      if (index >= 0) {
+        if (list[index].codigo.isNotEmpty) {
+          list[index] =
+              list[index].copyWith(qtdInvet: list[index].qtdInvet + 1);
+        }
+        state = state.copyWith(products: list);
+      } else {
+        if (product.codigo.isNotEmpty) {
+          product = product.copyWith(qtdInvet: 1);
+        }
+
+        state = state.copyWith(products: [product]);
+      }
     }
   }
 
@@ -96,7 +110,7 @@ class AddressInventoryNotifier extends StateNotifier<AddressInventoryState> {
     final index = products.indexWhere(
         (element) => element.codigo.trim() == product.codigo.trim());
     if (index >= 0) {
-      products[index].qtdInvet = quantity;
+      products[index] = products[index].copyWith(qtdInvet: quantity);
       state = state.copyWith(products: products);
     }
   }
