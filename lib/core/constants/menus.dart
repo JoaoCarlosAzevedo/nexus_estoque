@@ -32,14 +32,14 @@ final List menuItens = [
     icon: FontAwesomeIcons.boxesPacking,
     color: Colors.red,
     route: 'movimentos',
-  ), */
+  ), 
   MenuItemInfo(
     title: "Separação por Pedido",
     icon: FontAwesomeIcons.dolly,
     color: Colors.red,
     route: 'separacao',
   ),
-  /*
+
   MenuItemInfo(
     title: "Separação por Rotas",
     icon: FontAwesomeIcons.truckRampBox,

@@ -96,9 +96,6 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
   void checkProduct(String code) async {
     if (state is OutFlowDocLoaded) {
       if (code.startsWith("ETIQ/")) {
-        String error = "";
-        int index = 0;
-
         final currState = state as OutFlowDocLoaded;
         emit(OutFlowDocLoading());
         //caso faz a coleta de uma etiqueta, busca os produtos;
@@ -111,7 +108,7 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
             emit(currState);
 
             final products = r;
-            index = products.length;
+
             for (var productTag in products) {
               error = checkProducts(productTag.produto.trim(), true, currState,
                   productTag.quatidade);
@@ -120,13 +117,6 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
                 break;
               }
               checkedProd = productTag;
-            }
-
-            if (error.isNotEmpty) {
-              AudioService.error();
-              emit(OutFlowDocError(Failure(error, ErrorType.validation)));
-              emit(OutFlowDocLoaded(currState.docs, null, false, code));
-              return;
             }
 
             GroupedProducts grouped = GroupedProducts(
@@ -142,6 +132,13 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
                 .toList();
 
             grouped.products = listProds;
+
+            if (error.isNotEmpty) {
+              AudioService.error();
+              emit(OutFlowDocError(Failure(error, ErrorType.validation)));
+              emit(OutFlowDocLoaded(currState.docs, grouped, false, code));
+              return;
+            }
 
             emit(OutFlowDocLoading());
             AudioService.beep();
