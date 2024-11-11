@@ -1,6 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+enum Distributors { dellas, decminas, portolub, todos }
+
+//const buildDistribuitor = Distributors.decminas;
+//const buildDistribuitor = Distributors.todos;
+const buildDistribuitor = Distributors.dellas;
+
+bool checkMenu(Distributors dist, Distributors check) {
+  if (dist == Distributors.todos) {
+    return true;
+  }
+
+  if (dist == check) {
+    return true;
+  }
+
+  return false;
+}
+
 class MenuItemInfo {
   final String title;
   final IconData icon;
@@ -14,7 +32,7 @@ class MenuItemInfo {
       required this.route});
 }
 
-final List menuItens = [
+final List<MenuItemInfo> menuItens = [
   MenuItemInfo(
     title: "Endereçar Saldos",
     icon: FontAwesomeIcons.warehouse,
@@ -27,43 +45,66 @@ final List menuItens = [
     color: Colors.red,
     route: 'transferencias',
   ),
-  /*  MenuItemInfo(
-    title: "Movimentos Internos",
-    icon: FontAwesomeIcons.boxesPacking,
-    color: Colors.red,
-    route: 'movimentos',
-  ), 
-  MenuItemInfo(
-    title: "Separação por Pedido",
-    icon: FontAwesomeIcons.dolly,
-    color: Colors.red,
-    route: 'separacao',
-  ),
-
-  MenuItemInfo(
-    title: "Separação por Rotas",
-    icon: FontAwesomeIcons.truckRampBox,
-    color: Colors.red,
-    route: 'separacao_rotas',
-  ),
-   MenuItemInfo(
-    title: "Separação por Carga",
-    icon: FontAwesomeIcons.truckArrowRight,
-    color: Colors.red,
-    route: 'separacao_carga',
-  ), */
-  MenuItemInfo(
-    title: "Separação por Carga v2",
-    icon: FontAwesomeIcons.truckArrowRight,
-    color: Colors.red,
-    route: 'separacao_carga_v2',
-  ),
-  MenuItemInfo(
-    title: "Separação por Pedido v2",
-    icon: FontAwesomeIcons.dolly,
-    color: Colors.red,
-    route: 'separacao_carga_v2_pedido',
-  ),
+  ...checkMenu(buildDistribuitor, Distributors.portolub)
+      ? [
+          MenuItemInfo(
+            title: "Movimentos Internos",
+            icon: FontAwesomeIcons.boxesPacking,
+            color: Colors.red,
+            route: 'movimentos',
+          ),
+        ]
+      : [],
+  ...checkMenu(buildDistribuitor, Distributors.decminas)
+      ? [
+          MenuItemInfo(
+            title: "Separação por Pedido",
+            icon: FontAwesomeIcons.dolly,
+            color: Colors.red,
+            route: 'separacao',
+          )
+        ]
+      : [],
+  /* ...checkMenu(buildDistribuitor, Distributors.decminas)
+      ? [
+          MenuItemInfo(
+            title: "Separação por Rotas",
+            icon: FontAwesomeIcons.truckRampBox,
+            color: Colors.red,
+            route: 'separacao_rotas',
+          )
+        ]
+      : [], */
+  ...checkMenu(buildDistribuitor, Distributors.decminas)
+      ? [
+          MenuItemInfo(
+            title: "Separação por Carga",
+            icon: FontAwesomeIcons.truckArrowRight,
+            color: Colors.red,
+            route: 'separacao_carga',
+          )
+        ]
+      : [],
+  ...checkMenu(buildDistribuitor, Distributors.dellas)
+      ? [
+          MenuItemInfo(
+            title: "Separação por Carga v2",
+            icon: FontAwesomeIcons.truckArrowRight,
+            color: Colors.red,
+            route: 'separacao_carga_v2',
+          ),
+        ]
+      : [],
+  ...checkMenu(buildDistribuitor, Distributors.dellas)
+      ? [
+          MenuItemInfo(
+            title: "Separação por Pedido v2",
+            icon: FontAwesomeIcons.dolly,
+            color: Colors.red,
+            route: 'separacao_carga_v2_pedido',
+          ),
+        ]
+      : [],
   MenuItemInfo(
     title: "Conferencia NFe Saida",
     icon: FontAwesomeIcons.rightFromBracket,
@@ -94,22 +135,14 @@ final List menuItens = [
     color: Colors.red,
     route: 'inventario_endereco',
   ),
-  /* MenuItemInfo(
-    title: "Etiquetas Filtro",
-    icon: FontAwesomeIcons.print,
-    color: Colors.red,
-    route: 'etiqueta_filtros/0',
-  ), */
-  /*  MenuItemInfo(
-    title: "Etiquetas Filtro",
-    icon: FontAwesomeIcons.print,
-    color: Colors.red,
-    route: 'etiqueta_filtros_pedidos/0',
-  ), */
-  MenuItemInfo(
-    title: "Etiquetas Filtro",
-    icon: FontAwesomeIcons.print,
-    color: Colors.red,
-    route: 'etiqueta_filtros_cargas',
-  )
+  ...checkMenu(buildDistribuitor, Distributors.dellas)
+      ? [
+          MenuItemInfo(
+            title: "Etiquetas Filtro",
+            icon: FontAwesomeIcons.print,
+            color: Colors.red,
+            route: 'etiqueta_filtros_cargas',
+          )
+        ]
+      : [],
 ];

@@ -227,6 +227,9 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
   String checkProducts(
       String code, bool isTag, OutFlowDocLoaded aux, double checked) {
     //final aux = state as OutFlowDocLoaded;
+    double checkSaldo = checked;
+    double distribuido = 0;
+
     int index = aux.docs.produtos.indexWhere((element) {
       if (element.codigo.trim() == code.trim() &&
           (element.checked < element.quantidade)) {
@@ -269,9 +272,23 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
       });
     }
 
-    //emit(OutFlowDocLoading());
     if (index >= 0) {
-      aux.docs.produtos[index].checked += checked;
+      distribuido = aux.docs.produtos[index].quantidade -
+          aux.docs.produtos[index].checked;
+
+      //se a quantidade a distribuir é menor q o necessario, confere apenas a diferenca
+      if ((distribuido < checked) && distribuido > 0) {
+        checkSaldo = checkSaldo - distribuido;
+        aux.docs.produtos[index].checked += distribuido;
+      } else {
+        //caso contrario confere o total conferido
+        aux.docs.produtos[index].checked += checked;
+        checkSaldo = 0;
+      }
+      //existe ainda saldo a ser distribuido
+      if (checkSaldo > 0) {
+        return checkProducts(code, true, aux, checkSaldo);
+      }
 
       GroupedProducts grouped = GroupedProducts(
           produto: aux.docs.produtos[index].codigo,

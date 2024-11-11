@@ -12,11 +12,14 @@ import '../picking_load_list_page/cubit/picking_load_cubit.dart';
 
 class PickingLoadOrderStatusPage extends ConsumerWidget {
   const PickingLoadOrderStatusPage(
-      {required this.cubit, required this.load, super.key});
+      {required this.cubit,
+      required this.load,
+      required this.isPending,
+      super.key});
 
   final String load;
   final PickingLoadCubit cubit;
-
+  final bool isPending;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     late List<PickingModel> products;
@@ -32,7 +35,7 @@ class PickingLoadOrderStatusPage extends ConsumerWidget {
         actions: [
           IconButton(
               onPressed: () {
-                cubit.fetchPickingLoads();
+                cubit.fetchPickingLoads(isPending);
               },
               icon: const Icon(Icons.refresh))
         ],
@@ -81,14 +84,14 @@ class PickingLoadOrderStatusPage extends ConsumerWidget {
                     elements: products,
                     groupBy: (element) => element.pedido,
                     groupSeparatorBuilder: (String groupByValue) {
-                      products
+                      final orderProducts = products
                           .where((element) => element.pedido == groupByValue);
 
-                      final qtd = products.fold(
+                      final qtd = orderProducts.fold(
                         0.0,
                         (value, element) => value + element.quantidade,
                       );
-                      final checked = products.fold(
+                      final checked = orderProducts.fold(
                         0.0,
                         (value, element) => value + element.separado,
                       );
@@ -107,15 +110,18 @@ class PickingLoadOrderStatusPage extends ConsumerWidget {
                             if (qtd > 0)
                               ProgressIndicatorWidget(
                                 value: checked / qtd,
-                              )
+                              ),
                           ],
                         ),
                       );
                     },
                     itemBuilder: (context, PickingModel element) {
-                      return PickingProductCard(
-                        data: element,
-                        onTap: () async {},
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: PickingProductCard(
+                          data: element,
+                          onTap: () async {},
+                        ),
                       );
                     },
                     itemComparator: (item1, item2) => item1.descEndereco

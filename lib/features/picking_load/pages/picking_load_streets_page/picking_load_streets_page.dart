@@ -10,10 +10,14 @@ import '../picking_load_product_list_page/picking_load_product_list_page.dart';
 
 class PickingLoadStreetsPage extends ConsumerWidget {
   const PickingLoadStreetsPage(
-      {required this.cubit, required this.load, super.key});
+      {required this.cubit,
+      required this.load,
+      required this.isPending,
+      super.key});
 
   final String load;
   final PickingLoadCubit cubit;
+  final bool isPending;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,7 +29,7 @@ class PickingLoadStreetsPage extends ConsumerWidget {
         actions: [
           IconButton(
               onPressed: () {
-                cubit.fetchPickingLoads();
+                cubit.fetchPickingLoads(isPending);
               },
               icon: const Icon(Icons.refresh))
         ],
@@ -88,6 +92,7 @@ class PickingLoadStreetsPage extends ConsumerWidget {
                                   warehouseStreets: groupByValue,
                                   cubit: cubit,
                                   load: load,
+                                  isPending: isPending,
                                 ),
                               ),
                             );

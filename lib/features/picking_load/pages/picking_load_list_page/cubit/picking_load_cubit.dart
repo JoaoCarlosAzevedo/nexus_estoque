@@ -10,13 +10,13 @@ part 'picking_load_state.dart';
 class PickingLoadCubit extends Cubit<PickingLoadState> {
   final PickingRouteRepository repository;
   PickingLoadCubit(this.repository) : super(PickingLoadInitial()) {
-    fetchPickingLoads();
+    fetchPickingLoads(true);
   }
 
-  void fetchPickingLoads() async {
+  void fetchPickingLoads(bool isPending) async {
     emit(PickingLoadLoading());
 
-    final data = await repository.fetchPickingLoadList();
+    final data = await repository.fetchPickingLoadList(isPending);
 
     data.fold(
         (l) => emit(PickingLoadError(error: l)),

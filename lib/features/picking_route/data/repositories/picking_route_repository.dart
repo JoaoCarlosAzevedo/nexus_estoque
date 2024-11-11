@@ -8,6 +8,7 @@ import 'package:nexus_estoque/core/http/http_provider.dart';
 import 'package:nexus_estoque/features/picking/data/model/picking_model.dart';
 import 'package:nexus_estoque/features/picking_route/data/model/picking_route_model.dart';
 
+import '../../../../core/utils/datetime_formatter.dart';
 import '../model/shipping_model.dart';
 
 final pickingRouteRepositoryProvider =
@@ -77,12 +78,28 @@ class PickingRouteRepository {
     }
   }
 
-  Future<Either<Failure, List<ShippingModel>>> fetchPickingLoadList() async {
+  Future<Either<Failure, List<ShippingModel>>> fetchPickingLoadList(
+      bool isPending) async {
     final String url = await Config.baseURL;
+    Map<String, dynamic> queryParam;
+
     try {
-      var response = await dio.get('$url/separacao/rota/', queryParameters: {
-        'tipo': 'carga',
-      });
+      if (isPending) {
+        queryParam = {
+          'tipo': 'carga',
+        };
+      } else {
+        final d2 = DateTime.now();
+        final d1 = DateTime(d2.year - 1, d2.month, d2.day);
+        queryParam = {
+          'tipo': 'carga',
+          'data_ini': datetimeToYYYYMMDD(d1),
+          'data_fim': datetimeToYYYYMMDD(d2)
+        };
+      }
+
+      var response =
+          await dio.get('$url/separacao/rota/', queryParameters: queryParam);
 
       if (response.statusCode != 200) {
         return const Left(Failure("Server Error!", ErrorType.exception));

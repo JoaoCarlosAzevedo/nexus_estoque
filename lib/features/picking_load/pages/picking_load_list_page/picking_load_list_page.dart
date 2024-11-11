@@ -17,6 +17,7 @@ class PickingLoadListPage extends ConsumerStatefulWidget {
 }
 
 class _PickingLoadListPageState extends ConsumerState<PickingLoadListPage> {
+  bool isPending = true;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -30,7 +31,9 @@ class _PickingLoadListPageState extends ConsumerState<PickingLoadListPage> {
               actions: [
                 IconButton(
                     onPressed: () {
-                      context.read<PickingLoadCubit>().fetchPickingLoads();
+                      context
+                          .read<PickingLoadCubit>()
+                          .fetchPickingLoads(isPending);
                     },
                     icon: const Icon(Icons.refresh))
               ],
@@ -55,40 +58,74 @@ class _PickingLoadListPageState extends ConsumerState<PickingLoadListPage> {
                     if (state is PickingLoadLoaded) {
                       final data = state.loads;
 
-                      return ListView.builder(
-                        itemCount: data.length,
-                        itemBuilder: (context, index) {
-                          return LoadCardWidget(
-                            load: data[index],
-                            onSearch: () {
-                              final cubit = context.read<PickingLoadCubit>();
+                      return Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              const Text("Pendentes Separação"),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              Switch(
+                                value: isPending,
+                                activeColor: Colors.green,
+                                inactiveTrackColor: Colors.grey,
+                                onChanged: (bool value) {
+                                  // This is called when the user toggles the switch.
+                                  setState(() {
+                                    isPending = value;
+                                  });
+                                  context
+                                      .read<PickingLoadCubit>()
+                                      .fetchPickingLoads(isPending);
+                                },
+                              ),
+                            ],
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: data.length,
+                              itemBuilder: (context, index) {
+                                return LoadCardWidget(
+                                  load: data[index],
+                                  onSearch: () {
+                                    final cubit =
+                                        context.read<PickingLoadCubit>();
 
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      PickingLoadOrderStatusPage(
-                                    cubit: cubit,
-                                    load: data[index].codCarga,
-                                  ),
-                                ),
-                              );
-                            },
-                            onTap: () {
-                              final cubit = context.read<PickingLoadCubit>();
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            PickingLoadOrderStatusPage(
+                                          cubit: cubit,
+                                          load: data[index].codCarga,
+                                          isPending: isPending,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  onTap: () {
+                                    final cubit =
+                                        context.read<PickingLoadCubit>();
 
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => PickingLoadStreetsPage(
-                                    cubit: cubit,
-                                    load: data[index].codCarga,
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        },
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            PickingLoadStreetsPage(
+                                          cubit: cubit,
+                                          load: data[index].codCarga,
+                                          isPending: isPending,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       );
                     }
                     return const Text("Initial");

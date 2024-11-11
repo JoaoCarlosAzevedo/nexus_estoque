@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,11 +15,13 @@ class PickingLoadProductListPage extends ConsumerStatefulWidget {
       {required this.warehouseStreets,
       required this.cubit,
       required this.load,
+      required this.isPending,
       super.key});
   //final List<PickingModel> products;
   final String warehouseStreets;
   final String load;
   final PickingLoadCubit cubit;
+  final bool isPending;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -41,7 +44,7 @@ class _PickingLoadProductListPageState
         actions: [
           IconButton(
               onPressed: () {
-                widget.cubit.fetchPickingLoads();
+                widget.cubit.fetchPickingLoads(widget.isPending);
               },
               icon: const Icon(Icons.refresh))
         ],
@@ -122,10 +125,21 @@ class _PickingLoadProductListPageState
                       child: PickingProductCard(
                         data: element,
                         onTap: () async {
-                          final result =
-                              await PickingFormModal.show(context, element);
-                          if (result == "ok") {
-                            widget.cubit.fetchPickingLoads();
+                          if (element.separado >= element.quantidade) {
+                            AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.error,
+                                    animType: AnimType.rightSlide,
+                                    desc: "Item já separado!",
+                                    btnOkOnPress: () {},
+                                    btnOkColor: Theme.of(context).primaryColor)
+                                .show();
+                          } else {
+                            final result =
+                                await PickingFormModal.show(context, element);
+                            if (result == "ok") {
+                              widget.cubit.fetchPickingLoads(widget.isPending);
+                            }
                           }
                         },
                       ),
