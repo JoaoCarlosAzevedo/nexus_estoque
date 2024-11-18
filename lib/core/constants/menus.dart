@@ -4,8 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 enum Distributors { dellas, decminas, portolub, todos }
 
 //const buildDistribuitor = Distributors.decminas;
-//const buildDistribuitor = Distributors.todos;
-const buildDistribuitor = Distributors.dellas;
+const buildDistribuitor = Distributors.todos;
+//const buildDistribuitor = Distributors.dellas;
 
 bool checkMenu(Distributors dist, Distributors check) {
   if (dist == Distributors.todos) {
@@ -110,6 +110,12 @@ final List<MenuItemInfo> menuItens = [
     icon: FontAwesomeIcons.rightFromBracket,
     color: Colors.red,
     route: 'saidacheck',
+  ),
+  MenuItemInfo(
+    title: "Separacao Pedidos Sem Carga",
+    icon: FontAwesomeIcons.dolly,
+    color: Colors.red,
+    route: 'separaca_pedidos_v2',
   ),
   MenuItemInfo(
     title: "Conferencia NFe Entrada",
