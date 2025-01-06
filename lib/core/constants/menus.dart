@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-enum Distributors { dellas, decminas, portolub, todos }
+enum Distributors { dellas, decminas, portolub, todos, brazmax }
 
 //const buildDistribuitor = Distributors.decminas;
-const buildDistribuitor = Distributors.todos;
+const buildDistribuitor = Distributors.brazmax;
 //const buildDistribuitor = Distributors.dellas;
 
 bool checkMenu(Distributors dist, Distributors check) {
@@ -141,6 +141,22 @@ final List<MenuItemInfo> menuItens = [
     color: Colors.red,
     route: 'inventario_endereco',
   ),
+  MenuItemInfo(
+    title: "Etiqueta Produto",
+    icon: FontAwesomeIcons.tag,
+    color: Colors.red,
+    route: 'etiqueta_produto_listagem',
+  ),
+  ...checkMenu(buildDistribuitor, Distributors.brazmax)
+      ? [
+          MenuItemInfo(
+            title: "Inventário",
+            icon: FontAwesomeIcons.clipboardCheck,
+            color: Colors.red,
+            route: 'inventario',
+          ),
+        ]
+      : [],
   ...checkMenu(buildDistribuitor, Distributors.dellas)
       ? [
           MenuItemInfo(

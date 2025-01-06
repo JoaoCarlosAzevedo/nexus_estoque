@@ -35,10 +35,13 @@ import '../../features/address_inventory/pages/address_inventory_page/address_in
 import '../../features/filter_tags/pages/filter_tags_load_page/filter_tags_load_page.dart';
 import '../../features/filter_tags_orders/pages/filter_tags_load_list_page/filter_tags_order_load_list_page.dart';
 import '../../features/filter_tags_orders/pages/filter_tags_order_load_page/filter_tags_order_load_page.dart';
+import '../../features/inventory/pages/inventory_page.dart';
 import '../../features/picking_load/pages/picking_load_list_page/picking_load_list_page.dart';
 import '../../features/picking_load_orders/picking_loads/picking_load_orders_page.dart';
 import '../../features/picking_load_v2/pages/picking_load_list_page/picking_load_v2_list_page.dart';
 import '../../features/picking_orders_v2/pages/picking_orders_v2_page.dart';
+import '../../features/product_tag/product_tag_list/product_tag_list.dart';
+import '../../features/product_tag/product_tag_preview/product_tag_preview.dart';
 import '../../features/purchase_invoice_check/pages/purchase_invoice_list/purchase_invoice_list_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -166,6 +169,17 @@ final routerProvider = Provider<GoRouter>((ref) {
               );
             })),
         GoRoute(
+            path: "/etiqueta_produto_listagem",
+            builder: ((context, state) => const ProductTagListPage())),
+        GoRoute(
+            path: "/etiqueta_produto/:barcode",
+            builder: ((context, state) {
+              final param = state.pathParameters['barcode'];
+              return ProductTagPreview(
+                barcode: param ?? '',
+              );
+            })),
+        GoRoute(
           path: "/inventario_endereco/consulta/:local/:endereco",
           builder: ((context, state) {
             final endereco = state.pathParameters['endereco'];
@@ -186,6 +200,12 @@ final routerProvider = Provider<GoRouter>((ref) {
               address: param,
               doc: queryParam!,
             );
+          }),
+        ),
+        GoRoute(
+          path: "/inventario",
+          builder: ((context, state) {
+            return const InventoryPage();
           }),
         ),
         GoRoute(

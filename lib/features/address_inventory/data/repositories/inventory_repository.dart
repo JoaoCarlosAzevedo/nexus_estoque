@@ -20,6 +20,12 @@ final remoteGetInventoryProvider = FutureProvider.autoDispose
   return repository.getInventory(date, param);
 });
 
+final remoteGetProductInventoryProvider = FutureProvider.autoDispose
+    .family<List<InventoryModel>, String>((ref, param) async {
+  final repository = ref.read(inventoryRepository);
+  return repository.getProductInvetory(param);
+});
+
 final remoteDeleteInventoryProvider =
     FutureProvider.autoDispose.family<bool, int>((ref, param) async {
   final repository = ref.read(inventoryRepository);
@@ -89,6 +95,32 @@ class InventoryRepository {
           'emissao': date,
           'endereco': param[0],
           'Doc': param[1]
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final listProds = (response.data as List).map((item) {
+          return InventoryModel.fromMap(item);
+        }).toList();
+        return listProds;
+      }
+      throw const Failure("Nenhum registro encontrado.", ErrorType.validation);
+    } on DioException catch (_) {
+      throw const Failure("Erro de conexão.", ErrorType.exception);
+    }
+  }
+
+  Future<List<InventoryModel>> getProductInvetory(String parameter) async {
+    final String url = await Config.baseURL;
+    final param = parameter.split('|');
+
+    try {
+      var response = await dio.get(
+        '$url/inventario',
+        queryParameters: {
+          'emissao': param[0],
+          'produto': param[1],
+          'doc': param[2]
         },
       );
 
