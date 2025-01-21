@@ -112,6 +112,7 @@ class _PurchaseInvoiceProdutctsState
 
                                 if (state is PurchaseInvoiceProductsSuccess) {
                                   Navigator.pop(context);
+                                  ref.invalidate(purchaseInvoicesProvider);
                                 }
                               },
                               child: BlocBuilder<PurchaseInvoiceProductsCubit,
@@ -194,12 +195,14 @@ class _PurchaseInvoiceProdutctsState
                                                   .setNewQuantity(newQuantity,
                                                       state.product!);
                                             }
+                                            focus.requestFocus();
                                           },
                                           onClose: () {
                                             context
                                                 .read<
                                                     PurchaseInvoiceProductsCubit>()
                                                 .reset();
+                                            focus.requestFocus();
                                           },
                                         ),
                                         Expanded(

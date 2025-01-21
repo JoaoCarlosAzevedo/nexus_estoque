@@ -123,19 +123,20 @@ class PurchaseInvoiceProduct {
   double checked;
   double checkedBd;
   String sd1Chave;
+  bool partial;
 
-  PurchaseInvoiceProduct({
-    required this.codigo,
-    required this.descricao,
-    required this.item,
-    required this.quantidade,
-    required this.barcode,
-    required this.barcode2,
-    required this.um,
-    required this.checked,
-    required this.checkedBd,
-    required this.sd1Chave,
-  });
+  PurchaseInvoiceProduct(
+      {required this.codigo,
+      required this.descricao,
+      required this.item,
+      required this.quantidade,
+      required this.barcode,
+      required this.barcode2,
+      required this.um,
+      required this.checked,
+      required this.checkedBd,
+      required this.sd1Chave,
+      required this.partial});
 
   Color statusConferencia() {
     if (checkedBd > 0 && checkedBd < quantidade) {
@@ -172,17 +173,17 @@ class PurchaseInvoiceProduct {
 
   factory PurchaseInvoiceProduct.fromMap(Map<String, dynamic> map) {
     return PurchaseInvoiceProduct(
-      codigo: map['codigo'] ?? '',
-      descricao: map['descricao'] ?? '',
-      item: map['item'] ?? '',
-      quantidade: map['quantidade']?.toDouble() ?? 0,
-      barcode: map['barcode'] ?? '',
-      barcode2: map['barcode2'] ?? '',
-      um: map['um'] ?? '',
-      checked: map['checked']?.toDouble() ?? 0,
-      checkedBd: map['checked']?.toDouble() ?? 0,
-      sd1Chave: map['SD1Chave'] ?? '',
-    );
+        codigo: map['codigo'] ?? '',
+        descricao: map['descricao'] ?? '',
+        item: map['item'] ?? '',
+        quantidade: map['quantidade']?.toDouble() ?? 0,
+        barcode: map['barcode'] ?? '',
+        barcode2: map['barcode2'] ?? '',
+        um: map['um'] ?? '',
+        checked: map['checked']?.toDouble() ?? 0,
+        checkedBd: map['checked']?.toDouble() ?? 0,
+        sd1Chave: map['SD1Chave'] ?? '',
+        partial: map['parcial'] ?? false);
   }
 
   String toJson() => json.encode(toMap());

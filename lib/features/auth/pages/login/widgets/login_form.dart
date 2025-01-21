@@ -103,7 +103,7 @@ class LoginForm extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Text('Versão 1.1.22'),
+                const Text('Versão 1.1.25'),
               ],
             ),
           ),

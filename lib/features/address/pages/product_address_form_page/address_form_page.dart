@@ -36,6 +36,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
 
   final addressFocus = FocusNode();
   final batchFocus = FocusNode();
+  final quantityFocus = FocusNode();
 
   @override
   void initState() {
@@ -53,6 +54,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
     addressController.dispose();
     quantityController.dispose();
     batchController.dispose();
+    quantityFocus.dispose();
     super.dispose();
   }
 
@@ -82,7 +84,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                   .show();
             }
             if (state is ProductAddressFormSuccess) {
-              context.pop();
+              context.pop(true);
             }
           },
           child: BlocBuilder<ProductAddressFormCubit, ProductAddressFormState>(
@@ -123,9 +125,11 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                             enabled: true,
                             onPressed: () async {
                               addressSearchPage();
+                              quantityFocus.requestFocus();
                             },
                             onSubmitted: () {
                               batchFocus.requestFocus();
+                              quantityFocus.requestFocus();
                             },
                             focus: addressFocus,
                           ),
@@ -143,7 +147,10 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                               ),
                             ),
                           const Divider(),
-                          InputQuantity(controller: quantityController),
+                          InputQuantity(
+                            controller: quantityController,
+                            focus: quantityFocus,
+                          ),
                           const Divider(),
                           ElevatedButton(
                             onPressed: () {

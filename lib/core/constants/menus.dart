@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-enum Distributors { dellas, decminas, portolub, todos, brazmax }
+enum Distributors { dellas, decminas, portolub, todos, brazmax, audiogene }
 
 //const buildDistribuitor = Distributors.decminas;
-const buildDistribuitor = Distributors.brazmax;
+//const buildDistribuitor = Distributors.brazmax;
+const buildDistribuitor = Distributors.todos;
 //const buildDistribuitor = Distributors.dellas;
 
 bool checkMenu(Distributors dist, Distributors check) {
@@ -31,7 +32,7 @@ class MenuItemInfo {
       required this.color,
       required this.route});
 }
-
+/* 
 final List<MenuItemInfo> menuItens = [
   MenuItemInfo(
     title: "Endereçar Saldos",
@@ -167,4 +168,104 @@ final List<MenuItemInfo> menuItens = [
           )
         ]
       : [],
+];
+ */
+
+final List<MenuItemInfo> menuItens = [
+  MenuItemInfo(
+    title: "Endereçar Saldos",
+    icon: FontAwesomeIcons.warehouse,
+    color: Colors.red,
+    route: 'enderecar',
+  ),
+  MenuItemInfo(
+    title: "Transferências",
+    icon: FontAwesomeIcons.cartFlatbed,
+    color: Colors.red,
+    route: 'transferencias',
+  ),
+  /* MenuItemInfo(
+    title: "Movimentos Internos",
+    icon: FontAwesomeIcons.boxesPacking,
+    color: Colors.red,
+    route: 'movimentos',
+  ), */
+  /* MenuItemInfo(
+    title: "Separação por Pedido",
+    icon: FontAwesomeIcons.dolly,
+    color: Colors.red,
+    route: 'separacao',
+  ), */
+  /*  MenuItemInfo(
+    title: "Separação por Carga",
+    icon: FontAwesomeIcons.truckArrowRight,
+    color: Colors.red,
+    route: 'separacao_carga',
+  ), */
+  /*  MenuItemInfo(
+    title: "Separação por Carga v2",
+    icon: FontAwesomeIcons.truckArrowRight,
+    color: Colors.red,
+    route: 'separacao_carga_v2',
+  ), */
+  /*  MenuItemInfo(
+    title: "Separação por Pedido v2",
+    icon: FontAwesomeIcons.dolly,
+    color: Colors.red,
+    route: 'separacao_carga_v2_pedido',
+  ), */
+  MenuItemInfo(
+    title: "Conferencia NFe Saida",
+    icon: FontAwesomeIcons.rightFromBracket,
+    color: Colors.red,
+    route: 'saidacheck',
+  ),
+  MenuItemInfo(
+    title: "Conferencia NFe Entrada",
+    icon: FontAwesomeIcons.rightToBracket,
+    color: Colors.red,
+    route: 'entradacheck',
+  ),
+  MenuItemInfo(
+    title: "Separacao Pedidos Sem Carga",
+    icon: FontAwesomeIcons.dolly,
+    color: Colors.red,
+    route: 'separaca_pedidos_v2',
+  ),
+  MenuItemInfo(
+    title: "Reposição",
+    icon: FontAwesomeIcons.boxesPacking,
+    color: Colors.red,
+    route: 'reposicao',
+  ),
+  MenuItemInfo(
+    title: "Saldo por Endereço",
+    icon: FontAwesomeIcons.cubes,
+    color: Colors.red,
+    route: 'saldo_endereco',
+  ),
+  MenuItemInfo(
+    title: "Inventário por Endereço",
+    icon: FontAwesomeIcons.clipboardCheck,
+    color: Colors.red,
+    route: 'inventario_endereco',
+  ),
+  MenuItemInfo(
+    title: "Etiqueta Produto",
+    icon: FontAwesomeIcons.tag,
+    color: Colors.red,
+    route: 'etiqueta_produto_listagem',
+  ),
+  MenuItemInfo(
+    title: "Inventário",
+    icon: FontAwesomeIcons.clipboardCheck,
+    color: Colors.red,
+    route: 'inventario',
+  ),
+  /*  MenuItemInfo(
+    title: "Etiquetas Filtro",
+    icon: FontAwesomeIcons.print,
+    color: Colors.red,
+    route: 'etiqueta_filtros_cargas',
+  ) */
 ];

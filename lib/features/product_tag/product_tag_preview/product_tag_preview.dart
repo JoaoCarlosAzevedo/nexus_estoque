@@ -30,6 +30,24 @@ class _ProductTagPreviewState extends ConsumerState<ProductTagPreview> {
               child: Column(
                 children: [
                   Text("SKU: ${widget.barcode}"),
+                  /*  Row(
+                    children: [
+                      IconButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green),
+                        onPressed: () {},
+                        iconSize: 34,
+                        icon: const Icon(
+                          Icons.search,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text("Seleção de Endereço"),
+                    ],
+                  ), */
                   const Divider(),
                   Card(
                     child: Image.network(data.urlPreview),

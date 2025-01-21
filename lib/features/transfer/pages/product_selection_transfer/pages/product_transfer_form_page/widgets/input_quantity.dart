@@ -6,10 +6,12 @@ class InputQuantity extends StatefulWidget {
   const InputQuantity({
     super.key,
     required this.controller,
+    this.focus,
     this.onSubmitted,
   });
   final TextEditingController controller;
   final Function(String)? onSubmitted;
+  final FocusNode? focus;
   @override
   State<InputQuantity> createState() => _InputQuantityState();
 }
@@ -35,6 +37,7 @@ class _InputQuantityState extends State<InputQuantity> {
             style: const TextStyle(fontSize: 20),
             textAlign: TextAlign.center,
             controller: widget.controller,
+            focusNode: widget.focus,
             keyboardType: const TextInputType.numberWithOptions(
               decimal: true,
               signed: false,

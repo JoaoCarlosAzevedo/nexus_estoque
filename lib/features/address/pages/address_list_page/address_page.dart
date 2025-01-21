@@ -112,9 +112,19 @@ class _AddressPageState extends ConsumerState<AddressPage> {
                           itemBuilder: (context, index) {
                             return AddressCard(
                               data: filterList[index],
-                              onTap: () {
-                                context.push('/enderecar/form/',
+                              onTap: () async {
+                                bool? resp = await context.push(
+                                    '/enderecar/form/',
                                     extra: filterList[index]);
+
+                                if (resp != null) {
+                                  if (resp) {
+                                    // ignore: use_build_context_synchronously
+                                    context
+                                        .read<ProductAddressCubit>()
+                                        .fetchProductAddress();
+                                  }
+                                }
                               },
                             );
                           },
