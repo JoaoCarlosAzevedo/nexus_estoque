@@ -18,6 +18,7 @@ class ProductAddressModel {
   final String codigoBarras;
   final String codigoBarras2;
   final String enderecoFiltro;
+  final double fator;
 
   ProductAddressModel({
     required this.descricao,
@@ -36,6 +37,7 @@ class ProductAddressModel {
     required this.chave,
     required this.codigoBarras,
     required this.enderecoFiltro,
+    required this.fator,
     required this.codigoBarras2,
   });
 
@@ -57,6 +59,7 @@ class ProductAddressModel {
       'chave': chave,
       'codigobarras': codigoBarras,
       'codigoBarras2': codigoBarras2,
+      'fator': fator,
       'enderecoFiltro': enderecoFiltro,
     };
   }
@@ -69,6 +72,7 @@ class ProductAddressModel {
         clifor: map['clifor'] ?? '',
         lote: map['lote'] ?? '',
         saldo: map['saldo']?.toDouble() ?? 0,
+        fator: map['fator']?.toDouble() ?? 0,
         serie: map['serie'] ?? '',
         notafiscal: map['notafiscal'] ?? '',
         um: map['um'] ?? '',

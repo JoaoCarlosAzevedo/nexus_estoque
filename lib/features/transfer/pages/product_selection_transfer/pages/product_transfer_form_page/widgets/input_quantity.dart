@@ -7,11 +7,13 @@ class InputQuantity extends StatefulWidget {
     super.key,
     required this.controller,
     this.focus,
+    this.fator,
     this.onSubmitted,
   });
   final TextEditingController controller;
   final Function(String)? onSubmitted;
   final FocusNode? focus;
+  final double? fator;
   @override
   State<InputQuantity> createState() => _InputQuantityState();
 }
@@ -24,7 +26,11 @@ class _InputQuantityState extends State<InputQuantity> {
       children: <Widget>[
         IconButton(
           onPressed: () {
-            _setValue(-1.0);
+            if (widget.fator != null) {
+              _setValue(-1.0 * widget.fator!);
+            } else {
+              _setValue(-1.0);
+            }
           },
           iconSize: 30,
           icon: const Icon(
@@ -62,7 +68,11 @@ class _InputQuantityState extends State<InputQuantity> {
         IconButton(
           iconSize: 30,
           onPressed: () {
-            _setValue(1.0);
+            if (widget.fator != null) {
+              _setValue(1.0 * widget.fator!);
+            } else {
+              _setValue(1.0);
+            }
           },
           icon: const Icon(
             Icons.add,

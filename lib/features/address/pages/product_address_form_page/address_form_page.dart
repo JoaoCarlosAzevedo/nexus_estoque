@@ -20,6 +20,8 @@ import 'package:nexus_estoque/features/address/pages/product_check_page/product_
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_text.dart';
 
+import '../../../../core/widgets/form_input_no_keyboard_widget.dart';
+
 class AddressForm extends ConsumerStatefulWidget {
   const AddressForm({super.key, required this.productAddress});
   final ProductAddressModel productAddress;
@@ -31,12 +33,16 @@ class AddressForm extends ConsumerStatefulWidget {
 class _AddressFormState extends ConsumerState<AddressForm> {
   final TextEditingController addressController = TextEditingController();
   final TextEditingController batchController = TextEditingController();
+  final TextEditingController productController = TextEditingController();
   final TextEditingController quantityController =
       TextEditingController(text: '0');
 
   final addressFocus = FocusNode();
   final batchFocus = FocusNode();
   final quantityFocus = FocusNode();
+  final productFocus = FocusNode();
+
+  bool isMultiple = false;
 
   @override
   void initState() {
@@ -53,8 +59,10 @@ class _AddressFormState extends ConsumerState<AddressForm> {
     batchFocus.dispose();
     addressController.dispose();
     quantityController.dispose();
+    productController.dispose();
     batchController.dispose();
     quantityFocus.dispose();
+    productFocus.dispose();
     super.dispose();
   }
 
@@ -133,23 +141,76 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                             },
                             focus: addressFocus,
                           ),
-                          const Divider(),
                           if (widget.productAddress.lote.trim().isNotEmpty)
-                            TextField(
-                              enabled: true,
-                              controller: batchController,
-                              focusNode: batchFocus,
-                              onSubmitted: (e) {},
-                              decoration: const InputDecoration(
-                                label: Text("Lote"),
-                                border: InputBorder.none,
-                                prefixIcon: Icon(Icons.qr_code),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 16.0),
+                              child: TextField(
+                                enabled: true,
+                                controller: batchController,
+                                focusNode: batchFocus,
+                                onSubmitted: (e) {},
+                                decoration: const InputDecoration(
+                                  label: Text("Lote"),
+                                  border: InputBorder.none,
+                                  prefixIcon: Icon(Icons.qr_code),
+                                ),
+                              ),
+                            ),
+                          if (widget.productAddress.fator > 0)
+                            Wrap(
+                              alignment: WrapAlignment.spaceBetween,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              spacing: 5,
+                              direction: Axis.horizontal,
+                              children: [
+                                Text(
+                                    "Utiliza Multiplicador ${widget.productAddress.fator} ?"),
+                                Switch(
+                                  value: isMultiple,
+                                  activeColor: Colors.green,
+                                  inactiveTrackColor: Colors.grey,
+                                  onChanged: (bool value) {
+                                    // This is called when the user toggles the switch.
+                                    setState(() {
+                                      isMultiple = value;
+                                    });
+                                    if (isMultiple) {
+                                      productFocus.requestFocus();
+                                    } else {
+                                      quantityFocus.requestFocus();
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          if (widget.productAddress.fator > 0 && isMultiple)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 16.0),
+                              child: NoKeyboardTextForm(
+                                autoFocus: true,
+                                label: 'Cód. Produto',
+                                controller: productController,
+                                focusNode: productFocus,
+                                onChange: false,
+                                onSubmitted: (e) {
+                                  if (checkProductCode(e)) {
+                                    setState(() {
+                                      _addValue(
+                                          1 * widget.productAddress.fator);
+                                    });
+                                  }
+
+                                  productController.clear();
+                                  productFocus.requestFocus();
+                                },
                               ),
                             ),
                           const Divider(),
                           InputQuantity(
                             controller: quantityController,
                             focus: quantityFocus,
+                            fator:
+                                isMultiple ? widget.productAddress.fator : null,
                           ),
                           const Divider(),
                           ElevatedButton(
@@ -255,6 +316,40 @@ class _AddressFormState extends ConsumerState<AddressForm> {
     );
     if (result is AddressModel) {
       addressController.text = result.codigo;
+    }
+  }
+
+  bool checkProductCode(String code) {
+    if (widget.productAddress.codigo.trim() == code.trim()) {
+      return true;
+    }
+
+    if (widget.productAddress.codigoBarras.contains(code.trim()) &&
+        code.trim().length > 6) {
+      return true;
+    }
+
+    if (widget.productAddress.codigoBarras2.contains(code.trim()) &&
+        code.trim().length > 6) {
+      return true;
+    }
+
+    return false;
+  }
+
+  void _addValue(double number) {
+    if (quantityController.text.isEmpty) {
+      quantityController.text = '0';
+    }
+
+    double isPositive = double.parse(quantityController.text) + number;
+
+    if (isPositive >= 0) {
+      quantityController.text =
+          (double.parse(quantityController.text) + number).toStringAsFixed(2);
+
+      quantityController.selection =
+          TextSelection.collapsed(offset: quantityController.text.length);
     }
   }
 }

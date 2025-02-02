@@ -160,6 +160,13 @@ class _AddressPageState extends ConsumerState<AddressPage> {
       if (element.lote.toUpperCase().contains(search.toUpperCase())) {
         return true;
       }
+      if (element.codigoBarras.toUpperCase().contains(search.toUpperCase())) {
+        return true;
+      }
+
+      if (element.codigoBarras2.toUpperCase().contains(search.toUpperCase())) {
+        return true;
+      }
 
       if (search.trim().length >= 44) {
         if (element.chave.toUpperCase().contains(search.trim().toUpperCase())) {
