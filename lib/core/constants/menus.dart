@@ -257,6 +257,12 @@ final List<MenuItemInfo> menuItens = [
     route: 'etiqueta_produto_listagem',
   ),
   MenuItemInfo(
+    title: "Etiqueta Endereços",
+    icon: FontAwesomeIcons.tags,
+    color: Colors.red,
+    route: 'etiqueta_enderecos_listagem',
+  ),
+  MenuItemInfo(
     title: "Inventário",
     icon: FontAwesomeIcons.clipboardCheck,
     color: Colors.red,

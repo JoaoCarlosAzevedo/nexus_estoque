@@ -32,6 +32,8 @@ import '../../features/address_balance/data/model/address_balance_model.dart';
 import '../../features/address_inventory/pages/address_inventory_list/address_inventory_list_page.dart';
 import '../../features/address_inventory/pages/address_inventory_new_form_page/address_inventory_new_form_page.dart';
 import '../../features/address_inventory/pages/address_inventory_page/address_inventory_page.dart';
+import '../../features/address_tag/pages/address_tag_detail.dart';
+import '../../features/address_tag/pages/address_tag_page.dart';
 import '../../features/filter_tags/pages/filter_tags_load_page/filter_tags_load_page.dart';
 import '../../features/filter_tags_orders/pages/filter_tags_load_list_page/filter_tags_order_load_list_page.dart';
 import '../../features/filter_tags_orders/pages/filter_tags_order_load_page/filter_tags_order_load_page.dart';
@@ -172,10 +174,21 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: "/etiqueta_produto_listagem",
             builder: ((context, state) => const ProductTagListPage())),
         GoRoute(
+            path: "/etiqueta_enderecos_listagem",
+            builder: ((context, state) => const AddressTagListPage())),
+        GoRoute(
             path: "/etiqueta_produto/:barcode",
             builder: ((context, state) {
               final param = state.pathParameters['barcode'];
               return ProductTagPreview(
+                barcode: param ?? '',
+              );
+            })),
+        GoRoute(
+            path: "/etiqueta_endereco/:barcode",
+            builder: ((context, state) {
+              final param = state.pathParameters['barcode'];
+              return AddressTagPreview(
                 barcode: param ?? '',
               );
             })),
