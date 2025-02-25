@@ -8,6 +8,7 @@ import 'package:nexus_estoque/features/picking/data/model/picking_model.dart';
 import 'package:nexus_estoque/features/picking/data/repositories/picking_repository.dart';
 import 'package:nexus_estoque/features/picking/pages/picking_form/cubit/picking_save_cubit.dart';
 import 'package:nexus_estoque/features/picking/pages/picking_products_list/widgets/picking_product_card_wigdet.dart';
+import '../../../../core/utils/error_dialog.dart';
 import '../../../transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity_int.dart';
 
 class PickingFormModal {
@@ -49,6 +50,7 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
   final TextEditingController addressController = TextEditingController();
   final TextEditingController quantityController = TextEditingController();
   final FocusNode productFocus = FocusNode();
+  final FocusNode addressFocus = FocusNode();
   bool checkProduct = false;
   double quantity = 0;
 
@@ -57,6 +59,7 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
     productController.dispose();
     addressController.dispose();
     productFocus.dispose();
+    addressFocus.dispose();
     quantityController.dispose();
     quantityController.removeListener(_quantityListener);
 
@@ -125,9 +128,18 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
                         TextFormField(
                           enabled: true,
                           validator: isNotEmpty,
+                          focusNode: addressFocus,
                           onEditingComplete: () {},
                           onFieldSubmitted: (e) {
-                            productFocus.requestFocus();
+                            bool isValid = validateAddress();
+
+                            if (isValid) {
+                              productFocus.requestFocus();
+                            } else {
+                              showErrorWidget(context, "Endereço inválido");
+                              addressController.clear();
+                              addressFocus.requestFocus();
+                            }
                           },
                           autofocus: true,
                           controller: addressController,
@@ -209,6 +221,14 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
         return;
       }
     }
+  }
+
+  bool validateAddress() {
+    if (widget.picking.codEndereco.trim() == addressController.text.trim()) {
+      return true;
+    }
+
+    return false;
   }
 
   bool validateData() {

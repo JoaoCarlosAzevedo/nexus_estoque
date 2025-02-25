@@ -4,14 +4,17 @@ import 'package:nexus_estoque/features/outflow_doc_check/pages/outflow_doc_page/
 import '../../../data/model/purchase_invoice_model.dart';
 
 class InvoiceProductCheckCard extends StatelessWidget {
-  const InvoiceProductCheckCard(
-      {super.key,
-      required this.product,
-      required this.onTapCard,
-      required this.onDelete});
+  const InvoiceProductCheckCard({
+    super.key,
+    required this.product,
+    required this.onTapCard,
+    required this.onDelete,
+    this.onChanged,
+  });
   final PurchaseInvoiceProduct product;
   final Function()? onTapCard;
   final Function()? onDelete;
+  final void Function(bool)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +69,7 @@ class InvoiceProductCheckCard extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.titleMedium,
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -84,7 +87,15 @@ class InvoiceProductCheckCard extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.bodyLarge,
-                          )
+                          ),
+                          /*  Switch(
+                            value: false,
+                            activeColor: Colors.green,
+                            inactiveTrackColor: Colors.grey,
+                            onChanged: (bool value) {
+                              // This is called when the user toggles the switch.
+                            },
+                          ), */
                         ],
                       ),
                     ),
@@ -111,6 +122,25 @@ class InvoiceProductCheckCard extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 style: Theme.of(context).textTheme.titleMedium,
                               ),
+                              if (product.fator > 0)
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        "Utiliza multiplicador(x${product.fator.toStringAsFixed(0)})?",
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    Switch(
+                                      value: product.isMultiple,
+                                      activeColor: Colors.green,
+                                      inactiveTrackColor: Colors.grey,
+                                      onChanged: onChanged,
+                                    ),
+                                  ],
+                                )
                             ],
                           )
                         ],

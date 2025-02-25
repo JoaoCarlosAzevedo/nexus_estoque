@@ -144,6 +144,52 @@ class PurchaseInvoiceProductsCubit extends Cubit<PurchaseInvoiceProductsState> {
     }
   }
 
+  void setMultiplier(String barcode, bool switchValue) {
+    if (state is PurchaseInvoiceProductsLChecking) {
+      final currentState = state as PurchaseInvoiceProductsLChecking;
+      var currentInvoices = currentState.invoices;
+      final products = currentInvoices.fold(<PurchaseInvoiceProduct>[],
+          (previousValue, element) {
+        previousValue.addAll(element.purchaseInvoiceProducts);
+        return previousValue;
+      });
+
+      for (var element in products) {
+        if (element.codigo.contains(barcode)) {
+          element.isMultiple = switchValue;
+        }
+      }
+      emit(PurchaseInvoiceProductsLoading());
+      emit(PurchaseInvoiceProductsLChecking(
+        invoices: currentState.invoices,
+        barcode: '',
+        product: null,
+        show: false,
+      ));
+    }
+  }
+
+  double checkMultilier(String barcode) {
+    double total = 0;
+    if (state is PurchaseInvoiceProductsLChecking) {
+      final currentState = state as PurchaseInvoiceProductsLChecking;
+      var currentInvoices = currentState.invoices;
+      final products = currentInvoices.fold(<PurchaseInvoiceProduct>[],
+          (previousValue, element) {
+        previousValue.addAll(element.purchaseInvoiceProducts);
+        return previousValue;
+      });
+
+      for (var element in products) {
+        if (element.codigo.contains(barcode)) {
+          total = total + element.checked;
+        }
+      }
+    }
+
+    return total;
+  }
+
   void setNewQuantity(double newQuantity, PurchaseInvoiceProduct product) {
     if (state is PurchaseInvoiceProductsLChecking) {
       final currentState = state as PurchaseInvoiceProductsLChecking;
@@ -186,50 +232,26 @@ class PurchaseInvoiceProductsCubit extends Cubit<PurchaseInvoiceProductsState> {
       }
 
       emit(PurchaseInvoiceProductsLoading());
-      emit(
-        PurchaseInvoiceProductsLChecking(
-            show: true,
-            invoices: currentInvoices,
-            barcode: currentState.product!.barcode,
-            product: currentState.product),
-      );
-    }
-  }
-/* 
-  void setQuantity(double quantity) {
-    double saldo = quantity;
 
-    //zera antes de distribuir
-    for (var element in products) {
-      element.separado = 0;
-    }
-
-    for (var produto in products) {
-      if (produto.separado < produto.quantidade) {
-        //se a quantidade exceder a quantidade do primeiro pedido, preenche como completo e controla o saldo
-        if ((saldo + produto.separado) > produto.quantidade) {
-          double necessario = produto.quantidade - produto.separado;
-          produto.separado = produto.separado + necessario;
-          saldo = saldo - necessario;
-          //esse produto ja foi atendido
-          continue;
-        }
-
-        if (saldo > 0) {
-          produto.separado = produto.separado + saldo;
-          saldo = 0;
-        }
-      }
-    }
-    //se ainda sobrou saldo extra, joga no ultimo
-    if (saldo > 0) {
-      if (product.isNotEmpty) {
-        Pickingv2Model ultimPed = products.last;
-        ultimPed.separado = ultimPed.separado + saldo;
+      if (currentState.product == null) {
+        emit(
+          PurchaseInvoiceProductsLChecking(
+              show: false,
+              invoices: currentState.invoices,
+              barcode: '',
+              product: null),
+        );
+      } else {
+        emit(
+          PurchaseInvoiceProductsLChecking(
+              show: true,
+              invoices: currentInvoices,
+              barcode: currentState.product!.barcode,
+              product: currentState.product),
+        );
       }
     }
   }
-   */
 
   void checkBarcode(String barcode) {
     if (state is PurchaseInvoiceProductsLChecking) {
@@ -284,11 +306,20 @@ class PurchaseInvoiceProductsCubit extends Cubit<PurchaseInvoiceProductsState> {
         });
       }
 
-      emit(PurchaseInvoiceProductsLoading());
+      //emit(PurchaseInvoiceProductsLoading());
+
       if (index >= 0) {
-        products[index].checked += 1;
+        if (products[index].isMultiple && products[index].fator > 0) {
+          //products[index].checked += 1 * products[index].fator;
+          var checked = checkMultilier(barcode);
+          setNewQuantity(
+              checked + (1 * products[index].fator), products[index]);
+        } else {
+          products[index].checked += 1;
+        }
         found = true;
         AudioService.beep();
+        emit(PurchaseInvoiceProductsLoading());
         emit(
           PurchaseInvoiceProductsLChecking(
               show: true,
@@ -301,6 +332,7 @@ class PurchaseInvoiceProductsCubit extends Cubit<PurchaseInvoiceProductsState> {
       if (!found) {
         //nao encontrou nenhum elemento
         AudioService.error();
+        emit(PurchaseInvoiceProductsLoading());
         emit(
           PurchaseInvoiceProductsLChecking(
               show: true,

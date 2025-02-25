@@ -6,6 +6,7 @@ import 'package:nexus_estoque/core/mixins/validation_mixin.dart';
 import 'package:nexus_estoque/core/services/audio_player.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity.dart';
 
+import '../../../../core/utils/error_dialog.dart';
 import '../../../../core/widgets/form_input_no_keyboard_widget.dart';
 import '../../data/model/pickingv2_model.dart';
 import '../../data/repositories/pickingv2_repository.dart';
@@ -52,6 +53,7 @@ class _PickingFormv2State extends ConsumerState<PickingFormv2>
   final TextEditingController addressController = TextEditingController();
   final TextEditingController quantityController = TextEditingController();
   final FocusNode productFocus = FocusNode();
+  final FocusNode addressFocus = FocusNode();
   bool checkProduct = false;
   double quantity = 0;
 
@@ -60,6 +62,7 @@ class _PickingFormv2State extends ConsumerState<PickingFormv2>
     productController.dispose();
     addressController.dispose();
     productFocus.dispose();
+    addressFocus.dispose();
     quantityController.dispose();
 
     super.dispose();
@@ -122,28 +125,22 @@ class _PickingFormv2State extends ConsumerState<PickingFormv2>
                           onTap: (() {}),
                         ),
                         const Divider(),
-                        /* TextFormField(
-                          enabled: true,
-                          validator: isNotEmpty,
-                          onEditingComplete: () {},
-                          onFieldSubmitted: (e) {
-                            productFocus.requestFocus();
-                          },
-                          autofocus: true,
-                          controller: addressController,
-                          decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.qr_code),
-                            label: Text("Confirmação do Endereço"),
-
-                          ),
-                        ), */
                         NoKeyboardTextForm(
                           validator: isNotEmpty,
                           autoFocus: true,
                           controller: addressController,
+                          focusNode: addressFocus,
                           label: "Confirmação do Endereço",
                           onSubmitted: (value) {
-                            productFocus.requestFocus();
+                            bool isValid = validateAddress();
+
+                            if (isValid) {
+                              productFocus.requestFocus();
+                            } else {
+                              showErrorWidget(context, "Endereço inválido");
+                              addressController.clear();
+                              addressFocus.requestFocus();
+                            }
                           },
                         ),
                         const Divider(),
@@ -229,6 +226,14 @@ class _PickingFormv2State extends ConsumerState<PickingFormv2>
         return;
       }
     }
+  }
+
+  bool validateAddress() {
+    if (widget.picking.codEndereco.trim() == addressController.text.trim()) {
+      return true;
+    }
+
+    return false;
   }
 
   bool validateData() {

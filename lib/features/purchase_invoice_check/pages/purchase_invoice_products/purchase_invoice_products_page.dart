@@ -169,6 +169,7 @@ class _PurchaseInvoiceProdutctsState
                                                   .read<
                                                       PurchaseInvoiceProductsCubit>()
                                                   .checkBarcode(value.trim());
+
                                               focus.requestFocus();
                                               controller.clear();
                                             },
@@ -215,6 +216,17 @@ class _PurchaseInvoiceProdutctsState
                                               final product = products[index];
                                               return InvoiceProductCheckCard(
                                                 product: product,
+                                                onChanged: (_) {
+                                                  bool setBool =
+                                                      !product.isMultiple;
+
+                                                  context
+                                                      .read<
+                                                          PurchaseInvoiceProductsCubit>()
+                                                      .setMultiplier(
+                                                          product.codigo,
+                                                          setBool);
+                                                },
                                                 onTapCard: () {},
                                                 onDelete: () {
                                                   context

@@ -263,6 +263,12 @@ final List<MenuItemInfo> menuItens = [
     route: 'etiqueta_enderecos_listagem',
   ),
   MenuItemInfo(
+    title: "Etiquetas Filtro",
+    icon: FontAwesomeIcons.print,
+    color: Colors.red,
+    route: 'etiqueta_filtros_cargas',
+  ),
+  MenuItemInfo(
     title: "Inventário",
     icon: FontAwesomeIcons.clipboardCheck,
     color: Colors.red,

@@ -7,6 +7,7 @@ import 'package:nexus_estoque/core/services/audio_player.dart';
 import 'package:nexus_estoque/core/widgets/form_input_no_keyboard_widget.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity.dart';
 
+import '../../../../../core/utils/error_dialog.dart';
 import '../../../data/model/pickingv2_model.dart';
 import '../../../data/repositories/pickingv2_repository.dart';
 import '../../picking_form_v2_page/cubit/picking_save_v2_cubit.dart';
@@ -53,6 +54,7 @@ class _PickingFormv2GroupedState extends ConsumerState<PickingFormv2Grouped>
   final TextEditingController addressController = TextEditingController();
   final TextEditingController quantityController = TextEditingController();
   final FocusNode productFocus = FocusNode();
+  final FocusNode addressFocus = FocusNode();
   bool checkProduct = false;
   double quantity = 0;
 
@@ -61,6 +63,7 @@ class _PickingFormv2GroupedState extends ConsumerState<PickingFormv2Grouped>
     productController.dispose();
     addressController.dispose();
     productFocus.dispose();
+    addressFocus.dispose();
     quantityController.dispose();
 
     super.dispose();
@@ -123,25 +126,20 @@ class _PickingFormv2GroupedState extends ConsumerState<PickingFormv2Grouped>
                           onTap: (() {}),
                         ),
                         const Divider(),
-                        /*   TextFormField(
-                          enabled: true,
-                          validator: isNotEmpty,
-                          onEditingComplete: () {},
-                          onFieldSubmitted: (e) {
-                            productFocus.requestFocus();
-                          },
-                          autofocus: true,
-                          controller: addressController,
-                          decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.qr_code),
-                            label: Text("Confirmação do Endereço"),
-                          ),
-                        ), */
                         NoKeyboardTextForm(
                           autoFocus: true,
                           validator: isNotEmpty,
+                          focusNode: addressFocus,
                           onSubmitted: (value) {
-                            productFocus.requestFocus();
+                            bool isValid = validateAddress();
+
+                            if (isValid) {
+                              productFocus.requestFocus();
+                            } else {
+                              showErrorWidget(context, "Endereço inválido");
+                              addressController.clear();
+                              addressFocus.requestFocus();
+                            }
                           },
                           controller: addressController,
                           label: "Confirmação do Endereço",
@@ -149,22 +147,6 @@ class _PickingFormv2GroupedState extends ConsumerState<PickingFormv2Grouped>
                         const Divider(),
                         Text("Quant. Separada: $quantity"),
                         const Divider(),
-                        /*  TextFormField(
-                          enabled: true,
-                          focusNode: productFocus,
-                          controller: productController,
-                          onFieldSubmitted: (value) {
-                            if (validateData()) {
-                              productFocus.requestFocus();
-                              increment(context, 1);
-                            }
-                            productController.clear();
-                          },
-                          decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.qr_code),
-                            label: Text("Confirmação do Produto"),
-                          ),
-                        ), */
                         NoKeyboardTextForm(
                           autoFocus: true,
                           focusNode: productFocus,
@@ -229,6 +211,14 @@ class _PickingFormv2GroupedState extends ConsumerState<PickingFormv2Grouped>
         return;
       }
     }
+  }
+
+  bool validateAddress() {
+    if (widget.picking.address.trim() == addressController.text.trim()) {
+      return true;
+    }
+
+    return false;
   }
 
   bool validateData() {

@@ -122,8 +122,10 @@ class PurchaseInvoiceProduct {
   String um;
   double checked;
   double checkedBd;
+  double fator;
   String sd1Chave;
   bool partial;
+  bool isMultiple = false;
 
   PurchaseInvoiceProduct(
       {required this.codigo,
@@ -135,6 +137,7 @@ class PurchaseInvoiceProduct {
       required this.um,
       required this.checked,
       required this.checkedBd,
+      required this.fator,
       required this.sd1Chave,
       required this.partial});
 
@@ -167,6 +170,7 @@ class PurchaseInvoiceProduct {
       'um': um,
       'checked': checked,
       'checkedBd': checkedBd,
+      'fator': fator,
       'SD1Chave': sd1Chave,
     };
   }
@@ -182,6 +186,7 @@ class PurchaseInvoiceProduct {
         um: map['um'] ?? '',
         checked: map['checked']?.toDouble() ?? 0,
         checkedBd: map['checked']?.toDouble() ?? 0,
+        fator: map['fator']?.toDouble() ?? 0,
         sd1Chave: map['SD1Chave'] ?? '',
         partial: map['parcial'] ?? false);
   }
