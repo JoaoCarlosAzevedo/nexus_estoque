@@ -9,11 +9,13 @@ class InvoiceProductCheckCard extends StatelessWidget {
     required this.product,
     required this.onTapCard,
     required this.onDelete,
+    required this.onChangeProduct,
     this.onChanged,
   });
   final PurchaseInvoiceProduct product;
   final Function()? onTapCard;
   final Function()? onDelete;
+  final Function()? onChangeProduct;
   final void Function(bool)? onChanged;
 
   @override
@@ -38,6 +40,11 @@ class InvoiceProductCheckCard extends StatelessWidget {
                     "${product.item} ${product.descricao}",
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
+                ),
+                IconButton(
+                  onPressed: onChangeProduct,
+                  icon: const Icon(Icons.calculate),
+                  color: Colors.green,
                 ),
                 if (product.checked > product.quantidade)
                   IconButton(

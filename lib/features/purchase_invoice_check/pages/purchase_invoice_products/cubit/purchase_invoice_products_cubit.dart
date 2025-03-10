@@ -181,7 +181,9 @@ class PurchaseInvoiceProductsCubit extends Cubit<PurchaseInvoiceProductsState> {
       });
 
       for (var element in products) {
-        if (element.codigo.contains(barcode)) {
+        if (element.codigo.contains(barcode) ||
+            element.barcode.contains(barcode) ||
+            element.barcode2.contains(barcode)) {
           total = total + element.checked;
         }
       }

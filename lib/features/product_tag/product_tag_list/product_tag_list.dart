@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/features/product_multiplier/pages/product_multiplier_modal.dart';
 import '../../../core/features/searches/products/data/model/product_model.dart';
 import '../../../core/features/searches/products/provider/remote_product_provider.dart';
 
@@ -62,6 +63,10 @@ class _ProductTagListPageState extends ConsumerState<ProductTagListPage> {
                       return Card(
                         margin: const EdgeInsets.only(top: 10),
                         child: ListTile(
+                          onLongPress: () {
+                            showProductMultiplierModal(
+                                context, filterListProducts[index].codigo);
+                          },
                           onTap: () {
                             context.push(
                               '/etiqueta_produto/${filterListProducts[index].codigo}',

@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:nexus_estoque/features/purchase_invoice_check/pages/purchase_invoice_products/widgets/purchase_quantity_widget.dart';
 
+import '../../../../core/features/product_multiplier/pages/product_multiplier_modal.dart';
 import '../../../../core/services/back_buttom_dialog.dart';
 import '../../../../core/widgets/form_input_no_keyboard_widget.dart';
 import '../../../address/pages/product_address_form_page/address_form_page.dart';
@@ -215,6 +216,18 @@ class _PurchaseInvoiceProdutctsState
                                             itemBuilder: (context, index) {
                                               final product = products[index];
                                               return InvoiceProductCheckCard(
+                                                onChangeProduct: () async {
+                                                  final isSuccess =
+                                                      await showProductMultiplierModal(
+                                                          context,
+                                                          product.codigo);
+                                                  if (isSuccess) {
+                                                    // ignore: use_build_context_synchronously
+                                                    Navigator.pop(context);
+                                                    ref.invalidate(
+                                                        purchaseInvoicesProvider);
+                                                  }
+                                                },
                                                 product: product,
                                                 onChanged: (_) {
                                                   bool setBool =

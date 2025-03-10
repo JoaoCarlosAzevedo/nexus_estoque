@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 
 import '../../../../../core/features/barcode_scanner/barcode_scanner.dart';
+import '../../../../../core/services/secure_store.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({
@@ -30,13 +31,20 @@ class LoginForm extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
-                      onLongPress: () {
+                      onLongPress: () async {
                         /*  Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const BluetoothPage(),
                           ),
                         ); */
+                        await LocalStorage.deleteAll();
+
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text("Registros Deletados"),
+                        ));
+
                         Navigator.of(context)
                             .push(MaterialPageRoute(builder: (ctx) {
                           return const BarcodeScanerPage();
@@ -103,7 +111,7 @@ class LoginForm extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Text('Versão 1.1.28'),
+                const Text('Versão 1.1.29'),
               ],
             ),
           ),
