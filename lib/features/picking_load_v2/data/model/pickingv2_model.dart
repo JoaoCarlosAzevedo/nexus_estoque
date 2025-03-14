@@ -29,6 +29,8 @@ class Pickingv2Model {
   String apartamento;
   int recnoSDC;
 
+  double fator;
+
   String status;
 
   Pickingv2Model(
@@ -57,6 +59,7 @@ class Pickingv2Model {
       required this.apartamento,
       required this.status,
       required this.recnoSDC,
+      required this.fator,
       required this.rua});
 
   Map<String, dynamic> toMap() {
@@ -85,6 +88,7 @@ class Pickingv2Model {
       'nivel': nivel,
       'apartamento': apartamento,
       'status': status,
+      'fator': fator,
       'recnoSDC': recnoSDC,
     };
   }
@@ -96,6 +100,7 @@ class Pickingv2Model {
       codigobarras: map['codigobarras'] ?? '',
       codigobarras2: map['codigobarras2'] ?? '',
       quantidade: map['quantidade']?.toDouble() ?? 0.0,
+      fator: map['fator']?.toDouble() ?? 0.0,
       lote: map['lote'] ?? '',
       codEndereco: map['codEndereco'] ?? '',
       descEndereco: map['descEndereco'] ?? '',

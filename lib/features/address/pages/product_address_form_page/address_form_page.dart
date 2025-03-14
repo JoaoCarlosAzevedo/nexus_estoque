@@ -22,7 +22,6 @@ import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer
 
 import '../../../../core/features/product_multiplier/pages/product_multiplier_modal.dart';
 import '../../../../core/widgets/form_input_no_keyboard_widget.dart';
-import '../address_list_page/cubit/product_address_cubit.dart';
 
 class AddressForm extends ConsumerStatefulWidget {
   const AddressForm({super.key, required this.productAddress});

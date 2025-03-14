@@ -56,6 +56,7 @@ class _PickingFormv3State extends ConsumerState<PickingFormv3>
   final FocusNode addressFocus = FocusNode();
   bool checkProduct = false;
   double quantity = 0;
+  bool isMultiple = false;
 
   @override
   void dispose() {
@@ -113,6 +114,7 @@ class _PickingFormv3State extends ConsumerState<PickingFormv3>
                 );
               }
 
+              ///TO DO FATOR
               return SingleChildScrollView(
                 child: Form(
                   key: formKey,
@@ -145,23 +147,31 @@ class _PickingFormv3State extends ConsumerState<PickingFormv3>
                         ),
                         const Divider(),
                         Text("Quant. Separada: $quantity"),
-                        const Divider(),
-                        /* TextFormField(
-                          enabled: true,
-                          focusNode: productFocus,
-                          controller: productController,
-                          onFieldSubmitted: (value) {
-                            if (validateData()) {
-                              productFocus.requestFocus();
-                              increment(context, 1);
-                            }
-                            productController.clear();
-                          },
-                          decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.qr_code),
-                            label: Text("Confirmação do Produto"),
+                        //const Divider(),
+                        if (widget.picking.fator > 0)
+                          Wrap(
+                            alignment: WrapAlignment.spaceBetween,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            spacing: 5,
+                            direction: Axis.horizontal,
+                            children: [
+                              Text(
+                                  "Utiliza Multiplicador ${widget.picking.fator}x ?"),
+                              Switch(
+                                value: isMultiple,
+                                activeColor: Colors.green,
+                                inactiveTrackColor: Colors.grey,
+                                onChanged: (bool value) {
+                                  // This is called when the user toggles the switch.
+                                  setState(() {
+                                    isMultiple = value;
+                                  });
+                                  productFocus.requestFocus();
+                                },
+                              ),
+                            ],
                           ),
-                        ), */
+                        const Divider(),
                         NoKeyboardTextForm(
                           autoFocus: true,
                           focusNode: productFocus,
@@ -170,7 +180,11 @@ class _PickingFormv3State extends ConsumerState<PickingFormv3>
                           onSubmitted: (value) {
                             if (validateData()) {
                               productFocus.requestFocus();
-                              increment(context, 1);
+                              if (isMultiple) {
+                                increment(context, 1 * widget.picking.fator);
+                              } else {
+                                increment(context, 1);
+                              }
                             }
                             productController.clear();
                           },
