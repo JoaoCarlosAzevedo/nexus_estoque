@@ -63,6 +63,7 @@ class AddressInventoryListPage extends ConsumerWidget {
                           Text('${data[index].quantInvent} ${data[index].uM}'),
                       leading: InventoryDeleteIcon(
                         recno: data[index].recno,
+                        onSuccess: () {},
                       ),
                     ),
                   );

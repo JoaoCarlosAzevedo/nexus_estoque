@@ -360,6 +360,7 @@ class _InventoryPageState extends ConsumerState<InventoryPage>
             tipo: '',
             saldoAtual: 0.0,
             qtdInvet: 0.0,
+            fator: 0.0,
             um: '',
             codigo: '',
             error: ''),

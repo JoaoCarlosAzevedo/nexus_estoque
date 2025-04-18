@@ -76,9 +76,10 @@ class _AddressTagListPageState extends ConsumerState<AddressTagListPage> {
                               ),
                             );
                           },
-                          title: Text(
-                              "Armazem ${endereco.armazem} / ${endereco.departamento}"),
-                          subtitle: Text("Ruas: ${qtdRuas.length}"),
+                          title: Text("Armazem ${endereco.armazem} "),
+                          //subtitle: Text("Ruas: ${qtdRuas.length}"),
+                          subtitle:
+                              Text("Departamento: ${endereco.departamento}"),
                           leading: const FaIcon(FontAwesomeIcons.warehouse),
                         ),
                       );
@@ -86,8 +87,8 @@ class _AddressTagListPageState extends ConsumerState<AddressTagListPage> {
                     itemBuilder: (context, AddressTagModel element) {
                       return Container();
                     },
-                    useStickyGroupSeparators: true, // optional
-                    floatingHeader: true, // optional
+                    useStickyGroupSeparators: false, // optional
+                    floatingHeader: false, // optional
                     order: GroupedListOrder.ASC, // optional
                   ),
                 ),

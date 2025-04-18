@@ -74,7 +74,12 @@ class _InventoryAddressNewFormPageState
         ),
       ),
       data: (List<InventoryModel> data) {
-        if (data.isEmpty || invForm) {
+        return AddressInventoryFormPage(
+          address: widget.address,
+          doc: widget.doc,
+          data: data,
+        );
+        /* if (data.isEmpty || invForm) {
           return AddressInventoryFormPage(
             address: widget.address,
             doc: widget.doc,
@@ -154,7 +159,7 @@ class _InventoryAddressNewFormPageState
               ),
             ),
           ),
-        );
+        ); */
       },
     );
   }

@@ -24,7 +24,9 @@ class _AddressTagStreetListPageState
 
   @override
   Widget build(BuildContext context) {
-    final futureProvider = ref.watch(remoteAddressTagListProvider);
+    final futureProvider =
+        ref.watch(departmentStreetsListProvider(widget.department));
+
     final map = addressToMap(widget.department);
     return Scaffold(
       appBar: AppBar(
@@ -37,7 +39,7 @@ class _AddressTagStreetListPageState
         actions: [
           IconButton(
               onPressed: () {
-                ref.invalidate(remoteAddressTagListProvider);
+                ref.invalidate(departmentStreetsListProvider);
               },
               icon: const Icon(Icons.refresh))
         ],
@@ -97,15 +99,15 @@ class _AddressTagStreetListPageState
                             icon: const FaIcon(FontAwesomeIcons.print),
                           ),
                           title: Text("Rua ${endereco.rua} "),
-                          subtitle: Text("Prédios: ${qtdPredios.length}"),
+                          //subtitle: Text("Prédios: ${qtdPredios.length}"),
                         ),
                       );
                     },
                     itemBuilder: (context, AddressTagModel element) {
                       return Container();
                     },
-                    useStickyGroupSeparators: true, // optional
-                    floatingHeader: true, // optional
+                    useStickyGroupSeparators: false, // optional
+                    floatingHeader: false, // optional
                     order: GroupedListOrder.ASC, // optional
                   ),
                 ),

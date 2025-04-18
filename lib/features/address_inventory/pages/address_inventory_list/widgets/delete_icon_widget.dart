@@ -4,8 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/repositories/inventory_repository.dart';
 
 class InventoryDeleteIcon extends ConsumerStatefulWidget {
-  const InventoryDeleteIcon({required this.recno, super.key});
+  const InventoryDeleteIcon(
+      {required this.recno, required this.onSuccess, super.key});
   final int recno;
+  final VoidCallback onSuccess;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -27,6 +29,7 @@ class _InventoryDeleteIconState extends ConsumerState<InventoryDeleteIcon> {
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data!) {
+              widget.onSuccess();
               return const Icon(
                 Icons.check_circle_outline,
                 color: Colors.green,

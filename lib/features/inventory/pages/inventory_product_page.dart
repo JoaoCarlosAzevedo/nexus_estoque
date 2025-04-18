@@ -78,6 +78,7 @@ class ProductInventoryListPage extends ConsumerWidget {
                                 '${data[index].quantInvent} ${data[index].uM}'),
                             leading: InventoryDeleteIcon(
                               recno: data[index].recno,
+                              onSuccess: () {},
                             ),
                           ),
                         );

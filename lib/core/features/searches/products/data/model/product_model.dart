@@ -11,6 +11,7 @@ class ProductModel {
   String tipo;
   double saldoAtual;
   double qtdInvet;
+  double fator;
   String um;
   String codigo;
   String error;
@@ -24,6 +25,7 @@ class ProductModel {
     required this.tipo,
     required this.saldoAtual,
     required this.qtdInvet,
+    required this.fator,
     required this.um,
     required this.codigo,
     required this.error,
@@ -39,6 +41,7 @@ class ProductModel {
         localizacao: map['localizacao'] ?? '',
         tipo: map['tipo'] ?? '',
         saldoAtual: map['saldo']?.toDouble() ?? 0.0,
+        fator: map['fator']?.toDouble() ?? 0.0,
         qtdInvet: map['qtdInvet']?.toDouble() ?? 0.0,
         um: map['um'] ?? '',
         codigo: map['codigo'] ?? '',
@@ -58,6 +61,7 @@ class ProductModel {
     String? tipo,
     double? saldoAtual,
     double? qtdInvet,
+    double? fator,
     String? um,
     String? codigo,
     String? error,
@@ -72,6 +76,7 @@ class ProductModel {
       tipo: tipo ?? this.tipo,
       saldoAtual: saldoAtual ?? this.saldoAtual,
       qtdInvet: qtdInvet ?? this.qtdInvet,
+      fator: fator ?? this.fator,
       um: um ?? this.um,
       codigo: codigo ?? this.codigo,
       error: error ?? this.error,

@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class AddressTagModel {
@@ -52,20 +53,21 @@ class AddressTagModel {
   factory AddressTagModel.fromMap(Map<String, dynamic> map) {
     return AddressTagModel(
       recno: map['recno']?.toInt() ?? 0,
-      departamento: map['departamento'] ?? '',
-      apartamento: map['apartamento'] ?? '',
-      rua: map['rua'] ?? '',
-      predio: map['predio'] ?? '',
-      nivel: map['nivel'] ?? '',
+      departamento: map['departamento'] ?? '__',
+      apartamento: map['apartamento'] ?? '__',
+      rua: map['rua'] ?? '__',
+      predio: map['predio'] ?? '__',
+      nivel: map['nivel'] ?? '__',
       filial: map['filial'] ?? '',
       codEndereco: map['codigo_endereco'] ?? '',
       descricao: map['descricao'] ?? '',
-      armazem: map['armazem'] ?? '',
-      qtdProdutos: map['quant_produtos'] as int,
+      armazem: map['armazem'] ?? '__',
+      qtdProdutos: map['quant_produtos']?.toInt() ?? 0,
       saldo: map['saldo']?.toDouble() ?? 0.0,
       empenho: map['empenho']?.toDouble() ?? 0.0,
     );
   }
+  //String groupbyDepartamento() => armazem;
   String groupbyDepartamento() => "$armazem|$departamento";
   String groupbyDepartamentoRua() => "$armazem|$departamento|$rua";
   String groupbyDepartamentoRuaPredio() =>

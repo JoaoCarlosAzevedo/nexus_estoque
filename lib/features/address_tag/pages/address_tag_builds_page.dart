@@ -21,7 +21,8 @@ class _AddressTagBuildListPageState
 
   @override
   Widget build(BuildContext context) {
-    final futureProvider = ref.watch(remoteAddressTagListProvider);
+    final futureProvider =
+        ref.watch(buildingApartmentsListProvider(widget.build));
     final map = addressToMap(widget.build);
 
     return Scaffold(
@@ -35,7 +36,7 @@ class _AddressTagBuildListPageState
         actions: [
           IconButton(
               onPressed: () {
-                ref.invalidate(remoteAddressTagListProvider);
+                ref.invalidate(buildingApartmentsListProvider);
               },
               icon: const Icon(Icons.refresh))
         ],

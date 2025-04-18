@@ -23,7 +23,8 @@ class _AddressTagStreetBuildListPageState
 
   @override
   Widget build(BuildContext context) {
-    final futureProvider = ref.watch(remoteAddressTagListProvider);
+    final futureProvider =
+        ref.watch(streetsBuildingListProvider(widget.building));
     final map = addressToMap(widget.building);
     return Scaffold(
       appBar: AppBar(
@@ -36,7 +37,7 @@ class _AddressTagStreetBuildListPageState
         actions: [
           IconButton(
               onPressed: () {
-                ref.invalidate(remoteAddressTagListProvider);
+                ref.invalidate(streetsBuildingListProvider);
               },
               icon: const Icon(Icons.refresh))
         ],
@@ -96,16 +97,16 @@ class _AddressTagStreetBuildListPageState
                             icon: const FaIcon(FontAwesomeIcons.print),
                           ),
                           title: Text("Prédio ${endereco.predio}"),
-                          subtitle:
-                              Text("Apartamentos: ${qtdApartamentos.length}"),
+                          /*        subtitle:
+                              Text("Apartamentos: ${qtdApartamentos.length}"), */
                         ),
                       );
                     },
                     itemBuilder: (context, AddressTagModel element) {
                       return Container();
                     },
-                    useStickyGroupSeparators: true, // optional
-                    floatingHeader: true, // optional
+                    useStickyGroupSeparators: false, // optional
+                    floatingHeader: false, // optional
                     order: GroupedListOrder.ASC, // optional
                   ),
                 ),

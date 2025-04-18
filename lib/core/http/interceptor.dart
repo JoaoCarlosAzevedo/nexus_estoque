@@ -27,8 +27,6 @@ class AppInterceptors extends Interceptor {
       log('deletando refresh token');
     }
 
-    log('lendo novo token');
-
     accessToken ??= await _storage.read(key: 'access_token');
 
     if (!options.path.contains('oauth2/v1/token')) {

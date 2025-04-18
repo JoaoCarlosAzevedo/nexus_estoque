@@ -77,6 +77,13 @@ class _ProductTagListPageState extends ConsumerState<ProductTagListPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(filterListProducts[index].codigo),
+                              Text(
+                                  'Cód Barras: ${filterListProducts[index].codigoBarras}'),
+                              Text(
+                                  'Cód Dun: ${filterListProducts[index].codigoBarras2}'),
+                              if (filterListProducts[index].fator > 0)
+                                Text(
+                                    'Fator Dun: ${filterListProducts[index].fator.toStringAsFixed(0)}'),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -121,6 +128,17 @@ class _ProductTagListPageState extends ConsumerState<ProductTagListPage> {
       setState(() {
         filterListProducts = listProducts.where((element) {
           if (element.codigo.toUpperCase().contains(search.toUpperCase())) {
+            return true;
+          }
+
+          if (element.codigoBarras
+              .toUpperCase()
+              .contains(search.toUpperCase())) {
+            return true;
+          }
+          if (element.codigoBarras2
+              .toUpperCase()
+              .contains(search.toUpperCase())) {
             return true;
           }
 

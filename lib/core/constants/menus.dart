@@ -184,13 +184,13 @@ final List<MenuItemInfo> menuItens = [
     color: Colors.red,
     route: 'transferencias',
   ),
-  /* MenuItemInfo(
+/*   MenuItemInfo(
     title: "Movimentos Internos",
     icon: FontAwesomeIcons.boxesPacking,
     color: Colors.red,
     route: 'movimentos',
   ), */
-  /* MenuItemInfo(
+/*   MenuItemInfo(
     title: "Separação por Pedido",
     icon: FontAwesomeIcons.dolly,
     color: Colors.red,
@@ -202,18 +202,18 @@ final List<MenuItemInfo> menuItens = [
     color: Colors.red,
     route: 'separacao_carga',
   ), */
-  /*  MenuItemInfo(
+  MenuItemInfo(
     title: "Separação por Carga v2",
     icon: FontAwesomeIcons.truckArrowRight,
     color: Colors.red,
     route: 'separacao_carga_v2',
-  ), */
-  /*  MenuItemInfo(
+  ),
+  MenuItemInfo(
     title: "Separação por Pedido v2",
     icon: FontAwesomeIcons.dolly,
     color: Colors.red,
     route: 'separacao_carga_v2_pedido',
-  ), */
+  ),
   MenuItemInfo(
     title: "Conferencia NFe Saida",
     icon: FontAwesomeIcons.rightFromBracket,
@@ -268,16 +268,16 @@ final List<MenuItemInfo> menuItens = [
     color: Colors.red,
     route: 'etiqueta_filtros_cargas',
   ),
-  MenuItemInfo(
+/*   MenuItemInfo(
     title: "Inventário",
     icon: FontAwesomeIcons.clipboardCheck,
     color: Colors.red,
     route: 'inventario',
-  ),
-  /*  MenuItemInfo(
-    title: "Etiquetas Filtro",
-    icon: FontAwesomeIcons.print,
+  ), */
+/*   MenuItemInfo(
+    title: "Import. NF",
+    icon: FontAwesomeIcons.receipt,
     color: Colors.red,
-    route: 'etiqueta_filtros_cargas',
-  ) */
+    route: 'importar_nf_entrada',
+  ), */
 ];
