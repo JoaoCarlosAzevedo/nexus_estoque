@@ -5,8 +5,6 @@ import '../../../address_balance/data/model/address_balance_model.dart';
 import '../../data/model/inventory_model.dart';
 import '../../data/repositories/inventory_repository.dart';
 import '../address_inventory_form_page/address_inventory_form_page.dart';
-import '../address_inventory_form_page/widgets/address_warehouse_card.dart';
-import '../address_inventory_list/widgets/delete_icon_widget.dart';
 
 class InventoryAddressNewFormPage extends ConsumerStatefulWidget {
   const InventoryAddressNewFormPage(

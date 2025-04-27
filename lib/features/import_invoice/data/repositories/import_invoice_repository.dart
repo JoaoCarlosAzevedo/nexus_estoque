@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:nexus_estoque/core/http/http_provider.dart';
 
+import '../../../../core/error/failure.dart';
+import '../../../../core/http/config.dart';
+
 final importInvoiceRepositoryProvider =
     Provider<ImportInvoiceRepository>((ref) => ImportInvoiceRepository(ref));
 
@@ -14,44 +17,27 @@ class ImportInvoiceRepository {
     dio = _ref.read(httpProvider).dioInstance;
   }
 
-  Future<List<String>> fechtImportInvoice(
+  Future<dynamic> fechtImportInvoice(
     String chave,
   ) async {
-    //final String url = await Config.baseURL;
-    //late dynamic response;
+    final String url = await Config.baseURL;
+    late dynamic response;
 
-    await Future.delayed(const Duration(seconds: 4));
-    return [];
-/* 
     try {
-      response = await dio.get('$url/lotes/', queryParameters: {
-        'page': "1",
-        'pageSize': "10000",
-      });
+      response = await dio.post('$url/import_nf_entrada/$chave');
 
-      if (response.statusCode != 200) {
+      if (response.statusCode != 201) {
         throw const Failure("Erro ao conectar!", ErrorType.exception);
       }
+      // "mensagem": "NF incluida com sucesso!"
 
-      if (response.data.isEmpty) {
-        throw const Failure("Nenhum registro encontrado.", ErrorType.exception);
-      }
-
-      if ((response.data['resultado'] as List).isEmpty) {
-        throw const Failure(
-            "Nenhum registro encontrado.", ErrorType.validation);
-      }
-
-      final batches = (response.data['resultado'] as List).map((item) {
-        return BatchModel.fromMap(item);
-      }).toList();
-
-      return [];
+      return true;
     } on DioException catch (e) {
-      log(e.message.toString());
+      if (e.response?.statusCode == 400) {
+        throw e.response?.data["message"];
+      }
+
       throw const Failure("Erro ao conectar!", ErrorType.exception);
     }
-
-     */
   }
 }

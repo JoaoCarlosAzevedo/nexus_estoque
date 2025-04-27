@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,6 +16,7 @@ import '../../data/repositories/inventory_repository.dart';
 import '../address_inventory_list/widgets/delete_icon_widget.dart';
 import 'state/address_inventory_provider.dart';
 import 'widgets/address_warehouse_card.dart';
+import 'widgets/dun_quantity_input.dart';
 
 class AddressInventoryFormPage extends ConsumerStatefulWidget {
   const AddressInventoryFormPage(
@@ -102,42 +101,53 @@ class _AddressInventoryFormPageState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Documento: ${state.doc}",
-                  style: Theme.of(context).textTheme.titleLarge,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        "Doc.: ${state.doc}",
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+                    if (widget.address.codEndereco.isNotEmpty)
+                      ElevatedButton(
+                        onPressed: () {
+                          ref
+                              .read(addressInventoryProvider.notifier)
+                              .addProduct(
+                                  ProductModel(
+                                      descricao: 'Contagem 0',
+                                      localPadrao: '',
+                                      lote: '',
+                                      codigoBarras: '',
+                                      codigoBarras2: '',
+                                      localizacao: '',
+                                      tipo: '',
+                                      saldoAtual: 0.0,
+                                      qtdInvet: 0.0,
+                                      fator: 0.0,
+                                      um: '',
+                                      codigo: '',
+                                      error: ''),
+                                  1);
+                        },
+                        style: TextButton.styleFrom(
+                            backgroundColor: Colors.orange),
+                        child: Padding(
+                          padding: const EdgeInsets.all(0.0),
+                          child: Text(
+                            "Cont. Vazia +",
+                            style: Theme.of(context).textTheme.labelMedium,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
                 AddressWarehouseCard(
                   address: widget.address,
                 ),
-                if (widget.address.codEndereco.isNotEmpty)
-                  ElevatedButton(
-                    onPressed: () {
-                      ref.read(addressInventoryProvider.notifier).addProduct(
-                          ProductModel(
-                              descricao: 'Contagem 0',
-                              localPadrao: '',
-                              lote: '',
-                              codigoBarras: '',
-                              codigoBarras2: '',
-                              localizacao: '',
-                              tipo: '',
-                              saldoAtual: 0.0,
-                              qtdInvet: 0.0,
-                              fator: 0.0,
-                              um: '',
-                              codigo: '',
-                              error: ''),
-                          1);
-                    },
-                    style: TextButton.styleFrom(backgroundColor: Colors.orange),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "Contagem Vazia +",
-                        style: Theme.of(context).textTheme.labelMedium,
-                      ),
-                    ),
-                  ),
                 if (state.status != StateEnum.loading)
                   SizedBox(
                     height: 50,
@@ -207,69 +217,111 @@ class _AddressInventoryFormPageState
                                           itemCount: productsInventory.length,
                                           itemBuilder: (context, index) {
                                             return Card(
-                                              child: ListTile(
-                                                onTap: () async {
-                                                  if (productsInventory[index]
-                                                      .codigo
-                                                      .isNotEmpty) {
-                                                    double? newQuantity =
-                                                        await InventoryQuantityModal
-                                                            .show(
+                                                child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Expanded(
+                                                  child: ListTile(
+                                                    onTap: () async {
+                                                      if (productsInventory[
+                                                              index]
+                                                          .codigo
+                                                          .isNotEmpty) {
+                                                        double? newQuantity =
+                                                            await InventoryQuantityModal.show(
                                                                 context,
                                                                 productsInventory[
                                                                     index],
                                                                 productsInventory[
                                                                         index]
                                                                     .qtdInvet);
-                                                    if (newQuantity != null) {
+                                                        if (newQuantity !=
+                                                            null) {
+                                                          ref
+                                                              .read(
+                                                                  addressInventoryProvider
+                                                                      .notifier)
+                                                              .changeQuantity(
+                                                                  productsInventory[
+                                                                      index],
+                                                                  newQuantity);
+                                                        }
+                                                      }
+                                                    },
+                                                    onLongPress: () {
                                                       ref
                                                           .read(
                                                               addressInventoryProvider
                                                                   .notifier)
-                                                          .changeQuantity(
+                                                          .removeProduct(
                                                               productsInventory[
-                                                                  index],
-                                                              newQuantity);
-                                                    }
-                                                  }
-                                                },
-                                                onLongPress: () {
-                                                  ref
-                                                      .read(
-                                                          addressInventoryProvider
-                                                              .notifier)
-                                                      .removeProduct(
-                                                          productsInventory[
-                                                              index]);
-                                                },
-                                                title: Text(
-                                                  '${productsInventory[index].codigo} - ${productsInventory[index].codigoBarras}',
-                                                ),
-                                                subtitle: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                        productsInventory[index]
+                                                                  index]);
+                                                    },
+                                                    title: Text(
+                                                      '${productsInventory[index].codigo} - ${productsInventory[index].codigoBarras}',
+                                                    ),
+                                                    subtitle: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(productsInventory[
+                                                                index]
                                                             .descricao),
-                                                    if (productsInventory[index]
-                                                        .error
-                                                        .isNotEmpty)
-                                                      Text(
-                                                        productsInventory[index]
-                                                            .error,
-                                                        style: const TextStyle(
-                                                            color: Colors.red),
-                                                      )
-                                                  ],
+                                                        if (productsInventory[
+                                                                index]
+                                                            .error
+                                                            .isNotEmpty)
+                                                          Text(
+                                                            productsInventory[
+                                                                    index]
+                                                                .error,
+                                                            style:
+                                                                const TextStyle(
+                                                                    color: Colors
+                                                                        .red),
+                                                          )
+                                                      ],
+                                                    ),
+                                                    trailing: Text(
+                                                      'Qtd: ${productsInventory[index].qtdInvet}',
+                                                      style: const TextStyle(
+                                                          color: Colors.green),
+                                                    ),
+                                                  ),
                                                 ),
-                                                trailing: Text(
-                                                  'Qtd: ${productsInventory[index].qtdInvet}',
-                                                  style: const TextStyle(
-                                                      color: Colors.green),
-                                                ),
-                                              ),
-                                            );
+                                                if (productsInventory[index]
+                                                    .isDun)
+                                                  IconButton(
+                                                    iconSize: 40,
+                                                    onPressed: () async {
+                                                      final double? qtd =
+                                                          await DunQuantityModal
+                                                              .show(
+                                                                  context,
+                                                                  productsInventory[
+                                                                      index]);
+                                                      if (qtd != null) {
+                                                        ref
+                                                            .read(
+                                                                addressInventoryProvider
+                                                                    .notifier)
+                                                            .changeQuantity(
+                                                                productsInventory[
+                                                                    index],
+                                                                qtd);
+                                                      }
+                                                    },
+                                                    icon: const FaIcon(
+                                                      FontAwesomeIcons
+                                                          .calculator,
+                                                      color:
+                                                          Colors.orangeAccent,
+                                                    ),
+                                                  ),
+                                              ],
+                                            ));
                                           },
                                         ),
                                       ),
@@ -399,6 +451,18 @@ class _AddressInventoryFormPageState
         //caso o fator seja zero, coloca padrao 1
         if (quantity == 0) {
           quantity = 1;
+        }
+
+        if (selectedProduct.fator > 0 && isDun) {
+          selectedProduct.isDun = true;
+          ref
+              .read(addressInventoryProvider.notifier)
+              .setIsDun(selectedProduct, true);
+        } else {
+          selectedProduct.isDun = false;
+          ref
+              .read(addressInventoryProvider.notifier)
+              .setIsDun(selectedProduct, false);
         }
 
         ref

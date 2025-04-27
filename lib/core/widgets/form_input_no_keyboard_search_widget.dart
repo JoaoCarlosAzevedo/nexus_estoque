@@ -35,7 +35,7 @@ class _NoKeyboardTextSearchFormState extends State<NoKeyboardTextSearchForm> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 20.0),
+      padding: const EdgeInsets.only(bottom: 10.0),
       child: TextFormField(
         autofocus: widget.autoFocus ?? true,
         textInputAction: TextInputAction.done,
@@ -87,3 +87,6 @@ class _NoKeyboardTextSearchFormState extends State<NoKeyboardTextSearchForm> {
     );
   }
 }
+
+
+//001453-2

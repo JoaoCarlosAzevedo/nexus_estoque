@@ -52,7 +52,7 @@ class ProductAddressRepository {
   }
 
   Future<Either<Failure, String>> addressProduct(String produto, String codeseq,
-      String endereco, double quantity, String lote) async {
+      String endereco, double quantity, String lote, String validade) async {
     final String url = await Config.baseURL;
     try {
       final jsonMap = {
@@ -60,7 +60,8 @@ class ProductAddressRepository {
         'numseq': codeseq,
         'endereco': endereco,
         'quantidade': quantity,
-        if (lote.trim().isNotEmpty) 'novoLote': lote
+        if (lote.trim().isNotEmpty) 'novoLote': lote,
+        if (lote.trim().isNotEmpty) 'novaValidade': validade
       };
 
       final json = jsonEncode(jsonMap);

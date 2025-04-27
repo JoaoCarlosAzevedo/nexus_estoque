@@ -5,7 +5,7 @@ enum Distributors { dellas, decminas, portolub, todos, brazmax, audiogene }
 
 //const buildDistribuitor = Distributors.decminas;
 //const buildDistribuitor = Distributors.brazmax;
-const buildDistribuitor = Distributors.todos;
+const buildDistribuitor = Distributors.decminas;
 //const buildDistribuitor = Distributors.dellas;
 
 bool checkMenu(Distributors dist, Distributors check) {
@@ -31,8 +31,8 @@ class MenuItemInfo {
       required this.title,
       required this.color,
       required this.route});
-}
-/* 
+} /* 
+
 final List<MenuItemInfo> menuItens = [
   MenuItemInfo(
     title: "Endereçar Saldos",
@@ -168,8 +168,7 @@ final List<MenuItemInfo> menuItens = [
           )
         ]
       : [],
-];
- */
+]; */
 
 final List<MenuItemInfo> menuItens = [
   MenuItemInfo(
@@ -184,29 +183,29 @@ final List<MenuItemInfo> menuItens = [
     color: Colors.red,
     route: 'transferencias',
   ),
-/*   MenuItemInfo(
-    title: "Movimentos Internos",
-    icon: FontAwesomeIcons.boxesPacking,
+  MenuItemInfo(
+    title: "Separação por Rotas",
+    icon: FontAwesomeIcons.truckRampBox,
     color: Colors.red,
-    route: 'movimentos',
-  ), */
-/*   MenuItemInfo(
-    title: "Separação por Pedido",
-    icon: FontAwesomeIcons.dolly,
-    color: Colors.red,
-    route: 'separacao',
-  ), */
-  /*  MenuItemInfo(
+    route: 'separacao_rotas',
+  ),
+  MenuItemInfo(
     title: "Separação por Carga",
     icon: FontAwesomeIcons.truckArrowRight,
     color: Colors.red,
     route: 'separacao_carga',
-  ), */
+  ),
   MenuItemInfo(
     title: "Separação por Carga v2",
     icon: FontAwesomeIcons.truckArrowRight,
     color: Colors.red,
     route: 'separacao_carga_v2',
+  ),
+  MenuItemInfo(
+    title: "Separação por Pedido",
+    icon: FontAwesomeIcons.dolly,
+    color: Colors.red,
+    route: 'separacao',
   ),
   MenuItemInfo(
     title: "Separação por Pedido v2",
@@ -268,16 +267,35 @@ final List<MenuItemInfo> menuItens = [
     color: Colors.red,
     route: 'etiqueta_filtros_cargas',
   ),
-/*   MenuItemInfo(
+  MenuItemInfo(
     title: "Inventário",
     icon: FontAwesomeIcons.clipboardCheck,
     color: Colors.red,
     route: 'inventario',
-  ), */
-/*   MenuItemInfo(
+  ),
+  MenuItemInfo(
     title: "Import. NF",
     icon: FontAwesomeIcons.receipt,
     color: Colors.red,
     route: 'importar_nf_entrada',
-  ), */
+  ),
 ];
+
+
+
+
+
+/*   MenuItemInfo(
+    title: "Movimentos Internos",
+    icon: FontAwesomeIcons.boxesPacking,
+    color: Colors.red,
+    route: 'movimentos',
+  ),
+  
+   */
+
+/*   
+
+
+
+*/

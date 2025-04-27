@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,54 +29,92 @@ class _ImportInvoicePageState extends ConsumerState<ImportInvoicePage> {
     final height = MediaQuery.of(context).size.height;
     final provider = ref.watch(importInvoiceProvider);
 
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (bool didPop) async {
-        if (didPop) {
-          return;
-        }
-        final bool shouldPop = await showBackDialog(context) ?? false;
-        if (context.mounted && shouldPop) {
-          Navigator.pop(context);
-        }
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(title: const Text("Import. NF Entrada")),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                provider.when(
-                  data: (data) => Text(data.toString()),
-                  error: (err, stack) => Text(err.toString()),
+    ref.listen(importInvoiceProvider, (previous, current) {
+      if (current is AsyncError) {
+        AwesomeDialog(
+                context: context,
+                dialogType: DialogType.error,
+                animType: AnimType.rightSlide,
+                desc: current.error.toString(),
+                btnOkOnPress: () {},
+                btnOkColor: Theme.of(context).primaryColor)
+            .show();
+      }
+    });
+
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(title: const Text("Import. NF Entrada")),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              NoKeyboardTextSearchForm(
+                label: 'Pesquisa Chave',
+                autoFocus: true,
+                onSubmitted: (e) {
+                  ref
+                      .read(importInvoiceProvider.notifier)
+                      .fetchImportInvoice(e);
+                },
+                controller: controller,
+              ),
+              const Divider(),
+              Center(
+                child: provider.when(
+                  data: (data) {
+                    if (data) {
+                      return const Text(
+                        "NF Importada com sucesso!",
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontSize: 20,
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
+                  error: (err, stack) => const Text(
+                    "Erro a importar NF, tente novamente!",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 20,
+                    ),
+                  ),
                   loading: () => const Center(
                     child: CircularProgressIndicator(),
                   ),
                 ),
-                NoKeyboardTextSearchForm(
-                  label: 'Pesquisa Chave',
-                  autoFocus: true,
-                  onSubmitted: (e) {},
-                  //validator: isNotEmpty,
-                  controller: controller,
+              ),
+              /*   ElevatedButton(
+                onPressed: () {
+                  ref
+                      .read(importInvoiceProvider.notifier)
+                      .fetchImportInvoice(controller.text);
+                },
+                child: SizedBox(
+                  height: height / 15,
+                  width: double.infinity,
+                  child: const Center(child: Text("Confirmar")),
                 ),
-                const Divider(),
-                ElevatedButton(
-                  onPressed: () {
-                    ref
-                        .read(importInvoiceProvider.notifier)
-                        .fetchImportInvoice(controller.text);
-                  },
-                  child: SizedBox(
-                    height: height / 15,
-                    width: double.infinity,
-                    child: const Center(child: Text("Confirmar")),
-                  ),
-                ),
-              ],
-            ),
+              ), */
+            ],
+          ),
+        ),
+      ),
+      bottomSheet: Padding(
+        padding: const EdgeInsets.all(18.0),
+        child: ElevatedButton(
+          onPressed: () {
+            ref
+                .read(importInvoiceProvider.notifier)
+                .fetchImportInvoice(controller.text);
+          },
+          child: SizedBox(
+            height: height / 15,
+            width: double.infinity,
+            child: const Center(child: Text("Confirmar")),
           ),
         ),
       ),

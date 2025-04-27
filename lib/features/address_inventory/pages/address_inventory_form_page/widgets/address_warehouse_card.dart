@@ -11,7 +11,7 @@ class AddressWarehouseCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+        padding: const EdgeInsets.only(top: 0.0, bottom: 0.0),
         child: ListTile(
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

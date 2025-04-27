@@ -15,22 +15,23 @@ class ProductModel {
   String um;
   String codigo;
   String error;
+  bool isDun;
 
-  ProductModel({
-    required this.descricao,
-    required this.localPadrao,
-    required this.lote,
-    required this.codigoBarras,
-    required this.localizacao,
-    required this.tipo,
-    required this.saldoAtual,
-    required this.qtdInvet,
-    required this.fator,
-    required this.um,
-    required this.codigo,
-    required this.error,
-    required this.codigoBarras2,
-  });
+  ProductModel(
+      {required this.descricao,
+      required this.localPadrao,
+      required this.lote,
+      required this.codigoBarras,
+      required this.localizacao,
+      required this.tipo,
+      required this.saldoAtual,
+      required this.qtdInvet,
+      required this.fator,
+      required this.um,
+      required this.codigo,
+      required this.error,
+      required this.codigoBarras2,
+      this.isDun = false});
 
   factory ProductModel.fromMap(Map<String, dynamic> map) {
     return ProductModel(
@@ -66,6 +67,7 @@ class ProductModel {
     String? codigo,
     String? error,
     String? codigoBarras2,
+    bool? isDun,
   }) {
     return ProductModel(
       descricao: descricao ?? this.descricao,
@@ -81,6 +83,7 @@ class ProductModel {
       codigo: codigo ?? this.codigo,
       error: error ?? this.error,
       codigoBarras2: codigoBarras2 ?? this.codigoBarras2,
+      isDun: isDun ?? this.isDun,
     );
   }
 }

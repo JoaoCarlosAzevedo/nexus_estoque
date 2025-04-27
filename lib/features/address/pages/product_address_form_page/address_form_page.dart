@@ -22,6 +22,8 @@ import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer
 
 import '../../../../core/features/product_multiplier/pages/product_multiplier_modal.dart';
 import '../../../../core/widgets/form_input_no_keyboard_widget.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/datetime_formatter.dart';
 
 class AddressForm extends ConsumerStatefulWidget {
   const AddressForm({super.key, required this.productAddress});
@@ -42,7 +44,8 @@ class _AddressFormState extends ConsumerState<AddressForm> {
   final batchFocus = FocusNode();
   final quantityFocus = FocusNode();
   final productFocus = FocusNode();
-
+  String vencLote = "";
+  bool isValidDateLote = false;
   bool isMultiple = false;
 
   @override
@@ -158,20 +161,97 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                             focus: addressFocus,
                           ),
                           if (widget.productAddress.lote.trim().isNotEmpty)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 16.0),
-                              child: TextField(
-                                enabled: true,
-                                controller: batchController,
-                                focusNode: batchFocus,
-                                onSubmitted: (e) {},
-                                decoration: const InputDecoration(
-                                  label: Text("Lote"),
-                                  border: InputBorder.none,
-                                  prefixIcon: Icon(Icons.qr_code),
-                                ),
-                              ),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 8.0),
+                              child: Text("Informe o Lote e Data de Validade"),
                             ),
+                          if (widget.productAddress.lote.trim().isNotEmpty)
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 16.0),
+                                    child: TextField(
+                                      enabled: true,
+                                      controller: batchController,
+                                      focusNode: batchFocus,
+                                      onSubmitted: (e) {},
+                                      decoration: const InputDecoration(
+                                        label: Text("Lote"),
+                                        border: InputBorder.none,
+                                        prefixIcon: Icon(Icons.qr_code),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                    onPressed: () async {
+                                      final themeData = Theme.of(context);
+                                      DateTime dataAtual = DateTime.now();
+                                      DateTime umAnoPraFrente = DateTime(
+                                        dataAtual.year + 1,
+                                        dataAtual.month,
+                                        dataAtual.day,
+                                        dataAtual.hour,
+                                        dataAtual.minute,
+                                        dataAtual.second,
+                                      );
+                                      final DateTime? pickedDate =
+                                          await showDatePicker(
+                                        builder: (context, Widget? child) =>
+                                            Theme(
+                                          data: themeData.copyWith(
+                                            datePickerTheme:
+                                                const DatePickerThemeData(
+                                                    rangeSelectionBackgroundColor:
+                                                        AppColors.background),
+                                            appBarTheme: themeData.appBarTheme
+                                                .copyWith(
+                                                    backgroundColor:
+                                                        Colors.blue,
+                                                    iconTheme: themeData
+                                                        .appBarTheme.iconTheme!
+                                                        .copyWith(
+                                                            color: Colors.red)),
+                                            colorScheme:
+                                                const ColorScheme.light(
+                                              onPrimary: Colors.white,
+                                              primary: Colors.grey,
+                                              //surface: Colors.green,
+                                            ),
+                                          ),
+                                          child: child!,
+                                        ),
+                                        context: context,
+                                        initialDate: umAnoPraFrente,
+                                        firstDate: DateTime(dataAtual.year - 1),
+                                        lastDate: DateTime(dataAtual.year + 3),
+                                      );
+                                      if (pickedDate == null) return;
+
+                                      setState(() {
+                                        isValidDateLote = true;
+                                        vencLote =
+                                            datetimeToYYYYMMDD(pickedDate);
+                                      });
+                                    },
+                                    icon: Icon(
+                                      Icons.calendar_month,
+                                      color: isValidDateLote
+                                          ? Colors.green
+                                          : Colors.red,
+                                    )),
+                              ],
+                            ),
+                          if (widget.productAddress.lote.trim().isNotEmpty)
+                            if (vencLote.isNotEmpty)
+                              Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: Text(
+                                        "Validade: ${yyyymmddToDate(vencLote)}"),
+                                  )),
                           if (widget.productAddress.fator > 0)
                             Wrap(
                               alignment: WrapAlignment.spaceBetween,
@@ -248,6 +328,21 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                                       .show();
                                   return;
                                 }
+                                if (vencLote.isEmpty) {
+                                  AwesomeDialog(
+                                          context: context,
+                                          dialogType: DialogType.error,
+                                          animType: AnimType.rightSlide,
+                                          //title: 'Alerta',
+                                          desc:
+                                              "Validade do Lote não preenchido!",
+                                          //btnCancelOnPress: () {},
+                                          btnOkOnPress: () {},
+                                          btnOkColor:
+                                              Theme.of(context).primaryColor)
+                                      .show();
+                                  return;
+                                }
                               }
 
                               final cubit =
@@ -258,7 +353,8 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                                   widget.productAddress.numseq,
                                   addressController.text,
                                   double.parse(quantityController.text),
-                                  batchController.text);
+                                  batchController.text,
+                                  vencLote);
                             },
                             child: const SizedBox(
                               width: double.infinity,

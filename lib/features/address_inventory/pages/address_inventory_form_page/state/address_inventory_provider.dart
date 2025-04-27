@@ -24,6 +24,18 @@ class AddressInventoryNotifier extends StateNotifier<AddressInventoryState> {
             products: [],
             status: StateEnum.initial));
 
+  void setIsDun(ProductModel product, bool isDun) {
+    final list = state.products;
+    final index = list.indexWhere(
+        (element) => element.codigo.trim() == product.codigo.trim());
+    if (index >= 0) {
+      if (list[index].codigo.isNotEmpty) {
+        list[index] = list[index].copyWith(isDun: isDun);
+      }
+      state = state.copyWith(products: list);
+    }
+  }
+
   void addProduct(ProductModel product, double quantity) {
     final list = state.products;
 
@@ -53,7 +65,8 @@ class AddressInventoryNotifier extends StateNotifier<AddressInventoryState> {
         state = state.copyWith(products: list);
       } else {
         if (product.codigo.isNotEmpty) {
-          product = product.copyWith(qtdInvet: quantity);
+          //INICIALIZA com 0 ???
+          product = product.copyWith(qtdInvet: 0);
         }
 
         state = state.copyWith(products: [product]);
