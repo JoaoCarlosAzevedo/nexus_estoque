@@ -225,7 +225,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                                         context: context,
                                         initialDate: umAnoPraFrente,
                                         firstDate: DateTime(dataAtual.year - 1),
-                                        lastDate: DateTime(dataAtual.year + 3),
+                                        lastDate: DateTime(dataAtual.year + 5),
                                       );
                                       if (pickedDate == null) return;
 
