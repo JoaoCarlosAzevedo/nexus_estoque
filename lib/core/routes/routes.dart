@@ -43,6 +43,7 @@ import '../../features/picking_load/pages/picking_load_list_page/picking_load_li
 import '../../features/picking_load_orders/picking_loads/picking_load_orders_page.dart';
 import '../../features/picking_load_v2/pages/picking_load_list_page/picking_load_v2_list_page.dart';
 import '../../features/picking_orders_v2/pages/picking_orders_v2_page.dart';
+import '../../features/product_detail/product_detail_list/product_detail_list.dart';
 import '../../features/product_tag/product_tag_list/product_tag_list.dart';
 import '../../features/product_tag/product_tag_preview/product_tag_preview.dart';
 import '../../features/purchase_invoice_check/pages/purchase_invoice_list/purchase_invoice_list_page.dart';
@@ -174,6 +175,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/etiqueta_produto_listagem",
             builder: ((context, state) => const ProductTagListPage())),
+        GoRoute(
+            path: "/detalhe_produto_listagem",
+            builder: ((context, state) => const ProductDetailListPage())),
         GoRoute(
             path: "/etiqueta_enderecos_listagem",
             builder: ((context, state) => const AddressTagListPage())),

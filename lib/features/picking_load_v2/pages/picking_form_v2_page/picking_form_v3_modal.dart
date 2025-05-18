@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/mixins/validation_mixin.dart';
 import 'package:nexus_estoque/core/services/audio_player.dart';
+import 'package:nexus_estoque/features/picking_load_v2/pages/picking_form_v2_page/picking_form_serial_modal.dart';
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity.dart';
 
 import '../../../../core/utils/error_dialog.dart';
@@ -52,8 +55,12 @@ class _PickingFormv3State extends ConsumerState<PickingFormv3>
   final TextEditingController productController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController quantityController = TextEditingController();
+  final TextEditingController serialController = TextEditingController();
   final FocusNode productFocus = FocusNode();
   final FocusNode addressFocus = FocusNode();
+  final FocusNode serialFocus = FocusNode();
+  List<String> seriais = [];
+
   bool checkProduct = false;
   double quantity = 0;
   bool isMultiple = false;
@@ -62,8 +69,10 @@ class _PickingFormv3State extends ConsumerState<PickingFormv3>
   void dispose() {
     productController.dispose();
     addressController.dispose();
+    serialController.dispose();
     productFocus.dispose();
     addressFocus.dispose();
+    serialFocus.dispose();
     quantityController.dispose();
 
     super.dispose();
@@ -145,9 +154,9 @@ class _PickingFormv3State extends ConsumerState<PickingFormv3>
                             }
                           },
                         ),
-                        const Divider(),
-                        Text("Quant. Separada: $quantity"),
                         //const Divider(),
+                        Text("Quant. Separada: $quantity"),
+                        const Divider(),
                         if (widget.picking.fator > 0)
                           Wrap(
                             alignment: WrapAlignment.spaceBetween,
@@ -171,7 +180,7 @@ class _PickingFormv3State extends ConsumerState<PickingFormv3>
                               ),
                             ],
                           ),
-                        const Divider(),
+                        //const Divider(),
                         NoKeyboardTextForm(
                           autoFocus: true,
                           focusNode: productFocus,
@@ -179,20 +188,73 @@ class _PickingFormv3State extends ConsumerState<PickingFormv3>
                           label: "Confirmação do Produto",
                           onSubmitted: (value) {
                             if (validateData()) {
-                              productFocus.requestFocus();
-                              if (isMultiple) {
-                                increment(context, 1 * widget.picking.fator);
+                              if (widget.picking.serial == 'S') {
+                                serialFocus.requestFocus();
                               } else {
-                                increment(context, 1);
+                                productFocus.requestFocus();
+                                if (isMultiple) {
+                                  increment(context, 1 * widget.picking.fator);
+                                } else {
+                                  increment(context, 1);
+                                }
+                                productController.clear();
                               }
+                            } else {
+                              productFocus.requestFocus();
+                              productController.clear();
                             }
-                            productController.clear();
                           },
                         ),
-                        const Divider(),
-                        InputQuantity(
-                          controller: quantityController,
-                        ),
+                        //const Divider(),
+                        if (widget.picking.serial == 'S')
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: NoKeyboardTextForm(
+                                  autoFocus: true,
+                                  focusNode: serialFocus,
+                                  controller: serialController,
+                                  label: "Número de Série",
+                                  onSubmitted: (value) {
+                                    if (validateData()) {
+                                      if (value.isNotEmpty) {
+                                        seriais.add(value);
+                                        increment2(context, 1);
+                                        serialController.clear();
+                                        serialFocus.requestFocus();
+                                      }
+                                    } else {
+                                      serialController.clear();
+                                      productFocus.requestFocus();
+                                    }
+                                  },
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.search),
+                                onPressed: () async {
+                                  final qtdSerials = await SerialListModal.show(
+                                      context, widget.picking, seriais);
+                                  log(qtdSerials.toString());
+                                  log(seriais.toString());
+                                  //zera quantidade atual, e grava nova por cima
+                                  // ignore: use_build_context_synchronously
+                                  if (qtdSerials != quantity) {
+                                    setState(() {
+                                      quantity = 0;
+                                    });
+                                    // ignore: use_build_context_synchronously
+                                    increment2(context, qtdSerials);
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        if (widget.picking.serial != 'S')
+                          InputQuantity(
+                            controller: quantityController,
+                          ),
                         const SizedBox(
                           height: 20,
                         ),
@@ -228,9 +290,30 @@ class _PickingFormv3State extends ConsumerState<PickingFormv3>
         checkProduct = true;
       });
 
-      AudioService.beep();
+      if (quantity + number > 0) {
+        AudioService.beep();
+      }
       setState(() {
         quantity = quantity + number;
+        quantityController.text = quantity.toString();
+      });
+    }
+  }
+
+  void increment2(BuildContext context, double number) {
+    double isPositive = quantity + number;
+
+    if (isPositive >= 0) {
+      setState(() {
+        checkProduct = true;
+      });
+
+      if (quantity + number > 0) {
+        AudioService.beep();
+      }
+
+      setState(() {
+        quantity = widget.picking.calcSerialSkuQuantity(seriais.length);
         quantityController.text = quantity.toString();
       });
     }
@@ -292,8 +375,15 @@ class _PickingFormv3State extends ConsumerState<PickingFormv3>
         return;
       }
 
+      if (widget.picking.serial == 'S') {
+        if (seriais.length.toDouble() != widget.picking.qtdSerial) {
+          showValidation(context, "Número de Séries diferente da quantidade");
+          return;
+        }
+      }
+
       widget.picking.separado = quantity;
-      context.read<PickingSavev2Cubit>().postPicking(widget.picking);
+      context.read<PickingSavev2Cubit>().postPicking(widget.picking, seriais);
     }
   }
 

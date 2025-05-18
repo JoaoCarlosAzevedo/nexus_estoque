@@ -11,9 +11,9 @@ class PickingSavev2Cubit extends Cubit<PickingSavev2State> {
   PickingSavev2Cubit(this.pickingRepository) : super(PickingSavev2Initial());
   final Pickingv2Repository pickingRepository;
 
-  void postPicking(Pickingv2Model picking) async {
+  void postPicking(Pickingv2Model picking, List<String> seriais) async {
     emit(PickingSavev2Loading());
-    final result = await pickingRepository.postPicking(picking);
+    final result = await pickingRepository.postPicking(picking, seriais);
     if (result.isRight()) {
       result.fold((l) => null, (r) {
         emit(

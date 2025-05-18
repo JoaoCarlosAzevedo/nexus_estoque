@@ -27,6 +27,12 @@ class Pickingv2Model {
   String predio;
   String nivel;
   String apartamento;
+  String serial;
+
+  int qtdPar;
+  int qtdKit;
+  int qtdSerial;
+
   int recnoSDC;
 
   double fator;
@@ -60,6 +66,10 @@ class Pickingv2Model {
       required this.status,
       required this.recnoSDC,
       required this.fator,
+      required this.serial,
+      required this.qtdPar,
+      required this.qtdKit,
+      required this.qtdSerial,
       required this.rua});
 
   Map<String, dynamic> toMap() {
@@ -90,6 +100,7 @@ class Pickingv2Model {
       'status': status,
       'fator': fator,
       'recnoSDC': recnoSDC,
+      'serial': serial,
     };
   }
 
@@ -121,11 +132,29 @@ class Pickingv2Model {
       nivel: map['nivel'] ?? '',
       apartamento: map['aparatamento'] ?? '',
       status: map['status'] ?? '',
+      serial: map['serial'] ?? '',
       recnoSDC: map['recnoSDC']?.toInt() ?? 0,
+      qtdPar: map['qtdPar']?.toInt() ?? 0,
+      qtdKit: map['qtdKit']?.toInt() ?? 0,
+      qtdSerial: map['qtdSerial']?.toInt() ?? 0,
     );
   }
 
   String toJson() => json.encode(toMap());
+
+  double calcSerialSkuQuantity(int seriais) {
+    double calc = 0;
+
+    if (qtdPar > 0) {
+      calc = seriais / qtdPar;
+    }
+
+    if (qtdKit > 0) {
+      calc = calc / qtdKit;
+    }
+
+    return calc;
+  }
 
   factory Pickingv2Model.fromJson(String source) =>
       Pickingv2Model.fromMap(json.decode(source));

@@ -285,7 +285,7 @@ class _PickingFormv2State extends ConsumerState<PickingFormv2>
       }
 
       widget.picking.separado = quantity;
-      context.read<PickingSavev2Cubit>().postPicking(widget.picking);
+      context.read<PickingSavev2Cubit>().postPicking(widget.picking, []);
     }
   }
 

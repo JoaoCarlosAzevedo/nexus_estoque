@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -23,17 +24,21 @@ class Pickingv2Repository {
     dio = _ref.read(httpProvider).dioInstance;
   }
 
-  Future<Either<Failure, String>> postPicking(Pickingv2Model picking) async {
+  Future<Either<Failure, String>> postPicking(
+      Pickingv2Model picking, List<String> seriais) async {
     final String url = await Config.baseURL;
     final List<Pickingv2Model> pickingList = [picking];
     final jsonList = pickingList
         .map((e) => {
               'separado': e.separado,
               'recnoSDC': e.recnoSDC,
+              'seriais': seriais,
             })
         .toList();
 
     final String json = jsonEncode(jsonList);
+
+    log(json);
 
     try {
       var response = await dio.post(
