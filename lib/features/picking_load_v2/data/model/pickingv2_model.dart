@@ -32,6 +32,7 @@ class Pickingv2Model {
   int qtdPar;
   int qtdKit;
   int qtdSerial;
+  int qtdMax;
 
   int recnoSDC;
 
@@ -70,6 +71,7 @@ class Pickingv2Model {
       required this.qtdPar,
       required this.qtdKit,
       required this.qtdSerial,
+      required this.qtdMax,
       required this.rua});
 
   Map<String, dynamic> toMap() {
@@ -101,6 +103,7 @@ class Pickingv2Model {
       'fator': fator,
       'recnoSDC': recnoSDC,
       'serial': serial,
+      'qtdMax': qtdMax,
     };
   }
 
@@ -137,6 +140,7 @@ class Pickingv2Model {
       qtdPar: map['qtdPar']?.toInt() ?? 0,
       qtdKit: map['qtdKit']?.toInt() ?? 0,
       qtdSerial: map['qtdSerial']?.toInt() ?? 0,
+      qtdMax: map['qtdMax']?.toInt() ?? 0,
     );
   }
 

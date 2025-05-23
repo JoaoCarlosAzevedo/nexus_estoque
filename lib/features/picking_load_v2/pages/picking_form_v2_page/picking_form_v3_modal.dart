@@ -376,7 +376,7 @@ class _PickingFormv3State extends ConsumerState<PickingFormv3>
       }
 
       if (widget.picking.serial == 'S') {
-        if (seriais.length.toDouble() != widget.picking.qtdSerial) {
+        if (seriais.length.toDouble() != widget.picking.qtdMax) {
           showValidation(context, "Número de Séries diferente da quantidade");
           return;
         }

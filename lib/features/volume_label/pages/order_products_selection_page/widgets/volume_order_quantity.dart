@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 
-import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity.dart';
+import '../../../../transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity_int.dart';
+import '../../../data/model/volume_order_model.dart';
 
-import '../../../data/model/filter_tag_load_model.dart';
-
-class PurchaseFilterTagProductQuantityModal {
+class VolumeOrderQuantityModal {
   static Future<double?> show(
-      context, InvoiceProduct produto, double checked) async {
+      context, VolumeProdOrderModel produto, double quantity) async {
     {
       final result = await showModalBottomSheet<double>(
         context: context,
         isScrollControlled: true,
         builder: (BuildContext context) {
-          return FilterTagProductQuantity(
+          return VolumeOrderQuantity(
             produto: produto,
-            checked: checked,
+            quantity: quantity,
           );
         },
       );
@@ -23,23 +22,22 @@ class PurchaseFilterTagProductQuantityModal {
   }
 }
 
-class FilterTagProductQuantity extends StatefulWidget {
-  const FilterTagProductQuantity(
-      {super.key, required this.produto, required this.checked});
-  final InvoiceProduct produto;
-  final double checked;
+class VolumeOrderQuantity extends StatefulWidget {
+  const VolumeOrderQuantity(
+      {super.key, required this.produto, required this.quantity});
+  final VolumeProdOrderModel produto;
+  final double quantity;
 
   @override
-  State<FilterTagProductQuantity> createState() =>
-      _FilterTagProductQuantityState();
+  State<VolumeOrderQuantity> createState() => _VolumeOrderQuantityState();
 }
 
-class _FilterTagProductQuantityState extends State<FilterTagProductQuantity> {
+class _VolumeOrderQuantityState extends State<VolumeOrderQuantity> {
   final TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
-    controller.text = widget.checked.toString();
+    controller.text = widget.quantity.toString();
     super.initState();
   }
 
@@ -59,21 +57,24 @@ class _FilterTagProductQuantityState extends State<FilterTagProductQuantity> {
           //height: MediaQuery.of(context).size.height / 2,
           child: Column(
             children: [
-              InputQuantity(
-                controller: controller,
-              ),
-              Text("${widget.produto.item} - ${widget.produto.descricao}",
+              Text("${widget.produto.codigo} - ${widget.produto.descricao}",
                   style: Theme.of(context).textTheme.bodyLarge,
                   overflow: TextOverflow.ellipsis),
               const Divider(),
-              Text("Embalado: ${widget.produto.novaQuantidade}",
+              Text("Qtd: ${widget.quantity.toStringAsFixed(0)}",
                   style: Theme.of(context).textTheme.displayMedium,
                   overflow: TextOverflow.ellipsis),
               const SizedBox(
                 height: 10,
               ),
-              InputQuantity(
+              InputQuantityInt(
                 controller: controller,
+                onSubmitted: (e) {
+                  final double? quantity = double.tryParse(controller.text);
+                  if (quantity != null) {
+                    Navigator.of(context).pop(quantity);
+                  }
+                },
               ),
               const SizedBox(
                 height: 10,

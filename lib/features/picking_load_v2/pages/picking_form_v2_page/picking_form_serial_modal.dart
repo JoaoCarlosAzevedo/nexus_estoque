@@ -96,11 +96,11 @@ class _ListSerialState extends ConsumerState<ListSerial> with ValidationMixi {
             Align(
               alignment: Alignment.topCenter,
               child: Text(
-                "Qtd Cód. Série: ${widget.seriais.length} / ${widget.picking.qtdSerial}",
+                "Qtd Cód. Série: ${widget.seriais.length} / ${widget.picking.qtdMax}",
                 style: TextStyle(
-                    color: widget.seriais.length > widget.picking.qtdSerial
+                    color: widget.seriais.length > widget.picking.qtdMax
                         ? Colors.red
-                        : widget.seriais.length < widget.picking.qtdSerial
+                        : widget.seriais.length < widget.picking.qtdMax
                             ? Colors.orange
                             : Colors.green,
                     fontSize: 16,

@@ -233,6 +233,12 @@ final List<MenuItemInfo> menuItens = [
     color: Colors.red,
     route: 'etiqueta_enderecos_listagem',
   ),
+  MenuItemInfo(
+    title: "Etiquetas Volume",
+    icon: FontAwesomeIcons.cubes,
+    color: Colors.red,
+    route: 'etiqueta_volume',
+  ),
 ];
 
 /* 
@@ -351,6 +357,12 @@ final List<MenuItemInfo> menuItens = [
     icon: FontAwesomeIcons.receipt,
     color: Colors.red,
     route: 'importar_nf_entrada',
+  ), 
+ MenuItemInfo(
+    title: "Etiquetas Volume",
+    icon: FontAwesomeIcons.cubes,
+    color: Colors.red,
+    route: 'etiqueta_volume',
   ), 
 ];
  */
