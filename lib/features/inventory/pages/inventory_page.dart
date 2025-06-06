@@ -337,14 +337,10 @@ class _InventoryPageState extends ConsumerState<InventoryPage>
             return true;
           }
 
-          if (element.codigoBarras
-              .toUpperCase()
-              .contains(product.toUpperCase())) {
+          if (element.codigoBarras.toUpperCase() == (product.toUpperCase())) {
             return true;
           }
-          if (element.codigoBarras2
-              .toUpperCase()
-              .contains(product.toUpperCase())) {
+          if (element.codigoBarras2.toUpperCase() == (product.toUpperCase())) {
             return true;
           }
 

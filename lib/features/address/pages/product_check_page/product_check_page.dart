@@ -111,13 +111,13 @@ class _ProductCheckPageState extends State<ProductCheckPage> {
       return;
     }
 
-    if (widget.productAddress.codigoBarras.contains(code.trim()) &&
+    if (widget.productAddress.codigoBarras == (code.trim()) &&
         code.trim().length > 6) {
       cubit.checkProduct();
       return;
     }
 
-    if (widget.productAddress.codigoBarras2.contains(code.trim()) &&
+    if (widget.productAddress.codigoBarras2 == (code.trim()) &&
         code.trim().length > 6) {
       cubit.checkProduct();
       return;

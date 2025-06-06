@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
+
 import 'package:grouped_list/grouped_list.dart';
 
 import '../../../../core/features/bluetooth_printer/bluetooth_printer.dart';
@@ -9,6 +11,7 @@ import '../../../../core/services/bt_printer.dart';
 import '../../data/model/volume_order_model.dart';
 import '../../data/repositories/volume_label_repository.dart';
 import '../order_products_selection_page/order_products_selection_page.dart';
+import 'widgets/dele_label_widget.dart';
 
 class VolumeOrderDetailPage extends ConsumerStatefulWidget {
   const VolumeOrderDetailPage({required this.order, super.key});
@@ -138,7 +141,45 @@ class _VolumeOrderDetailPageState extends ConsumerState<VolumeOrderDetailPage> {
                             final element = data.etiquetas[index];
                             return Card(
                               child: ListTile(
-                                onTap: () {},
+                                leading: LabelDeleteIcon(
+                                  param:
+                                      '${element.pedido}|${element.numExp}|${element.volume}',
+                                  onSuccess: () {
+                                    ref.invalidate(
+                                      volumeLabelGetOrderProvider(widget.order),
+                                    );
+                                  },
+                                ),
+                                /*  leading: IconButton.filledTonal(
+                                  iconSize: 15,
+                                  onPressed: () {
+                                    AwesomeDialog(
+                                      context: context,
+                                      dialogType: DialogType.info,
+                                      animType: AnimType.rightSlide,
+                                      title: 'Confirmar exclusão',
+                                      desc: 'Deseja excluir etiqueta volume?',
+                                      btnCancelOnPress: () {},
+                                      btnOkOnPress: () {
+                                        showLoading(
+                                            context,
+                                            element.pedido,
+                                            element.numExp,
+                                            element.volume,
+                                            ref);
+
+                                        /*  ref.invalidate(
+                                          volumeLabelGetOrderProvider(
+                                              widget.order),
+                                        ); */
+                                      },
+                                    ).show();
+                                  },
+                                  icon: const FaIcon(
+                                    FontAwesomeIcons.trash,
+                                    color: Colors.red,
+                                  ),
+                                ), */
                                 title: Text('Volume: ${element.volume}'),
                                 subtitle:
                                     Text('Nº Expedição: ${element.numExp}'),
@@ -174,4 +215,61 @@ class _VolumeOrderDetailPageState extends ConsumerState<VolumeOrderDetailPage> {
       ),
     );
   }
+}
+
+void showLoading(BuildContext context, String order, String numExp,
+    String volume, WidgetRef ref) {
+  final param = '$order|$numExp|$volume';
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (_) {
+      final provider = ref.watch(volumeLabelDeleteProvider(param));
+
+      ref.listen(
+        volumeLabelDeleteProvider(param),
+        (AsyncValue<String>? _, AsyncValue<String> next) {
+          if (next.hasValue) {
+            context.pop();
+          }
+          if (next.hasError) {
+            context.pop();
+          }
+        },
+      );
+
+      return SimpleDialog(
+        backgroundColor: Colors.transparent, //here set the color to transparent
+        elevation: 0,
+        children: [
+          provider.when(
+            data: (a) {
+              return Container();
+            },
+            error: (_, __) {
+              return Container();
+            },
+            loading: () => Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                CircularProgressIndicator(
+                  color: Theme.of(context).primaryColor,
+                ),
+              ],
+            ),
+          )
+        ],
+        /* children: <Widget>[
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              CircularProgressIndicator(
+                color: Theme.of(context).primaryColor,
+              ),
+            ],
+          ),
+        ], */
+      );
+    },
+  );
 }

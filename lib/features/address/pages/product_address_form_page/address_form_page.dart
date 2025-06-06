@@ -436,12 +436,12 @@ class _AddressFormState extends ConsumerState<AddressForm> {
       return true;
     }
 
-    if (widget.productAddress.codigoBarras.contains(code.trim()) &&
+    if (widget.productAddress.codigoBarras == (code.trim()) &&
         code.trim().length > 6) {
       return true;
     }
 
-    if (widget.productAddress.codigoBarras2.contains(code.trim()) &&
+    if (widget.productAddress.codigoBarras2 == (code.trim()) &&
         code.trim().length > 6) {
       return true;
     }

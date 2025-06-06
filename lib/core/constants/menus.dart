@@ -234,10 +234,22 @@ final List<MenuItemInfo> menuItens = [
     route: 'etiqueta_enderecos_listagem',
   ),
   MenuItemInfo(
+    title: "Import. NF",
+    icon: FontAwesomeIcons.receipt,
+    color: Colors.red,
+    route: 'importar_nf_entrada',
+  ),
+  MenuItemInfo(
     title: "Etiquetas Volume",
     icon: FontAwesomeIcons.cubes,
     color: Colors.red,
     route: 'etiqueta_volume',
+  ),
+  MenuItemInfo(
+    title: "Consulta Produto",
+    icon: FontAwesomeIcons.box,
+    color: Colors.red,
+    route: 'detalhe_produto_listagem',
   ),
 ];
 

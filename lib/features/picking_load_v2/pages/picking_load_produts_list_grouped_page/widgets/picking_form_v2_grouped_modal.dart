@@ -233,14 +233,10 @@ class _PickingFormv2GroupedState extends ConsumerState<PickingFormv2Grouped>
     }
 
     if (productController.text.trim().length >= 5) {
-      if (widget.picking.barcode1
-          .trim()
-          .contains(productController.text.trim())) {
+      if (widget.picking.barcode1.trim() == (productController.text.trim())) {
         productValid = true;
       }
-      if (widget.picking.barcode2
-          .trim()
-          .contains(productController.text.trim())) {
+      if (widget.picking.barcode2.trim() == (productController.text.trim())) {
         productValid = true;
       }
     }

@@ -47,11 +47,11 @@ class FilterTagLoadOrderCubit extends Cubit<FilterTagLoadOrderState> {
           }
 
           if (barcode.trim().length >= 5) {
-            if (element.codigobarras.trim().contains(barcode.trim())) {
+            if (element.codigobarras.trim() == barcode.trim()) {
               return true;
             }
 
-            if (element.codigobarras2.trim().contains(barcode.trim())) {
+            if (element.codigobarras2.trim() == barcode.trim()) {
               return true;
             }
           }

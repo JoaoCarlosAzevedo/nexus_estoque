@@ -161,12 +161,12 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
           }
 
           if (code.trim().length >= 5) {
-            if (element.barcode.trim().contains(code.trim()) &&
+            if (element.barcode.trim() == code.trim() &&
                 (element.checked < element.quantidade)) {
               return true;
             }
 
-            if (element.barcode2.trim().contains(code.trim()) &&
+            if (element.barcode2.trim() == code.trim() &&
                 (element.checked < element.quantidade)) {
               return true;
             }
@@ -182,12 +182,12 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
             }
 
             if (code.trim().length >= 5) {
-              if (element.barcode.trim().contains(code.trim())) {
+              if (element.barcode.trim() == code.trim()) {
                 return true;
               }
             }
             if (code.trim().length >= 5) {
-              if (element.barcode2.trim().contains(code.trim())) {
+              if (element.barcode2.trim() == code.trim()) {
                 return true;
               }
             }
@@ -237,12 +237,12 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
       }
 
       if (code.trim().length >= 5) {
-        if (element.barcode.trim().contains(code.trim()) &&
+        if (element.barcode.trim() == code.trim() &&
             (element.checked < element.quantidade)) {
           return true;
         }
 
-        if (element.barcode2.trim().contains(code.trim()) &&
+        if (element.barcode2.trim() == code.trim() &&
             (element.checked < element.quantidade)) {
           return true;
         }
@@ -258,12 +258,12 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
         }
 
         if (code.trim().length >= 5) {
-          if (element.barcode.trim().contains(code.trim())) {
+          if (element.barcode.trim() == code.trim()) {
             return true;
           }
         }
         if (code.trim().length >= 5) {
-          if (element.barcode2.trim().contains(code.trim())) {
+          if (element.barcode2.trim() == code.trim()) {
             return true;
           }
         }

@@ -79,12 +79,12 @@ class PurchaseInvoiceProductsCubit extends Cubit<PurchaseInvoiceProductsState> {
           }
 
           if (barcode.trim().length >= 5) {
-            if (element.barcode.trim().contains(barcode.trim()) &&
+            if (element.barcode.trim() == barcode.trim() &&
                 (element.checked < element.quantidade)) {
               return true;
             }
 
-            if (element.barcode2.trim().contains(barcode.trim()) &&
+            if (element.barcode2.trim() == barcode.trim() &&
                 (element.checked < element.quantidade)) {
               return true;
             }
@@ -101,12 +101,12 @@ class PurchaseInvoiceProductsCubit extends Cubit<PurchaseInvoiceProductsState> {
             }
 
             if (barcode.trim().length >= 5) {
-              if (element.barcode.trim().contains(barcode.trim())) {
+              if (element.barcode.trim() == barcode.trim()) {
                 return true;
               }
             }
             if (barcode.trim().length >= 5) {
-              if (element.barcode2.trim().contains(barcode.trim())) {
+              if (element.barcode2.trim() == barcode.trim()) {
                 return true;
               }
             }
@@ -155,7 +155,7 @@ class PurchaseInvoiceProductsCubit extends Cubit<PurchaseInvoiceProductsState> {
       });
 
       for (var element in products) {
-        if (element.codigo.contains(barcode)) {
+        if (element.codigo == (barcode)) {
           element.isMultiple = switchValue;
         }
       }
@@ -181,9 +181,9 @@ class PurchaseInvoiceProductsCubit extends Cubit<PurchaseInvoiceProductsState> {
       });
 
       for (var element in products) {
-        if (element.codigo.contains(barcode) ||
-            element.barcode.contains(barcode) ||
-            element.barcode2.contains(barcode)) {
+        if (element.codigo == (barcode) ||
+            element.barcode == (barcode) ||
+            element.barcode2 == (barcode)) {
           total = total + element.checked;
         }
       }
@@ -273,12 +273,12 @@ class PurchaseInvoiceProductsCubit extends Cubit<PurchaseInvoiceProductsState> {
         }
 
         if (barcode.trim().length >= 5) {
-          if (element.barcode.trim().contains(barcode.trim()) &&
+          if (element.barcode.trim() == barcode.trim() &&
               (element.checked < element.quantidade)) {
             return true;
           }
 
-          if (element.barcode2.trim().contains(barcode.trim()) &&
+          if (element.barcode2.trim() == barcode.trim() &&
               (element.checked < element.quantidade)) {
             return true;
           }
@@ -294,12 +294,12 @@ class PurchaseInvoiceProductsCubit extends Cubit<PurchaseInvoiceProductsState> {
           }
 
           if (barcode.trim().length >= 5) {
-            if (element.barcode.trim().contains(barcode.trim())) {
+            if (element.barcode.trim() == barcode.trim()) {
               return true;
             }
           }
           if (barcode.trim().length >= 5) {
-            if (element.barcode2.trim().contains(barcode.trim())) {
+            if (element.barcode2.trim() == barcode.trim()) {
               return true;
             }
           }

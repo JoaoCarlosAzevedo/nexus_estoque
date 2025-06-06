@@ -35,11 +35,11 @@ class VolumeOrderNotifier extends StateNotifier<VolumeOrderState> {
       }
 
       if (barcode.trim().length >= 5) {
-        if (element.codigo.trim().contains(barcode.trim())) {
+        if (element.codigo.trim() == barcode.trim()) {
           return true;
         }
 
-        if (element.barcode.trim().contains(barcode.trim())) {
+        if (element.barcode.trim() == barcode.trim()) {
           return true;
         }
       }

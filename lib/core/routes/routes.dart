@@ -48,7 +48,7 @@ import '../../features/product_tag/product_tag_list/product_tag_list.dart';
 import '../../features/product_tag/product_tag_preview/product_tag_preview.dart';
 import '../../features/purchase_invoice_check/pages/purchase_invoice_list/purchase_invoice_list_page.dart';
 import '../../features/volume_label/pages/order_detail_page/order_detail_page.dart';
-import '../../features/volume_label/pages/order_selection_page/order_selection_page.dart';
+import '../../features/volume_label/pages/order_selection_page/order_list_selection_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authService = RouterNotifier(ref);
@@ -237,7 +237,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
           path: "/etiqueta_volume",
           builder: ((context, state) {
-            return const VolumeOrderSelectionPage();
+            return const OrderLabelListSelectionPage();
           }),
         ),
         GoRoute(

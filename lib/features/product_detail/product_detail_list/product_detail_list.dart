@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/features/searches/products/data/model/product_model.dart';
 import '../../../core/features/searches/products/provider/remote_product_provider.dart';
@@ -66,9 +67,8 @@ class _ProductDetailListPageState extends ConsumerState<ProductDetailListPage> {
                                 context, filterListProducts[index].codigo); */
                           },
                           onTap: () {
-                            /*  context.push(
-                              '/etiqueta_produto/${filterListProducts[index].codigo}',
-                            ); */
+                            context.push(
+                                '/saldo_produto/${filterListProducts[index].codigo}');
                           },
                           title: Text(filterListProducts[index].descricao),
                           subtitle: Column(
@@ -77,11 +77,11 @@ class _ProductDetailListPageState extends ConsumerState<ProductDetailListPage> {
                               Text(filterListProducts[index].codigo),
                               Text(
                                   'Cód Barras: ${filterListProducts[index].codigoBarras}'),
-                              Text(
+                              /*         Text(
                                   'Cód Dun: ${filterListProducts[index].codigoBarras2}'),
                               if (filterListProducts[index].fator > 0)
                                 Text(
-                                    'Fator Dun: ${filterListProducts[index].fator.toStringAsFixed(0)}'),
+                                    'Fator Dun: ${filterListProducts[index].fator.toStringAsFixed(0)}'), */
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -96,9 +96,9 @@ class _ProductDetailListPageState extends ConsumerState<ProductDetailListPage> {
                           ),
                           trailing: Column(
                             children: [
-                              Text(filterListProducts[index]
+                              /*     Text(filterListProducts[index]
                                   .saldoAtual
-                                  .toString()),
+                                  .toString()), */
                               Text(filterListProducts[index].um),
                             ],
                           ),
@@ -129,14 +129,10 @@ class _ProductDetailListPageState extends ConsumerState<ProductDetailListPage> {
             return true;
           }
 
-          if (element.codigoBarras
-              .toUpperCase()
-              .contains(search.toUpperCase())) {
+          if (element.codigoBarras.toUpperCase() == (search.toUpperCase())) {
             return true;
           }
-          if (element.codigoBarras2
-              .toUpperCase()
-              .contains(search.toUpperCase())) {
+          if (element.codigoBarras2.toUpperCase() == (search.toUpperCase())) {
             return true;
           }
 
