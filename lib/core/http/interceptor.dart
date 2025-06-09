@@ -24,6 +24,8 @@ class AppInterceptors extends Interceptor {
     //se for uma nova solicitacao de autenticacao, deleta os tokens anteriores
     if (options.path.contains('oauth2/v1/token')) {
       await _storage.delete(key: 'refresh_token');
+      await _storage.delete(key: 'access_token');
+      accessToken = '';
       log('deletando refresh token');
     }
 

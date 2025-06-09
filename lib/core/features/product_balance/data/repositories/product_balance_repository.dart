@@ -12,6 +12,21 @@ import 'package:nexus_estoque/core/http/http_provider.dart';
 final productBalanceRepositoryProvider = Provider<ProductBalanceRepositoryv2>(
     (ref) => ProductBalanceRepositoryv2(ref));
 
+final productBalancetProvider =
+    FutureProvider.family<ProductBalanceModel, String>((ref, args) async {
+  final result = await ref
+      .read(productBalanceRepositoryProvider)
+      .fetchProductBalance(args);
+  late ProductBalanceModel productBalance;
+  result.fold((l) {
+    throw Exception(l.error);
+  }, (r) {
+    productBalance = r;
+  });
+
+  return productBalance;
+});
+
 class ProductBalanceRepositoryv2 {
   late Dio dio;
   final options = DioConfig.dioBaseOption;

@@ -207,7 +207,8 @@ final List<MenuItemInfo> menuItens = [
     title: "Reposição",
     icon: FontAwesomeIcons.boxesPacking,
     color: Colors.red,
-    route: 'reposicao',
+    route: 'reposicao_v2',
+    //route: 'reposicao',
   ),
   MenuItemInfo(
     title: "Saldo por Endereço",

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -44,6 +45,8 @@ class _TransferFormPageState extends ConsumerState<TransferFormPage>
   final TextEditingController origBatchController = TextEditingController();
   final TextEditingController destBatchController = TextEditingController();
 
+  final destAddressFocusNode = FocusNode();
+
   final TextEditingController quantityController =
       TextEditingController(text: '1.00');
   bool canChangeWarehouse = false;
@@ -52,12 +55,22 @@ class _TransferFormPageState extends ConsumerState<TransferFormPage>
   void initState() {
     if (widget.reposition != null) {
       quantityController.text = widget.reposition!.quantity.toString();
+      origAddressController.text = widget.reposition!.origAddress;
+      origWarehouseController.text = widget.reposition!.warehouse;
     }
-    super.initState();
-    Future.delayed(
+
+    /* Future.delayed(
       const Duration(milliseconds: 500),
       () => SystemChannels.textInput.invokeMethod('TextInput.hide'),
     );
+ */
+    SchedulerBinding.instance.addPostFrameCallback((Duration _) {
+      if (widget.reposition != null) {
+        if (widget.reposition!.destAddress.isEmpty) {
+          destAddressFocusNode.requestFocus();
+        }
+      }
+    });
   }
 
   @override
@@ -71,6 +84,7 @@ class _TransferFormPageState extends ConsumerState<TransferFormPage>
     origBatchController.dispose();
     destBatchController.dispose();
 
+    destAddressFocusNode.dispose();
     quantityController.dispose();
 
     super.dispose();
@@ -86,6 +100,7 @@ class _TransferFormPageState extends ConsumerState<TransferFormPage>
         canChangeWarehouse = true;
       }
     }
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Form(
@@ -177,6 +192,8 @@ class _TransferFormPageState extends ConsumerState<TransferFormPage>
                       InputSearchWidget(
                         label: "Endereço Destino",
                         controller: destAddressController,
+                        autoFocus: true,
+                        focusNode: destAddressFocusNode,
                         validator: isNotEmpty,
                         onPressed: () async {
                           allAddressSearch();
@@ -215,6 +232,12 @@ class _TransferFormPageState extends ConsumerState<TransferFormPage>
                                     destAddressController.text.trim()) {
                               postTransfer();
                             } else {
+                              if (widget.reposition!.origAddress.trim() ==
+                                      origAddressController.text.trim() &&
+                                  widget.reposition!.destAddress.isEmpty) {
+                                postTransfer();
+                                return;
+                              }
                               AwesomeDialog(
                                       context: context,
                                       dialogType: DialogType.error,

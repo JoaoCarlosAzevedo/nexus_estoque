@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class InputSearchWidget extends StatefulWidget {
@@ -23,6 +24,7 @@ class InputSearchWidget extends StatefulWidget {
 }
 
 class _InputSearchWidgetState extends State<InputSearchWidget> {
+  bool showKeyboard = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -30,6 +32,7 @@ class _InputSearchWidgetState extends State<InputSearchWidget> {
       child: TextFormField(
         autofocus: widget.autoFocus ?? true,
         textInputAction: TextInputAction.next,
+        keyboardType: showKeyboard ? TextInputType.text : TextInputType.none,
         focusNode: widget.focusNode,
         onFieldSubmitted: widget.onSubmitted,
         validator: widget.validator,
@@ -37,7 +40,35 @@ class _InputSearchWidgetState extends State<InputSearchWidget> {
         decoration: InputDecoration(
           label: Text(widget.label),
           border: InputBorder.none,
-          prefixIcon: const Icon(Icons.qr_code),
+          prefixIcon: IconButton(
+            onPressed: () async {
+              setState(() {
+                showKeyboard = !showKeyboard;
+                if (showKeyboard) {
+                  widget.focusNode?.unfocus();
+                } else {
+                  Future.delayed(
+                    const Duration(milliseconds: 100),
+                    () =>
+                        SystemChannels.textInput.invokeMethod('TextInput.hide'),
+                  );
+                }
+              });
+
+              Future.delayed(const Duration(milliseconds: 500), () {
+                setState(() {
+                  if (showKeyboard) {
+                    widget.focusNode?.requestFocus();
+                  }
+                  // Here you can write your code for open new view
+                });
+              });
+            },
+            icon: Icon(
+              Icons.keyboard,
+              color: showKeyboard ? Colors.green : Colors.grey,
+            ),
+          ),
           suffixIcon: Focus(
             descendantsAreFocusable: false,
             canRequestFocus: false,

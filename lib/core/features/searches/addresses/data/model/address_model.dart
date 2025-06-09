@@ -11,6 +11,14 @@ class AddressModel {
   double empenho;
   String ultimoMov;
 
+  String deposito;
+  String rua;
+  String predio;
+  String nivel;
+  String aparatamento;
+  String descEnderecov2;
+  bool picking;
+
   AddressModel(
       {required this.descricao,
       required this.local,
@@ -19,7 +27,14 @@ class AddressModel {
       required this.quantidade,
       required this.empenho,
       required this.ultimoMov,
-      required this.armzDesc});
+      required this.armzDesc,
+      required this.deposito,
+      required this.rua,
+      required this.predio,
+      required this.nivel,
+      required this.descEnderecov2,
+      required this.aparatamento,
+      required this.picking});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -43,6 +58,13 @@ class AddressModel {
       quantidade: map['quantidade']?.toDouble() ?? 0,
       empenho: map['empenho']?.toDouble() ?? 0,
       ultimoMov: map['ultimo_mov'] ?? '',
+      deposito: map['deposito'] ?? '',
+      rua: map['rua'] ?? '',
+      predio: map['predio'] ?? '',
+      nivel: map['nivel'] ?? '',
+      aparatamento: map['aparatamento'] ?? '',
+      descEnderecov2: map['descEnderecov2'] ?? '',
+      picking: map['picking'] ?? false,
     );
   }
 
