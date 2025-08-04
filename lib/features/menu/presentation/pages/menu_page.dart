@@ -33,11 +33,19 @@ class MenuPage extends ConsumerWidget {
     AsyncValue<Branch?> environment = ref.watch(environmentProvider);
 
     if (authUser is LoginStateSuccess) {
+      final listMenus = authUser.user.menus;
       if (!authUser.user.title.contains("SEPARADOR TRANSFERENCIA")) {
         //copia;
         menus = [
           for (final newMenu in menuItens)
             if (newMenu.route != "separacao") newMenu,
+        ];
+      }
+
+      if (listMenus.isNotEmpty) {
+        menus = [
+          for (final newMenu in menuItens)
+            if (listMenus.contains(newMenu.route.trim())) newMenu,
         ];
       }
     }
@@ -61,11 +69,16 @@ class MenuPage extends ConsumerWidget {
           ],
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              context.push('/filiais');
+          GestureDetector(
+            onLongPress: () {
+              LocalStorage.deleteBranch();
             },
-            icon: const Icon(Icons.apartment_outlined),
+            child: IconButton(
+              onPressed: () {
+                context.push('/filiais');
+              },
+              icon: const Icon(Icons.apartment_outlined),
+            ),
           ),
           IconButton(
               onPressed: () {
@@ -89,8 +102,13 @@ class MenuPage extends ConsumerWidget {
               if (authUser is LoginStateSuccess)
                 Padding(
                   padding: const EdgeInsets.only(left: 8, bottom: 8),
-                  child: Text(
-                      'Bem vindo, ${authUser.user.displayName} - ${authUser.user.title}'),
+                  child: GestureDetector(
+                    onTap: () {
+                      print(authUser.user.menus);
+                    },
+                    child: Text(
+                        'Bem vindo, ${authUser.user.displayName} - ${authUser.user.title}'),
+                  ),
                 ),
               environment.when(
                 loading: () => const CircularProgressIndicator(),

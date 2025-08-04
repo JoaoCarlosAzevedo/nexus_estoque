@@ -1,7 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 
+import '../../../../../core/constants/menus.dart';
 import '../../../../../core/features/barcode_scanner/barcode_scanner.dart';
 import '../../../../../core/services/secure_store.dart';
 
@@ -113,7 +116,17 @@ class LoginForm extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Text('Versão 1.1.45'),
+                GestureDetector(
+                  onTap: () {
+                    final listMenus = menuItens
+                        .map(
+                          (e) => e.route,
+                        )
+                        .toList();
+                    print(jsonEncode(listMenus));
+                  },
+                  child: const Text('Versão 1.1.48'),
+                ),
               ],
             ),
           ),

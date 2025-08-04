@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/features/address_inventory/pages/address_inventory_form_page/widgets/inventory_quantity_input.dart';
 
+import '../../../../core/features/searches/batches/pages/batches_search_page.dart';
 import '../../../../core/features/searches/products/data/model/product_model.dart';
 import '../../../../core/features/searches/products/pages/products_search_page.dart';
 import '../../../../core/features/searches/products/provider/remote_product_provider.dart';
@@ -36,10 +37,14 @@ class AddressInventoryFormPage extends ConsumerStatefulWidget {
 class _AddressInventoryFormPageState
     extends ConsumerState<AddressInventoryFormPage> with ValidationMixi {
   final TextEditingController productController = TextEditingController();
+  final TextEditingController loteController = TextEditingController();
   final FocusNode focus = FocusNode();
+  final FocusNode loteFocus = FocusNode();
   List<ProductModel> productsInventory = [];
   late List<ProductModel> listWatch = [];
   late List<InventoryModel> inventoryData = [];
+  bool isLote = false;
+  late ProductModel prodInv;
 
   @override
   void initState() {
@@ -61,7 +66,9 @@ class _AddressInventoryFormPageState
   @override
   void dispose() {
     focus.dispose();
+    loteFocus.dispose();
     productController.dispose();
+    loteController.dispose();
     super.dispose();
   }
 
@@ -80,7 +87,11 @@ class _AddressInventoryFormPageState
             .show();
       }
       if (current.status == StateEnum.success) {
-        context.pop();
+        if (isLote) {
+          ref.invalidate(remoteGetInventoryProvider);
+        } else {
+          context.pop();
+        }
       }
     });
 
@@ -93,6 +104,13 @@ class _AddressInventoryFormPageState
           title: state.doc.isEmpty
               ? const Text("Contagem")
               : Text("Contagem ${state.doc.substring(state.doc.length - 1)}"),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  ref.invalidate(remoteGetInventoryProvider);
+                },
+                icon: const Icon(Icons.refresh))
+          ],
         ),
         resizeToAvoidBottomInset: false,
         body: SafeArea(
@@ -114,6 +132,10 @@ class _AddressInventoryFormPageState
                     if (widget.address.codEndereco.isNotEmpty)
                       ElevatedButton(
                         onPressed: () {
+                          setState(() {
+                            isLote = false;
+                          });
+                          loteController.clear();
                           ref
                               .read(addressInventoryProvider.notifier)
                               .addProduct(
@@ -203,6 +225,30 @@ class _AddressInventoryFormPageState
                                   FontAwesomeIcons.magnifyingGlass),
                             ),
                           ),
+                          if (isLote)
+                            NoKeyboardTextSearchForm(
+                              label: 'Lote',
+                              autoFocus: true,
+                              focusNode: loteFocus,
+                              onSubmitted: (e) {
+                                focus.requestFocus();
+                              },
+                              validator: isNotEmpty,
+                              controller: loteController,
+                              prefixIcon: IconButton(
+                                onPressed: () async {
+                                  final value = await BatchSearchModalv2.show(
+                                    context,
+                                    prodInv.codigo,
+                                    widget.address.armazem,
+                                  );
+                                  loteController.text = value;
+                                  focus.requestFocus();
+                                },
+                                icon: const FaIcon(
+                                    FontAwesomeIcons.magnifyingGlass),
+                              ),
+                            ),
                           state.status == StateEnum.loading
                               ? const Expanded(
                                   child: Center(
@@ -361,6 +407,11 @@ class _AddressInventoryFormPageState
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(widget.data[index].codPro),
+                                        if (widget.data[index].lote
+                                            .trim()
+                                            .isNotEmpty)
+                                          Text(
+                                              'Lote: ${widget.data[index].lote}'),
                                       ],
                                     ),
                                     trailing: Text(
@@ -385,7 +436,9 @@ class _AddressInventoryFormPageState
         floatingActionButton: FloatingActionButton.extended(
           label: const Text("Confirmar"),
           onPressed: () {
-            ref.read(addressInventoryProvider.notifier).postInventory();
+            ref
+                .read(addressInventoryProvider.notifier)
+                .postInventory(loteController.text);
           },
           icon: const Icon(Icons.check),
           backgroundColor: Colors.green,
@@ -459,6 +512,19 @@ class _AddressInventoryFormPageState
           ref
               .read(addressInventoryProvider.notifier)
               .setIsDun(selectedProduct, false);
+        }
+        if (selectedProduct.lote.startsWith('L')) {
+          setState(() {
+            isLote = true;
+            prodInv = selectedProduct;
+          });
+          loteFocus.requestFocus();
+        } else {
+          setState(() {
+            isLote = false;
+            prodInv = selectedProduct;
+            loteController.clear();
+          });
         }
 
         ref

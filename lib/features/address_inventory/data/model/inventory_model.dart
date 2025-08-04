@@ -15,6 +15,7 @@ class InventoryModel {
   String doc;
   String endereco;
   String codEndereco;
+  String lote;
   String chave;
   int recno;
   InventoryModel({
@@ -31,6 +32,7 @@ class InventoryModel {
     required this.doc,
     required this.endereco,
     required this.codEndereco,
+    required this.lote,
     required this.chave,
     required this.recno,
   });
@@ -50,6 +52,7 @@ class InventoryModel {
       'doc': doc,
       'endereco': endereco,
       'codEndereco': codEndereco,
+      'lote': lote,
       'chave': chave,
       'recno': recno,
     };
@@ -71,6 +74,7 @@ class InventoryModel {
       endereco: map['Endereco'] ?? '',
       codEndereco: map['CodEndereco'] ?? '',
       chave: map['chave'] ?? '',
+      lote: map['lote'] ?? '',
       recno: map['recno'] ?? 0,
     );
   }

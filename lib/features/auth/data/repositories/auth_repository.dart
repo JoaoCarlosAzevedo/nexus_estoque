@@ -49,10 +49,12 @@ class AuthRepository {
         return data.fold((l) {
           return Left(l);
         }, (r) {
+          final List<String> menus = List<String>.from(r['menus'] as List);
           user.id = userId;
           user.userName = r['nome'];
           user.displayName = r['nome'];
           user.title = r['cargo'];
+          user.menus = menus;
 
           return Right(user);
         });
@@ -88,8 +90,11 @@ class AuthRepository {
         return const Left(Failure("Server Error!", ErrorType.exception));
       }
 
-      return Right(
-          {'nome': response.data['nome'], 'cargo': response.data['cargo']});
+      return Right({
+        'nome': response.data['nome'],
+        'cargo': response.data['cargo'],
+        'menus': response.data['menu'] ?? []
+      });
     } on DioException catch (e) {
       if (e.type.name == "connectTimeout") {
         return const Left(Failure("Tempo Excedido", ErrorType.timeout));

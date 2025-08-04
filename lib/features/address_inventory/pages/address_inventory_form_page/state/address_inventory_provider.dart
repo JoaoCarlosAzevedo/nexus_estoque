@@ -128,7 +128,7 @@ class AddressInventoryNotifier extends StateNotifier<AddressInventoryState> {
     }
   }
 
-  void postInventory() async {
+  void postInventory(String lote) async {
     final products = state.products;
 
     if (products.isEmpty) {
@@ -143,6 +143,7 @@ class AddressInventoryNotifier extends StateNotifier<AddressInventoryState> {
               'local':
                   state.warehouse.isEmpty ? e.localPadrao : state.warehouse,
               'localizacao': state.address.isEmpty ? '' : state.address,
+              'lote': lote
             })
         .toList();
 

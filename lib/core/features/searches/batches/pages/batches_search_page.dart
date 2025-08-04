@@ -38,6 +38,31 @@ class BatchSearchModal {
   }
 }
 
+class BatchSearchModalv2 {
+  static Future<String> show(context, String codigo, String warehouse) async {
+    {
+      final result = await showModalBottomSheet<dynamic>(
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return FractionallySizedBox(
+            heightFactor: 0.9,
+            child: RemoteBatch(
+              ProductArg(product: codigo, warehouse: warehouse),
+            ),
+          );
+        },
+      );
+
+      if (result != null) {
+        return result;
+      } else {
+        return '';
+      }
+    }
+  }
+}
+
 class BatchSearchPage extends ConsumerWidget {
   const BatchSearchPage(
       {required this.product,

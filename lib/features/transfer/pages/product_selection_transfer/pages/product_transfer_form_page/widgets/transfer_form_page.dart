@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
@@ -53,6 +53,7 @@ class _TransferFormPageState extends ConsumerState<TransferFormPage>
 
   @override
   void initState() {
+    super.initState();
     if (widget.reposition != null) {
       quantityController.text = widget.reposition!.quantity.toString();
       origAddressController.text = widget.reposition!.origAddress;

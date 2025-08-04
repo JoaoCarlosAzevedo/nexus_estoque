@@ -38,7 +38,7 @@ class ProductModel {
         descricao: map['descricao'] ?? '',
         localPadrao: map['localpadrao'] ?? '',
         codigoBarras: map['codigobarras'] ?? '',
-        lote: map['lotes'] ?? '',
+        lote: map['lote'] ?? '',
         localizacao: map['localizacao'] ?? '',
         tipo: map['tipo'] ?? '',
         saldoAtual: map['saldo']?.toDouble() ?? 0.0,

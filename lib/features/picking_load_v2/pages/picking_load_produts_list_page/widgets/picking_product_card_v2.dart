@@ -122,12 +122,14 @@ class PickingProductCardv2 extends StatelessWidget {
                                   style:
                                       Theme.of(context).textTheme.titleMedium,
                                 ),
-                                /*     Text(
-                                      "Pedido ${data.pedido}",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: Theme.of(context).textTheme.titleMedium,
-                                    ), */
+                                if (data.lote.trim().isNotEmpty)
+                                  Text(
+                                    "Lote: ${data.lote}",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
                               ],
                             )
                           ],

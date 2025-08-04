@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/http/config.dart';
@@ -24,6 +26,7 @@ class ProductMultiplierRepository {
   Future<ProductMultiplierModel> fechProductMultiplier(String barcode) async {
     late dynamic response;
     final String url = await Config.baseURL;
+
     try {
       response = await dio.get(
         '$url/produtos/detalhes/$barcode',
@@ -53,6 +56,31 @@ class ProductMultiplierRepository {
       throw const Failure("Erro ao gravar fator", ErrorType.validation);
     } on DioException catch (_) {
       throw const Failure("Erro desconhecido", ErrorType.validation);
+    }
+  }
+
+  Future<bool> postProductBarcode(String product, String barcode) async {
+    late dynamic response;
+    final String url = await Config.baseURL;
+    final data = {
+      'produto': product,
+      'barcode': barcode,
+    };
+    final String json = jsonEncode(data);
+
+    try {
+      response = await dio.post('$url/produtos/detalhes/', data: json);
+
+      if (response.statusCode == 201) {
+        return true;
+      }
+
+      throw const Failure("Erro ao gravar cód de barras", ErrorType.validation);
+    } on DioException catch (e) {
+      if (e.response!.data["message"] != "") {
+        throw e.response!.data["message"];
+      }
+      throw "Erro desconhecido";
     }
   }
 }

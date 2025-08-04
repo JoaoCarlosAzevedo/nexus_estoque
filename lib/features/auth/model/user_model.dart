@@ -8,6 +8,7 @@ class UserModel {
   String accessToken;
   String refreshToken;
   String title;
+  List<String> menus;
 
   UserModel({
     required this.id,
@@ -16,6 +17,7 @@ class UserModel {
     required this.accessToken,
     required this.refreshToken,
     required this.title,
+    required this.menus,
   });
 
   Map<String, dynamic> toMap() {
@@ -26,6 +28,7 @@ class UserModel {
       'accessToken': accessToken,
       'refreshToken': refreshToken,
       'title': title,
+      'menus': menus,
     };
   }
 
@@ -37,6 +40,7 @@ class UserModel {
       accessToken: map['access_token'] ?? '',
       refreshToken: map['refresh_token'] ?? '',
       title: map['cargo'] ?? '',
+      menus: map['menu'] ?? [],
     );
   }
 

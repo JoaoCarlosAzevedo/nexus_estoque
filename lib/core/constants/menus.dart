@@ -5,8 +5,8 @@ enum Distributors { dellas, decminas, portolub, todos, brazmax, audiogene }
 
 //const buildDistribuitor = Distributors.decminas;
 //const buildDistribuitor = Distributors.brazmax;
-const buildDistribuitor = Distributors.decminas;
-//const buildDistribuitor = Distributors.dellas;
+//const buildDistribuitor = Distributors.decminas;
+const buildDistribuitor = Distributors.dellas;
 
 bool checkMenu(Distributors dist, Distributors check) {
   if (dist == Distributors.todos) {
@@ -31,8 +31,8 @@ class MenuItemInfo {
       required this.title,
       required this.color,
       required this.route});
-} /* 
-
+}
+/* 
 final List<MenuItemInfo> menuItens = [
   MenuItemInfo(
     title: "Endereçar Saldos",
@@ -137,6 +137,12 @@ final List<MenuItemInfo> menuItens = [
     route: 'saldo_endereco',
   ),
   MenuItemInfo(
+    title: "Consulta Produto",
+    icon: FontAwesomeIcons.box,
+    color: Colors.red,
+    route: 'detalhe_produto_listagem',
+  ),
+  MenuItemInfo(
     title: "Inventário por Endereço",
     icon: FontAwesomeIcons.clipboardCheck,
     color: Colors.red,
@@ -147,6 +153,12 @@ final List<MenuItemInfo> menuItens = [
     icon: FontAwesomeIcons.tag,
     color: Colors.red,
     route: 'etiqueta_produto_listagem',
+  ),
+  MenuItemInfo(
+    title: "Etiqueta Endereços",
+    icon: FontAwesomeIcons.tags,
+    color: Colors.red,
+    route: 'etiqueta_enderecos_listagem',
   ),
   ...checkMenu(buildDistribuitor, Distributors.brazmax)
       ? [
@@ -168,10 +180,10 @@ final List<MenuItemInfo> menuItens = [
           )
         ]
       : [],
-]; */
+];  */
 
 //menu audiogente
-
+/* 
 final List<MenuItemInfo> menuItens = [
   MenuItemInfo(
     title: "Endereçar Saldos",
@@ -248,13 +260,12 @@ final List<MenuItemInfo> menuItens = [
   ),
   MenuItemInfo(
     title: "Consulta Produto",
-    icon: FontAwesomeIcons.box,
+    icon: FontAwesomeIcons.box, 
     color: Colors.red,
     route: 'detalhe_produto_listagem',
   ),
 ];
-
-/* 
+ */
 
 final List<MenuItemInfo> menuItens = [
   MenuItemInfo(
@@ -268,6 +279,12 @@ final List<MenuItemInfo> menuItens = [
     icon: FontAwesomeIcons.cartFlatbed,
     color: Colors.red,
     route: 'transferencias',
+  ),
+  MenuItemInfo(
+    title: "Movimentos Internos",
+    icon: FontAwesomeIcons.boxesPacking,
+    color: Colors.red,
+    route: 'movimentos',
   ),
   MenuItemInfo(
     title: "Separação por Rotas",
@@ -324,10 +341,22 @@ final List<MenuItemInfo> menuItens = [
     route: 'reposicao',
   ),
   MenuItemInfo(
+    title: "Reposição v2",
+    icon: FontAwesomeIcons.boxesPacking,
+    color: Colors.red,
+    route: 'reposicao_v2',
+  ),
+  MenuItemInfo(
     title: "Saldo por Endereço",
     icon: FontAwesomeIcons.cubes,
     color: Colors.red,
     route: 'saldo_endereco',
+  ),
+  MenuItemInfo(
+    title: "Consulta Produto",
+    icon: FontAwesomeIcons.box,
+    color: Colors.red,
+    route: 'detalhe_produto_listagem',
   ),
   MenuItemInfo(
     title: "Inventário por Endereço",
@@ -370,15 +399,15 @@ final List<MenuItemInfo> menuItens = [
     icon: FontAwesomeIcons.receipt,
     color: Colors.red,
     route: 'importar_nf_entrada',
-  ), 
- MenuItemInfo(
+  ),
+  MenuItemInfo(
     title: "Etiquetas Volume",
     icon: FontAwesomeIcons.cubes,
     color: Colors.red,
     route: 'etiqueta_volume',
-  ), 
+  ),
 ];
- */
+
 
 
 

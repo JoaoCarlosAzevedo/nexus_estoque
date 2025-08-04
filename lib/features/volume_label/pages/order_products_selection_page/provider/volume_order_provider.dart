@@ -117,14 +117,16 @@ class VolumeOrderNotifier extends StateNotifier<VolumeOrderState> {
           .toList(),
     };
 
-    final String jsonString = jsonEncode(json);
-
     try {
+      final String jsonString = jsonEncode(json);
       final etiqueta = await repository.postVolumeLabel(jsonString);
 
       if (etiqueta.isNotEmpty) {
         state = state.copyWith(etiqueta: etiqueta);
         state = state.copyWith(status: StateEnum.success);
+      } else {
+        state = state.copyWith(
+            error: "Erro ao gerar etiquetas", status: StateEnum.error);
       }
     } catch (e) {
       state = state.copyWith(

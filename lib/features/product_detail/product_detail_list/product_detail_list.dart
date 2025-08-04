@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/features/product_barcode_update/pages/product_multiplier_modal.dart';
+import '../../../core/features/product_multiplier/pages/product_multiplier_modal.dart';
 import '../../../core/features/searches/products/data/model/product_model.dart';
 import '../../../core/features/searches/products/provider/remote_product_provider.dart';
 
@@ -62,9 +65,15 @@ class _ProductDetailListPageState extends ConsumerState<ProductDetailListPage> {
                       return Card(
                         margin: const EdgeInsets.only(top: 10),
                         child: ListTile(
+                          leading: IconButton(
+                              onPressed: () {
+                                showProductBarcodeUpdateModal(
+                                    context, filterListProducts[index]);
+                              },
+                              icon: const FaIcon(FontAwesomeIcons.barcode)),
                           onLongPress: () {
-                            /*   showProductMultiplierModal(
-                                context, filterListProducts[index].codigo); */
+                            showProductMultiplierModal(
+                                context, filterListProducts[index].codigo);
                           },
                           onTap: () {
                             context.push(

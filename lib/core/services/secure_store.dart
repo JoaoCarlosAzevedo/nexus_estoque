@@ -28,6 +28,10 @@ class LocalStorage {
     return Branch.fromJson(branch);
   }
 
+  static Future deleteBranch() async {
+    await storage.delete(key: 'branch');
+  }
+
   static Future<void> deleteAll() async {
     await storage.deleteAll();
   }
