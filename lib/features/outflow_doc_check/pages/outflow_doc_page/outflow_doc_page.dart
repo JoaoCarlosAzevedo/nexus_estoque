@@ -99,6 +99,11 @@ class _OutFlowDocCheckPageState extends ConsumerState<OutFlowDocCheckPage> {
                         onClose: () {
                           context.read<OutFlowDocCubit>().reset();
                         },
+                        onChangeProduct: () {
+                          context
+                              .read<OutFlowDocCubit>()
+                              .fetchOutFlowDoc(state.docs.chaveNFe);
+                        },
                       );
                     }
                     return Column(

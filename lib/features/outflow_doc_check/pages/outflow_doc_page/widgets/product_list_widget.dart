@@ -19,6 +19,7 @@ class OutFlowDocProductList extends ConsumerStatefulWidget {
       required this.barcodeScanned,
       required this.onClose,
       required this.onTapCard,
+      required this.onChangeProduct,
       super.key});
   final Function(String)? onSubmitted;
   final void Function()? onSave;
@@ -28,6 +29,7 @@ class OutFlowDocProductList extends ConsumerStatefulWidget {
   final String? barcodeScanned;
   final void Function()? onClose;
   final void Function()? onTapCard;
+  final void Function()? onChangeProduct;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -99,6 +101,7 @@ class _OutFlowDocProductListState extends ConsumerState<OutFlowDocProductList> {
                     final product = document.produtos[index];
                     return ProductCheckCard(
                       product: product,
+                      onChangeProduct: widget.onChangeProduct,
                       onTapCard: () async {
                         if (product.um.trim() == "L") {
                           double? newQuantity = await CheckQuantityModal.show(

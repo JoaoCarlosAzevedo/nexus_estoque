@@ -75,6 +75,7 @@ class Produtos {
   String barcode2;
   double checked;
   double checkedBd;
+  double fator;
   String item;
   String codigo;
   String um;
@@ -85,6 +86,7 @@ class Produtos {
     required this.barcode2,
     required this.checked,
     required this.checkedBd,
+    required this.fator,
     required this.item,
     required this.codigo,
     required this.um,
@@ -98,6 +100,7 @@ class Produtos {
       'barcode2': barcode2,
       'checked': checked,
       'checkedBd': checkedBd,
+      'fator': fator,
       'item': item,
       'codigo': codigo,
       'um': um,
@@ -112,6 +115,7 @@ class Produtos {
       barcode2: map['barcode2'] ?? '',
       checked: map['checked']?.toDouble() ?? 0,
       checkedBd: map['checked']?.toDouble() ?? 0,
+      fator: map['fator']?.toDouble() ?? 0,
       item: map['item'] ?? '',
       codigo: map['codigo'] ?? '',
       um: map['um'] ?? '',

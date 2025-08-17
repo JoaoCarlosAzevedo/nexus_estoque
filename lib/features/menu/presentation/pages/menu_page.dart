@@ -104,7 +104,7 @@ class MenuPage extends ConsumerWidget {
                   padding: const EdgeInsets.only(left: 8, bottom: 8),
                   child: GestureDetector(
                     onTap: () {
-                      print(authUser.user.menus);
+                      //print(authUser.user.menus);
                     },
                     child: Text(
                         'Bem vindo, ${authUser.user.displayName} - ${authUser.user.title}'),

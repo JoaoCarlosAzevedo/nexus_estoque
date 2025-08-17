@@ -188,6 +188,8 @@ class LoadGroupProdModel {
   String nivel;
   String apartamento;
 
+  double fator;
+
   List<Pickingv2Model> products;
   LoadGroupProdModel({
     required this.load,
@@ -206,6 +208,7 @@ class LoadGroupProdModel {
     required this.nivel,
     required this.apartamento,
     required this.products,
+    required this.fator,
   });
 
   double getTotalQuantity() {

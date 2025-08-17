@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:nexus_estoque/features/outflow_doc_check/data/model/outflow_doc_model.dart';
 import 'package:nexus_estoque/features/outflow_doc_check/pages/outflow_doc_page/widgets/progress_indicator_widget.dart';
 
+import '../../../../../core/features/product_multiplier/pages/product_multiplier_modal.dart';
+
 class ProductCheckCard extends StatelessWidget {
   const ProductCheckCard(
       {super.key,
       required this.product,
       required this.onTapCard,
-      required this.onDelete});
+      required this.onDelete,
+      required this.onChangeProduct});
   final Produtos product;
   final Function()? onTapCard;
   final Function()? onDelete;
+  final Function()? onChangeProduct;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +33,19 @@ class ProductCheckCard extends StatelessWidget {
                   "${product.item} ${product.descricao}",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
+              ),
+              IconButton(
+                onPressed: () async {
+                  final isSuccess =
+                      await showProductMultiplierModal(context, product.codigo);
+                  if (isSuccess) {
+                    // ignore: use_build_context_synchronously
+                    //Navigator.pop(context);
+                    onChangeProduct?.call();
+                  }
+                },
+                icon: const Icon(Icons.calculate),
+                color: Colors.green,
               ),
               if (product.checked > product.quantidade)
                 IconButton(

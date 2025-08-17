@@ -9,6 +9,7 @@ import 'package:grouped_list/grouped_list.dart';
 import 'package:nexus_estoque/core/utils/safe_array_search_extension.dart';
 import 'package:nexus_estoque/features/picking_load_v2/pages/picking_load_produts_list_grouped_page/widgets/picking_form_v2_grouped_modal.dart';
 
+import '../../../../core/features/product_multiplier/pages/product_multiplier_modal.dart';
 import '../../../picking/data/model/picking_model.dart';
 import '../../data/model/pickingv2_model.dart';
 
@@ -168,6 +169,7 @@ class _PickingLoadProductListGroupedPage2State
                       nivel: element.nivel,
                       apartamento: element.apartamento,
                       products: [element],
+                      fator: element.fator,
                     ));
                   } else {
                     found.products.add(element);
@@ -196,6 +198,17 @@ class _PickingLoadProductListGroupedPage2State
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: PickingProductGroupedCardv2(
+                        onAlterProd: () async {
+                          final isSuccess = await showProductMultiplierModal(
+                              context, element.product);
+                          if (isSuccess) {
+                            widget.cubit.fetchPickingLoadsDeparment(
+                                widget.load,
+                                widget.department,
+                                widget.dateIni,
+                                widget.dateEnd);
+                          }
+                        },
                         data: element,
                         onTap: () async {
                           final result =

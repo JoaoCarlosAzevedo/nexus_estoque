@@ -198,7 +198,18 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
 
         emit(OutFlowDocLoading());
         if (index >= 0) {
-          aux.docs.produtos[index].checked += 1;
+          bool isDun = false;
+
+          if (code.trim() == aux.docs.produtos[index].barcode2.trim()) {
+            isDun = true;
+          }
+
+          if (isDun && aux.docs.produtos[index].fator > 0) {
+            checkProducts(aux.docs.produtos[index].codigo.trim(), true, aux,
+                aux.docs.produtos[index].fator);
+          } else {
+            aux.docs.produtos[index].checked += 1;
+          }
 
           GroupedProducts grouped = GroupedProducts(
               produto: aux.docs.produtos[index].codigo,

@@ -157,7 +157,7 @@ class _PickingFormv3State extends ConsumerState<PickingFormv3>
                         //const Divider(),
                         Text("Quant. Separada: $quantity"),
                         const Divider(),
-                        if (widget.picking.fator > 0)
+                        /* if (widget.picking.fator > 0)
                           Wrap(
                             alignment: WrapAlignment.spaceBetween,
                             crossAxisAlignment: WrapCrossAlignment.center,
@@ -179,7 +179,7 @@ class _PickingFormv3State extends ConsumerState<PickingFormv3>
                                 },
                               ),
                             ],
-                          ),
+                          ), */
                         //const Divider(),
                         NoKeyboardTextForm(
                           autoFocus: true,
@@ -284,6 +284,21 @@ class _PickingFormv3State extends ConsumerState<PickingFormv3>
 
   void increment(BuildContext context, double number) {
     double isPositive = quantity + number;
+    var isDun = false;
+    double fator = widget.picking.fator;
+    double addQuantity = 0;
+
+    if (productController.text.trim() == widget.picking.codigobarras2.trim()) {
+      isDun = true;
+    }
+
+    if (fator > 0 && isDun) {
+      isPositive = quantity + number * fator;
+      addQuantity = number * fator;
+    } else {
+      isPositive = quantity + number;
+      addQuantity = number;
+    }
 
     if (isPositive >= 0) {
       setState(() {
@@ -294,7 +309,7 @@ class _PickingFormv3State extends ConsumerState<PickingFormv3>
         AudioService.beep();
       }
       setState(() {
-        quantity = quantity + number;
+        quantity = quantity + addQuantity;
         quantityController.text = quantity.toString();
       });
     }

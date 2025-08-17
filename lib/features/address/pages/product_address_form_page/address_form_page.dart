@@ -163,7 +163,8 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                           if (widget.productAddress.lote.trim().isNotEmpty)
                             const Padding(
                               padding: EdgeInsets.only(top: 8.0),
-                              child: Text("Informe o Lote e Data de Validade"),
+                              child:
+                                  Text("Informe o Lote e Data de Fabricação"),
                             ),
                           if (widget.productAddress.lote.trim().isNotEmpty)
                             Row(
@@ -188,14 +189,14 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                                     onPressed: () async {
                                       final themeData = Theme.of(context);
                                       DateTime dataAtual = DateTime.now();
-                                      DateTime umAnoPraFrente = DateTime(
+                                      /*    DateTime umAnoPraFrente = DateTime(
                                         dataAtual.year + 1,
                                         dataAtual.month,
                                         dataAtual.day,
                                         dataAtual.hour,
                                         dataAtual.minute,
                                         dataAtual.second,
-                                      );
+                                      ); */
                                       final DateTime? pickedDate =
                                           await showDatePicker(
                                         builder: (context, Widget? child) =>
@@ -223,9 +224,9 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                                           child: child!,
                                         ),
                                         context: context,
-                                        initialDate: umAnoPraFrente,
-                                        firstDate: DateTime(dataAtual.year - 1),
-                                        lastDate: DateTime(dataAtual.year + 5),
+                                        initialDate: dataAtual,
+                                        firstDate: DateTime(dataAtual.year - 5),
+                                        lastDate: dataAtual,
                                       );
                                       if (pickedDate == null) return;
 
@@ -250,7 +251,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(right: 8.0),
                                     child: Text(
-                                        "Validade: ${yyyymmddToDate(vencLote)}"),
+                                        "Dt. Fabr.: ${yyyymmddToDate(vencLote)}"),
                                   )),
                           if (widget.productAddress.fator > 0)
                             Wrap(
@@ -264,7 +265,8 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                                 Switch(
                                   value: isMultiple,
                                   activeColor: Colors.green,
-                                  inactiveTrackColor: Colors.grey,
+                                  inactiveTrackColor:
+                                      const Color.fromARGB(255, 154, 76, 76),
                                   onChanged: (bool value) {
                                     // This is called when the user toggles the switch.
                                     setState(() {

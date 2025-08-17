@@ -311,7 +311,14 @@ class PurchaseInvoiceProductsCubit extends Cubit<PurchaseInvoiceProductsState> {
       //emit(PurchaseInvoiceProductsLoading());
 
       if (index >= 0) {
-        if (products[index].isMultiple && products[index].fator > 0) {
+        bool isDun = false;
+
+        if (products[index].barcode2.trim() == barcode.trim()) {
+          isDun = true;
+        }
+
+        //if (products[index].isMultiple && products[index].fator > 0) {
+        if (isDun && products[index].fator > 0) {
           //products[index].checked += 1 * products[index].fator;
           var checked = checkMultilier(barcode);
           setNewQuantity(

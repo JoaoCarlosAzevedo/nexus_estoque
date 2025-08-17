@@ -129,7 +129,7 @@ class InvoiceProductCheckCard extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 style: Theme.of(context).textTheme.titleMedium,
                               ),
-                              if (product.fator > 0)
+                              /* if (product.fator > 0)
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -147,7 +147,7 @@ class InvoiceProductCheckCard extends StatelessWidget {
                                       onChanged: onChanged,
                                     ),
                                   ],
-                                )
+                                ) */
                             ],
                           )
                         ],

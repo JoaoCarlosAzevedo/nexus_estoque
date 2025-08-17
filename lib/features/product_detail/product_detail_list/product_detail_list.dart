@@ -62,56 +62,77 @@ class _ProductDetailListPageState extends ConsumerState<ProductDetailListPage> {
                   child: ListView.builder(
                     itemCount: filterListProducts.length,
                     itemBuilder: (context, index) {
-                      return Card(
-                        margin: const EdgeInsets.only(top: 10),
-                        child: ListTile(
-                          leading: IconButton(
-                              onPressed: () {
-                                showProductBarcodeUpdateModal(
-                                    context, filterListProducts[index]);
+                      return Stack(
+                        children: [
+                          Card(
+                            margin: const EdgeInsets.only(top: 10),
+                            child: ListTile(
+                              leading: IconButton(
+                                  onPressed: () {
+                                    showProductBarcodeUpdateModal(
+                                        context, filterListProducts[index]);
+                                  },
+                                  icon: const FaIcon(FontAwesomeIcons.barcode)),
+                              onTap: () {
+                                context.push(
+                                    '/saldo_produto/${filterListProducts[index].codigo}');
                               },
-                              icon: const FaIcon(FontAwesomeIcons.barcode)),
-                          onLongPress: () {
-                            showProductMultiplierModal(
-                                context, filterListProducts[index].codigo);
-                          },
-                          onTap: () {
-                            context.push(
-                                '/saldo_produto/${filterListProducts[index].codigo}');
-                          },
-                          title: Text(filterListProducts[index].descricao),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(filterListProducts[index].codigo),
-                              Text(
-                                  'Cód Barras: ${filterListProducts[index].codigoBarras}'),
-                              /*         Text(
-                                  'Cód Dun: ${filterListProducts[index].codigoBarras2}'),
-                              if (filterListProducts[index].fator > 0)
-                                Text(
-                                    'Fator Dun: ${filterListProducts[index].fator.toStringAsFixed(0)}'), */
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                              title: Text(filterListProducts[index].descricao),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  Text(filterListProducts[index].codigo),
                                   Text(
-                                      'Tipo ${filterListProducts[index].tipo}'),
+                                      'Cód Barras: ${filterListProducts[index].codigoBarras}'),
                                   Text(
-                                      'Local ${filterListProducts[index].localPadrao}'),
+                                      'Cód Dun: ${filterListProducts[index].codigoBarras2}'),
+                                  Text(
+                                      'Fator Dun: ${filterListProducts[index].fator.toStringAsFixed(0)}'),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                          'Tipo ${filterListProducts[index].tipo}'),
+                                      Text(
+                                          'Local ${filterListProducts[index].localPadrao}'),
+                                    ],
+                                  ),
                                 ],
                               ),
-                            ],
-                          ),
-                          trailing: Column(
-                            children: [
-                              /*     Text(filterListProducts[index]
+                              trailing: Column(
+                                children: [
+                                  /*     Text(filterListProducts[index]
                                   .saldoAtual
                                   .toString()), */
-                              Text(filterListProducts[index].um),
-                            ],
+                                  Text(filterListProducts[index].um),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
+                          Positioned(
+                            top: 5,
+                            right: 0,
+                            child: IconButton(
+                              onPressed: () async {
+                                final isSuccess =
+                                    await showProductMultiplierModal(context,
+                                        filterListProducts[index].codigo);
+                                if (isSuccess) {
+                                  // ignore: use_build_context_synchronously
+                                  //Navigator.pop(context);
+                                  ref.invalidate(remoteProductProvider);
+                                  resetFilter = true;
+                                }
+                              },
+                              icon: const Icon(
+                                Icons.calculate,
+                                color: Colors.green,
+                              ),
+                              color: Colors.green,
+                            ),
+                          ),
+                        ],
                       );
                     },
                   ),

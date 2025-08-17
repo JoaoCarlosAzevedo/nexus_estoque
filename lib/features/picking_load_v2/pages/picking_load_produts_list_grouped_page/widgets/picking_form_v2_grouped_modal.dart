@@ -122,6 +122,7 @@ class _PickingFormv2GroupedState extends ConsumerState<PickingFormv2Grouped>
                     child: Column(
                       children: [
                         PickingProductGroupedCardv2(
+                          onAlterProd: null,
                           data: widget.picking,
                           onTap: (() {}),
                         ),
@@ -192,7 +193,22 @@ class _PickingFormv2GroupedState extends ConsumerState<PickingFormv2Grouped>
   }
 
   void increment(BuildContext context, double number) {
-    double isPositive = quantity + number;
+    var isDun = false;
+    double fator = widget.picking.fator;
+    double isPositive = 0;
+    double addQuantity = 0;
+
+    if (productController.text.trim() == widget.picking.barcode2.trim()) {
+      isDun = true;
+    }
+
+    if (fator > 0 && isDun) {
+      isPositive = quantity + number * fator;
+      addQuantity = number * fator;
+    } else {
+      isPositive = quantity + number;
+      addQuantity = number;
+    }
 
     if (isPositive >= 0) {
       setState(() {
@@ -201,7 +217,7 @@ class _PickingFormv2GroupedState extends ConsumerState<PickingFormv2Grouped>
 
       AudioService.beep();
       setState(() {
-        quantity = quantity + number;
+        quantity = quantity + addQuantity;
         quantityController.text = quantity.toString();
       });
 
