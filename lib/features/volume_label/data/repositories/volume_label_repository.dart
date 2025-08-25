@@ -94,6 +94,40 @@ class VolumeLabelRepository {
     }
   }
 
+  Future<List<OrderLabelModel>> gerOrdersByClient(
+      String dateIni, String dateFim) async {
+    final String url = await Config.baseURL;
+    try {
+      final response = await dio
+          .get('$url/etiquetas_volumes/lista/pedidos', queryParameters: {
+        'dtini': dateIni,
+        'dtfim': dateFim,
+      });
+
+      if (response.data.isEmpty) {
+        throw const Failure(
+            "Nenhum registro encontrado.", ErrorType.validation);
+      }
+
+      if (response.statusCode == 200) {
+        final list = (response.data as List).map((item) {
+          return OrderLabelModel.fromMap(item);
+        }).toList();
+        return list;
+
+        //return VolumeLabelOrder.fromMap(response.data);
+      } else {
+        throw const Failure(
+            "Nenhum registro encontrado.", ErrorType.validation);
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 400) {
+        throw Failure(e.response?.data["message"], ErrorType.validation);
+      }
+      throw const Failure("Server Error!", ErrorType.exception);
+    }
+  }
+
   Future<String> deleteVolumeLabel(String data) async {
     final String url = await Config.baseURL;
     final param = data.split("|");

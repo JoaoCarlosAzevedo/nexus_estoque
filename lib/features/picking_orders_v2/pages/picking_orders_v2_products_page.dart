@@ -45,13 +45,13 @@ class PickingOrdersV2ProductsPage extends ConsumerWidget {
           listener: (context, state) {
             if (state is PickingOrdersV2Loaded) {
               if (state.loads.isEmpty) {
-                context.pop();
+                context.pop(false);
               }
 
               final index2 =
                   state.loads.indexWhere((e) => e.pedido.trim() == order);
               if (index2 == -1) {
-                context.pop();
+                context.pop(true);
               }
             }
           },

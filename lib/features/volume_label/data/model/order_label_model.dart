@@ -4,12 +4,14 @@ import 'dart:convert';
 class OrderLabelModel {
   final String pedido;
   final int volumes;
+  final String cliente;
   List<ProductOrderLabelModel> products;
 
   OrderLabelModel({
     required this.pedido,
     required this.volumes,
     required this.products,
+    required this.cliente,
   });
 
   Map<String, dynamic> toMap() {
@@ -28,6 +30,7 @@ class OrderLabelModel {
   factory OrderLabelModel.fromMap(Map<String, dynamic> map) {
     return OrderLabelModel(
       pedido: map['pedido'] ?? '',
+      cliente: map['cliente'] ?? '',
       volumes: map['volumes']?.toInt() ?? 0,
       products: List<ProductOrderLabelModel>.from(
         map['produtos']?.map(

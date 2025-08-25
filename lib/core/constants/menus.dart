@@ -335,6 +335,12 @@ final List<MenuItemInfo> menuItens = [
     route: 'separaca_pedidos_v2',
   ),
   MenuItemInfo(
+    title: "Separacao Pedidos Sem Carga",
+    icon: FontAwesomeIcons.clipboardUser,
+    color: Colors.red,
+    route: 'separaca_pedidos_v3',
+  ),
+  MenuItemInfo(
     title: "Reposição",
     icon: FontAwesomeIcons.boxesPacking,
     color: Colors.red,

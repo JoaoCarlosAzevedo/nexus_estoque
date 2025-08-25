@@ -147,7 +147,14 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: ((context, state) => const PickingLoadOrdersList())),
         GoRoute(
             path: "/separaca_pedidos_v2",
-            builder: ((context, state) => const PickingOrdersV2List())),
+            builder: ((context, state) => const PickingOrdersV2List(
+                  isMonitor: false,
+                ))),
+        GoRoute(
+            path: "/separaca_pedidos_v3",
+            builder: ((context, state) => const PickingOrdersV2List(
+                  isMonitor: true,
+                ))),
         GoRoute(
             path: "/reposicao",
             builder: ((context, state) => const RepositionPage())),
