@@ -79,6 +79,8 @@ class Produtos {
   String item;
   String codigo;
   String um;
+  bool manualInput;
+
   Produtos({
     required this.descricao,
     required this.quantidade,
@@ -90,6 +92,7 @@ class Produtos {
     required this.item,
     required this.codigo,
     required this.um,
+    required this.manualInput,
   });
 
   Map<String, dynamic> toMap() {
@@ -104,6 +107,7 @@ class Produtos {
       'item': item,
       'codigo': codigo,
       'um': um,
+      'manualInput': manualInput,
     };
   }
 
@@ -119,6 +123,7 @@ class Produtos {
       item: map['item'] ?? '',
       codigo: map['codigo'] ?? '',
       um: map['um'] ?? '',
+      manualInput: map['manualInput'] ?? false,
     );
   }
 

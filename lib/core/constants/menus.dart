@@ -412,6 +412,12 @@ final List<MenuItemInfo> menuItens = [
     color: Colors.red,
     route: 'etiqueta_volume',
   ),
+  MenuItemInfo(
+    title: "Etiquetas Pedidos",
+    icon: FontAwesomeIcons.cubes,
+    color: Colors.red,
+    route: 'etiqueta_volume_pedidos',
+  ),
 ];
 
 

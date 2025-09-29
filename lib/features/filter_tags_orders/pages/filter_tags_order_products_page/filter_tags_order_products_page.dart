@@ -12,9 +12,11 @@ import 'filter_tag_order_tab1.dart';
 import 'filter_tag_order_tab2.dart';
 
 class FilterTagsOrderProductsPage extends ConsumerStatefulWidget {
-  const FilterTagsOrderProductsPage({required this.cubit, super.key});
+  const FilterTagsOrderProductsPage(
+      {required this.cubit, super.key, this.orderBydate});
 
   final FilterTagLoadOrderCubit cubit;
+  final String? orderBydate;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -150,6 +152,7 @@ class _FilterTagsOrderProductsPageState
                         FilterTagOrderTab2(
                           pedido: state.selectedInvoice!,
                           etiqueta: state.etiqueta,
+                          orderBydate: widget.orderBydate,
                         ),
                       ],
                     );

@@ -103,7 +103,7 @@ class _OutFlowDocProductListState extends ConsumerState<OutFlowDocProductList> {
                       product: product,
                       onChangeProduct: widget.onChangeProduct,
                       onTapCard: () async {
-                        if (product.um.trim() == "L") {
+                        if (product.um.trim() == "L" || product.manualInput) {
                           double? newQuantity = await CheckQuantityModal.show(
                               context, product, product.checked);
                           if (newQuantity != null) {

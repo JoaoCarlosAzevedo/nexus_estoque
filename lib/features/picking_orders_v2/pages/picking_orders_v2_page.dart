@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 
 import '../../picking_load_v2/data/model/pickingv2_model.dart';
 
@@ -279,6 +278,7 @@ class _PickingOrdersV2ListWidgetState
                                           // Navegar primeiro, depois invalidar o provider
                                           final bool? isFinished =
                                               await Navigator.push(
+                                            // ignore: use_build_context_synchronously
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>

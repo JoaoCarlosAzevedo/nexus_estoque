@@ -47,8 +47,19 @@ class FilterTagRepository {
 
   Future<Either<Failure, LoadOrder>> fetchLoad(String load) async {
     final String url = await Config.baseURL;
+    final param = load.split("-");
+    Response response;
+
     try {
-      var response = await dio.get('$url/etiqueta_filtro_pedidos/carga/$load');
+      if (param.length == 1) {
+        response = await dio.get('$url/etiqueta_filtro_pedidos/carga/$load');
+      } else {
+        response = await dio
+            .get('$url/etiqueta_filtro_pedidos/carga/0', queryParameters: {
+          'dtini': param[1],
+          'dtfim': param[2],
+        });
+      }
 
       if (response.statusCode != 200) {
         return const Left(Failure("Server Error!", ErrorType.exception));

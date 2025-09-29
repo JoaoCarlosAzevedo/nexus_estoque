@@ -8,9 +8,13 @@ import '../filter_tags_order_load_page/cubit/filter_tag_order_load_cubit.dart';
 
 class FilterTagOrderTab2 extends ConsumerStatefulWidget {
   const FilterTagOrderTab2(
-      {super.key, required this.pedido, required this.etiqueta});
+      {super.key,
+      required this.pedido,
+      required this.etiqueta,
+      this.orderBydate});
   final Orders pedido;
   final String etiqueta;
+  final String? orderBydate;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -52,7 +56,9 @@ class _FilterTagOrderTab2State extends ConsumerState<FilterTagOrderTab2> {
           padding: const EdgeInsets.all(8.0),
           child: ElevatedButton(
             onPressed: () {
-              context.read<FilterTagLoadOrderCubit>().postTag();
+              context
+                  .read<FilterTagLoadOrderCubit>()
+                  .postTag(widget.orderBydate ?? '');
             },
             child: const Padding(
               padding: EdgeInsets.all(12),

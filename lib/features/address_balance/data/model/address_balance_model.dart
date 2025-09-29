@@ -8,6 +8,7 @@ class AddressBalanceModel {
   final String codEndereco;
   final double quantidade;
   final double empenho;
+  final double separado;
   final String endereDesc;
   final String armazemDesc;
   final String ultimoMov;
@@ -20,6 +21,7 @@ class AddressBalanceModel {
     required this.codEndereco,
     required this.quantidade,
     required this.empenho,
+    required this.separado,
     required this.endereDesc,
     required this.armazemDesc,
     required this.ultimoMov,
@@ -35,6 +37,7 @@ class AddressBalanceModel {
       'quantidade': quantidade,
       'empenho': empenho,
       'endereDesc': endereDesc,
+      'separado': separado,
       'armazemDesc': armazemDesc,
       'ultimo_mov': ultimoMov,
     };
@@ -49,6 +52,7 @@ class AddressBalanceModel {
       codEndereco: map['codEndereco'] ?? '',
       quantidade: map['quantidade']?.toDouble() ?? 0.0,
       empenho: map['empenho']?.toDouble() ?? 0.0,
+      separado: map['separado']?.toDouble() ?? 0.0,
       endereDesc: map['endereDesc'] ?? '',
       armazemDesc: map['armazemDesc'] ?? '',
       ultimoMov: map['ultimo_mov'] ?? '',

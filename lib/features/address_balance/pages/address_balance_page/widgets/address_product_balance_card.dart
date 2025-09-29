@@ -63,7 +63,11 @@ class AddressProductBalanceCard extends ConsumerWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.displaySmall,
-                          )
+                          ),
+                          Text(
+                            "${productBalance.quantidade - productBalance.separado} (Saldo-Separado) ",
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
                         ],
                       ),
                     ),
@@ -122,7 +126,18 @@ class AddressProductBalanceCard extends ConsumerWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.displaySmall,
-                          )
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            "Separado",
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          Text(
+                            "${productBalance.separado} ${productBalance.um}",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
                         ],
                       ),
                     ),

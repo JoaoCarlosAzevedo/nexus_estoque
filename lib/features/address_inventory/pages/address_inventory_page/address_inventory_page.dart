@@ -109,6 +109,7 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
                             codEndereco: '',
                             quantidade: 0.0,
                             empenho: 0.0,
+                            separado: 0.0,
                             endereDesc: '',
                             armazemDesc: '',
                             ultimoMov: '');

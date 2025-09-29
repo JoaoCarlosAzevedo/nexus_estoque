@@ -102,7 +102,7 @@ class FilterTagLoadOrderCubit extends Cubit<FilterTagLoadOrderState> {
     }
   }
 
-  void postTag() async {
+  void postTag(String order) async {
     if (state is FilterTagLoadLoaded) {
       final currentState = state as FilterTagLoadLoaded;
       if (currentState.selectedInvoice != null) {
@@ -110,7 +110,8 @@ class FilterTagLoadOrderCubit extends Cubit<FilterTagLoadOrderState> {
         final result = await repostiory.postTag(currentState.selectedInvoice!);
         if (result.isRight()) {
           result.fold((l) => null, (r) {
-            fetchLoad(currentState.load.carga, r, currentState.selectedInvoice);
+            fetchLoad(order.isEmpty ? currentState.load.carga : order, r,
+                currentState.selectedInvoice);
           });
         } else {
           result.fold((l) => emit(FilterTagLoadError(error: l)), (r) => null);
