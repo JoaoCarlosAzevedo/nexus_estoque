@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity.dart';
 import '../../../../transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity_int.dart';
 import '../../../data/model/volume_order_model.dart';
 
@@ -61,13 +62,13 @@ class _VolumeOrderQuantityState extends State<VolumeOrderQuantity> {
                   style: Theme.of(context).textTheme.bodyLarge,
                   overflow: TextOverflow.ellipsis),
               const Divider(),
-              Text("Qtd: ${widget.quantity.toStringAsFixed(0)}",
+              Text("Qtd: ${widget.quantity.toStringAsFixed(2)}",
                   style: Theme.of(context).textTheme.displayMedium,
                   overflow: TextOverflow.ellipsis),
               const SizedBox(
                 height: 10,
               ),
-              InputQuantityInt(
+              InputQuantity(
                 controller: controller,
                 onSubmitted: (e) {
                   final double? quantity = double.tryParse(controller.text);

@@ -29,47 +29,53 @@ class VolumeOrderNotifier extends StateNotifier<VolumeOrderState> {
 
   void checkBarcode(String barcode) async {
     final currState = state.orderProducts;
-    int index = currState.indexWhere((element) {
+
+    // Primeiro, encontrar todos os produtos que correspondem ao código/barcode
+    List<int> matchingIndices = [];
+    for (int i = 0; i < currState.length; i++) {
+      final element = currState[i];
       if (element.codigo.trim() == barcode.trim()) {
-        return true;
-      }
-
-      if (barcode.trim().length >= 5) {
-        if (element.codigo.trim() == barcode.trim()) {
-          return true;
-        }
-
-        if (element.barcode.trim() == barcode.trim()) {
-          return true;
+        matchingIndices.add(i);
+      } else if (barcode.trim().length >= 5) {
+        if (element.codigo.trim() == barcode.trim() ||
+            element.barcode.trim() == barcode.trim()) {
+          matchingIndices.add(i);
         }
       }
+    }
 
-      return false;
-    });
+    if (matchingIndices.isEmpty) {
+      state = state.copyWith(
+          error: "Produto não encontrado no pedido!", status: StateEnum.error);
+      AudioService.error();
+      return;
+    }
 
-    if (index != -1) {
-      //state = state.copyWith(status: StateEnum.loading);
-
+    // Verificar se algum produto tem espaço disponível
+    int? availableIndex;
+    for (int index in matchingIndices) {
       final novaQtd = currState[index].novaQtd;
       final qtdPedido = currState[index].quantPedido;
       final qtdGrav = currState[index].quantVolume;
 
-      if ((novaQtd + 1 + qtdGrav) > qtdPedido) {
-        state = state.copyWith(
-            error: "Excedeu a quantidade do Pedido", status: StateEnum.error);
-        AudioService.error();
-        return;
+      if ((novaQtd + 1 + qtdGrav) <= qtdPedido) {
+        availableIndex = index;
+        break;
       }
-      currState[index] =
-          currState[index].copyWith(novaQtd: currState[index].novaQtd + 1);
+    }
+
+    if (availableIndex != null) {
+      // Encontrou um produto com espaço disponível, incrementar a quantidade
+      currState[availableIndex] = currState[availableIndex]
+          .copyWith(novaQtd: currState[availableIndex].novaQtd + 1);
 
       state =
           state.copyWith(orderProducts: currState, status: StateEnum.initial);
-
       AudioService.beep();
     } else {
+      // Nenhum produto tem espaço disponível
       state = state.copyWith(
-          error: "Produto não encontrado no pedido!", status: StateEnum.error);
+          error: "Excedeu a quantidade do Pedido", status: StateEnum.error);
       AudioService.error();
     }
   }
