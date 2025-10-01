@@ -65,7 +65,9 @@ class _VolumeOrderTab1State extends ConsumerState<VolumeOrderTab1> {
                                 products[index], products[index].novaQtd);
                         if (newQuantity != null) {
                           ref.read(volumeOrderProvider.notifier).changeQuantity(
-                              products[index].codigo, newQuantity);
+                              products[index].codigo,
+                              products[index].item,
+                              newQuantity);
                           // ignore: use_build_context_synchronously
                           /* context.read<FilterTagLoadCubit>().selectProduct(
                               products[index].codigo, newQuantity, 0); */

@@ -74,10 +74,12 @@ class VolumeOrderNotifier extends StateNotifier<VolumeOrderState> {
     }
   }
 
-  void changeQuantity(String codigo, double newQuantity) {
+  void changeQuantity(String codigo, String item, double newQuantity) {
     final currState = state.orderProducts;
+
     int index = currState.indexWhere((element) {
-      if (element.codigo.trim() == codigo.trim()) {
+      if (element.codigo.trim() == codigo.trim() &&
+          element.item.trim() == item.trim()) {
         return true;
       }
       return false;

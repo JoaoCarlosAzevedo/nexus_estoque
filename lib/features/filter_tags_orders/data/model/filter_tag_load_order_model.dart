@@ -145,6 +145,7 @@ class OrdersProduct {
   double quantidaetiqueta;
   double novaQuantidade;
   String carga;
+  List<OrdersProductVolume> volumes;
 
   OrdersProduct(
       {required this.codigo,
@@ -156,6 +157,7 @@ class OrdersProduct {
       required this.codigobarras2,
       required this.novaQuantidade,
       required this.quantidaetiqueta,
+      required this.volumes,
       required this.carga});
 
   Map<String, dynamic> toMap() {
@@ -179,12 +181,24 @@ class OrdersProduct {
       descricao: map['descricao'] ?? '',
       um: map['um'] ?? '',
       item: map['item'] ?? '',
-      quantidade: map['quantidade'].toDouble() ?? 0.0,
+      quantidade: map['quantidade']?.toDouble() ?? 0.0,
       codigobarras: map['codigobarras'] ?? '',
       codigobarras2: map['codigobarras2'] ?? '',
-      quantidaetiqueta: map['quantida_etiqueta'].toDouble() ?? 0.0,
+      quantidaetiqueta: map['quantida_etiqueta']?.toDouble() ?? 0.0,
       novaQuantidade: 0.0,
       carga: map['carga'] ?? '',
+      volumes: map['volumes'] != null
+          ? List<OrdersProductVolume>.from(
+              map['volumes']?.map(
+                (x) => OrdersProductVolume.fromMap(x),
+              ),
+            )
+          : [],
+      /*  volumes: List<OrdersProductVolume>.from(
+        map['volumes']?.map(
+          (x) => OrdersProductVolume.fromMap(x),
+        ),
+      ), */
     );
   }
 
@@ -205,4 +219,31 @@ class OrdersProduct {
 
   factory OrdersProduct.fromJson(String source) =>
       OrdersProduct.fromMap(json.decode(source) as Map<String, dynamic>);
+}
+
+class OrdersProductVolume {
+  String volume;
+  String volumeMaximo;
+  String etiqueta;
+
+  OrdersProductVolume(
+      {required this.volume,
+      required this.volumeMaximo,
+      required this.etiqueta});
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'volume': volume,
+      'volumeMaximo': volumeMaximo,
+      'etiqueta': etiqueta,
+    };
+  }
+
+  factory OrdersProductVolume.fromMap(Map<String, dynamic> map) {
+    return OrdersProductVolume(
+      volume: map['volume'] ?? '',
+      volumeMaximo: map['volumeMaximo'] ?? '',
+      etiqueta: map['etiqueta'] ?? '',
+    );
+  }
 }

@@ -52,6 +52,7 @@ import '../../features/reposition_v2/pages/reposition_v2/reposition_v2_page.dart
 import '../../features/reposition_v2/pages/reposition_v2_address_list/reposition_v2_address_list_page.dart';
 import '../../features/volume_label/pages/order_detail_page/order_detail_page.dart';
 import '../../features/volume_label/pages/order_selection_page/order_list_selection_page.dart';
+import '../../features/volume_label_v2/pages/volume_label_v2_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authService = RouterNotifier(ref);
@@ -259,6 +260,12 @@ final routerProvider = Provider<GoRouter>((ref) {
           path: "/etiqueta_volume",
           builder: ((context, state) {
             return const OrderLabelListSelectionPage();
+          }),
+        ),
+        GoRoute(
+          path: "/etiqueta_volume_v2",
+          builder: ((context, state) {
+            return const VolumeLabelV2Page();
           }),
         ),
         GoRoute(

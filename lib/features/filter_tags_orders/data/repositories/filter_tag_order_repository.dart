@@ -12,6 +12,13 @@ import '../model/filter_tag_order_model.dart';
 final filterTagRepositoryProvider =
     Provider<FilterTagRepository>((ref) => FilterTagRepository(ref));
 
+final orderVolumesProvider =
+    FutureProvider.family.autoDispose<Orders, String>((ref, args) async {
+  final result =
+      await ref.read(filterTagRepositoryProvider).fetchOrderVolumes(args);
+  return result;
+});
+
 class FilterTagRepository {
   late Dio dio;
   final Ref _ref;
@@ -45,6 +52,30 @@ class FilterTagRepository {
     }
   }
 
+  Future<Either<Failure, String>> postIndividualTag(Orders invoice) async {
+    final String url = await Config.baseURL;
+    try {
+      var response = await dio.post('$url/etiqueta_filtro_pedidos/individual',
+          data: invoice.toJson());
+
+      if (response.statusCode != 201) {
+        return const Left(Failure("Server Error!", ErrorType.exception));
+      }
+
+      if (response.data.isEmpty) {
+        return const Left(
+            Failure("Erro ao gerar etiqueta!", ErrorType.validation));
+      }
+
+      return Right(response.data['etiqueta']);
+    } on DioException catch (e) {
+      if (e.type.name == "connectTimeout") {
+        return const Left(Failure("Tempo Excedido", ErrorType.timeout));
+      }
+      return const Left(Failure("Server Error!", ErrorType.exception));
+    }
+  }
+
   Future<Either<Failure, LoadOrder>> fetchLoad(String load) async {
     final String url = await Config.baseURL;
     final param = load.split("-");
@@ -58,6 +89,7 @@ class FilterTagRepository {
             .get('$url/etiqueta_filtro_pedidos/carga/0', queryParameters: {
           'dtini': param[1],
           'dtfim': param[2],
+          'tipo_etiqueta': param.length == 4 ? param[3] : '',
         });
       }
 
@@ -76,6 +108,35 @@ class FilterTagRepository {
         return const Left(Failure("Tempo Excedido", ErrorType.timeout));
       }
       return const Left(Failure("Server Error!", ErrorType.exception));
+    }
+  }
+
+  Future<Orders> fetchOrderVolumes(String order) async {
+    final String url = await Config.baseURL;
+
+    Response response;
+
+    try {
+      response = await dio
+          .get('$url/etiqueta_filtro_pedidos/individual/', queryParameters: {
+        'pedido': order,
+      });
+
+      if (response.statusCode != 200) {
+        throw "Server Error!";
+      }
+
+      if (response.data.isEmpty) {
+        throw "Nao Encontrado!";
+      }
+      final listRoutes = Orders.fromMap(response.data);
+
+      return listRoutes;
+    } on DioException catch (e) {
+      if (e.type.name == "connectTimeout") {
+        throw "Tempo Excedido";
+      }
+      throw "Server Error!";
     }
   }
 

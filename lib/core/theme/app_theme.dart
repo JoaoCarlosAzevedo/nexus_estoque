@@ -25,7 +25,8 @@ class AppTheme {
         surface: AppColors.primaryGrey,
         outline: AppColors.primaryGrey,
         inversePrimary: AppColors.primaryGrey,
-
+        background: AppColors.primaryGrey,
+        onBackground: AppColors.primaryGrey,
         //hea: AppColors.primaryGrey,
         //primaryColor: AppColors.grey,
         //backgroundColor: AppColors.background,
@@ -33,7 +34,7 @@ class AppTheme {
       ),
       // Define the default font family.
       radioTheme: RadioThemeData(
-          fillColor: WidgetStateProperty.all(AppColors.grey),
+          fillColor: MaterialStateProperty.all(AppColors.grey),
           visualDensity: VisualDensity.standard
           //overlayColor:
           ),
@@ -111,6 +112,19 @@ class AppTheme {
         prefixIconColor: AppColors.grey,
         suffixIconColor: AppColors.grey,
       ),
+      expansionTileTheme: ExpansionTileThemeData(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        textColor: AppColors.grey,
+        iconColor: AppColors.grey,
+        //collapsedBackgroundColor: AppColors.grey,
+        collapsedShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        collapsedTextColor: AppColors.grey,
+        collapsedIconColor: AppColors.grey,
+      ),
       listTileTheme: ListTileThemeData(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
@@ -129,7 +143,7 @@ class AppTheme {
           //overlayColor: MaterialStateProperty.all(Colors.transparent),
           //iconSize: MaterialStateProperty.resolveWith((states) => 36),
           iconColor:
-              WidgetStateProperty.resolveWith((states) => AppColors.grey),
+              MaterialStateProperty.resolveWith((states) => AppColors.grey),
         ),
       ),
       //primaryIconTheme: IconThemeData(color: Colors.red),
@@ -169,7 +183,7 @@ class AppTheme {
           color: Colors.amberAccent,
         ), */
         overlayColor:
-            WidgetStateProperty.resolveWith((states) => AppColors.background),
+            MaterialStateProperty.resolveWith((states) => AppColors.background),
       ),
     );
   }

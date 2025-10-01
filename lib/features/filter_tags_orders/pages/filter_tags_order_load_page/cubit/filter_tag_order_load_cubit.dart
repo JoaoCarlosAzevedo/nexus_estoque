@@ -120,6 +120,26 @@ class FilterTagLoadOrderCubit extends Cubit<FilterTagLoadOrderState> {
     }
   }
 
+  void postIindividualTag(String order) async {
+    if (state is FilterTagLoadLoaded) {
+      final currentState = state as FilterTagLoadLoaded;
+      if (currentState.selectedInvoice != null) {
+        emit(FilterTagLoadLoading());
+
+        final result =
+            await repostiory.postIndividualTag(currentState.selectedInvoice!);
+        if (result.isRight()) {
+          result.fold((l) => null, (r) {
+            fetchLoad(order.isEmpty ? currentState.load.carga : order, r,
+                currentState.selectedInvoice);
+          });
+        } else {
+          result.fold((l) => emit(FilterTagLoadError(error: l)), (r) => null);
+        }
+      }
+    }
+  }
+
   void fetchLoad(String load, String etiqueta, Orders? order) async {
     emit(FilterTagLoadLoading());
 
