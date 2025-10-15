@@ -100,6 +100,14 @@ class PickingOrdersV2ListWidget extends ConsumerStatefulWidget {
 class _PickingOrdersV2ListWidgetState
     extends ConsumerState<PickingOrdersV2ListWidget> {
   bool filterFaturado = false;
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,233 +137,306 @@ class _PickingOrdersV2ListWidgetState
             body: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: BlocBuilder<PickingOrdersV2Cubit, PickingOrdersV2State>(
-                  builder: (context, state) {
-                    if (state is PickingOrdersV2Loading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
+                child: Column(
+                  children: [
+                    // Campo de busca
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: TextField(
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          hintText: 'Buscar pedido...',
+                          prefixIcon: const Icon(Icons.search),
+                          suffixIcon: _searchQuery.isNotEmpty
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear),
+                                  onPressed: () {
+                                    _searchController.clear();
+                                    setState(() {
+                                      _searchQuery = '';
+                                    });
+                                  },
+                                )
+                              : null,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                            vertical: 12.0,
+                          ),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            _searchQuery = value.toLowerCase();
+                          });
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: BlocBuilder<PickingOrdersV2Cubit,
+                          PickingOrdersV2State>(
+                        builder: (context, state) {
+                          if (state is PickingOrdersV2Loading) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
 
-                    if (state is PickingOrdersV2Error) {
-                      return Center(
-                        child: Text(state.error.error),
-                      );
-                    }
+                          if (state is PickingOrdersV2Error) {
+                            return Center(
+                              child: Text(state.error.error),
+                            );
+                          }
 
-                    if (state is PickingOrdersV2Loaded) {
-                      List<Pickingv2Model> data = state.loads;
+                          if (state is PickingOrdersV2Loaded) {
+                            List<Pickingv2Model> data = state.loads;
 
-                      if (widget.order.isNotEmpty) {
-                        orders = data
-                            .where((order) =>
-                                order.pedido.trim() == widget.order.trim())
-                            .toList(); // Convert the Iterable result back to a List
-                      } else {
-                        if (widget.monitor != null) {
-                          // Filtrar pedidos que não existem no array iniciados
-                          final initiatedOrders = widget.monitor!.iniciados
-                              .map((item) => item.chave.trim())
-                              .toSet();
+                            if (widget.order.isNotEmpty) {
+                              orders = data
+                                  .where((order) =>
+                                      order.pedido.trim() ==
+                                      widget.order.trim())
+                                  .toList(); // Convert the Iterable result back to a List
+                            } else {
+                              if (widget.monitor != null) {
+                                // Filtrar pedidos que não existem no array iniciados
+                                final initiatedOrders = widget
+                                    .monitor!.iniciados
+                                    .map((item) => item.chave.trim())
+                                    .toSet();
 
-                          orders = data
-                              .where((order) => !initiatedOrders
-                                  .contains(order.pedido.trim()))
-                              .toList();
-                        } else {
-                          orders = data;
-                        }
-                      }
-                      if (!widget.isMonitor) {
-                        if (orders.isEmpty) {
-                          return const Center(
-                            child: Text("Nenhum registro encontrado."),
-                          );
-                        }
-                      }
+                                orders = data
+                                    .where((order) => !initiatedOrders
+                                        .contains(order.pedido.trim()))
+                                    .toList();
+                              } else {
+                                orders = data;
+                              }
+                            }
 
-                      return Column(
-                        children: [
-                          if (widget.isMonitor)
-                            PickingStatusWidget(
-                              orderNumber: widget.order,
-                              separationStatus: widget.order.trim().isEmpty
-                                  ? 'Disponível para nova separação'
-                                  : 'Em processo de separação',
-                            ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GroupedListView<Pickingv2Model, String>(
-                                elements: orders.toList(),
-                                groupBy: (element) => element.pedido,
-                                groupSeparatorBuilder: (String groupByValue) {
-                                  final qtdProd = orders
-                                      .where(
-                                        (element) =>
-                                            element.pedido.trim() ==
-                                            groupByValue,
-                                      )
-                                      .toList();
-                                  return GestureDetector(
-                                    onTap: () async {
-                                      if (widget.isMonitor &&
-                                          widget.order.isEmpty) {
-                                        // Mostrar diálogo de confirmação para iniciar separação
-                                        final bool? confirmStart =
-                                            await showDialog<bool>(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: const Text(
-                                                  'Iniciar Separação'),
-                                              content: Text(
-                                                  'Deseja iniciar a separação do pedido $groupByValue?'),
-                                              actions: [
-                                                Consumer(
-                                                  builder:
-                                                      (context, ref, child) {
-                                                    final startPickingState =
-                                                        ref.watch(
-                                                            postStartPickingProvider);
-                                                    return startPickingState
-                                                        .when(
-                                                      loading: () =>
-                                                          const ElevatedButton(
-                                                        onPressed: null,
-                                                        child: SizedBox(
-                                                          width: 20,
-                                                          height: 20,
-                                                          child:
-                                                              CircularProgressIndicator(
-                                                                  strokeWidth:
-                                                                      2),
+                            // Aplicar filtro de busca se houver texto na busca
+                            if (_searchQuery.isNotEmpty) {
+                              orders = orders
+                                  .where((order) => order.pedido
+                                      .toLowerCase()
+                                      .contains(_searchQuery))
+                                  .toList();
+                            }
+                            if (!widget.isMonitor) {
+                              if (orders.isEmpty) {
+                                return const Center(
+                                  child: Text("Nenhum registro encontrado."),
+                                );
+                              }
+                            }
+
+                            return Column(
+                              children: [
+                                if (widget.isMonitor)
+                                  PickingStatusWidget(
+                                    orderNumber: widget.order,
+                                    separationStatus:
+                                        widget.order.trim().isEmpty
+                                            ? 'Disponível para nova separação'
+                                            : 'Em processo de separação',
+                                  ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child:
+                                        GroupedListView<Pickingv2Model, String>(
+                                      elements: orders.toList(),
+                                      groupBy: (element) => element.pedido,
+                                      groupSeparatorBuilder:
+                                          (String groupByValue) {
+                                        final qtdProd = orders
+                                            .where(
+                                              (element) =>
+                                                  element.pedido.trim() ==
+                                                  groupByValue,
+                                            )
+                                            .toList();
+                                        final isFaturado = qtdProd.any(
+                                            (element) =>
+                                                element.status.trim() ==
+                                                "Faturado");
+                                        return GestureDetector(
+                                          onTap: () {
+                                            if (widget.isMonitor &&
+                                                widget.order.isEmpty) {
+                                              // Mostrar diálogo de confirmação para iniciar separação
+                                              showDialog<bool>(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: const Text(
+                                                        'Iniciar Separação'),
+                                                    content: Text(
+                                                        'Deseja iniciar a separação do pedido $groupByValue?'),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop(false);
+                                                        },
+                                                        child: const Text(
+                                                            'Cancelar'),
+                                                      ),
+                                                      Consumer(
+                                                        builder: (context, ref,
+                                                            child) {
+                                                          final startPickingState =
+                                                              ref.watch(
+                                                                  postStartPickingProvider);
+                                                          return startPickingState
+                                                              .when(
+                                                            loading: () =>
+                                                                const ElevatedButton(
+                                                              onPressed: null,
+                                                              child: SizedBox(
+                                                                width: 20,
+                                                                height: 20,
+                                                                child: CircularProgressIndicator(
+                                                                    strokeWidth:
+                                                                        2),
+                                                              ),
+                                                            ),
+                                                            error: (error,
+                                                                stackTrace) {
+                                                              return Text(
+                                                                error
+                                                                    .toString(),
+                                                                style: const TextStyle(
+                                                                    color: Colors
+                                                                        .red),
+                                                              );
+                                                            },
+                                                            data: (data) {
+                                                              if (mounted) {
+                                                                if (data) {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop(
+                                                                          true);
+                                                                }
+                                                              }
+                                                              return ElevatedButton(
+                                                                onPressed: () {
+                                                                  ref
+                                                                      .read(postStartPickingProvider
+                                                                          .notifier)
+                                                                      .postInitPicking(
+                                                                          groupByValue);
+                                                                },
+                                                                child: const Text(
+                                                                    'Confirmar'),
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              ).then((confirmStart) {
+                                                if (confirmStart == true) {
+                                                  // Atualizar o monitor e navegar para a próxima tela
+                                                  final cubit = context.read<
+                                                      PickingOrdersV2Cubit>();
+
+                                                  // Navegar primeiro, depois invalidar o provider
+                                                  Navigator.push(
+                                                    // ignore: use_build_context_synchronously
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          PickingOrdersV2ProductsPage(
+                                                        cubit: cubit,
+                                                        order: groupByValue,
+                                                      ),
+                                                    ),
+                                                  );
+                                                }
+                                              });
+                                            } else {
+                                              final cubit = context
+                                                  .read<PickingOrdersV2Cubit>();
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PickingOrdersV2ProductsPage(
+                                                    cubit: cubit,
+                                                    order: groupByValue,
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                          },
+                                          child: Card(
+                                            child: ListTile(
+                                              title: Row(
+                                                children: [
+                                                  Text("Pedido $groupByValue"),
+                                                  if (isFaturado) ...[
+                                                    const SizedBox(width: 8),
+                                                    Container(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                        horizontal: 8,
+                                                        vertical: 4,
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.green,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(12),
+                                                      ),
+                                                      child: const Text(
+                                                        'FATURADO',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 10,
+                                                          fontWeight:
+                                                              FontWeight.bold,
                                                         ),
                                                       ),
-                                                      error:
-                                                          (error, stackTrace) {
-                                                        return Text(
-                                                          error.toString(),
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: Colors
-                                                                      .red),
-                                                        );
-                                                      },
-                                                      data: (data) {
-                                                        if (mounted) {
-                                                          if (data) {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop(true);
-                                                          }
-                                                        }
-                                                        return ElevatedButton(
-                                                          onPressed: () async {
-                                                            await ref
-                                                                .read(postStartPickingProvider
-                                                                    .notifier)
-                                                                .postInitPicking(
-                                                                    groupByValue);
-                                                          },
-                                                          child: const Text(
-                                                              'Confirmar'),
-                                                        );
-                                                      },
-                                                    );
-                                                  },
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        );
-
-                                        if (confirmStart == true) {
-                                          // Atualizar o monitor e navegar para a próxima tela
-                                          final cubit = context
-                                              .read<PickingOrdersV2Cubit>();
-
-                                          // Navegar primeiro, depois invalidar o provider
-                                          final bool? isFinished =
-                                              await Navigator.push(
-                                            // ignore: use_build_context_synchronously
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  PickingOrdersV2ProductsPage(
-                                                cubit: cubit,
-                                                order: groupByValue,
+                                                    ),
+                                                  ],
+                                                ],
                                               ),
-                                            ),
-                                          ).then((_) {
-                                            // Invalidar o provider após a navegação
-                                            ref.invalidate(
-                                                fetchUserMonitorProvider);
-                                          });
-
-                                          if (widget.isMonitor) {
-                                            // Verificar se a separação foi finalizada
-                                            if (isFinished == true) {
-                                              // Atualizar o monitor após todas as operações
-                                              if (mounted) {
-                                                ref.invalidate(
-                                                    fetchUserMonitorProvider);
-                                              }
-                                            }
-                                          }
-                                        }
-                                      } else {
-                                        final cubit = context
-                                            .read<PickingOrdersV2Cubit>();
-                                        final bool? isFinished =
-                                            await Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                PickingOrdersV2ProductsPage(
-                                              cubit: cubit,
-                                              order: groupByValue,
+                                              subtitle: Text(
+                                                  "Qtd. Itens ${qtdProd.length}"),
+                                              trailing: const FaIcon(
+                                                  FontAwesomeIcons
+                                                      .clipboardCheck),
                                             ),
                                           ),
                                         );
-                                        if (widget.isMonitor) {
-                                          // Verificar se a separação foi finalizada
-                                          if (isFinished == true) {
-                                            if (mounted) {
-                                              ref.invalidate(
-                                                  fetchUserMonitorProvider);
-                                            }
-                                          }
-                                        }
-                                      }
-                                    },
-                                    child: Card(
-                                      child: ListTile(
-                                        title: Text("Pedido $groupByValue"),
-                                        subtitle: Text(
-                                            "Qtd. Itens ${qtdProd.length}"),
-                                        trailing: const FaIcon(
-                                            FontAwesomeIcons.clipboardCheck),
-                                      ),
+                                      },
+                                      itemBuilder: (context, element) {
+                                        return Container();
+                                      },
+                                      itemComparator: (item1, item2) => item1
+                                          .pedido
+                                          .compareTo(item2.pedido), // optional
+                                      useStickyGroupSeparators:
+                                          false, // optional
+                                      floatingHeader: false, // optional
+                                      order: GroupedListOrder.ASC, // optional
                                     ),
-                                  );
-                                },
-                                itemBuilder: (context, element) {
-                                  return Container();
-                                },
-                                itemComparator: (item1, item2) => item1.pedido
-                                    .compareTo(item2.pedido), // optional
-                                useStickyGroupSeparators: false, // optional
-                                floatingHeader: false, // optional
-                                order: GroupedListOrder.ASC, // optional
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    }
-                    return const Text("Initial");
-                  },
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+                          return const Text("Initial");
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
