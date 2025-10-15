@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:nexus_estoque/features/outflow_doc_check/data/model/outflow_doc_model.dart';
 import 'package:nexus_estoque/features/outflow_doc_check/pages/outflow_doc_page/widgets/progress_indicator_widget.dart';
@@ -36,11 +38,14 @@ class ProductCheckCard extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () async {
-                  final isSuccess =
+                  final newValue =
                       await showProductMultiplierModal(context, product.codigo);
-                  if (isSuccess) {
+
+                  if (newValue > 0) {
                     // ignore: use_build_context_synchronously
                     //Navigator.pop(context);
+                    product.fator = newValue;
+
                     onChangeProduct?.call();
                   }
                 },

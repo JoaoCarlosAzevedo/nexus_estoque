@@ -201,7 +201,7 @@ class _PickingLoadProductListGroupedPage2State
                         onAlterProd: () async {
                           final isSuccess = await showProductMultiplierModal(
                               context, element.product);
-                          if (isSuccess) {
+                          if (isSuccess > 0) {
                             widget.cubit.fetchPickingLoadsDeparment(
                                 widget.load,
                                 widget.department,

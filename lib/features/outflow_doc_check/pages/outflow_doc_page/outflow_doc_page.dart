@@ -100,9 +100,9 @@ class _OutFlowDocCheckPageState extends ConsumerState<OutFlowDocCheckPage> {
                           context.read<OutFlowDocCubit>().reset();
                         },
                         onChangeProduct: () {
-                          context
+                          /* context
                               .read<OutFlowDocCubit>()
-                              .fetchOutFlowDoc(state.docs.chaveNFe);
+                              .fetchOutFlowDoc(state.docs.chaveNFe);  */
                         },
                       );
                     }

@@ -169,6 +169,31 @@ class PurchaseInvoiceProductsCubit extends Cubit<PurchaseInvoiceProductsState> {
     }
   }
 
+  void setProductFator(String sku, double newFator) {
+    if (state is PurchaseInvoiceProductsLChecking) {
+      final currentState = state as PurchaseInvoiceProductsLChecking;
+      var currentInvoices = currentState.invoices;
+      final products = currentInvoices.fold(<PurchaseInvoiceProduct>[],
+          (previousValue, element) {
+        previousValue.addAll(element.purchaseInvoiceProducts);
+        return previousValue;
+      });
+
+      for (var element in products) {
+        if (element.codigo == (sku)) {
+          element.fator = newFator;
+        }
+      }
+      emit(PurchaseInvoiceProductsLoading());
+      emit(PurchaseInvoiceProductsLChecking(
+        invoices: currentState.invoices,
+        barcode: '',
+        product: null,
+        show: false,
+      ));
+    }
+  }
+
   double checkMultilier(String barcode) {
     double total = 0;
     if (state is PurchaseInvoiceProductsLChecking) {

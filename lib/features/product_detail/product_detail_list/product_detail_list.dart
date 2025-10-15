@@ -118,7 +118,7 @@ class _ProductDetailListPageState extends ConsumerState<ProductDetailListPage> {
                                 final isSuccess =
                                     await showProductMultiplierModal(context,
                                         filterListProducts[index].codigo);
-                                if (isSuccess) {
+                                if (isSuccess > 1) {
                                   // ignore: use_build_context_synchronously
                                   //Navigator.pop(context);
                                   ref.invalidate(remoteProductProvider);

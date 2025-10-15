@@ -85,7 +85,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
             onPressed: () async {
               final isSuccess = await showProductMultiplierModal(
                   context, widget.productAddress.codigo);
-              if (isSuccess) {
+              if (isSuccess > 0) {
                 // ignore: use_build_context_synchronously
                 context.pop(true);
               }

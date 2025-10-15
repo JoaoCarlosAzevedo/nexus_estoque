@@ -221,11 +221,18 @@ class _PurchaseInvoiceProdutctsState
                                                       await showProductMultiplierModal(
                                                           context,
                                                           product.codigo);
-                                                  if (isSuccess) {
+                                                  if (isSuccess > 1) {
                                                     // ignore: use_build_context_synchronously
-                                                    Navigator.pop(context);
-                                                    ref.invalidate(
-                                                        purchaseInvoicesProvider);
+                                                    //Navigator.pop(context);
+
+                                                    context
+                                                        .read<
+                                                            PurchaseInvoiceProductsCubit>()
+                                                        .setProductFator(
+                                                            product.codigo,
+                                                            isSuccess);
+                                                    /*  ref.invalidate(
+                                                        purchaseInvoicesProvider); */
                                                   }
                                                 },
                                                 product: product,

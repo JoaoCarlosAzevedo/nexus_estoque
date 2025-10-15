@@ -1,20 +1,21 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/model/product_multiplier_model.dart';
 import '../provider/product_multiplier_notifier.dart';
 
-Future<bool> showProductMultiplierModal(
+Future<double> showProductMultiplierModal(
     BuildContext context, String barcode) async {
-  final response = await showDialog<bool>(
+  final response = await showDialog<double>(
       context: context,
       builder: (_) => ProductMultiplierModal(
             barcode: barcode,
           ));
   if (response == null) {
-    return false;
+    return -1;
   }
   return response;
 }
@@ -52,7 +53,8 @@ class _ProductMultiplierModalState
     ref.listen(productMultiplierChangeProvider, (previous, current) {
       if (current is AsyncData) {
         if (current.value ?? false) {
-          Navigator.pop(context, true);
+          final newValue = double.parse(controller.text);
+          Navigator.pop(context, newValue);
         }
       }
 
