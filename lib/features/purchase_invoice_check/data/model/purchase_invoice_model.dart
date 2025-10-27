@@ -18,6 +18,7 @@ class PurchaseInvoice {
   String placaVeiculo;
   String placaNF;
   int nfRecno;
+  bool showQtd;
 
   List<PurchaseInvoiceProduct> purchaseInvoiceProducts;
 
@@ -37,6 +38,7 @@ class PurchaseInvoice {
     required this.placaNF,
     required this.nfRecno,
     required this.purchaseInvoiceProducts,
+    required this.showQtd,
   });
 
   bool isCompleted() {
@@ -64,6 +66,7 @@ class PurchaseInvoice {
       'placaVeiculo': placaVeiculo,
       'placa_nf': placaNF,
       'doc_recno': nfRecno,
+      'showQtd': showQtd,
       'produtos': purchaseInvoiceProducts.map((x) => x.toMap()).toList(),
     };
   }
@@ -98,6 +101,7 @@ class PurchaseInvoice {
       placaVeiculo: map['placaVeiculo'] ?? '',
       placaNF: map['placa_nf'] ?? '',
       nfRecno: map['doc_recno'] ?? '',
+      showQtd: map['showQtd'] ?? true,
       purchaseInvoiceProducts: List<PurchaseInvoiceProduct>.from(
         (map['produtos'] as List<dynamic>).map<PurchaseInvoiceProduct>(
           (x) => PurchaseInvoiceProduct.fromMap(x as Map<String, dynamic>),

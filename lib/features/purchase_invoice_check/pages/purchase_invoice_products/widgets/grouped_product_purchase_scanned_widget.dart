@@ -24,6 +24,7 @@ class GroupedProductScannedCard extends StatelessWidget {
 
   double checked = 0;
   double quantityOriginal = 0;
+  bool showQtd = false;
 
   @override
   Widget build(BuildContext context) {
@@ -103,13 +104,14 @@ class GroupedProductScannedCard extends StatelessWidget {
                                     .copyWith(color: Colors.orange),
                               ),
                             if (checked > quantityOriginal)
-                              Text(
-                                "Total Itens da NF: $quantityOriginal",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineMedium!
-                                    .copyWith(color: Colors.red),
-                              ),
+                              if (showQtd)
+                                Text(
+                                  "Total Itens da NF: $quantityOriginal",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium!
+                                      .copyWith(color: Colors.red),
+                                ),
                           ],
                         ),
                         trailing: IconButton(
@@ -204,6 +206,8 @@ class GroupedProductScannedCard extends StatelessWidget {
   }
 
   void getChecked() {
+    showQtd = listInvoices.first.showQtd;
+
     if (product != null) {
       final allProducts = listInvoices.fold(<PurchaseInvoiceProduct>[],
           (previousValue, element) {
