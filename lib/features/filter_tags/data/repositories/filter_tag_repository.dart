@@ -113,7 +113,7 @@ class FilterTagRepository {
       String dateIni, String dateEnd) async {
     final String url = await Config.baseURL;
     try {
-      var response = await dio.get('$url/cargas/', queryParameters: {
+      var response = await dio.get('$url/cargas/locais', queryParameters: {
         'dataIni': dateIni,
         'dataFim': dateEnd,
       });

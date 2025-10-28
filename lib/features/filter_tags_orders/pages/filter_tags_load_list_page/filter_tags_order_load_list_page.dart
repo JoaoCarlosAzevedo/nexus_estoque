@@ -19,11 +19,20 @@ class _FilterTagsOrderLoadListPageState
     extends ConsumerState<FilterTagsOrderLoadListPage> {
   late String dateIni;
   late String dateEnd;
+  String locaisFilter = '';
+  final TextEditingController _locaisController = TextEditingController();
+
   @override
   void initState() {
     dateIni = datetimeToYYYYMMDD(DateTime.now());
     dateEnd = datetimeToYYYYMMDD(DateTime.now());
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _locaisController.dispose();
+    super.dispose();
   }
 
   @override
@@ -53,35 +62,83 @@ class _FilterTagsOrderLoadListPageState
               icon: const Icon(Icons.calendar_month)),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: futureProvider.when(
-          skipLoadingOnRefresh: false,
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (err, stack) {
-            return Center(child: Text(err.toString()));
-          },
-          data: (data) {
-            if (data.isEmpty) {
-              return const Center(
-                child: Text("Nenhum registro encontrado."),
-              );
-            }
-            return ListView.builder(
-              itemCount: data.length,
-              itemBuilder: (context, index) {
-                return LoadSimpleCardWidget(
-                  load: data[index],
-                  onTap: () {
-                    context.push(
-                      '/etiqueta_filtros_pedidos/${data[index].load}',
-                    );
-                  },
-                );
+      body: Column(
+        children: [
+          // Campo de filtro por locais
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _locaisController,
+              decoration: InputDecoration(
+                labelText: 'Filtrar por armazém',
+                hintText: 'Digite o armazém para filtrar',
+                prefixIcon: const Icon(Icons.location_on),
+                suffixIcon: locaisFilter.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          _locaisController.clear();
+                          setState(() {
+                            locaisFilter = '';
+                          });
+                        },
+                      )
+                    : null,
+                border: const OutlineInputBorder(),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  locaisFilter = value.toLowerCase();
+                });
               },
-            );
-          },
-        ),
+            ),
+          ),
+          // Lista de cargas
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: futureProvider.when(
+                skipLoadingOnRefresh: false,
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (err, stack) {
+                  return Center(child: Text(err.toString()));
+                },
+                data: (data) {
+                  // Filtrar dados por locais
+                  final filteredData = locaisFilter.isEmpty
+                      ? data
+                      : data
+                          .where((load) =>
+                              load.locais.toLowerCase().contains(locaisFilter))
+                          .toList();
+
+                  if (filteredData.isEmpty) {
+                    return Center(
+                      child: Text(
+                        locaisFilter.isEmpty
+                            ? "Nenhum registro encontrado."
+                            : "Nenhum registro encontrado para '$locaisFilter'.",
+                      ),
+                    );
+                  }
+                  return ListView.builder(
+                    itemCount: filteredData.length,
+                    itemBuilder: (context, index) {
+                      return LoadSimpleCardWidget(
+                        load: filteredData[index],
+                        onTap: () {
+                          context.push(
+                            '/etiqueta_filtros_pedidos/${filteredData[index].load}',
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -7,6 +7,7 @@ class LoadModel {
   String nomeTransp;
   String codRota;
   String descRota;
+  String locais;
 
   LoadModel({
     required this.load,
@@ -14,6 +15,7 @@ class LoadModel {
     required this.nomeTransp,
     required this.codRota,
     required this.descRota,
+    required this.locais,
   });
 
   Map<String, dynamic> toMap() {
@@ -23,6 +25,7 @@ class LoadModel {
       'nomeTransp': nomeTransp,
       'codRota': codRota,
       'descRota': descRota,
+      'locais': locais,
     };
   }
 
@@ -33,6 +36,7 @@ class LoadModel {
       nomeTransp: map['desctransp'] ?? "",
       codRota: map['codrota'] ?? "",
       descRota: map['descrota'] ?? "",
+      locais: map['locais'] ?? "",
     );
   }
 

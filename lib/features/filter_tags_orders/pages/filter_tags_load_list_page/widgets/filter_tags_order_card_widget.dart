@@ -81,6 +81,29 @@ class LoadSimpleCardWidget extends ConsumerWidget {
                   ),
                 ],
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Armazéns",
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        Text(
+                          load.locais,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
