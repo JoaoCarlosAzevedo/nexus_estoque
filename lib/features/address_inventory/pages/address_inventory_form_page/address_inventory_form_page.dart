@@ -484,6 +484,14 @@ class _AddressInventoryFormPageState
                                             .isNotEmpty)
                                           Text(
                                               'Lote: ${widget.data[index].lote}'),
+                                        if (widget.data[index].dataLote
+                                                .trim()
+                                                .isNotEmpty &&
+                                            widget.data[index].lote
+                                                .trim()
+                                                .isNotEmpty)
+                                          Text(
+                                              'Dt. Venc.: ${widget.data[index].dataLote}'),
                                       ],
                                     ),
                                     trailing: Text(

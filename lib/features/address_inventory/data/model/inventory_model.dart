@@ -17,6 +17,7 @@ class InventoryModel {
   String codEndereco;
   String lote;
   String chave;
+  String dataLote;
   int recno;
   InventoryModel({
     required this.filial,
@@ -34,6 +35,7 @@ class InventoryModel {
     required this.codEndereco,
     required this.lote,
     required this.chave,
+    required this.dataLote,
     required this.recno,
   });
 
@@ -54,6 +56,7 @@ class InventoryModel {
       'codEndereco': codEndereco,
       'lote': lote,
       'chave': chave,
+      'dataLote': dataLote,
       'recno': recno,
     };
   }
@@ -75,6 +78,7 @@ class InventoryModel {
       codEndereco: map['CodEndereco'] ?? '',
       chave: map['chave'] ?? '',
       lote: map['lote'] ?? '',
+      dataLote: map['dataValidade'] ?? '',
       recno: map['recno'] ?? 0,
     );
   }
