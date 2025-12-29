@@ -11,6 +11,8 @@ import '../../../../core/features/searches/products/pages/products_search_page.d
 import '../../../../core/features/searches/products/provider/remote_product_provider.dart';
 import '../../../../core/mixins/validation_mixin.dart';
 import '../../../../core/widgets/form_input_no_keyboard_search_widget.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/datetime_formatter.dart';
 import '../../../address_balance/data/model/address_balance_model.dart';
 import '../../data/model/inventory_model.dart';
 import '../../data/repositories/inventory_repository.dart';
@@ -45,6 +47,8 @@ class _AddressInventoryFormPageState
   late List<InventoryModel> inventoryData = [];
   bool isLote = false;
   late ProductModel prodInv;
+  String vencLote = "";
+  bool isValidDateLote = false;
 
   @override
   void initState() {
@@ -87,11 +91,12 @@ class _AddressInventoryFormPageState
             .show();
       }
       if (current.status == StateEnum.success) {
-        if (isLote) {
+        context.pop();
+        /*   if (isLote) {
           ref.invalidate(remoteGetInventoryProvider);
         } else {
           context.pop();
-        }
+        } */
       }
     });
 
@@ -136,6 +141,8 @@ class _AddressInventoryFormPageState
                             isLote = false;
                           });
                           loteController.clear();
+                          vencLote = "";
+                          isValidDateLote = false;
                           ref
                               .read(addressInventoryProvider.notifier)
                               .addProduct(
@@ -226,29 +233,94 @@ class _AddressInventoryFormPageState
                             ),
                           ),
                           if (isLote)
-                            NoKeyboardTextSearchForm(
-                              label: 'Lote',
-                              autoFocus: true,
-                              focusNode: loteFocus,
-                              onSubmitted: (e) {
-                                focus.requestFocus();
-                              },
-                              validator: isNotEmpty,
-                              controller: loteController,
-                              prefixIcon: IconButton(
-                                onPressed: () async {
-                                  final value = await BatchSearchModalv2.show(
-                                    context,
-                                    prodInv.codigo,
-                                    widget.address.armazem,
-                                  );
-                                  loteController.text = value;
-                                  focus.requestFocus();
-                                },
-                                icon: const FaIcon(
-                                    FontAwesomeIcons.magnifyingGlass),
-                              ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: NoKeyboardTextSearchForm(
+                                    label: 'Lote',
+                                    autoFocus: true,
+                                    focusNode: loteFocus,
+                                    onSubmitted: (e) {
+                                      focus.requestFocus();
+                                    },
+                                    validator: isNotEmpty,
+                                    controller: loteController,
+                                    prefixIcon: IconButton(
+                                      onPressed: () async {
+                                        final value =
+                                            await BatchSearchModalv2.show(
+                                          context,
+                                          prodInv.codigo,
+                                          widget.address.armazem,
+                                        );
+                                        loteController.text = value;
+                                        focus.requestFocus();
+                                      },
+                                      icon: const FaIcon(
+                                          FontAwesomeIcons.magnifyingGlass),
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                    onPressed: () async {
+                                      final themeData = Theme.of(context);
+                                      DateTime dataAtual = DateTime.now();
+                                      final DateTime? pickedDate =
+                                          await showDatePicker(
+                                        builder: (context, Widget? child) =>
+                                            Theme(
+                                          data: themeData.copyWith(
+                                            datePickerTheme:
+                                                const DatePickerThemeData(
+                                                    rangeSelectionBackgroundColor:
+                                                        AppColors.background),
+                                            appBarTheme: themeData.appBarTheme
+                                                .copyWith(
+                                                    backgroundColor:
+                                                        Colors.blue,
+                                                    iconTheme: themeData
+                                                        .appBarTheme.iconTheme!
+                                                        .copyWith(
+                                                            color: Colors.red)),
+                                            colorScheme:
+                                                const ColorScheme.light(
+                                              onPrimary: Colors.white,
+                                              primary: Colors.grey,
+                                              //surface: Colors.green,
+                                            ),
+                                          ),
+                                          child: child!,
+                                        ),
+                                        context: context,
+                                        initialDate: dataAtual,
+                                        firstDate: DateTime(dataAtual.year - 5),
+                                        lastDate: dataAtual,
+                                      );
+                                      if (pickedDate == null) return;
+
+                                      setState(() {
+                                        isValidDateLote = true;
+                                        vencLote =
+                                            datetimeToYYYYMMDD(pickedDate);
+                                      });
+                                    },
+                                    icon: Icon(
+                                      Icons.calendar_month,
+                                      color: isValidDateLote
+                                          ? Colors.green
+                                          : Colors.red,
+                                    )),
+                              ],
                             ),
+                          if (isLote)
+                            if (vencLote.isNotEmpty)
+                              Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: Text(
+                                        "Dt. Fabr.: ${yyyymmddToDate(vencLote)}"),
+                                  )),
                           state.status == StateEnum.loading
                               ? const Expanded(
                                   child: Center(
@@ -438,7 +510,7 @@ class _AddressInventoryFormPageState
           onPressed: () {
             ref
                 .read(addressInventoryProvider.notifier)
-                .postInventory(loteController.text);
+                .postInventory(loteController.text, vencLote);
           },
           icon: const Icon(Icons.check),
           backgroundColor: Colors.green,
@@ -524,6 +596,8 @@ class _AddressInventoryFormPageState
             isLote = false;
             prodInv = selectedProduct;
             loteController.clear();
+            vencLote = "";
+            isValidDateLote = false;
           });
         }
 
