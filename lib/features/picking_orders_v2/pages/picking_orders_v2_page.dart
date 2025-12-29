@@ -407,8 +407,16 @@ class _PickingOrdersV2ListWidgetState
                                                   ],
                                                 ],
                                               ),
-                                              subtitle: Text(
-                                                  "Qtd. Itens ${qtdProd.length}"),
+                                              subtitle: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  if (qtdProd.isNotEmpty)
+                                                    Text(qtdProd.first.desCli),
+                                                  Text(
+                                                      "Qtd. Itens ${qtdProd.length}"),
+                                                ],
+                                              ),
                                               trailing: const FaIcon(
                                                   FontAwesomeIcons
                                                       .clipboardCheck),
