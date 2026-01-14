@@ -123,7 +123,7 @@ class LoginForm extends StatelessWidget {
                         .toList();
                     print(jsonEncode(listMenus)); */
                   },
-                  child: const Text('Versão 1.1.57'),
+                  child: const Text('Versão 1.1.58'),
                 ),
               ],
             ),

@@ -124,6 +124,7 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
                 descricao: checkedProd.descricao,
                 barcode1: checkedProd.produto,
                 barcode2: checkedProd.produto,
+                isBlind: false,
                 products: []);
 
             final listProds = currState.docs.produtos
@@ -216,6 +217,7 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
               descricao: aux.docs.produtos[index].descricao,
               barcode1: aux.docs.produtos[index].barcode,
               barcode2: aux.docs.produtos[index].barcode2,
+              isBlind: aux.docs.produtos[index].isBlind,
               products: []);
 
           final listProds = aux.docs.produtos
@@ -306,6 +308,7 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
           descricao: aux.docs.produtos[index].descricao,
           barcode1: aux.docs.produtos[index].barcode,
           barcode2: aux.docs.produtos[index].barcode2,
+          isBlind: aux.docs.produtos[index].isBlind,
           products: []);
 
       final listProds = aux.docs.produtos

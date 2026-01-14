@@ -80,6 +80,7 @@ class Produtos {
   String codigo;
   String um;
   bool manualInput;
+  bool isBlind;
 
   Produtos({
     required this.descricao,
@@ -93,6 +94,7 @@ class Produtos {
     required this.codigo,
     required this.um,
     required this.manualInput,
+    required this.isBlind,
   });
 
   Map<String, dynamic> toMap() {
@@ -108,6 +110,7 @@ class Produtos {
       'codigo': codigo,
       'um': um,
       'manualInput': manualInput,
+      'isBlind': isBlind,
     };
   }
 
@@ -124,6 +127,7 @@ class Produtos {
       codigo: map['codigo'] ?? '',
       um: map['um'] ?? '',
       manualInput: map['manualInput'] ?? false,
+      isBlind: map['confCega'] ?? false,
     );
   }
 
@@ -139,12 +143,14 @@ class GroupedProducts {
   String barcode1;
   String barcode2;
   List<Produtos> products;
+  bool isBlind;
   GroupedProducts({
     required this.produto,
     required this.descricao,
     required this.barcode1,
     required this.barcode2,
     required this.products,
+    required this.isBlind,
   });
 
   double getTotalConferido() {

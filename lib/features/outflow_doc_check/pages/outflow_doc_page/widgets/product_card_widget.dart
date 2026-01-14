@@ -86,24 +86,25 @@ class ProductCheckCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          "Quantidade",
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                        Text(
-                          "${product.quantidade} ${product.um}",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        )
-                      ],
+                  if (!product.isBlind)
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            "Quantidade",
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          Text(
+                            "${product.quantidade} ${product.um}",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          )
+                        ],
+                      ),
                     ),
-                  ),
                 ],
               ),
               Row(

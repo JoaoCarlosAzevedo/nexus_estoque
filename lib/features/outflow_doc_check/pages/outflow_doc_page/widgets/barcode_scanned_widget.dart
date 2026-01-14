@@ -43,6 +43,8 @@ class BarcodeScannedCard extends StatelessWidget {
                       title: Text(
                         "${product?.descricao}",
                         style: Theme.of(context).textTheme.titleLarge,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       subtitle: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -73,21 +75,28 @@ class BarcodeScannedCard extends StatelessWidget {
                                 style:
                                     Theme.of(context).textTheme.headlineMedium,
                               ), */
-                              RichText(
-                                text: TextSpan(
-                                  text:
-                                      "Conferido: ${product!.getTotalConferido()} / ",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium,
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: '${product!.getTotalNF()}',
-                                        style: const TextStyle(
-                                            color: Colors.green)),
-                                  ],
-                                ),
-                              )
+                              product!.isBlind
+                                  ? Text(
+                                      "Conferido: ${product!.getTotalConferido()}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium,
+                                    )
+                                  : RichText(
+                                      text: TextSpan(
+                                        text:
+                                            "Conferido: ${product!.getTotalConferido()} / ",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineMedium,
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                              text: '${product!.getTotalNF()}',
+                                              style: const TextStyle(
+                                                  color: Colors.green)),
+                                        ],
+                                      ),
+                                    )
                             ],
                           ),
                         ],
