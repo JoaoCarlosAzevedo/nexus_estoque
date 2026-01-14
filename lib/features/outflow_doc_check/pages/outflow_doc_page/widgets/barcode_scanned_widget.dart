@@ -75,7 +75,9 @@ class BarcodeScannedCard extends StatelessWidget {
                                 style:
                                     Theme.of(context).textTheme.headlineMedium,
                               ), */
-                              product!.isBlind
+                              product!.isBlind &&
+                                      product!.getTotalConferido() !=
+                                          product!.getTotalNF()
                                   ? Text(
                                       "Conferido: ${product!.getTotalConferido()}",
                                       style: Theme.of(context)
