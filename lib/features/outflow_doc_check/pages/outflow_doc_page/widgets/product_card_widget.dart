@@ -23,7 +23,7 @@ class ProductCheckCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.only(top: 10),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(0.0),
         child: ListTile(
           onTap: onTapCard,
           title: Row(
@@ -32,8 +32,9 @@ class ProductCheckCard extends StatelessWidget {
               Flexible(
                 child: Text(
                   overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
                   "${product.item} ${product.descricao}",
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
               IconButton(
@@ -64,7 +65,7 @@ class ProductCheckCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Divider(),
+              //const Divider(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,6 +20,9 @@ class OutFlowDocCheckPage extends ConsumerStatefulWidget {
 
 class _OutFlowDocCheckPageState extends ConsumerState<OutFlowDocCheckPage> {
   final TextEditingController controller = TextEditingController();
+  OutFlowDocCubit? _cubit;
+  Completer<void>? _saveCompleter;
+  bool _isSavingOnExit = false;
 
   @override
   void dispose() {
@@ -34,9 +39,25 @@ class _OutFlowDocCheckPageState extends ConsumerState<OutFlowDocCheckPage> {
         if (didPop) {
           return;
         }
+
         final bool shouldPop = await showBackDialog(context) ?? false;
         if (context.mounted && shouldPop) {
-          Navigator.pop(context);
+          // Verifica se há um documento carregado e salva antes de sair
+          if (_cubit != null && _cubit!.state is OutFlowDocLoaded) {
+            _isSavingOnExit = true;
+            _saveCompleter = Completer<void>();
+            final state = _cubit!.state as OutFlowDocLoaded;
+            _cubit!.saveOutFlowDoc(state.docs);
+
+            // Aguarda o salvamento terminar
+            await _saveCompleter!.future;
+
+            if (context.mounted) {
+              Navigator.pop(context);
+            }
+          } else {
+            Navigator.pop(context);
+          }
         }
       },
       child: Scaffold(
@@ -46,11 +67,41 @@ class _OutFlowDocCheckPageState extends ConsumerState<OutFlowDocCheckPage> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: BlocProvider(
-              create: (context) =>
-                  OutFlowDocCubit(ref.read(outflowDocRepository)),
+              create: (context) {
+                _cubit = OutFlowDocCubit(ref.read(outflowDocRepository));
+                return _cubit!;
+              },
               child: BlocListener<OutFlowDocCubit, OutFlowDocState>(
                 listener: (context, state) {
-                  if (state is OutFlowDocPostError) {
+                  // Se está salvando ao sair e o salvamento terminou
+                  if (_isSavingOnExit && _saveCompleter != null) {
+                    if (state is OutFlowDocInitial) {
+                      // Salvamento concluído com sucesso
+                      _isSavingOnExit = false;
+                      if (!_saveCompleter!.isCompleted) {
+                        _saveCompleter!.complete();
+                      }
+                      return;
+                    }
+                    if (state is OutFlowDocPostError) {
+                      // Salvamento falhou
+                      _isSavingOnExit = false;
+                      if (!_saveCompleter!.isCompleted) {
+                        _saveCompleter!.complete();
+                      }
+                      AwesomeDialog(
+                              context: context,
+                              dialogType: DialogType.error,
+                              animType: AnimType.rightSlide,
+                              desc: state.failure.error,
+                              btnOkOnPress: () {},
+                              btnOkColor: Theme.of(context).primaryColor)
+                          .show();
+                      return;
+                    }
+                  }
+
+                  if (state is OutFlowDocPostError && !_isSavingOnExit) {
                     AwesomeDialog(
                             context: context,
                             dialogType: DialogType.error,
