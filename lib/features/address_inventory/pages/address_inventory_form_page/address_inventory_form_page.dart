@@ -58,6 +58,27 @@ class _AddressInventoryFormPageState
     //executa no final do build
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(addressInventoryProvider.notifier).setDoc(widget.doc);
+
+      if (widget.address.prdInvent) {
+        if (widget.address.codProd.trim().isNotEmpty) {
+          ref.read(addressInventoryProvider.notifier).addProduct(
+              ProductModel(
+                  descricao: widget.address.descProd,
+                  localPadrao: widget.address.armazem,
+                  lote: '',
+                  codigoBarras: '',
+                  codigoBarras2: '',
+                  localizacao: '',
+                  tipo: '',
+                  saldoAtual: 0.0,
+                  qtdInvet: 0.0,
+                  fator: 0.0,
+                  um: '',
+                  codigo: widget.address.codProd,
+                  error: ''),
+              0);
+        }
+      }
       ref
           .read(addressInventoryProvider.notifier)
           .setWarehouse(widget.address.armazem);

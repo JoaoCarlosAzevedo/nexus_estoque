@@ -112,7 +112,8 @@ class _AddressInventoryPageState extends ConsumerState<AddressInventoryPage>
                             separado: 0.0,
                             endereDesc: '',
                             armazemDesc: '',
-                            ultimoMov: '');
+                            ultimoMov: '',
+                            prdInvent: false);
                         context.push("/inventario_endereco/form/$doc",
                             extra: address);
                       },

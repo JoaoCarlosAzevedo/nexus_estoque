@@ -12,6 +12,7 @@ class AddressBalanceModel {
   final String endereDesc;
   final String armazemDesc;
   final String ultimoMov;
+  final bool prdInvent;
 
   AddressBalanceModel({
     required this.descProd,
@@ -25,6 +26,7 @@ class AddressBalanceModel {
     required this.endereDesc,
     required this.armazemDesc,
     required this.ultimoMov,
+    required this.prdInvent,
   });
 
   Map<String, dynamic> toMap() {
@@ -40,6 +42,7 @@ class AddressBalanceModel {
       'separado': separado,
       'armazemDesc': armazemDesc,
       'ultimo_mov': ultimoMov,
+      'prdInvent': prdInvent,
     };
   }
 
@@ -56,6 +59,7 @@ class AddressBalanceModel {
       endereDesc: map['endereDesc'] ?? '',
       armazemDesc: map['armazemDesc'] ?? '',
       ultimoMov: map['ultimo_mov'] ?? '',
+      prdInvent: map['prdInvent'] ?? false,
     );
   }
 
