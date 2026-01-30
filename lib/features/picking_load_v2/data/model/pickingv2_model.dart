@@ -39,6 +39,10 @@ class Pickingv2Model {
   double fator;
 
   String status;
+  String retira;
+
+  bool lSKUonly;
+  bool lnoQtd;
 
   Pickingv2Model(
       {required this.descricao,
@@ -72,6 +76,9 @@ class Pickingv2Model {
       required this.qtdKit,
       required this.qtdSerial,
       required this.qtdMax,
+      required this.lSKUonly,
+      required this.lnoQtd,
+      required this.retira,
       required this.rua});
 
   Map<String, dynamic> toMap() {
@@ -104,6 +111,9 @@ class Pickingv2Model {
       'recnoSDC': recnoSDC,
       'serial': serial,
       'qtdMax': qtdMax,
+      'lSKUonly': lSKUonly,
+      'lnoQtd': lnoQtd,
+      'retira': retira,
     };
   }
 
@@ -141,6 +151,9 @@ class Pickingv2Model {
       qtdKit: map['qtdKit']?.toInt() ?? 0,
       qtdSerial: map['qtdSerial']?.toInt() ?? 0,
       qtdMax: map['qtdMax']?.toInt() ?? 0,
+      lSKUonly: map['skuOnly'] ?? false,
+      lnoQtd: map['noQtd'] ?? false,
+      retira: map['retira'] ?? '',
     );
   }
 

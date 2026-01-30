@@ -223,6 +223,20 @@ class _PickingOrdersV2ListWidgetState
                                       .contains(_searchQuery))
                                   .toList();
                             }
+
+                            // Ordenar: pedidos com retira preenchido no topo, depois por número do pedido
+                            orders.sort((a, b) {
+                              final aRetiraPreenchido =
+                                  a.retira.trim().isNotEmpty;
+                              final bRetiraPreenchido =
+                                  b.retira.trim().isNotEmpty;
+                              if (aRetiraPreenchido != bRetiraPreenchido) {
+                                return (bRetiraPreenchido ? 1 : 0)
+                                    .compareTo(aRetiraPreenchido ? 1 : 0);
+                              }
+                              return a.pedido.compareTo(b.pedido);
+                            });
+
                             if (!widget.isMonitor) {
                               if (orders.isEmpty) {
                                 return const Center(
@@ -247,14 +261,20 @@ class _PickingOrdersV2ListWidgetState
                                     child:
                                         GroupedListView<Pickingv2Model, String>(
                                       elements: orders.toList(),
-                                      groupBy: (element) => element.pedido,
+                                      groupBy: (element) =>
+                                          '${element.retira.trim().isEmpty ? '1' : '0'}_${element.pedido}',
                                       groupSeparatorBuilder:
                                           (String groupByValue) {
+                                        final pedido = groupByValue
+                                                .contains('_')
+                                            ? groupByValue.substring(
+                                                groupByValue.indexOf('_') + 1)
+                                            : groupByValue;
                                         final qtdProd = orders
                                             .where(
                                               (element) =>
                                                   element.pedido.trim() ==
-                                                  groupByValue,
+                                                  pedido,
                                             )
                                             .toList();
                                         final isFaturado = qtdProd.any(
@@ -274,7 +294,7 @@ class _PickingOrdersV2ListWidgetState
                                                     title: const Text(
                                                         'Iniciar Separação'),
                                                     content: Text(
-                                                        'Deseja iniciar a separação do pedido $groupByValue?'),
+                                                        'Deseja iniciar a separação do pedido $pedido?'),
                                                     actions: [
                                                       TextButton(
                                                         onPressed: () {
@@ -328,7 +348,7 @@ class _PickingOrdersV2ListWidgetState
                                                                       .read(postStartPickingProvider
                                                                           .notifier)
                                                                       .postInitPicking(
-                                                                          groupByValue);
+                                                                          pedido);
                                                                 },
                                                                 child: const Text(
                                                                     'Confirmar'),
@@ -354,7 +374,7 @@ class _PickingOrdersV2ListWidgetState
                                                       builder: (context) =>
                                                           PickingOrdersV2ProductsPage(
                                                         cubit: cubit,
-                                                        order: groupByValue,
+                                                        order: pedido,
                                                       ),
                                                     ),
                                                   );
@@ -369,7 +389,7 @@ class _PickingOrdersV2ListWidgetState
                                                   builder: (context) =>
                                                       PickingOrdersV2ProductsPage(
                                                     cubit: cubit,
-                                                    order: groupByValue,
+                                                    order: pedido,
                                                   ),
                                                 ),
                                               );
@@ -377,9 +397,9 @@ class _PickingOrdersV2ListWidgetState
                                           },
                                           child: Card(
                                             child: ListTile(
-                                              title: Row(
+                                              title: Wrap(
                                                 children: [
-                                                  Text("Pedido $groupByValue"),
+                                                  Text("Pedido $pedido"),
                                                   if (isFaturado) ...[
                                                     const SizedBox(width: 8),
                                                     Container(
@@ -405,6 +425,31 @@ class _PickingOrdersV2ListWidgetState
                                                       ),
                                                     ),
                                                   ],
+                                                  const SizedBox(width: 8),
+                                                  if (qtdProd
+                                                      .first.retira.isNotEmpty)
+                                                    Container(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                        horizontal: 8,
+                                                        vertical: 4,
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.red,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(12),
+                                                      ),
+                                                      child: const Text(
+                                                        'RETIRA',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 10,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
                                                 ],
                                               ),
                                               subtitle: Column(

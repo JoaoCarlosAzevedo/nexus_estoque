@@ -252,9 +252,10 @@ class _PickingFormv3State extends ConsumerState<PickingFormv3>
                             ],
                           ),
                         if (widget.picking.serial != 'S')
-                          InputQuantity(
-                            controller: quantityController,
-                          ),
+                          if (!widget.picking.lnoQtd)
+                            InputQuantity(
+                              controller: quantityController,
+                            ),
                         const SizedBox(
                           height: 20,
                         ),

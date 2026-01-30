@@ -47,9 +47,11 @@ class PickingProductCardv2 extends StatelessWidget {
             ),
             ListTile(
               onTap: onTap,
-              title: Text(
-                '${data.itemPedido} - ${data.descricao}',
-              ),
+              title: data.lSKUonly
+                  ? const Text(" - ")
+                  : Text(
+                      '${data.itemPedido} - ${data.descricao}',
+                    ),
               subtitle: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,

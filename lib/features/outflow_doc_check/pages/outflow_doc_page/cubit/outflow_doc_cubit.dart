@@ -34,25 +34,26 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
   void postOutFlowDoc(OutFlowDoc doc) async {
     emit(OutFlowDocLoading());
 
-    for (final product in doc.produtos) {
-      if (product.checked < product.quantidade) {
-        emit(const OutFlowDocPostError(Failure(
-            "Existem produtos com conferência INFERIOR a NF",
-            ErrorType.validation)));
+    if (!doc.parcial) {
+      for (final product in doc.produtos) {
+        if (product.checked < product.quantidade) {
+          emit(const OutFlowDocPostError(Failure(
+              "Existem produtos com conferência INFERIOR a NF",
+              ErrorType.validation)));
 
-        emit(OutFlowDocLoaded(doc, null, false, null));
-        return;
-      }
+          emit(OutFlowDocLoaded(doc, null, false, null));
+          return;
+        }
 
-      if (product.checked > product.quantidade) {
-        emit(const OutFlowDocPostError(Failure(
-            "Existem produtos com conferência SUPERIOR a NF",
-            ErrorType.validation)));
-        emit(OutFlowDocLoaded(doc, null, false, null));
-        return;
+        if (product.checked > product.quantidade) {
+          emit(const OutFlowDocPostError(Failure(
+              "Existem produtos com conferência SUPERIOR a NF",
+              ErrorType.validation)));
+          emit(OutFlowDocLoaded(doc, null, false, null));
+          return;
+        }
       }
     }
-
     try {
       final result = await repository.postOutFlowDoc(doc);
       if (result.isRight()) {

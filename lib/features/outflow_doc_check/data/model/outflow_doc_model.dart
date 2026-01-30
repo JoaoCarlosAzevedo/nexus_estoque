@@ -11,6 +11,7 @@ class OutFlowDoc {
   String nomeCliente;
   String notaFiscal;
   String chaveNFe;
+  bool parcial;
 
   OutFlowDoc({
     required this.codigoTransp,
@@ -22,6 +23,7 @@ class OutFlowDoc {
     required this.nomeCliente,
     required this.notaFiscal,
     required this.chaveNFe,
+    required this.parcial,
   });
 
   bool isCompleted() {
@@ -44,6 +46,7 @@ class OutFlowDoc {
       'NomeCliente': nomeCliente,
       'NotaFiscal': notaFiscal,
       'ChaveNFe': chaveNFe,
+      'Parcial': parcial,
     };
   }
 
@@ -59,6 +62,7 @@ class OutFlowDoc {
       nomeCliente: map['NomeCliente'] ?? '',
       notaFiscal: map['NotaFiscal'] ?? '',
       chaveNFe: map['ChaveNFe'] ?? '',
+      parcial: map['parcial'] ?? false,
     );
   }
 
@@ -81,6 +85,7 @@ class Produtos {
   String um;
   bool manualInput;
   bool isBlind;
+  bool lnoQtd;
 
   Produtos({
     required this.descricao,
@@ -95,6 +100,7 @@ class Produtos {
     required this.um,
     required this.manualInput,
     required this.isBlind,
+    required this.lnoQtd,
   });
 
   Map<String, dynamic> toMap() {
@@ -111,6 +117,7 @@ class Produtos {
       'um': um,
       'manualInput': manualInput,
       'isBlind': isBlind,
+      'lnoQtd': lnoQtd,
     };
   }
 
@@ -128,6 +135,7 @@ class Produtos {
       um: map['um'] ?? '',
       manualInput: map['manualInput'] ?? false,
       isBlind: map['confCega'] ?? false,
+      lnoQtd: map['noQtd'] ?? false,
     );
   }
 
