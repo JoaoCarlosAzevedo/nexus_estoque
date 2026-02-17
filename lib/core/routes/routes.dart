@@ -50,6 +50,9 @@ import '../../features/product_tag/product_tag_preview/product_tag_preview.dart'
 import '../../features/purchase_invoice_check/pages/purchase_invoice_list/purchase_invoice_list_page.dart';
 import '../../features/reposition_v2/pages/reposition_v2/reposition_v2_page.dart';
 import '../../features/reposition_v2/pages/reposition_v2_address_list/reposition_v2_address_list_page.dart';
+import '../../features/order_check/data/model/order_check_model.dart';
+import '../../features/order_check/pages/order_check_page.dart';
+import '../../features/order_check/pages/order_check_list_page.dart';
 import '../../features/volume_label/pages/order_detail_page/order_detail_page.dart';
 import '../../features/volume_label/pages/order_selection_page/order_list_selection_page.dart';
 import '../../features/volume_label_v2/pages/volume_label_v2_page.dart';
@@ -129,6 +132,15 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/configuracoes",
             builder: ((context, state) => const EnvironmentConfigPage())),
+        GoRoute(
+            path: "/conferencia_pedidos",
+            builder: ((context, state) => const OrderCheckListPage())),
+        GoRoute(
+            path: "/order_check/:pedido",
+            builder: ((context, state) {
+              final pedido = state.extra as OrderCheckModel;
+              return OrderCheckPage(pedido: pedido);
+            })),
         GoRoute(
             path: "/saidacheck",
             builder: ((context, state) => const OutFlowDocCheckPage())),

@@ -317,6 +317,12 @@ final List<MenuItemInfo> menuItens = [
     route: 'separacao_carga_v2_pedido',
   ),
   MenuItemInfo(
+    title: "Conferência de Pedidos",
+    icon: FontAwesomeIcons.clipboardCheck,
+    color: Colors.red,
+    route: 'conferencia_pedidos',
+  ),
+  MenuItemInfo(
     title: "Conferencia NFe Saida",
     icon: FontAwesomeIcons.rightFromBracket,
     color: Colors.red,
