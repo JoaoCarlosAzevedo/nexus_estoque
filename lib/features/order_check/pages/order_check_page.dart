@@ -22,6 +22,33 @@ bool _isConferenciaCompletaPorSku(List<OrderCheckItemModel> itens) {
   return qtdPorSku.keys.every((cod) => confPorSku[cod] == qtdPorSku[cod]);
 }
 
+class _StatusChip extends StatelessWidget {
+  const _StatusChip({required this.label, required this.color});
+
+  final String label;
+  final MaterialColor color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.shade50,
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: color.shade200),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: color.shade700,
+        ),
+      ),
+    );
+  }
+}
+
 class OrderCheckPage extends ConsumerStatefulWidget {
   const OrderCheckPage({
     super.key,
@@ -383,144 +410,137 @@ class _OrderCheckFeedbackCard extends StatelessWidget {
             : Colors.red.shade600;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      padding: const EdgeInsets.symmetric(horizontal: 0),
+      child: Stack(
+        clipBehavior: Clip.none,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 5, right: 5, bottom: 4),
-            child: Text(
-              "Produto conferido",
-              style: TextStyle(
-                fontSize: isCompact ? 12 : 14,
-                fontWeight: FontWeight.w600,
-                color: Colors.grey[700],
-              ),
+          Card(
+            color: AppColors.background,
+            margin: EdgeInsets.zero,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18),
+              side: BorderSide(color: Colors.grey.shade300),
             ),
-          ),
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Material(
-                color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(12),
-                elevation: 2,
-                child: Container(
-                  margin: const EdgeInsets.only(right: 44),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey.shade300),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 4,
+                    color: accentColor,
                   ),
-                  clipBehavior: Clip.antiAlias,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: 6,
-                        constraints: const BoxConstraints(minHeight: 80),
-                        color: accentColor,
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "Produto conferido",
+                            style: TextStyle(
+                              fontSize: isCompact ? 11 : 12,
+                              fontWeight: FontWeight.w600,
+                              color: accentColor,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            feedback.descProduto ?? feedback.code,
+                            style: TextStyle(
+                              color: AppColors.grey,
+                              fontWeight: FontWeight.w600,
+                              fontSize: isCompact ? 14 : 15,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            "SKU: ${feedback.codProduto ?? feedback.code}",
+                            style: const TextStyle(
+                              color: AppColors.grey,
+                              fontSize: 12,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      feedback.descProduto ?? feedback.code,
-                                      style: TextStyle(
-                                        color: Colors.grey[900],
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Text(
-                                      "SKU: ${feedback.codProduto ?? feedback.code}",
-                                      style: TextStyle(
-                                        color: Colors.grey[600],
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      "Conferido: $totalConf",
-                                      style: TextStyle(
-                                        color: Colors.grey[900],
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                    if (isAbaixo) ...[
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        "Conferência com pendências",
-                                        style: TextStyle(
-                                          color: Colors.amber.shade800,
-                                          fontSize: 13,
-                                        ),
-                                      ),
-                                    ],
-                                    if (isOk) ...[
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        "Conferência OK",
-                                        style: TextStyle(
-                                          color: Colors.teal.shade700,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ],
-                                    if (isAcima) ...[
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        "Quantidade acima do pedido",
-                                        style: TextStyle(
-                                          color: Colors.red.shade700,
-                                          fontSize: 13,
-                                        ),
-                                      ),
-                                    ],
-                                  ],
+                              if (isAbaixo)
+                                const _StatusChip(
+                                  label: "Pendente",
+                                  color: Colors.amber,
+                                ),
+                              if (isOk)
+                                const _StatusChip(
+                                  label: "OK",
+                                  color: Colors.teal,
+                                ),
+                              if (isAcima)
+                                const _StatusChip(
+                                  label: "Excedente",
+                                  color: Colors.red,
+                                ),
+                              const SizedBox(width: 8),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: accentColor.withOpacity(0.15),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  "Conferido: $totalConf",
+                                  style: TextStyle(
+                                    color: accentColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
                                 ),
                               ),
                               IconButton(
                                 onPressed: onEditQuantity,
-                                icon: FaIcon(
+                                icon: const FaIcon(
                                   FontAwesomeIcons.penToSquare,
-                                  color: Colors.grey[700],
+                                  size: 24,
+                                  color: AppColors.grey,
                                 ),
-                              ),
+                              )
                             ],
                           ),
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
-              Positioned(
-                right: 0,
-                top: 0,
-                child: GestureDetector(
-                  onTap: onClose,
-                  child: CircleAvatar(
-                    radius: 16,
-                    backgroundColor: AppColors.primary,
-                    child:
-                        const Icon(Icons.close, color: Colors.white, size: 20),
-                  ),
+            ),
+          ),
+          Positioned(
+            top: -4,
+            right: -4,
+            child: GestureDetector(
+              onTap: onClose,
+              child: Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 4,
+                    ),
+                  ],
                 ),
+                child: Icon(Icons.close, color: Colors.grey.shade700, size: 18),
               ),
-            ],
+            ),
           ),
         ],
       ),
@@ -538,103 +558,108 @@ class _OrderCheckFeedbackCard extends StatelessWidget {
     final accentColor = isError ? Colors.red.shade600 : Colors.amber.shade600;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      padding: const EdgeInsets.symmetric(horizontal: 0),
+      child: Stack(
+        clipBehavior: Clip.none,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 5, right: 5, bottom: 4),
-            child: Text(
-              "Produto conferido",
-              style: TextStyle(
-                fontSize: isCompact ? 12 : 14,
-                fontWeight: FontWeight.w600,
-                color: Colors.grey[700],
+          Card(
+            color: AppColors.background,
+            margin: EdgeInsets.zero,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(color: Colors.grey.shade300),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 4,
+                    color: accentColor,
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            icon,
+                            color: accentColor,
+                            size: 24,
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  "Produto conferido",
+                                  style: TextStyle(
+                                    fontSize: isCompact ? 11 : 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: accentColor,
+                                    letterSpacing: 0.5,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  title,
+                                  style: TextStyle(
+                                    color: AppColors.grey,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: isCompact ? 14 : 15,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  subtitle,
+                                  style: TextStyle(
+                                    color: AppColors.grey,
+                                    fontSize: 12,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Material(
-                color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(12),
-                elevation: 2,
-                child: Container(
-                  margin: const EdgeInsets.only(right: 44),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey.shade300),
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: 6,
-                        constraints: const BoxConstraints(minHeight: 60),
-                        color: accentColor,
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Icon(
-                                icon,
-                                color: accentColor,
-                                size: 28,
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      title,
-                                      style: TextStyle(
-                                        color: Colors.grey[900],
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      subtitle,
-                                      style: TextStyle(
-                                        color: Colors.grey[600],
-                                        fontSize: 13,
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+          Positioned(
+            top: -4,
+            right: -4,
+            child: GestureDetector(
+              onTap: onClose,
+              child: Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 4,
+                    ),
+                  ],
+                ),
+                child: Icon(
+                  Icons.close,
+                  color: Colors.grey.shade700,
+                  size: 18,
                 ),
               ),
-              Positioned(
-                right: 0,
-                top: 0,
-                child: GestureDetector(
-                  onTap: onClose,
-                  child: CircleAvatar(
-                    radius: 16,
-                    backgroundColor: AppColors.primary,
-                    child:
-                        const Icon(Icons.close, color: Colors.white, size: 20),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ],
       ),
@@ -723,9 +748,15 @@ class _OrderCheckItemCard extends StatelessWidget {
   final OrderCheckItemModel item;
   final bool isCompact;
 
+  Color _getConferidoChipColor() {
+    if (item.conferido == 0) return Colors.grey;
+    if (item.conferido < item.quantidade) return Colors.orange;
+    if (item.conferido == item.quantidade) return Colors.green;
+    return Colors.red; // exceder
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isConferido = item.conferido >= item.quantidade;
     final chipFontSize = isCompact ? 11.0 : 12.0;
     final padding = isCompact ? 12.0 : 16.0;
 
@@ -756,23 +787,12 @@ class _OrderCheckItemCard extends StatelessWidget {
               ),
             ),
             SizedBox(height: isCompact ? 4 : 6),
-            Wrap(
-              spacing: 6,
-              runSpacing: 4,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 _buildStatusChip(
-                  "Qtd: ${item.quantidade}",
-                  Colors.blue,
-                  chipFontSize,
-                ),
-                _buildStatusChip(
-                  "Sep: ${item.separado}",
-                  Colors.orange,
-                  chipFontSize,
-                ),
-                _buildStatusChip(
                   "Conf: ${item.conferido}",
-                  isConferido ? Colors.green : Colors.grey,
+                  _getConferidoChipColor(),
                   chipFontSize,
                 ),
               ],

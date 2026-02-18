@@ -77,9 +77,11 @@ class OrderCheckNotifier extends StateNotifier<OrderCheckState> {
     for (int i = 0; i < itens.length; i++) {
       final item = itens[i];
       final codProduto = item.codProduto.trim();
-      final matches = codProduto == trimmedCode ||
-          codProduto.endsWith(trimmedCode) ||
-          trimmedCode.endsWith(codProduto);
+      final barcode = item.barcode.trim();
+      final barcode2 = item.barcode2.trim();
+      final matches = codProduto.trim() == trimmedCode ||
+          barcode.trim() == trimmedCode ||
+          barcode2.trim() == trimmedCode;
 
       if (matches) {
         lastMatchIndex = i;

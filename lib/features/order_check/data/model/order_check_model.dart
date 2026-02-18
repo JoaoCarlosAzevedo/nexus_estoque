@@ -52,6 +52,8 @@ class OrderCheckModel {
 class OrderCheckItemModel {
   final String item;
   final String codProduto;
+  final String barcode;
+  final String barcode2;
   final String descProduto;
   final int quantidade;
   final int conferido;
@@ -66,12 +68,16 @@ class OrderCheckItemModel {
     required this.conferido,
     required this.separado,
     required this.recno,
+    required this.barcode,
+    required this.barcode2,
   });
 
   factory OrderCheckItemModel.fromJson(Map<String, dynamic> json) {
     return OrderCheckItemModel(
       item: json['item']?.toString() ?? '',
       codProduto: json['codProduto']?.toString() ?? '',
+      barcode: json['codigobarras']?.toString() ?? '',
+      barcode2: json['codigobarras2']?.toString() ?? '',
       descProduto: json['descProduto']?.toString() ?? '',
       quantidade: json['quantidade'] is int
           ? json['quantidade'] as int
@@ -108,10 +114,14 @@ class OrderCheckItemModel {
     int? conferido,
     int? separado,
     int? recno,
+    String? barcode,
+    String? barcode2,
   }) {
     return OrderCheckItemModel(
       item: item ?? this.item,
       codProduto: codProduto ?? this.codProduto,
+      barcode: barcode ?? this.barcode,
+      barcode2: barcode2 ?? this.barcode2,
       descProduto: descProduto ?? this.descProduto,
       quantidade: quantidade ?? this.quantidade,
       conferido: conferido ?? this.conferido,
