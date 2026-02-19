@@ -59,6 +59,8 @@ class OrderCheckItemModel {
   final int conferido;
   final int separado;
   final int recno;
+  final bool isBlind;
+  final double fator;
 
   OrderCheckItemModel({
     required this.item,
@@ -70,6 +72,8 @@ class OrderCheckItemModel {
     required this.recno,
     required this.barcode,
     required this.barcode2,
+    required this.isBlind,
+    required this.fator,
   });
 
   factory OrderCheckItemModel.fromJson(Map<String, dynamic> json) {
@@ -91,6 +95,8 @@ class OrderCheckItemModel {
       recno: json['recno'] is int
           ? json['recno'] as int
           : int.tryParse(json['recno']?.toString() ?? '0') ?? 0,
+      isBlind: json['confCega'] ?? false,
+      fator: json['fator']?.toDouble() ?? 0,
     );
   }
 
@@ -103,6 +109,8 @@ class OrderCheckItemModel {
       'conferido': conferido,
       'separado': separado,
       'recno': recno,
+      'confCega': isBlind,
+      'fator': fator,
     };
   }
 
@@ -116,6 +124,8 @@ class OrderCheckItemModel {
     int? recno,
     String? barcode,
     String? barcode2,
+    bool? isBlind,
+    double? fator,
   }) {
     return OrderCheckItemModel(
       item: item ?? this.item,
@@ -127,6 +137,8 @@ class OrderCheckItemModel {
       conferido: conferido ?? this.conferido,
       separado: separado ?? this.separado,
       recno: recno ?? this.recno,
+      isBlind: isBlind ?? this.isBlind,
+      fator: fator ?? this.fator,
     );
   }
 }

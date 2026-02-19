@@ -99,7 +99,11 @@ class OrderCheckNotifier extends StateNotifier<OrderCheckState> {
 
     if (indexToUpdate != null) {
       final item = itens[indexToUpdate];
-      itens[indexToUpdate] = item.copyWith(conferido: item.conferido + 1);
+      final matchedBarcode2 = item.barcode2.trim() == trimmedCode;
+      final increment = (matchedBarcode2 && item.fator != 0)
+          ? item.fator.round()
+          : 1;
+      itens[indexToUpdate] = item.copyWith(conferido: item.conferido + increment);
       final itensComSku =
           itens.where((i) => i.codProduto.trim() == item.codProduto.trim());
       final totalConf = itensComSku.fold<int>(0, (sum, i) => sum + i.conferido);
