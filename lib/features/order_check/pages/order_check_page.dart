@@ -97,7 +97,7 @@ class _OrderCheckPageState extends ConsumerState<OrderCheckPage> {
       isScrollControlled: true,
       builder: (context) => _OrderCheckQuantityModal(
         codProduto: feedback.codProduto!,
-        descProduto: feedback.descProduto ?? '',
+        descProduto: feedback.isBlind ? '' : (feedback.descProduto ?? ''),
         currentQuantity: totalConf,
       ),
     );
@@ -448,7 +448,9 @@ class _OrderCheckFeedbackCard extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            feedback.descProduto ?? feedback.code,
+                            feedback.isBlind
+                                ? (feedback.codProduto ?? feedback.code)
+                                : (feedback.descProduto ?? feedback.code),
                             style: TextStyle(
                               color: AppColors.grey,
                               fontWeight: FontWeight.w600,
@@ -711,7 +713,9 @@ class _OrderCheckQuantityModalState extends State<_OrderCheckQuantityModal> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              "${widget.codProduto} - ${widget.descProduto}",
+              widget.descProduto.isNotEmpty
+                  ? "${widget.codProduto} - ${widget.descProduto}"
+                  : widget.codProduto,
               style: Theme.of(context).textTheme.titleMedium,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -770,7 +774,9 @@ class _OrderCheckItemCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "${item.item}-${item.descProduto}",
+              item.isBlind
+                  ? "${item.item}-${item.codProduto}"
+                  : "${item.item}-${item.descProduto}",
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: isCompact ? 13 : 14,
@@ -845,6 +851,7 @@ class _ConferidosTab extends StatelessWidget {
           descProduto: existente.descProduto,
           totalQuantidade: existente.totalQuantidade + item.quantidade,
           totalConferido: existente.totalConferido + item.conferido,
+          isBlind: existente.isBlind || item.isBlind,
         );
       } else {
         map[item.codProduto] = _SkuConferido(
@@ -852,6 +859,7 @@ class _ConferidosTab extends StatelessWidget {
           descProduto: item.descProduto,
           totalQuantidade: item.quantidade,
           totalConferido: item.conferido,
+          isBlind: item.isBlind,
         );
       }
     }
@@ -1020,12 +1028,14 @@ class _SkuConferido {
     required this.descProduto,
     required this.totalQuantidade,
     required this.totalConferido,
+    required this.isBlind,
   });
 
   final String codProduto;
   final String descProduto;
   final int totalQuantidade;
   final int totalConferido;
+  final bool isBlind;
 }
 
 class _ConferidoSkuCard extends StatelessWidget {
@@ -1060,7 +1070,7 @@ class _ConferidoSkuCard extends StatelessWidget {
                       fontSize: isCompact ? 13 : 14,
                     ),
                   ),
-                  if (sku.descProduto.isNotEmpty) ...[
+                  if (!sku.isBlind && sku.descProduto.isNotEmpty) ...[
                     SizedBox(height: isCompact ? 2 : 4),
                     Text(
                       sku.descProduto,

@@ -14,6 +14,7 @@ class OrderCheckScanFeedback {
   final String? descProduto;
   final int totalConferido;
   final int totalQuantidade;
+  final bool isBlind;
 
   const OrderCheckScanFeedback({
     required this.code,
@@ -23,6 +24,7 @@ class OrderCheckScanFeedback {
     this.descProduto,
     this.totalConferido = 0,
     this.totalQuantidade = 0,
+    this.isBlind = false,
   });
 }
 
@@ -117,6 +119,7 @@ class OrderCheckNotifier extends StateNotifier<OrderCheckState> {
           descProduto: item.descProduto,
           totalConferido: totalConf,
           totalQuantidade: totalQtd,
+          isBlind: item.isBlind,
         ),
       );
       AudioService.beep();
