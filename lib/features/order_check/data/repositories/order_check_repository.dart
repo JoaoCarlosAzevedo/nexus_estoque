@@ -32,8 +32,7 @@ class OrderCheckRepository {
       }
 
       final list = (response.data as List)
-          .map((item) =>
-              OrderCheckModel.fromJson(item as Map<String, dynamic>))
+          .map((item) => OrderCheckModel.fromJson(item as Map<String, dynamic>))
           .toList();
 
       return Right(list);
@@ -55,20 +54,28 @@ class OrderCheckRepository {
   }
 
   Future<Either<Failure, Unit>> postConferencia(
-    List<OrderCheckItemModel> itens,
-  ) async {
+    List<OrderCheckItemModel> itens, {
+    required String pedido,
+    required int volumes,
+  }) async {
     final String url = await Config.baseURL;
-    final jsonList = itens
+    final conferencia = itens
         .map((e) => {
               'recno': e.recno,
               'conferido': e.conferido,
             })
         .toList();
 
+    final data = {
+      'conferencia': conferencia,
+      'pedido': pedido,
+      'volumes': volumes,
+    };
+
     try {
       final response = await dio.post(
         '$url/api/v2/conferencia/pedidos',
-        data: jsonList,
+        data: data,
       );
 
       if (response.statusCode != 200 && response.statusCode != 201) {

@@ -115,7 +115,7 @@ class _OrderCheckPageState extends ConsumerState<OrderCheckPage> {
     final itens = ref.read(orderCheckNotifierProvider(widget.pedido)).itens;
     if (itens.isEmpty) return;
 
-    final confirmed = await showDialog<bool>(
+    final confirmResult = await showDialog<_ConfirmacaoResult>(
       context: context,
       barrierDismissible: false,
       builder: (context) => _ConfirmacaoConferenciaDialog(
@@ -124,17 +124,21 @@ class _OrderCheckPageState extends ConsumerState<OrderCheckPage> {
       ),
     );
 
-    if (!mounted || confirmed != true) return;
+    if (!mounted || confirmResult == null || !confirmResult.confirmed) return;
 
     setState(() => _isSaving = true);
 
     final repository = ref.read(orderCheckRepositoryProvider);
-    final result = await repository.postConferencia(itens);
+    final postResult = await repository.postConferencia(
+      itens,
+      pedido: widget.pedido.pedido,
+      volumes: confirmResult.volumes,
+    );
 
     if (!mounted) return;
     setState(() => _isSaving = false);
 
-    result.fold(
+    postResult.fold(
       (failure) => ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(failure.error),
@@ -1118,7 +1122,13 @@ class _ConferidoSkuCard extends StatelessWidget {
   }
 }
 
-class _ConfirmacaoConferenciaDialog extends StatelessWidget {
+class _ConfirmacaoResult {
+  const _ConfirmacaoResult({required this.confirmed, required this.volumes});
+  final bool confirmed;
+  final int volumes;
+}
+
+class _ConfirmacaoConferenciaDialog extends StatefulWidget {
   const _ConfirmacaoConferenciaDialog({
     required this.pedido,
     required this.itens,
@@ -1128,9 +1138,30 @@ class _ConfirmacaoConferenciaDialog extends StatelessWidget {
   final List<OrderCheckItemModel> itens;
 
   @override
+  State<_ConfirmacaoConferenciaDialog> createState() =>
+      _ConfirmacaoConferenciaDialogState();
+}
+
+class _ConfirmacaoConferenciaDialogState
+    extends State<_ConfirmacaoConferenciaDialog> {
+  late final TextEditingController _volumesController;
+
+  @override
+  void initState() {
+    super.initState();
+    _volumesController = TextEditingController(text: '0');
+  }
+
+  @override
+  void dispose() {
+    _volumesController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // Considera todos os itens do pedido: divergência quando conferido != quantidade
-    final temDivergencia = itens.any((i) => i.conferido != i.quantidade);
+    final temDivergencia = widget.itens.any((i) => i.conferido != i.quantidade);
 
     final screenWidth = MediaQuery.sizeOf(context).width;
     final isCompact = screenWidth < 360;
@@ -1149,7 +1180,10 @@ class _ConfirmacaoConferenciaDialog extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: () => Navigator.of(context).pop(false),
+            onPressed: () => Navigator.of(context).pop(const _ConfirmacaoResult(
+              confirmed: false,
+              volumes: 0,
+            )),
             icon: const Icon(Icons.close),
             tooltip: "Fechar",
             padding: EdgeInsets.zero,
@@ -1165,7 +1199,7 @@ class _ConfirmacaoConferenciaDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Pedido ${pedido.pedido} - ${pedido.cliente}",
+            "Pedido ${widget.pedido.pedido} - ${widget.pedido.cliente}",
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Colors.grey[600],
                   fontSize: isCompact ? 12 : 14,
@@ -1216,6 +1250,16 @@ class _ConfirmacaoConferenciaDialog extends StatelessWidget {
             ),
           ),
           SizedBox(height: isCompact ? 12 : 16),
+          Text(
+            "Quantidade de volumes",
+            style: TextStyle(
+              fontSize: isCompact ? 13 : 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey[800],
+            ),
+          ),
+          SizedBox(height: isCompact ? 6 : 8),
+          InputQuantityInt(controller: _volumesController),
         ],
       ),
       actions: [
@@ -1224,7 +1268,10 @@ class _ConfirmacaoConferenciaDialog extends StatelessWidget {
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
           ),
-          onPressed: () => Navigator.of(context).pop(false),
+          onPressed: () => Navigator.of(context).pop(const _ConfirmacaoResult(
+            confirmed: false,
+            volumes: 0,
+          )),
           child: const Text("Cancelar"),
         ),
         const SizedBox(width: 8),
@@ -1233,8 +1280,14 @@ class _ConfirmacaoConferenciaDialog extends StatelessWidget {
             backgroundColor: Colors.green,
             foregroundColor: Colors.white,
           ),
-          onPressed: () => Navigator.of(context).pop(true),
-          child: Text(isCompact ? "Confirmar" : "Confirmar"),
+          onPressed: () {
+            final volumes = int.tryParse(_volumesController.text) ?? 0;
+            Navigator.of(context).pop(_ConfirmacaoResult(
+              confirmed: true,
+              volumes: volumes,
+            ));
+          },
+          child: const Text("Confirmar"),
         ),
       ],
     );
