@@ -1169,6 +1169,8 @@ class _ConfirmacaoConferenciaDialogState
         ? const EdgeInsets.symmetric(horizontal: 12, vertical: 16)
         : const EdgeInsets.symmetric(horizontal: 24, vertical: 24);
 
+    final keyboardBottom = MediaQuery.of(context).viewInsets.bottom;
+
     return AlertDialog(
       insetPadding: insetPadding,
       title: Row(
@@ -1194,12 +1196,17 @@ class _ConfirmacaoConferenciaDialogState
           ),
         ],
       ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Pedido ${widget.pedido.pedido} - ${widget.pedido.cliente}",
+      content: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.only(
+            bottom: keyboardBottom > 0 ? keyboardBottom : 24,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Pedido ${widget.pedido.pedido} - ${widget.pedido.cliente}",
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Colors.grey[600],
                   fontSize: isCompact ? 12 : 14,
@@ -1260,36 +1267,42 @@ class _ConfirmacaoConferenciaDialogState
           ),
           SizedBox(height: isCompact ? 6 : 8),
           InputQuantityInt(controller: _volumesController),
-        ],
+            ],
+          ),
+        ),
       ),
-      actions: [
-        OutlinedButton(
-          style: OutlinedButton.styleFrom(
-            backgroundColor: Colors.red,
-            foregroundColor: Colors.white,
-          ),
-          onPressed: () => Navigator.of(context).pop(const _ConfirmacaoResult(
-            confirmed: false,
-            volumes: 0,
-          )),
-          child: const Text("Cancelar"),
-        ),
-        const SizedBox(width: 8),
-        FilledButton(
-          style: FilledButton.styleFrom(
-            backgroundColor: Colors.green,
-            foregroundColor: Colors.white,
-          ),
-          onPressed: () {
-            final volumes = int.tryParse(_volumesController.text) ?? 0;
-            Navigator.of(context).pop(_ConfirmacaoResult(
-              confirmed: true,
-              volumes: volumes,
-            ));
-          },
-          child: const Text("Confirmar"),
-        ),
-      ],
+      actions: keyboardBottom > 0
+          ? null
+          : [
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () => Navigator.of(context).pop(
+                    const _ConfirmacaoResult(
+                  confirmed: false,
+                  volumes: 0,
+                )),
+                child: const Text("Cancelar"),
+              ),
+              const SizedBox(width: 8),
+              FilledButton(
+                style: FilledButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () {
+                  final volumes =
+                      int.tryParse(_volumesController.text) ?? 0;
+                  Navigator.of(context).pop(_ConfirmacaoResult(
+                    confirmed: true,
+                    volumes: volumes,
+                  ));
+                },
+                child: const Text("Confirmar"),
+              ),
+            ],
     );
   }
 }

@@ -92,8 +92,8 @@ class OrderCheckRepository {
 
       final message = e.response?.data != null &&
               e.response?.data is Map &&
-              (e.response!.data as Map)['message'] != null
-          ? (e.response!.data as Map)['message'].toString()
+              (e.response!.data as Map)['errorMessage'] != null
+          ? (e.response!.data as Map)['errorMessage'].toString()
           : "Erro ao enviar conferência.";
 
       return Left(Failure(message, ErrorType.exception));
