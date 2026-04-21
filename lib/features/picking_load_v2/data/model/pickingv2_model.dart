@@ -43,6 +43,7 @@ class Pickingv2Model {
 
   bool lSKUonly;
   bool lnoQtd;
+  bool lEtiqPed;
 
   Pickingv2Model(
       {required this.descricao,
@@ -78,6 +79,7 @@ class Pickingv2Model {
       required this.qtdMax,
       required this.lSKUonly,
       required this.lnoQtd,
+      required this.lEtiqPed,
       required this.retira,
       required this.rua});
 
@@ -113,6 +115,7 @@ class Pickingv2Model {
       'qtdMax': qtdMax,
       'lSKUonly': lSKUonly,
       'lnoQtd': lnoQtd,
+      'etiqPed': lEtiqPed,
       'retira': retira,
     };
   }
@@ -154,6 +157,7 @@ class Pickingv2Model {
       lSKUonly: map['skuOnly'] ?? false,
       lnoQtd: map['noQtd'] ?? false,
       retira: map['retira'] ?? '',
+      lEtiqPed: map['etiqPed'] ?? false,
     );
   }
 

@@ -65,6 +65,24 @@ class VolumeLabelRepository {
     }
   }
 
+  Future<String> getOrderLabel(String order) async {
+    final String url = await Config.baseURL;
+    try {
+      final response = await dio.get('$url/separacao/etiqueta/$order');
+
+      if (response.statusCode == 200) {
+        return response.data['zpl'] ?? '';
+      } else {
+        throw const Failure("Erro ao gerar etiqueta.", ErrorType.exception);
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 400) {
+        throw Failure(e.response?.data["message"], ErrorType.validation);
+      }
+      throw const Failure("Erro na requisicao", ErrorType.exception);
+    }
+  }
+
   Future<List<OrderLabelModel>> gerOrders() async {
     final String url = await Config.baseURL;
     try {
