@@ -30,11 +30,13 @@ class FilterTagOrderModel {
       pedido: map['pedido'] ?? '',
       embalagem: map['embalagem'] ?? '',
       etiqueta: map['etiqueta'] ?? '',
-      itens: List<FilterTagProductModel>.from(
-        map['itens']?.map(
-          (x) => FilterTagProductModel.fromMap(x),
-        ),
-      ),
+      itens: map['itens'] == null
+          ? []
+          : List<FilterTagProductModel>.from(
+              (map['itens'] as List).map(
+                (x) => FilterTagProductModel.fromMap(x as Map<String, dynamic>),
+              ),
+            ),
     );
   }
 

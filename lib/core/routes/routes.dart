@@ -38,6 +38,7 @@ import '../../features/filter_tags/pages/filter_tags_load_page/filter_tags_load_
 import '../../features/filter_tags_orders/pages/filter_tags_load_list_page/filter_tags_order_load_list_page.dart';
 import '../../features/filter_tags_orders/pages/filter_tags_order_load_page/filter_tags_order_load_page.dart';
 import '../../features/filter_tags_orders/pages/filter_tags_orders_by_date_page/filter_tags_orders_by_date_page.dart';
+import '../../features/filter_tags_orders/pages/filter_tags_orders_v3_page/filter_tags_orders_v3_page.dart';
 import '../../features/import_invoice/pages/import_invoice_page.dart';
 import '../../features/inventory/pages/inventory_page.dart';
 import '../../features/picking_load/pages/picking_load_list_page/picking_load_list_page.dart';
@@ -284,6 +285,12 @@ final routerProvider = Provider<GoRouter>((ref) {
           path: "/etiqueta_volume_pedidos",
           builder: ((context, state) {
             return const FilterTagsOrdersbyDatePage();
+          }),
+        ),
+        GoRoute(
+          path: "/etiqueta_pedidos_v3",
+          builder: ((context, state) {
+            return const FilterTagsOrdersV3Page();
           }),
         ),
         GoRoute(

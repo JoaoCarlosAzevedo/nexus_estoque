@@ -4,7 +4,7 @@ abstract class FilterTagLoadOrderState extends Equatable {
   const FilterTagLoadOrderState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class FilterTagLoadInitial extends FilterTagLoadOrderState {}
@@ -16,11 +16,19 @@ class FilterTagLoadLoaded extends FilterTagLoadOrderState {
   final String etiqueta;
   final LoadOrder load;
   final Orders? selectedInvoice;
-  const FilterTagLoadLoaded(
-      {required this.load,
-      required this.selectedInvoice,
-      required this.error,
-      required this.etiqueta});
+  final List<FilterTagOrderModel> etiquetas;
+
+  const FilterTagLoadLoaded({
+    required this.load,
+    required this.selectedInvoice,
+    required this.error,
+    required this.etiqueta,
+    this.etiquetas = const [],
+  });
+
+  @override
+  List<Object?> get props =>
+      [error, etiqueta, load, selectedInvoice, etiquetas];
 }
 
 class FilterTagLoadError extends FilterTagLoadOrderState {
