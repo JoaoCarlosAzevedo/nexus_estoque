@@ -152,6 +152,24 @@ class _PickingFormv2GroupedState extends ConsumerState<PickingFormv2Grouped>
                           autoFocus: true,
                           focusNode: productFocus,
                           onSubmitted: (value) {
+                            if (value.contains('ETIQ/\$PLM')) {
+                              final parts = value.split('\$');
+                              if (parts.length >= 4) {
+                                final sku = parts[2].trim();
+                                final qty =
+                                    double.tryParse(parts[3].trim()) ?? 0;
+
+                                productController.text = sku;
+
+                                if (validateData()) {
+                                  productFocus.requestFocus();
+                                  increment(context, qty);
+                                }
+                                productController.clear();
+                                return;
+                              }
+                            }
+
                             if (validateData()) {
                               productFocus.requestFocus();
                               increment(context, 1);
@@ -159,7 +177,7 @@ class _PickingFormv2GroupedState extends ConsumerState<PickingFormv2Grouped>
                             productController.clear();
                           },
                           controller: productController,
-                          label: "Confirmação do Produto",
+                          label: "Confirmação do Produtos",
                         ),
                         const Divider(),
                         InputQuantity(
