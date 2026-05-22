@@ -7,7 +7,7 @@ import 'address_search_page.dart';
 
 class AllAddressSearchModal {
   static Future<dynamic> show(
-    context,
+    BuildContext context,
   ) async {
     {
       final result = await showModalBottomSheet<dynamic>(
@@ -59,39 +59,30 @@ class AllAddressSearchPageState extends ConsumerState<AddressSearchPage> {
       ),
       body: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              //const Text("Busca Endereços"),
-              Row(
-                children: [
-                  Radio<SearchType>(
-                    value: SearchType.all,
-                    groupValue: searchSelected,
-                    onChanged: (SearchType? value) {
-                      setState(() {
-                        searchSelected = value!;
-                      });
-                    },
-                  ),
-                  const Text("Todos")
-                ],
-              ),
-              Row(
-                children: [
-                  Radio<SearchType>(
-                    value: SearchType.balance,
-                    groupValue: searchSelected,
-                    onChanged: (SearchType? value) {
-                      setState(() {
-                        searchSelected = value!;
-                      });
-                    },
-                  ),
-                  const Text("Saldo")
-                ],
-              ),
-            ],
+          RadioGroup<SearchType>(
+            groupValue: searchSelected,
+            onChanged: (SearchType? value) {
+              setState(() {
+                searchSelected = value!;
+              });
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    Radio<SearchType>(value: SearchType.all),
+                    const Text("Todos"),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Radio<SearchType>(value: SearchType.balance),
+                    const Text("Saldo"),
+                  ],
+                ),
+              ],
+            ),
           ),
           Expanded(
             child: searchSelected == SearchType.all

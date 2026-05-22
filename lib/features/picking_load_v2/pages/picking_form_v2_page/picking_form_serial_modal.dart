@@ -9,7 +9,7 @@ import '../../data/model/pickingv2_model.dart';
 
 class SerialListModal {
   static Future<double> show(
-      context, Pickingv2Model picking, List<String> seriais) async {
+      BuildContext context, Pickingv2Model picking, List<String> seriais) async {
     {
       final result = await showModalBottomSheet<dynamic>(
         context: context,
@@ -146,7 +146,7 @@ class _ListSerialState extends ConsumerState<ListSerial> with ValidationMixi {
     );
   }
 
-  void showValidation(context, String message) {
+  void showValidation(BuildContext context, String message) {
     AwesomeDialog(
             context: context,
             dialogType: DialogType.error,

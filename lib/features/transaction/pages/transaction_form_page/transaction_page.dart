@@ -50,7 +50,7 @@ class ProductTransactionPage extends ConsumerWidget {
     );
   }
 
-  void showError(context, String error) {
+  void showError(BuildContext context, String error) {
     AwesomeDialog(
             context: context,
             dialogType: DialogType.error,

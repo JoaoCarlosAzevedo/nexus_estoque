@@ -6,7 +6,7 @@ import '../../../data/model/filter_tag_load_order_model.dart';
 
 class PurchaseFilterTagProductOrderQuantityModal {
   static Future<double?> show(
-      context, OrdersProduct produto, double checked) async {
+      BuildContext context, OrdersProduct produto, double checked) async {
     {
       final result = await showModalBottomSheet<double>(
         context: context,

@@ -6,7 +6,7 @@ import '../../../data/model/purchase_invoice_model.dart';
 
 class PurchasePurchaseCheckQuantityModal {
   static Future<double?> show(
-      context, PurchaseInvoiceProduct produto, double checked) async {
+      BuildContext context, PurchaseInvoiceProduct produto, double checked) async {
     {
       final result = await showModalBottomSheet<double>(
         context: context,

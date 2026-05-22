@@ -65,6 +65,7 @@ class _FilterTagsOrdersbyDatePageState
                 IconButton(
                     onPressed: () async {
                       await pickeDateRange(context);
+                      if (!context.mounted) return;
                       context
                           .read<FilterTagLoadOrderCubit>()
                           .fetchLoad("0-$dateIni-$dateEnd", "", null);

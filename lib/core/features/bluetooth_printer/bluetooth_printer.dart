@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import '../../services/bt_printer.dart';
 
 class BluetoothPageModal {
-  static Future<bool> show(context) async {
+  // ignore: strict_top_level_inference
+  static Future<bool> show(BuildContext context) async {
     final result = await showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,

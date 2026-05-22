@@ -5,7 +5,7 @@ import 'package:nexus_estoque/core/features/searches/clients/data/model/client_m
 import 'package:nexus_estoque/core/features/searches/clients/providers/remote_client_provider.dart';
 
 class ClientSearchModal {
-  static Future<ClientModel?> show(context) async {
+  static Future<ClientModel?> show(BuildContext context) async {
     {
       final result = await showModalBottomSheet<dynamic>(
         context: context,

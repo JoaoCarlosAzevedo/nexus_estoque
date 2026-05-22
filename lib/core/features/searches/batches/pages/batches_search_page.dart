@@ -11,7 +11,7 @@ import 'package:nexus_estoque/features/transaction/pages/transaction_form_page/w
 
 class BatchSearchModal {
   static Future<String> show(
-      context, ProductBalanceModel product, String warehouse, Tm tm) async {
+      BuildContext context, ProductBalanceModel product, String warehouse, Tm tm) async {
     {
       final result = await showModalBottomSheet<dynamic>(
         context: context,
@@ -39,7 +39,7 @@ class BatchSearchModal {
 }
 
 class BatchSearchModalv2 {
-  static Future<String> show(context, String codigo, String warehouse) async {
+  static Future<String> show(BuildContext context, String codigo, String warehouse) async {
     {
       final result = await showModalBottomSheet<dynamic>(
         context: context,

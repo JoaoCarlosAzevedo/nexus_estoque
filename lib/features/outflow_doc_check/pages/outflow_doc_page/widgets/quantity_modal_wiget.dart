@@ -3,7 +3,7 @@ import 'package:nexus_estoque/features/outflow_doc_check/data/model/outflow_doc_
 import 'package:nexus_estoque/features/transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity.dart';
 
 class CheckQuantityModal {
-  static Future<double?> show(context, Produtos produto, double checked) async {
+  static Future<double?> show(BuildContext context, Produtos produto, double checked) async {
     {
       final result = await showModalBottomSheet<double>(
         context: context,

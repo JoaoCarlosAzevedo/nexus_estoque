@@ -5,7 +5,7 @@ import '../../../../../core/features/searches/products/data/model/product_model.
 import '../../../../../core/theme/app_colors.dart';
 
 class DunQuantityModal {
-  static Future<double?> show(context, ProductModel produto) async {
+  static Future<double?> show(BuildContext context, ProductModel produto) async {
     {
       final result = await showModalBottomSheet<double>(
         context: context,

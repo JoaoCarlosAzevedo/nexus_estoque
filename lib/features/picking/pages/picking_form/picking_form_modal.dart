@@ -12,7 +12,7 @@ import '../../../../core/utils/error_dialog.dart';
 import '../../../transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity_int.dart';
 
 class PickingFormModal {
-  static Future<dynamic> show(context, PickingModel picking) async {
+  static Future<dynamic> show(BuildContext context, PickingModel picking) async {
     {
       final result = await showModalBottomSheet<dynamic>(
         context: context,
@@ -282,7 +282,7 @@ class _PickingFormState extends ConsumerState<PickingForm> with ValidationMixi {
     }
   }
 
-  void showValidation(context, String message) {
+  void showValidation(BuildContext context, String message) {
     AwesomeDialog(
             context: context,
             dialogType: DialogType.error,

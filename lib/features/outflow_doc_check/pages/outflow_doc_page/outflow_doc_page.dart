@@ -35,7 +35,7 @@ class _OutFlowDocCheckPageState extends ConsumerState<OutFlowDocCheckPage> {
     final height = MediaQuery.of(context).size.height;
     return PopScope(
       canPop: false,
-      onPopInvoked: (bool didPop) async {
+      onPopInvokedWithResult: (bool didPop, _) async {
         if (didPop) {
           return;
         }

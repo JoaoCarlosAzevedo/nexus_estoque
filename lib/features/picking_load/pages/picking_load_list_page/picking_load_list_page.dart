@@ -69,7 +69,7 @@ class _PickingLoadListPageState extends ConsumerState<PickingLoadListPage> {
                               ),
                               Switch(
                                 value: isPending,
-                                activeColor: Colors.green,
+                                activeThumbColor: Colors.green,
                                 inactiveTrackColor: Colors.grey,
                                 onChanged: (bool value) {
                                   // This is called when the user toggles the switch.

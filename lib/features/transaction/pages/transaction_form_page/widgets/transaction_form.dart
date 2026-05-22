@@ -71,40 +71,31 @@ class _TransactionFormPageState extends State<TransactionFormPage>
               padding: const EdgeInsets.only(right: 8.0, left: 8.0),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        children: [
-                          Radio<Tm>(
-                            value: Tm.entrada,
-                            groupValue: tmSelected,
-                            onChanged: (Tm? value) {
-                              setState(() {
-                                tmSelected = value;
-                                batchDateController.clear();
-                              });
-                            },
-                          ),
-                          const Text("Entrada")
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Radio<Tm>(
-                            value: Tm.saida,
-                            groupValue: tmSelected,
-                            onChanged: (Tm? value) {
-                              setState(() {
-                                tmSelected = value;
-                                batchDateController.clear();
-                              });
-                            },
-                          ),
-                          const Text("Saida")
-                        ],
-                      ),
-                    ],
+                  RadioGroup<Tm>(
+                    groupValue: tmSelected,
+                    onChanged: (Tm? value) {
+                      setState(() {
+                        tmSelected = value;
+                        batchDateController.clear();
+                      });
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Radio<Tm>(value: Tm.entrada),
+                            const Text("Entrada"),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Radio<Tm>(value: Tm.saida),
+                            const Text("Saida"),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,

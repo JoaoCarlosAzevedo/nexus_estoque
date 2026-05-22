@@ -79,7 +79,7 @@ class _PickingLoadV2ListWidgetState
             ),
             Switch(
               value: filterFaturado,
-              activeColor: Colors.green,
+              activeThumbColor: Colors.green,
               inactiveTrackColor: Colors.grey,
               onChanged: (bool value) {
                 // This is called when the user toggles the switch.

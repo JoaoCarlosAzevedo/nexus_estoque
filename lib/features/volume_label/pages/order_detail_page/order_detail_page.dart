@@ -246,7 +246,7 @@ void showLoading(BuildContext context, String order, String numExp,
             data: (a) {
               return Container();
             },
-            error: (_, __) {
+            error: (_, _) {
               return Container();
             },
             loading: () => Column(

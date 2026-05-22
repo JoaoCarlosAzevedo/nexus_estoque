@@ -25,8 +25,6 @@ class AppTheme {
         surface: AppColors.primaryGrey,
         outline: AppColors.primaryGrey,
         inversePrimary: AppColors.primaryGrey,
-        background: AppColors.primaryGrey,
-        onBackground: AppColors.primaryGrey,
         //hea: AppColors.primaryGrey,
         //primaryColor: AppColors.grey,
         //backgroundColor: AppColors.background,
@@ -34,7 +32,7 @@ class AppTheme {
       ),
       // Define the default font family.
       radioTheme: RadioThemeData(
-          fillColor: MaterialStateProperty.all(AppColors.grey),
+          fillColor: WidgetStateProperty.all(AppColors.grey),
           visualDensity: VisualDensity.standard
           //overlayColor:
           ),
@@ -47,7 +45,7 @@ class AppTheme {
           color: AppColors.grey,
         ),
         centerTitle: true,
-        color: AppColors.primaryGrey,
+        backgroundColor: AppColors.primaryGrey,
         elevation: 0,
         iconTheme: IconThemeData(color: AppColors.grey),
       ),
@@ -143,7 +141,7 @@ class AppTheme {
           //overlayColor: MaterialStateProperty.all(Colors.transparent),
           //iconSize: MaterialStateProperty.resolveWith((states) => 36),
           iconColor:
-              MaterialStateProperty.resolveWith((states) => AppColors.grey),
+              WidgetStateProperty.resolveWith((states) => AppColors.grey),
         ),
       ),
       //primaryIconTheme: IconThemeData(color: Colors.red),
@@ -183,7 +181,7 @@ class AppTheme {
           color: Colors.amberAccent,
         ), */
         overlayColor:
-            MaterialStateProperty.resolveWith((states) => AppColors.background),
+            WidgetStateProperty.resolveWith((states) => AppColors.background),
       ),
     );
   }

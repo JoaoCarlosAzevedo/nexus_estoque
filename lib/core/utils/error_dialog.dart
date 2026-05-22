@@ -1,7 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 
-void showErrorWidget(context, String error) {
+void showErrorWidget(BuildContext context, String error) {
   AwesomeDialog(
           context: context,
           dialogType: DialogType.error,

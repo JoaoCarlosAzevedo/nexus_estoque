@@ -79,7 +79,8 @@ class ProductSelectionPage extends ConsumerWidget {
     );
   }
 
-  void showError(context, String error) {
+  // ignore: strict_top_level_inference
+  void showError(BuildContext context, String error) {
     AwesomeDialog(
             context: context,
             dialogType: DialogType.error,

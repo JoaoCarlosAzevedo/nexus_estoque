@@ -5,7 +5,7 @@ import '../../../data/model/volume_order_model.dart';
 
 class VolumeOrderQuantityModal {
   static Future<double?> show(
-      context, VolumeProdOrderModel produto, double quantity) async {
+      BuildContext context, VolumeProdOrderModel produto, double quantity) async {
     {
       final result = await showModalBottomSheet<double>(
         context: context,

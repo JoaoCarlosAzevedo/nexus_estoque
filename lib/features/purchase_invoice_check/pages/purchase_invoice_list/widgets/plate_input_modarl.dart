@@ -113,7 +113,7 @@ class _PlateInputModalState extends ConsumerState<PlateInputModal> {
                 ],
               );
             },
-            error: (_, __) => ListView(
+            error: (_, _) => ListView(
                   shrinkWrap: true,
                   children: [
                     const Text("Número da Placa"),

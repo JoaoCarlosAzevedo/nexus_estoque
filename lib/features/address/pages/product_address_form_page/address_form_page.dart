@@ -264,7 +264,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                                     "Utiliza Multiplicador ${widget.productAddress.fator} ?"),
                                 Switch(
                                   value: isMultiple,
-                                  activeColor: Colors.green,
+                                  activeThumbColor: Colors.green,
                                   inactiveTrackColor:
                                       const Color.fromARGB(255, 154, 76, 76),
                                   onChanged: (bool value) {
@@ -468,7 +468,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
   }
 }
 
-void showError(context, String error) {
+void showError(BuildContext context, String error) {
   AwesomeDialog(
           context: context,
           dialogType: DialogType.error,

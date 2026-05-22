@@ -64,6 +64,7 @@ class _VolumeLabelV2PageState extends ConsumerState<VolumeLabelV2Page> {
                 IconButton(
                     onPressed: () async {
                       await pickeDateRange(context);
+                      if (!context.mounted) return;
                       context.read<FilterTagLoadOrderCubit>().fetchLoad(
                           "0-$dateIni-$dateEnd-etiqueta_individual", "", null);
                     },
@@ -305,6 +306,7 @@ class _VolumeLabelV2PageState extends ConsumerState<VolumeLabelV2Page> {
         ),
       ),
     ).then((result) {
+      if (!context.mounted) return;
       // Navega para FilterTagsOrderProductsPage após receber os dados
       if (result != null) {
         final cubit = context.read<FilterTagLoadOrderCubit>();

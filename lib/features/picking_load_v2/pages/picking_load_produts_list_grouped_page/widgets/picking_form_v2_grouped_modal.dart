@@ -14,7 +14,7 @@ import '../../picking_form_v2_page/cubit/picking_save_v2_cubit.dart';
 import 'picking_product_grouped_card_v2.dart';
 
 class PickingFormv2GroupedGroupedModal {
-  static Future<dynamic> show(context, LoadGroupProdModel picking) async {
+  static Future<dynamic> show(BuildContext context, LoadGroupProdModel picking) async {
     {
       final result = await showModalBottomSheet<dynamic>(
         context: context,
@@ -307,7 +307,7 @@ class _PickingFormv2GroupedState extends ConsumerState<PickingFormv2Grouped>
     }
   }
 
-  void showValidation(context, String message) {
+  void showValidation(BuildContext context, String message) {
     AwesomeDialog(
             context: context,
             dialogType: DialogType.error,

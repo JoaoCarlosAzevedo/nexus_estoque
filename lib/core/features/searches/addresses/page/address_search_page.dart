@@ -9,7 +9,7 @@ import 'package:nexus_estoque/core/features/searches/addresses/provider/remote_a
 
 class AddressSearchModal {
   static Future<dynamic> show(
-      context, String warehouse, ProductBalanceModel product) async {
+      BuildContext context, String warehouse, ProductBalanceModel product) async {
     {
       BalanceWarehouse? addresses = product.armazem
           .firstWhereOrNull((element) => element.codigo == warehouse);
@@ -78,39 +78,30 @@ class AddressSearchPageState extends ConsumerState<AddressSearchPage> {
       ),
       body: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              //const Text("Busca Endereços"),
-              Row(
-                children: [
-                  Radio<SearchType>(
-                    value: SearchType.all,
-                    groupValue: searchSelected,
-                    onChanged: (SearchType? value) {
-                      setState(() {
-                        searchSelected = value!;
-                      });
-                    },
-                  ),
-                  const Text("Todos")
-                ],
-              ),
-              Row(
-                children: [
-                  Radio<SearchType>(
-                    value: SearchType.balance,
-                    groupValue: searchSelected,
-                    onChanged: (SearchType? value) {
-                      setState(() {
-                        searchSelected = value!;
-                      });
-                    },
-                  ),
-                  const Text("Saldo")
-                ],
-              ),
-            ],
+          RadioGroup<SearchType>(
+            groupValue: searchSelected,
+            onChanged: (SearchType? value) {
+              setState(() {
+                searchSelected = value!;
+              });
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    Radio<SearchType>(value: SearchType.all),
+                    const Text("Todos"),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Radio<SearchType>(value: SearchType.balance),
+                    const Text("Saldo"),
+                  ],
+                ),
+              ],
+            ),
           ),
           Expanded(
             child: searchSelected == SearchType.all

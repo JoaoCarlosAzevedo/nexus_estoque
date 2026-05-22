@@ -497,7 +497,7 @@ class _OrderCheckFeedbackCard extends StatelessWidget {
                                   vertical: 4,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: accentColor.withOpacity(0.15),
+                                  color: accentColor.withValues(alpha: 0.15),
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                                 child: Text(
@@ -539,7 +539,7 @@ class _OrderCheckFeedbackCard extends StatelessWidget {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 4,
                     ),
                   ],
@@ -654,7 +654,7 @@ class _OrderCheckFeedbackCard extends StatelessWidget {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 4,
                     ),
                   ],
@@ -820,7 +820,7 @@ class _OrderCheckItemCard extends StatelessWidget {
         vertical: isCompact ? 3 : 4,
       ),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.2),
+        color: color.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(6),
         border: Border.all(color: color, width: 1),
       ),
@@ -878,7 +878,7 @@ class _ConferidosTab extends StatelessWidget {
           width: 12,
           height: 12,
           decoration: BoxDecoration(
-            color: color.withOpacity(0.3),
+            color: color.withValues(alpha: 0.3),
             borderRadius: BorderRadius.circular(4),
             border: Border.all(color: color),
           ),
@@ -1100,7 +1100,7 @@ class _ConferidoSkuCard extends StatelessWidget {
                     vertical: isCompact ? 4 : 6,
                   ),
                   decoration: BoxDecoration(
-                    color: cor.withOpacity(0.2),
+                    color: cor.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: cor),
                   ),

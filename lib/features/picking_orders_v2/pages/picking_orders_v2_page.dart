@@ -660,6 +660,9 @@ class _PickingOrdersV2ListWidgetState
                                                   },
                                                 ).then((confirmStart) async {
                                                   if (confirmStart == true) {
+                                                    if (!context.mounted) {
+                                                      return;
+                                                    }
                                                     final cubit = context.read<
                                                         PickingOrdersV2Cubit>();
                                                     await _openPickingProductsPage(

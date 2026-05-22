@@ -8,7 +8,7 @@ import 'package:nexus_estoque/features/transaction/pages/transaction_form_page/w
 
 class WarehouseSearchModal {
   static Future<String> show(
-      context, ProductBalanceModel product, Tm tm) async {
+      BuildContext context, ProductBalanceModel product, Tm tm) async {
     {
       final result = await showModalBottomSheet<dynamic>(
         context: context,

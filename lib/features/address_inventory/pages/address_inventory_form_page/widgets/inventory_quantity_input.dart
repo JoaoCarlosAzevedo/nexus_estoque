@@ -5,7 +5,7 @@ import '../../../../transfer/pages/product_selection_transfer/pages/product_tran
 
 class InventoryQuantityModal {
   static Future<double?> show(
-      context, ProductModel produto, double quantity) async {
+      BuildContext context, ProductModel produto, double quantity) async {
     {
       final result = await showModalBottomSheet<double>(
         context: context,

@@ -45,7 +45,7 @@ class _PurchaseInvoiceProdutctsState
       length: 2,
       child: PopScope(
         canPop: false,
-        onPopInvoked: (bool didPop) async {
+        onPopInvokedWithResult: (bool didPop, _) async {
           if (didPop) {
             return;
           }
@@ -222,9 +222,9 @@ class _PurchaseInvoiceProdutctsState
                                                           context,
                                                           product.codigo);
                                                   if (isSuccess > 1) {
-                                                    // ignore: use_build_context_synchronously
-                                                    //Navigator.pop(context);
-
+                                                    if (!context.mounted) {
+                                                      return;
+                                                    }
                                                     context
                                                         .read<
                                                             PurchaseInvoiceProductsCubit>()
