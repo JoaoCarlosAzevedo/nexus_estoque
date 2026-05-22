@@ -1,6 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -137,7 +136,7 @@ class _ProductMultiplierModalState
                       child: Text("Confirmar"),
                     ),
                   ),
-                  error: (_, __) => ElevatedButton(
+                  error: (_, _) => ElevatedButton(
                     onPressed: () {
                       if (controller.text.isNotEmpty) {
                         final product = ProductMultiplierModel(
@@ -179,7 +178,7 @@ class _ProductMultiplierModalState
               ],
             );
           },
-          error: (_, __) => const Center(
+          error: (_, _) => const Center(
             child: Text("Erro ao consultar produto"),
           ),
           loading: () => const Center(

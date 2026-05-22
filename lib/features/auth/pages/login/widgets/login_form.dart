@@ -7,6 +7,10 @@ import '../../../../../core/features/barcode_scanner/barcode_scanner.dart';
 import '../../../../../core/services/secure_store.dart';
 
 class LoginForm extends StatelessWidget {
+  static final _riveFileLoader = FileLoader.fromAsset(
+    'assets/inventory_app.riv',
+    riveFactory: Factory.flutter,
+  );
   const LoginForm({
     super.key,
     required this.userController,
@@ -65,16 +69,23 @@ class LoginForm extends StatelessWidget {
                     const Text("Nexus WMS")
                   ],
                 ),
-                const Expanded(
+                Expanded(
                   flex: 1,
                   child: Padding(
-                    padding: EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Card(
                       elevation: 0,
                       child: Center(
-                        child: RiveAnimation.asset(
-                          fit: BoxFit.scaleDown,
-                          'assets/inventory_app.riv',
+                        child: RiveWidgetBuilder(
+                          fileLoader: _riveFileLoader,
+                          builder: (context, state) => switch (state) {
+                            RiveLoading() => const SizedBox.shrink(),
+                            RiveFailed() => const SizedBox.shrink(),
+                            RiveLoaded() => RiveWidget(
+                                controller: state.controller,
+                                fit: Fit.scaleDown,
+                              ),
+                          },
                         ),
                       ),
                     ),

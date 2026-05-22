@@ -1,31 +1,24 @@
-import 'package:bluetooth_print_plus/bluetooth_print_model.dart';
-import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:bluetooth_print_plus/bluetooth_print_plus.dart';
+import 'package:flutter/material.dart';
 
 import '../../services/bt_printer.dart';
 
 class BluetoothPageModal {
   static Future<bool> show(context) async {
-    {
-      final result = await showModalBottomSheet<bool>(
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return const FractionallySizedBox(
-            heightFactor: 0.7,
-            child: BluetoothPage(),
-          );
-        },
-      );
+    final result = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return const FractionallySizedBox(
+          heightFactor: 0.7,
+          child: BluetoothPage(),
+        );
+      },
+    );
 
-      if (result != null) {
-        return result;
-      } else {
-        return false;
-      }
-    }
+    return result ?? false;
   }
 }
 
@@ -45,12 +38,14 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
-  final _bluetoothPrintPlus = BluetoothPrintPlus.instance;
+class _HomePageState extends State<HomePage> {
   bool _connected = false;
-  bool _iscanning = false;
+  bool _isScanning = false;
   bool _isLoading = false;
   BluetoothDevice? _device;
+  List<BluetoothDevice> _scanResults = [];
+  StreamSubscription<ConnectState>? _connectStateSubscription;
+  StreamSubscription<List<BluetoothDevice>>? _scanResultsSubscription;
 
   @override
   void initState() {
@@ -58,50 +53,59 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     WidgetsBinding.instance.addPostFrameCallback((_) => initBluetooth());
   }
 
+  @override
+  void dispose() {
+    _connectStateSubscription?.cancel();
+    _scanResultsSubscription?.cancel();
+    super.dispose();
+  }
+
   Future<void> startScanning() async {
     setState(() {
-      _iscanning = true;
+      _isScanning = true;
     });
-    await _bluetoothPrintPlus.isAvailable;
-    await _bluetoothPrintPlus.startScan(timeout: const Duration(seconds: 30));
+    await BluetoothPrintPlus.startScan(timeout: const Duration(seconds: 30));
   }
 
   Future<void> initBluetooth() async {
-    bool isConnected = await _bluetoothPrintPlus.isConnected ?? false;
-    _bluetoothPrintPlus.state.listen((state) {
-      switch (state) {
-        case BluetoothPrintPlus.CONNECTED:
+    _connected = BluetoothPrintPlus.isConnected;
+
+    _connectStateSubscription =
+        BluetoothPrintPlus.connectState.listen((connectState) {
+      switch (connectState) {
+        case ConnectState.connected:
           setState(() {
             _connected = true;
             _isLoading = false;
-            if (_device == null) return;
-            /*  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-              return FunctionPage(_device!);
-            })); */
-            //Navigator.pop(context, true);
           });
           break;
-        case BluetoothPrintPlus.DISCONNECTED:
+        case ConnectState.disconnected:
           setState(() {
             _connected = false;
             _isLoading = false;
+            _device = null;
           });
-          break;
-        default:
           break;
       }
     });
 
+    _scanResultsSubscription =
+        BluetoothPrintPlus.scanResults.listen((devices) {
+      if (!mounted) return;
+      setState(() {
+        _scanResults = devices;
+      });
+    });
+
     if (!mounted) return;
 
-    if (isConnected) {
+    if (_connected) {
       setState(() {
-        _connected = true;
         _isLoading = false;
       });
     }
 
-    startScanning();
+    await startScanning();
   }
 
   @override
@@ -113,75 +117,75 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       body: SafeArea(
         child: Column(
           children: [
-            //if (_isLoading) const CircularProgressIndicator(),
             Text(
               "Status Conexão: $_connected",
               style: Theme.of(context).textTheme.displaySmall,
             ),
             if (_device != null && _connected)
               Text(
-                "Dipositivo Conectado: ${_device!.name!}",
+                "Dipositivo Conectado: ${_device!.name}",
                 style: Theme.of(context).textTheme.displaySmall,
               ),
-            const SizedBox(
-              height: 15,
-            ),
+            const SizedBox(height: 15),
             _isLoading
                 ? const Expanded(
                     child: Center(
-                    child: CircularProgressIndicator(),
-                  ))
-                : _iscanning
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : _isScanning
                     ? Expanded(
-                        child: StreamBuilder<List<BluetoothDevice>>(
-                        stream: _bluetoothPrintPlus.scanResults,
-                        initialData: const [],
-                        builder: (c, snapshot) => ListView(
-                          children: snapshot.data!
-                              .map((d) => Container(
-                                    padding: const EdgeInsets.only(
-                                        left: 15, right: 15, bottom: 5),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                            child: Column(
+                        child: ListView(
+                          children: _scanResults
+                              .map(
+                                (d) => Container(
+                                  padding: const EdgeInsets.only(
+                                    left: 15,
+                                    right: 15,
+                                    bottom: 5,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(d.name ?? ''),
+                                            Text(d.name),
                                             Text(
-                                              d.address ?? 'null',
+                                              d.address,
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
-                                                  fontSize: 12,
-                                                  color: Colors.grey),
+                                                fontSize: 12,
+                                                color: Colors.grey,
+                                              ),
                                             ),
                                             const Divider(),
                                           ],
-                                        )),
-                                        const SizedBox(
-                                          width: 10,
                                         ),
-                                        if (!_connected)
-                                          ElevatedButton(
-                                            onPressed: () async {
-                                              _bluetoothPrintPlus.stopScan();
-                                              _bluetoothPrintPlus.connect(d);
-                                              _device = d;
-                                              setState(() {
-                                                _isLoading = true;
-                                              });
-                                            },
-                                            child: const Text("Conectar"),
-                                          )
-                                      ],
-                                    ),
-                                  ))
+                                      ),
+                                      const SizedBox(width: 10),
+                                      if (!_connected)
+                                        ElevatedButton(
+                                          onPressed: () async {
+                                            await BluetoothPrintPlus.stopScan();
+                                            _device = d;
+                                            setState(() {
+                                              _isLoading = true;
+                                            });
+                                            await BluetoothPrintPlus.connect(d);
+                                          },
+                                          child: const Text("Conectar"),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              )
                               .toList(),
                         ),
-                      ))
+                      )
                     : const Text("Not Scanning"),
             if (_connected)
               Container(
@@ -190,13 +194,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 width: double.infinity,
                 height: 60,
                 child: ElevatedButton(
-                  child:
-                      const Text("Desconectar", style: TextStyle(fontSize: 16)),
+                  child: const Text(
+                    "Desconectar",
+                    style: TextStyle(fontSize: 16),
+                  ),
                   onPressed: () async {
                     setState(() {
                       _isLoading = true;
                     });
-                    final _ = await BluetoothPrinter.disconnect();
+                    await BluetoothPrinter.disconnect();
                   },
                 ),
               ),
@@ -208,7 +214,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 height: 60,
                 child: ElevatedButton(
                   child: const Text("Fechar", style: TextStyle(fontSize: 16)),
-                  onPressed: () async {
+                  onPressed: () {
                     Navigator.pop(context, true);
                   },
                 ),
@@ -220,18 +226,18 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 width: double.infinity,
                 height: 60,
                 child: ElevatedButton(
-                  child: const Text("Buscar Dispositivos",
-                      style: TextStyle(fontSize: 16)),
+                  child: const Text(
+                    "Buscar Dispositivos",
+                    style: TextStyle(fontSize: 16),
+                  ),
                   onPressed: () async {
                     setState(() {
-                      _iscanning = true;
+                      _isScanning = true;
                     });
-                    await _bluetoothPrintPlus.isAvailable;
-                    await _bluetoothPrintPlus.startScan(
-                        timeout: const Duration(seconds: 30));
+                    await startScanning();
                   },
                 ),
-              )
+              ),
           ],
         ),
       ),

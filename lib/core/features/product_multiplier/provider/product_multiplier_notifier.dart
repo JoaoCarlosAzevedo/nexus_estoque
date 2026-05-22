@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/model/product_multiplier_model.dart';
@@ -12,15 +14,13 @@ final remoteProductMultiplierProvider = FutureProvider.family
 });
 
 final productMultiplierChangeProvider =
-    AutoDisposeAsyncNotifierProvider<ProductMultiplierChangeProvider, bool>(() {
-  return ProductMultiplierChangeProvider();
-});
+    AsyncNotifierProvider.autoDispose<ProductMultiplierChangeProvider, bool>(
+  ProductMultiplierChangeProvider.new,
+);
 
-class ProductMultiplierChangeProvider extends AutoDisposeAsyncNotifier<bool> {
+class ProductMultiplierChangeProvider extends AsyncNotifier<bool> {
   @override
-  bool build() {
-    return false;
-  }
+  FutureOr<bool> build() => false;
 
   Future<void> postMultiplier(ProductMultiplierModel product) async {
     state = const AsyncValue.loading();

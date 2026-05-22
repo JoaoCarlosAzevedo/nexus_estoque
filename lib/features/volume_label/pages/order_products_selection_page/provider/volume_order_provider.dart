@@ -2,7 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 import '../../../../../core/services/audio_player.dart';
 import '../../../../address_inventory/pages/address_inventory_form_page/state/address_inventory_provider.dart';

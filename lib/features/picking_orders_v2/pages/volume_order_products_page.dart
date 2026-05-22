@@ -9,7 +9,6 @@ import '../../../core/features/bluetooth_printer/bluetooth_printer.dart';
 import '../../../core/services/bt_printer.dart';
 import '../../filter_tags_orders/pages/filter_tags_order_load_page/cubit/filter_tag_order_load_cubit.dart';
 import '../../filter_tags_orders/pages/filter_tags_order_products_page/filter_tag_order_tab1.dart';
-import '../../filter_tags_orders/pages/filter_tags_order_products_page/filter_tag_order_tab2.dart';
 import '../../volume_label_v2/pages/widgets/volume_label_v2_order_tab2.dart';
 
 class VolumeOrderProductsPage extends ConsumerStatefulWidget {

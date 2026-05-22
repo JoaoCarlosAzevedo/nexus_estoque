@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/model/product_balance_model.dart';
 import 'package:nexus_estoque/core/features/product_balance/data/repositories/product_balance_repository.dart';
@@ -20,7 +21,7 @@ class ProductSelectionPage extends ConsumerWidget {
       required this.builder,
       this.param});
   final String title;
-  final IconData icon;
+  final FaIconData icon;
   final dynamic param;
 
   final ProductBalanceWidgetBuilder builder;
@@ -58,7 +59,7 @@ class ProductSelectionPage extends ConsumerWidget {
 
               if (state is ProductBalanceCubitLoaded) {
                 return PopScope(
-                    onPopInvoked: (didPop) async {
+                    onPopInvokedWithResult: (didPop, _) async {
                       if (didPop) return;
                       context.read<ProductBalanceCubit>().reset();
                       context.pop();

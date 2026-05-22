@@ -109,7 +109,7 @@ class _ProductBarcodeUpdateModalState
                   child: Text("Confirmar"),
                 ),
               ),
-              error: (_, __) => ElevatedButton(
+              error: (_, _) => ElevatedButton(
                 onPressed: () {
                   if (controller.text.isNotEmpty) {
                     ref

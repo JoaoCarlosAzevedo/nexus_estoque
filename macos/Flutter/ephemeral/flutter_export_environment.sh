@@ -1,10 +1,11 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/Users/joaocarlosazevedo/fvm/versions/3.22.0"
-export "FLUTTER_APPLICATION_PATH=/Users/joaocarlosazevedo/Documents/projects/nexus_estoque"
+export "FLUTTER_ROOT=C:\Users\joaoc\fvm\versions\3.22.0"
+export "FLUTTER_APPLICATION_PATH=C:\Projects\nexus_estoque"
+export "FLUTTER_FRAMEWORK_SWIFT_PACKAGE_PATH=C:\Projects\nexus_estoque\macos\Flutter\ephemeral\Packages\.packages\FlutterFramework"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
-export "FLUTTER_BUILD_NAME=1.1.30"
+export "FLUTTER_BUILD_NAME=1.1.65"
 export "FLUTTER_BUILD_NUMBER=1"
 export "DART_OBFUSCATION=false"
 export "TRACK_WIDGET_CREATION=true"

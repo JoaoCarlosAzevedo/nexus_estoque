@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 import '../../../core/features/searches/products/data/model/product_model.dart';
 import '../../address_inventory/data/model/inventory_product_model.dart';

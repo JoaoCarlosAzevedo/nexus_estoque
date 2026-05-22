@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../../transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity.dart';
-import '../../../../transfer/pages/product_selection_transfer/pages/product_transfer_form_page/widgets/input_quantity_int.dart';
 import '../../../data/model/volume_order_model.dart';
 
 class VolumeOrderQuantityModal {

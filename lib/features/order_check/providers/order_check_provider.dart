@@ -7,8 +7,7 @@ final orderCheckProvider =
     AsyncNotifierProvider.autoDispose<OrderCheckListNotifier,
         List<OrderCheckModel>>(OrderCheckListNotifier.new);
 
-class OrderCheckListNotifier
-    extends AutoDisposeAsyncNotifier<List<OrderCheckModel>> {
+class OrderCheckListNotifier extends AsyncNotifier<List<OrderCheckModel>> {
   @override
   Future<List<OrderCheckModel>> build() async {
     final repository = ref.read(orderCheckRepositoryProvider);

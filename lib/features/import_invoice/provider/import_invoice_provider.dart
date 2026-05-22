@@ -1,17 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/repositories/import_invoice_repository.dart';
 
 final importInvoiceProvider =
-    AutoDisposeAsyncNotifierProvider<ImportInvoiceProvider, bool>(() {
-  return ImportInvoiceProvider();
-});
+    AsyncNotifierProvider.autoDispose<ImportInvoiceProvider, bool>(
+  ImportInvoiceProvider.new,
+);
 
-class ImportInvoiceProvider extends AutoDisposeAsyncNotifier<bool> {
+class ImportInvoiceProvider extends AsyncNotifier<bool> {
   @override
-  bool build() {
-    return false;
-  }
+  FutureOr<bool> build() => false;
 
   Future<void> fetchImportInvoice(String chave) async {
     state = const AsyncValue.loading();

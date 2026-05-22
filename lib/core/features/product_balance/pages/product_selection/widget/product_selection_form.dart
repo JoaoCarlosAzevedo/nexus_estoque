@@ -11,7 +11,7 @@ class ProductSelectioForm extends StatefulWidget {
   const ProductSelectioForm(
       {super.key, required this.title, required this.icon, this.param});
   final String title;
-  final IconData icon;
+  final FaIconData icon;
   final dynamic param;
 
   @override

@@ -1,8 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:bluetooth_print_plus/cpcl_command.dart';
-import 'package:bluetooth_print_plus/esc_command.dart';
-import 'package:bluetooth_print_plus/tsp_command.dart';
+import 'package:bluetooth_print_plus/bluetooth_print_plus.dart';
 
 /// CommandTool
 class CommandTool {
@@ -46,13 +44,8 @@ class CommandTool {
     await tscCommand.text(
         content: "一蓑烟雨任平生。", x: 10, y: 170, xMulti: 3, yMulti: 3);
     await tscCommand.qrCode(
-        // content: "料峭春风吹酒醒，微冷，山头斜照却相迎。",
-        content: "28938928",
-        x: 50,
-        y: 350,
-        cellWidth: 3);
+        content: "28938928", x: 50, y: 350, cellWidth: 3);
     await tscCommand.qrCode(
-      // content: "回首向来萧瑟处，归去，也无风雨也无晴。",
       content: "28938928",
       x: 50,
       y: 500,

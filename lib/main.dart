@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rive/rive.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/routes/routes.dart';
@@ -9,6 +10,9 @@ import 'package:nexus_estoque/features/auth/pages/login/cubit/auth_cubit.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await RiveNative.init();
+
   //splashscreen
   await Future.delayed(
     const Duration(seconds: 1),

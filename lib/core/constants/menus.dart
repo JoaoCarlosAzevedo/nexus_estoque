@@ -22,7 +22,7 @@ bool checkMenu(Distributors dist, Distributors check) {
 
 class MenuItemInfo {
   final String title;
-  final IconData icon;
+  final FaIconData icon;
   final Color color;
   final String route;
 

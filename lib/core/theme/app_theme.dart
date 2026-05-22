@@ -52,7 +52,7 @@ class AppTheme {
         iconTheme: IconThemeData(color: AppColors.grey),
       ),
       cardColor: AppColors.background,
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: AppColors.background,
         elevation: 5,
         shape: RoundedRectangleBorder(
@@ -174,7 +174,7 @@ class AppTheme {
       textTheme: customTextTheme(),
       progressIndicatorTheme: const ProgressIndicatorThemeData(
           circularTrackColor: AppColors.primaryGrey, color: AppColors.grey),
-      tabBarTheme: TabBarTheme(
+      tabBarTheme: TabBarThemeData(
         dividerColor: AppColors.tertiaryGrey,
         labelColor: AppColors.grey,
         indicatorColor: AppColors.grey,

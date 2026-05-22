@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:nexus_estoque/core/http/config.dart';
 import 'package:nexus_estoque/core/http/dio_config.dart';
 

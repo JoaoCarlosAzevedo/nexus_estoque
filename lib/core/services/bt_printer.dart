@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:bluetooth_print_plus/bluetooth_print_model.dart';
 import 'package:bluetooth_print_plus/bluetooth_print_plus.dart';
 import 'package:flutter/widgets.dart';
 
@@ -10,51 +9,46 @@ import '../features/bluetooth_printer/command_tool.dart';
 
 class BluetoothPrinter {
   static Future<bool> isConnected() async {
-    return await BluetoothPrintPlus.instance.isConnected ?? false;
+    return BluetoothPrintPlus.isConnected;
   }
 
-  Stream<List<BluetoothDevice>>? scannDevices() {
-    return BluetoothPrintPlus.instance.scanResults;
+  Stream<List<BluetoothDevice>> scannDevices() {
+    return BluetoothPrintPlus.scanResults;
   }
 
-  static void startScann() async {
-    await BluetoothPrintPlus.instance.isAvailable;
-    await BluetoothPrintPlus.instance.startScan(
+  static Future<void> startScann() async {
+    await BluetoothPrintPlus.startScan(
       timeout: const Duration(seconds: 30),
     );
   }
 
   static Future<dynamic> connect(BluetoothDevice device) async {
-    await BluetoothPrintPlus.instance.stopScan();
-    await BluetoothPrintPlus.instance.connect(device);
+    await BluetoothPrintPlus.stopScan();
+    await BluetoothPrintPlus.connect(device);
   }
 
   static Future<dynamic> disconnect() async {
-    await BluetoothPrintPlus.instance.disconnect();
+    await BluetoothPrintPlus.disconnect();
   }
 
   static Future<dynamic> testPrinter() async {
     final cmd = await CommandTool.tscSelfTestCmd();
-    BluetoothPrintPlus.instance.write(cmd);
+    if (cmd != null) {
+      await BluetoothPrintPlus.write(cmd);
+    }
   }
 
   static Future<bool> printTest() {
-    String source = "^XA ^CF0,60 ^FO160,50^FDTESTE DE ETIQUETA^FS^XZ";
-    final response = printZPL(source);
-    return response;
+    const source = "^XA ^CF0,60 ^FO160,50^FDTESTE DE ETIQUETA^FS^XZ";
+    return printZPL(source);
   }
 
   static Future<bool> printZPL(String zpl) async {
     try {
-      List<int> list = utf8.encode(zpl);
-      Uint8List bytes = Uint8List.fromList(list);
-
-      final response = await BluetoothPrintPlus.instance.write(bytes);
-      if (response == null) {
-        return true;
-      } else {
-        return false;
-      }
+      final list = utf8.encode(zpl);
+      final bytes = Uint8List.fromList(list);
+      await BluetoothPrintPlus.write(bytes);
+      return true;
     } catch (e) {
       return false;
     }

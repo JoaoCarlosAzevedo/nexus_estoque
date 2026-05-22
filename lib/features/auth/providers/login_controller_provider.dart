@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:nexus_estoque/features/auth/providers/login_state.dart';
 
 import '../model/user_model.dart';
