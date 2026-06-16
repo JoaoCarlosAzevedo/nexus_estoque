@@ -109,6 +109,44 @@ class Pickingv2Repository {
     }
   }
 
+  Future<Either<Failure, String>> postCheckout(
+      String pedido, String etiquetaCheckout) async {
+    final String url = await Config.baseURL;
+    final body = {
+      'pedido': pedido,
+      'etiqueta_checkout': etiquetaCheckout,
+    };
+
+    final String json = jsonEncode(body);
+
+    log(json);
+
+    try {
+      final response = await dio.post(
+        '$url/separacao/checkout',
+        data: json,
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        return const Left(Failure("Server Error!", ErrorType.exception));
+      }
+
+      return const Right("Created");
+    } on DioException catch (e) {
+      if (e.type.name == "connectTimeout") {
+        return const Left(Failure("Tempo Excedido", ErrorType.timeout));
+      }
+
+      final data = e.response?.data;
+      final msg = data is Map ? data["message"] : null;
+      if (msg != null && msg.toString().isNotEmpty) {
+        return Left(Failure(msg.toString(), ErrorType.validation));
+      }
+
+      return const Left(Failure("Server Error!", ErrorType.exception));
+    }
+  }
+
   Future<Either<Failure, List<Shippingv2Model>>> fetchPickingLoadList(
       String dateIni, String dateEnd) async {
     final String url = await Config.baseURL;

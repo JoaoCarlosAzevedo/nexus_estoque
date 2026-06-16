@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -22,8 +23,33 @@ class FilterTagOrderTab2 extends ConsumerStatefulWidget {
 }
 
 class _FilterTagOrderTab2State extends ConsumerState<FilterTagOrderTab2> {
+  late final TextEditingController _volumesController;
+
+  @override
+  void initState() {
+    super.initState();
+    _volumesController =
+        TextEditingController(text: widget.pedido.volumes.toString());
+  }
+
+  @override
+  void dispose() {
+    _volumesController.dispose();
+    super.dispose();
+  }
+
+  void _onVolumesChanged(String value) {
+    // Mantemos o objeto Orders sincronizado com o campo para que o
+    // postTag (que serializa via Orders.toMap()) envie o valor digitado.
+    final parsed = int.tryParse(value);
+    if (parsed != null && parsed >= 0) {
+      widget.pedido.volumes = parsed;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final gravaVolume = widget.pedido.gravaVolume;
     final products = widget.pedido.itens
         .where(
           (element) => element.novaQuantidade > 0.0,
@@ -36,6 +62,38 @@ class _FilterTagOrderTab2State extends ConsumerState<FilterTagOrderTab2> {
           padding: const EdgeInsets.all(8.0),
           child: Text("Pedido: ${widget.pedido.pedido}"),
         ),
+        if (gravaVolume)
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+            child: Row(
+              children: [
+                const Text('Volumes:'),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: TextFormField(
+                    controller: _volumesController,
+                    keyboardType: const TextInputType.numberWithOptions(
+                      signed: false,
+                      decimal: false,
+                    ),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
+                    ),
+                    onChanged: _onVolumesChanged,
+                  ),
+                ),
+              ],
+            ),
+          ),
         Text("Produtos da Embalagem (${products.length.toString()})"),
         Expanded(
           child: ListView.builder(

@@ -37,7 +37,8 @@ String _messageFromResponseData(dynamic data) {
   return '';
 }
 
-Failure _failureFromResponse(Response? response, {String fallback = 'Server Error!'}) {
+Failure _failureFromResponse(Response? response,
+    {String fallback = 'Server Error!'}) {
   final msg = _messageFromResponseData(response?.data);
   if (msg.isNotEmpty) {
     final code = response?.statusCode ?? 500;
@@ -129,6 +130,42 @@ class FilterTagRepository {
         queryParameters: {
           'dtini': dtini,
           'dtfim': dtfim,
+        },
+      );
+
+      if (response.statusCode != 200) {
+        return Left(_failureFromResponse(response));
+      }
+
+      if (response.data == null) {
+        return const Right([]);
+      }
+
+      final raw = response.data;
+      if (raw is! List) {
+        return Left(_failureFromResponse(response,
+            fallback: 'Resposta inválida da API.'));
+      }
+
+      final list = raw
+          .map((item) =>
+              EtiquetaPedidoV3Item.fromMap(item as Map<String, dynamic>))
+          .toList();
+
+      return Right(list);
+    } on DioException catch (e) {
+      return Left(_failureFromDio(e));
+    }
+  }
+
+  Future<Either<Failure, List<EtiquetaPedidoV3Item>>>
+      fetchPedidosByEtiquetaCheckout(String etiquetaCheckout) async {
+    final String url = await Config.baseURL;
+    try {
+      final response = await dio.get(
+        '$url/etiqueta_filtro_pedidos/pedidos',
+        queryParameters: {
+          'etiqueta_checkout': etiquetaCheckout,
         },
       );
 

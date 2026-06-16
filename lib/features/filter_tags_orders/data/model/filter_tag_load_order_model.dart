@@ -61,6 +61,9 @@ class Orders {
   String codigoTransp;
   String nomeTransp;
 
+  int volumes;
+  bool gravaVolume;
+
   List<OrdersProduct> itens;
 
   Orders(
@@ -71,7 +74,9 @@ class Orders {
       required this.nomeCliente,
       required this.codigoTransp,
       required this.nomeTransp,
-      required this.itens});
+      required this.itens,
+      required this.volumes,
+      required this.gravaVolume});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -82,7 +87,10 @@ class Orders {
       'nomeCliente': nomeCliente,
       'codigoTransp': codigoTransp,
       'nomeTransp': nomeTransp,
+      'volumes': volumes,
+      'grava_volume': gravaVolume,
       'itens': itens.map((x) => x.toMap()).toList(),
+      'graca_volume': gravaVolume,
     };
   }
 
@@ -95,6 +103,8 @@ class Orders {
       nomeCliente: map['NomeCliente'] ?? '',
       codigoTransp: map['CodigoTransp'] ?? '',
       nomeTransp: map['NomeTransp'] ?? '',
+      volumes: map['volumes']?.toInt() ?? 0,
+      gravaVolume: map['grava_volume'] ?? false,
       itens: List<OrdersProduct>.from(
         map['itens']?.map(
           (x) => OrdersProduct.fromMap(x),

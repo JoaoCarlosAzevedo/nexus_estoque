@@ -436,6 +436,12 @@ final List<MenuItemInfo> menuItens = [
     color: Colors.red,
     route: 'etiqueta_pedidos_v3',
   ),
+  MenuItemInfo(
+    title: "Etiqueta Pedido via Checkout",
+    icon: FontAwesomeIcons.tag,
+    color: Colors.red,
+    route: 'etiqueta_pedido_checkout',
+  ),
 ];
 
 

@@ -44,6 +44,7 @@ import '../../features/inventory/pages/inventory_page.dart';
 import '../../features/picking_load/pages/picking_load_list_page/picking_load_list_page.dart';
 import '../../features/picking_load_orders/picking_loads/picking_load_orders_page.dart';
 import '../../features/picking_load_v2/pages/picking_load_list_page/picking_load_v2_list_page.dart';
+import '../../features/etiqueta_pedido_checkout/pages/etiqueta_pedido_checkout_page.dart';
 import '../../features/picking_orders_v2/pages/picking_orders_v2_page.dart';
 import '../../features/product_detail/product_detail_list/product_detail_list.dart';
 import '../../features/product_tag/product_tag_list/product_tag_list.dart';
@@ -170,6 +171,10 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: ((context, state) => const PickingOrdersV2List(
                   isMonitor: true,
                 ))),
+        GoRoute(
+            path: "/etiqueta_pedido_checkout",
+            builder: ((context, state) =>
+                const EtiquetaPedidoCheckoutPage())),
         GoRoute(
             path: "/reposicao",
             builder: ((context, state) => const RepositionPage())),

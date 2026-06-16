@@ -44,6 +44,7 @@ class Pickingv2Model {
   bool lSKUonly;
   bool lnoQtd;
   bool lEtiqPed;
+  bool letiqCheckout;
 
   Pickingv2Model(
       {required this.descricao,
@@ -81,6 +82,7 @@ class Pickingv2Model {
       required this.lnoQtd,
       required this.lEtiqPed,
       required this.retira,
+      required this.letiqCheckout,
       required this.rua});
 
   Map<String, dynamic> toMap() {
@@ -117,6 +119,7 @@ class Pickingv2Model {
       'lnoQtd': lnoQtd,
       'etiqPed': lEtiqPed,
       'retira': retira,
+      'letiqCheckout': letiqCheckout,
     };
   }
 
@@ -158,6 +161,7 @@ class Pickingv2Model {
       lnoQtd: map['noQtd'] ?? false,
       retira: map['retira'] ?? '',
       lEtiqPed: map['etiqPed'] ?? false,
+      letiqCheckout: map['etiqueta_checkout'] ?? false,
     );
   }
 
