@@ -9,6 +9,7 @@ import 'package:nexus_estoque/features/picking/data/model/picking_model.dart';
 import 'package:nexus_estoque/features/picking_route/data/model/picking_route_model.dart';
 
 import '../../../../core/utils/datetime_formatter.dart';
+import '../../../picking_load/data/model/pallet_obs_item.dart';
 import '../model/shipping_model.dart';
 
 final pickingRouteRepositoryProvider =
@@ -118,6 +119,50 @@ class PickingRouteRepository {
         return const Left(Failure("Tempo Excedido", ErrorType.timeout));
       }
       return const Left(Failure("Server Error!", ErrorType.exception));
+    }
+  }
+
+  Future<Either<Failure, Unit>> postPalletObservacao({
+    required List<PalletObsItem> items,
+    required String observacao,
+  }) async {
+    final String url = await Config.baseURL;
+
+    final data = {
+      'observacao': observacao,
+      'itens': items.map((e) => e.toMap()).toList(),
+    };
+
+    try {
+      final response = await dio.post(
+        '$url/api/v2/conferencia/pedidos/observacao',
+        data: data,
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        return const Left(Failure("Erro no servidor!", ErrorType.exception));
+      }
+
+      return const Right(unit);
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout ||
+          e.type == DioExceptionType.sendTimeout) {
+        return const Left(Failure("Tempo excedido", ErrorType.timeout));
+      }
+
+      final responseData = e.response?.data;
+      String message = "Erro ao enviar observação de pallet.";
+      if (responseData is Map) {
+        final candidate = responseData['message'] ??
+            responseData['errorMessage'] ??
+            responseData['error'];
+        if (candidate != null && candidate.toString().isNotEmpty) {
+          message = candidate.toString();
+        }
+      }
+
+      return Left(Failure(message, ErrorType.exception));
     }
   }
 }

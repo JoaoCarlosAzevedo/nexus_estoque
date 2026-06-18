@@ -12,6 +12,7 @@ class ShippingModel {
   String descTransp;
   List<PickingOrder> pedidos;
   List<PickingModel> produtos;
+  bool isObsPed;
 
   ShippingModel({
     required this.codCarga,
@@ -21,6 +22,7 @@ class ShippingModel {
     required this.descTransp,
     required this.pedidos,
     required this.produtos,
+    required this.isObsPed,
   });
 
   Map<String, dynamic> toMap() {
@@ -31,6 +33,7 @@ class ShippingModel {
       'CodTransp': codTransp,
       'DescTransp': descTransp,
       'Pedidos': pedidos.map((x) => x.toMap()).toList(),
+      'obs_pedido': isObsPed,
     };
   }
 
@@ -42,6 +45,7 @@ class ShippingModel {
       codTransp: map['CodTransp'] ?? '',
       descTransp: map['DescTransp'] ?? '',
       produtos: [],
+      isObsPed: map['obs_pedido'] ?? false,
       pedidos: List<PickingOrder>.from(
         map['Pedidos']?.map((x) => PickingOrder.fromMap(x)),
       ),
@@ -55,6 +59,7 @@ class ShippingModel {
       qtdEntregas: map['QtdEntregas']?.toInt() ?? 0,
       codTransp: map['CodTransp'] ?? '',
       descTransp: map['DescTransp'] ?? '',
+      isObsPed: map['obs_pedido'] ?? false,
       pedidos: [],
       produtos: List<PickingModel>.from(
         map['Pedidos']?.map((x) => PickingModel.fromMap(x)),

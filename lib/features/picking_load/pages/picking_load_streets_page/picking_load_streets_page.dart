@@ -7,6 +7,8 @@ import 'package:grouped_list/grouped_list.dart';
 import '../../../picking/data/model/picking_model.dart';
 import '../picking_load_list_page/cubit/picking_load_cubit.dart';
 import '../picking_load_product_list_page/picking_load_product_list_page.dart';
+import '../picking_pallet_obs/cubit/picking_pallet_obs_cubit.dart';
+import '../picking_pallet_obs/widgets/pallet_obs_layout.dart';
 
 class PickingLoadStreetsPage extends ConsumerWidget {
   const PickingLoadStreetsPage(
@@ -21,22 +23,31 @@ class PickingLoadStreetsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    late List<PickingModel> products;
+    return BlocProvider.value(
+      value: cubit,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Carga $load"),
+          actions: [
+            BlocBuilder<PickingLoadCubit, PickingLoadState>(
+              builder: (context, state) {
+                final isObsPed = state is PickingLoadLoaded &&
+                    state.loads.any(
+                      (element) =>
+                          element.codCarga == load && element.isObsPed,
+                    );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Carga $load"),
-        actions: [
-          IconButton(
-              onPressed: () {
-                cubit.fetchPickingLoads(isPending);
+                return PalletObsAppBarAction(enablePanel: isObsPed);
               },
-              icon: const Icon(Icons.refresh))
-        ],
-      ),
-      body: BlocProvider.value(
-        value: cubit,
-        child: BlocListener<PickingLoadCubit, PickingLoadState>(
+            ),
+            IconButton(
+                onPressed: () {
+                  cubit.fetchPickingLoads(isPending);
+                },
+                icon: const Icon(Icons.refresh))
+          ],
+        ),
+        body: BlocListener<PickingLoadCubit, PickingLoadState>(
           listener: (context, state) {
             if (state is PickingLoadLoaded) {
               if (state.loads.isEmpty) {
@@ -72,9 +83,12 @@ class PickingLoadStreetsPage extends ConsumerWidget {
                     child: Text("Nenhum registro encontrado!"),
                   );
                 }
-                products = state.loads[index].produtos;
 
-                return GroupedListView<PickingModel, String>(
+                final loadData = state.loads[index];
+                final products = loadData.produtos;
+                final isObsPed = loadData.isObsPed;
+
+                final list = GroupedListView<PickingModel, String>(
                   elements: products,
                   groupBy: (element) => element.rua,
                   groupSeparatorBuilder: (String groupByValue) {
@@ -84,15 +98,20 @@ class PickingLoadStreetsPage extends ConsumerWidget {
                         child: ListTile(
                           title: Text("Rua $groupByValue"),
                           onTap: () {
+                            final palletObsCubit =
+                                context.read<PickingPalletObsCubit>();
+
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    PickingLoadProductListPage(
-                                  warehouseStreets: groupByValue,
-                                  cubit: cubit,
-                                  load: load,
-                                  isPending: isPending,
+                                builder: (_) => BlocProvider.value(
+                                  value: palletObsCubit,
+                                  child: PickingLoadProductListPage(
+                                    warehouseStreets: groupByValue,
+                                    cubit: cubit,
+                                    load: load,
+                                    isPending: isPending,
+                                  ),
                                 ),
                               ),
                             );
@@ -109,6 +128,11 @@ class PickingLoadStreetsPage extends ConsumerWidget {
                   useStickyGroupSeparators: false, // optional
                   floatingHeader: false, // optional
                   order: GroupedListOrder.ASC, // optional
+                );
+
+                return PalletObsLayout(
+                  enablePanel: isObsPed,
+                  child: list,
                 );
               }
               return const Center(

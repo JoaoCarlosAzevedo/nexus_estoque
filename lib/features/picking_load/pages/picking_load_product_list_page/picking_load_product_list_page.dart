@@ -9,6 +9,8 @@ import '../../../picking/data/model/picking_model.dart';
 import '../../../picking/pages/picking_form/picking_form_modal.dart';
 import '../../../picking/pages/picking_products_list/widgets/picking_product_card_wigdet.dart';
 import '../picking_load_list_page/cubit/picking_load_cubit.dart';
+import '../picking_pallet_obs/cubit/picking_pallet_obs_cubit.dart';
+import '../picking_pallet_obs/widgets/pallet_obs_layout.dart';
 
 class PickingLoadProductListPage extends ConsumerStatefulWidget {
   const PickingLoadProductListPage(
@@ -33,25 +35,36 @@ class _PickingLoadProductListPageState
   late List<PickingModel> products;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Column(
-          children: [
-            Text("Carga: ${widget.load}"),
-            Text("Rua ${widget.warehouseStreets}"),
+    return BlocProvider.value(
+      value: widget.cubit,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Column(
+            children: [
+              Text("Carga: ${widget.load}"),
+              Text("Rua ${widget.warehouseStreets}"),
+            ],
+          ),
+          actions: [
+            BlocBuilder<PickingLoadCubit, PickingLoadState>(
+              builder: (context, state) {
+                final isObsPed = state is PickingLoadLoaded &&
+                    state.loads.any(
+                      (element) =>
+                          element.codCarga == widget.load && element.isObsPed,
+                    );
+
+                return PalletObsAppBarAction(enablePanel: isObsPed);
+              },
+            ),
+            IconButton(
+                onPressed: () {
+                  widget.cubit.fetchPickingLoads(widget.isPending);
+                },
+                icon: const Icon(Icons.refresh))
           ],
         ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                widget.cubit.fetchPickingLoads(widget.isPending);
-              },
-              icon: const Icon(Icons.refresh))
-        ],
-      ),
-      body: BlocProvider.value(
-        value: widget.cubit,
-        child: BlocListener<PickingLoadCubit, PickingLoadState>(
+        body: BlocListener<PickingLoadCubit, PickingLoadState>(
           listener: (context, state) {
             if (state is PickingLoadLoaded) {
               if (state.loads.isEmpty) {
@@ -110,7 +123,10 @@ class _PickingLoadProductListPageState
                     child: Text("Nenhum produto nessa rua."),
                   );
                 }
-                return GroupedListView<PickingModel, String>(
+
+                final isObsPed = loads.isObsPed;
+
+                final list = GroupedListView<PickingModel, String>(
                   elements: products,
                   groupBy: (element) => element.descEndereco.substring(6),
                   groupSeparatorBuilder: (String groupByValue) {
@@ -135,9 +151,24 @@ class _PickingLoadProductListPageState
                                     btnOkColor: Theme.of(context).primaryColor)
                                 .show();
                           } else {
+                            final previousSeparado = element.separado;
                             final result =
                                 await PickingFormModal.show(context, element);
                             if (result == "ok") {
+                              if (isObsPed && context.mounted) {
+                                final delta =
+                                    element.separado - previousSeparado;
+                                if (delta > 0) {
+                                  context
+                                      .read<PickingPalletObsCubit>()
+                                      .addItem(
+                                        pedido: element.pedido,
+                                        codigo: element.codigo,
+                                        descricao: element.descricao,
+                                        quantidade: delta,
+                                      );
+                                }
+                              }
                               widget.cubit.fetchPickingLoads(widget.isPending);
                             }
                           }
@@ -152,6 +183,15 @@ class _PickingLoadProductListPageState
                   floatingHeader: false, // optional
                   order: GroupedListOrder.ASC, // optional
                 );
+
+                if (!isObsPed) {
+                  return list;
+                }
+
+                return PalletObsLayout(
+                  enablePanel: isObsPed,
+                  child: list,
+                );
               }
 
               return const Center(
@@ -164,3 +204,4 @@ class _PickingLoadProductListPageState
     );
   }
 }
+
