@@ -55,6 +55,7 @@ import '../../features/reposition_v2/pages/reposition_v2_address_list/reposition
 import '../../features/order_check/data/model/order_check_model.dart';
 import '../../features/order_check/pages/order_check_page.dart';
 import '../../features/order_check/pages/order_check_list_page.dart';
+import '../../features/conferencia_pedidos_carga/pages/carga_list_page/carga_list_page.dart';
 import '../../features/volume_label/pages/order_detail_page/order_detail_page.dart';
 import '../../features/volume_label/pages/order_selection_page/order_list_selection_page.dart';
 import '../../features/volume_label_v2/pages/volume_label_v2_page.dart';
@@ -137,6 +138,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/conferencia_pedidos",
             builder: ((context, state) => const OrderCheckListPage())),
+        GoRoute(
+            path: "/conferencia_pedidos_carga",
+            builder: ((context, state) => const CargaListPage())),
         GoRoute(
             path: "/order_check/:pedido",
             builder: ((context, state) {

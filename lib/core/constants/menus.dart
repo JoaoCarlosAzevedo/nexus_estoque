@@ -323,6 +323,12 @@ final List<MenuItemInfo> menuItens = [
     route: 'conferencia_pedidos',
   ),
   MenuItemInfo(
+    title: "Conferencia Pedidos x Carga",
+    icon: FontAwesomeIcons.truckRampBox,
+    color: Colors.red,
+    route: 'conferencia_pedidos_carga',
+  ),
+  MenuItemInfo(
     title: "Conferencia NFe Saida",
     icon: FontAwesomeIcons.rightFromBracket,
     color: Colors.red,
