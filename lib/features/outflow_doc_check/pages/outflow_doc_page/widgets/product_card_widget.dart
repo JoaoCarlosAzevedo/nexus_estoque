@@ -157,6 +157,22 @@ class ProductCheckCard extends StatelessWidget {
               ProgressIndicatorWidget(
                 value: product.checked / product.quantidade,
               ),
+              if (product.pedObs.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: RichText(
+                    text: TextSpan(
+                      style: Theme.of(context).textTheme.bodySmall,
+                      children: [
+                        const TextSpan(text: 'Observação do Pallet: '),
+                        TextSpan(
+                          text: product.pedObs,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
             ],
           ),
           visualDensity: VisualDensity.compact,
