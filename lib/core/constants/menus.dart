@@ -448,6 +448,12 @@ final List<MenuItemInfo> menuItens = [
     color: Colors.red,
     route: 'etiqueta_pedido_checkout',
   ),
+  MenuItemInfo(
+    title: "Etiqueta NF Saída",
+    icon: FontAwesomeIcons.tags,
+    color: Colors.red,
+    route: 'etiqueta_nf_saida',
+  ),
 ];
 
 
