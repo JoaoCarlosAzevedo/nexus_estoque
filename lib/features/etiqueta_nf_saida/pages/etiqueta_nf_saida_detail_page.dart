@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../core/features/bluetooth_printer/bluetooth_printer.dart';
 import '../../../core/services/bt_printer.dart';
 import '../data/model/etiqueta_nf_saida_model.dart';
 import '../data/repositories/etiqueta_nf_saida_repository.dart';
@@ -144,7 +143,7 @@ class EtiquetaNfSaidaDetailPage extends ConsumerWidget {
         ),
       );
     } else {
-      await BluetoothPageModal.show(context);
+      await BluetoothPrinter.showPrintErrorFeedback(context);
     }
   }
 
@@ -192,7 +191,7 @@ class EtiquetaNfSaidaDetailPage extends ConsumerWidget {
         ),
       );
     } else {
-      await BluetoothPageModal.show(context);
+      await BluetoothPrinter.showPrintErrorFeedback(context);
     }
   }
 }

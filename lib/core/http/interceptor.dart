@@ -33,10 +33,15 @@ class AppInterceptors extends Interceptor {
 
     if (!options.path.contains('oauth2/v1/token')) {
       final Branch? env = await LocalStorage.getBranch();
-      final group = env?.groupCode.trim() ?? "01";
-      final branch = env?.branchCode.trim() ?? "01";
+      final group = env?.groupCode.trim() ?? "";
+      final branch = env?.branchCode.trim() ?? "";
 
       options.headers['Authorization'] = 'Bearer $accessToken';
+
+      if (group.isNotEmpty && branch.isNotEmpty) {
+        options.headers['tenantId'] = '$group,$branch';
+      }
+
       options.queryParameters['empresa'] = group.isEmpty ? "01" : group;
       options.queryParameters['filial'] = branch.isEmpty ? "01" : branch;
 

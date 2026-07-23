@@ -3,12 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/routes/routes.dart';
 import 'package:nexus_estoque/core/services/bt_printer.dart';
+import 'package:nexus_estoque/core/services/print_config.dart';
 import 'package:nexus_estoque/core/theme/app_theme.dart';
 import 'package:nexus_estoque/features/auth/data/repositories/auth_repository.dart';
 import 'package:nexus_estoque/features/auth/pages/login/cubit/auth_cubit.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   //splashscreen
   await Future.delayed(
     const Duration(seconds: 1),
@@ -30,8 +33,17 @@ class NexusEstoque extends ConsumerStatefulWidget {
 class _NexusEstoqueState extends ConsumerState<NexusEstoque> {
   @override
   void dispose() {
-    BluetoothPrinter.disconnect();
+    _disconnectPrinterIfBluetooth();
     super.dispose();
+  }
+
+  Future<void> _disconnectPrinterIfBluetooth() async {
+    try {
+      final mode = await PrintConfig.getMode();
+      if (mode == PrintMode.bluetooth) {
+        await BluetoothPrinter.disconnect();
+      }
+    } catch (_) {}
   }
 
   @override

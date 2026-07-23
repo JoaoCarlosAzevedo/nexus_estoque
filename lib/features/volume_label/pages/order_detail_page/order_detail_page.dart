@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 
 import 'package:grouped_list/grouped_list.dart';
 
-import '../../../../core/features/bluetooth_printer/bluetooth_printer.dart';
 import '../../../../core/services/bt_printer.dart';
 import '../../data/model/volume_order_model.dart';
 import '../../data/repositories/volume_label_repository.dart';
@@ -192,7 +191,8 @@ class _VolumeOrderDetailPageState extends ConsumerState<VolumeOrderDetailPage> {
                                             element.zpl);
                                     if (!isPrinted) {
                                       // ignore: use_build_context_synchronously
-                                      BluetoothPageModal.show(context);
+                                      await BluetoothPrinter
+                                          .showPrintErrorFeedback(context);
                                     }
                                   },
                                   icon: const FaIcon(

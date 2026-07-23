@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nexus_estoque/core/features/branches/data/pages/branch_page.dart';
 import 'package:nexus_estoque/core/features/environment/pages/environment_config_page.dart';
+import 'package:nexus_estoque/core/features/environment/pages/network_printer_config_page.dart';
 import 'package:nexus_estoque/core/features/searches/addresses/page/address_search_page.dart';
 import 'package:nexus_estoque/core/features/searches/products/pages/products_search_page.dart';
 import 'package:nexus_estoque/features/address/data/model/product_address_model.dart';
@@ -72,7 +73,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         final loginState = ref.read(loginControllerProvider);
         final isLoginRoute = state.matchedLocation == '/login';
 
-        if (state.matchedLocation == "/configuracoes") {
+        if (state.matchedLocation.startsWith("/configuracoes")) {
           return null;
         }
         if (loginState is LoginStateInitial) {
@@ -136,6 +137,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/configuracoes",
             builder: ((context, state) => const EnvironmentConfigPage())),
+        GoRoute(
+            path: "/configuracoes/impressora_rede",
+            builder: ((context, state) => const NetworkPrinterConfigPage())),
         GoRoute(
             path: "/conferencia_pedidos",
             builder: ((context, state) => const OrderCheckListPage())),

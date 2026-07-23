@@ -7,7 +7,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grouped_list/grouped_list.dart';
 
 import '../../../core/error/failure.dart';
-import '../../../core/features/bluetooth_printer/bluetooth_printer.dart';
 import '../../../core/services/bt_printer.dart';
 import '../../picking_load_v2/data/model/pickingv2_model.dart';
 import '../../volume_label/data/repositories/volume_label_repository.dart';
@@ -95,7 +94,7 @@ class _PrintOrderLabelConfirmDialogState
         await _mostrarErro(
           'Não foi possível imprimir a etiqueta. Verifique a conexão Bluetooth com a impressora.',
         );
-        if (mounted) await BluetoothPageModal.show(context);
+        if (mounted) await BluetoothPrinter.showPrintErrorFeedback(context);
         return;
       }
       if (mounted) Navigator.of(context, rootNavigator: true).pop();

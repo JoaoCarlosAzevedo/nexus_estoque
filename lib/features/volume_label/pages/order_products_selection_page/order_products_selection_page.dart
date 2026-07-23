@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../../core/features/bluetooth_printer/bluetooth_printer.dart';
 import '../../../../core/services/bt_printer.dart';
 import '../../../address_inventory/pages/address_inventory_form_page/state/address_inventory_provider.dart';
 
@@ -131,7 +130,8 @@ class _VolumeOrderProductsSelectionPageState
                               await BluetoothPrinter.printZPL(state.etiqueta);
                           if (!isPrinted) {
                             // ignore: use_build_context_synchronously
-                            BluetoothPageModal.show(context);
+                            await BluetoothPrinter.showPrintErrorFeedback(
+                                context);
                           }
                         },
                         child: const Padding(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/features/bluetooth_printer/bluetooth_printer.dart';
 import '../../../../../core/services/bt_printer.dart';
 
 class VolumeLabelPreview extends ConsumerStatefulWidget {
@@ -40,7 +39,7 @@ class _VolumeLabelPreviewState extends ConsumerState<VolumeLabelPreview> {
           final isPrinted = await BluetoothPrinter.printZPL(widget.zpl);
           if (!isPrinted) {
             // ignore: use_build_context_synchronously
-            BluetoothPageModal.show(context);
+            await BluetoothPrinter.showPrintErrorFeedback(context);
           }
         },
         icon: const Icon(Icons.print),

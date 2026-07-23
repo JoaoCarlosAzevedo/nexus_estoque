@@ -91,6 +91,20 @@ class _OutFlowDocProductListState extends ConsumerState<OutFlowDocProductList> {
                 notFound: widget.notFound,
                 product: widget.scannedProduct,
                 onClose: widget.onClose,
+                onPressed: () async {
+                  final grouped = widget.scannedProduct;
+                  if (grouped == null || grouped.products.isEmpty) {
+                    return;
+                  }
+                  final double? newQuantity = await CheckQuantityModal.show(
+                      context,
+                      grouped.products.first,
+                      grouped.getTotalConferido());
+                  if (newQuantity != null) {
+                    cubit.setNewQuantity(newQuantity, grouped);
+                  }
+                  focus.requestFocus();
+                },
               ),
               Expanded(
                 child: ListView.builder(

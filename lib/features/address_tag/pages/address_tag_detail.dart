@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/features/bluetooth_printer/bluetooth_printer.dart';
 import '../../../core/services/bt_printer.dart';
 import '../data/model/address_tag_model.dart';
 import '../data/repositories/address_tag_repository.dart';
@@ -71,7 +70,7 @@ class _AddressTagPreviewState extends ConsumerState<AddressTagPreview> {
                 final isPrinted = await BluetoothPrinter.printZPL(data);
                 if (!isPrinted) {
                   // ignore: use_build_context_synchronously
-                  BluetoothPageModal.show(context);
+                  await BluetoothPrinter.showPrintErrorFeedback(context);
                 }
               },
               icon: const Icon(Icons.print),

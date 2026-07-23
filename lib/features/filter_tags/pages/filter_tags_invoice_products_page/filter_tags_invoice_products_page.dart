@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nexus_estoque/features/filter_tags/pages/filter_tags_invoice_products_page/filter_tag_tab2.dart';
 
-import '../../../../core/features/bluetooth_printer/bluetooth_printer.dart';
 import '../../../../core/services/bt_printer.dart';
 import '../filter_tags_load_page/cubit/filter_tag_load_cubit.dart';
 import 'filter_tag_tab1.dart';
@@ -74,7 +73,7 @@ class _FilterTagsInvoiceProductsPageState
                         await BluetoothPrinter.printZPL(state.etiqueta);
                     if (!isPrinted) {
                       // ignore: use_build_context_synchronously
-                      BluetoothPageModal.show(context);
+                      await BluetoothPrinter.showPrintErrorFeedback(context);
                       return;
                     }
 
@@ -131,7 +130,8 @@ class _FilterTagsInvoiceProductsPageState
                                 await BluetoothPrinter.printZPL(state.etiqueta);
                             if (!isPrinted) {
                               // ignore: use_build_context_synchronously
-                              BluetoothPageModal.show(context);
+                              await BluetoothPrinter.showPrintErrorFeedback(
+                                  context);
                             }
                           },
                           child: const Padding(

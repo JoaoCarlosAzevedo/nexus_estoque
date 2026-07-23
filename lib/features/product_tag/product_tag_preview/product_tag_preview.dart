@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/features/bluetooth_printer/bluetooth_printer.dart';
 import '../../../core/services/bt_printer.dart';
 import '../data/repositories/product_tag_repository.dart';
 
@@ -61,7 +60,7 @@ class _ProductTagPreviewState extends ConsumerState<ProductTagPreview> {
                 final isPrinted = await BluetoothPrinter.printZPL(data.zpl);
                 if (!isPrinted) {
                   // ignore: use_build_context_synchronously
-                  BluetoothPageModal.show(context);
+                  await BluetoothPrinter.showPrintErrorFeedback(context);
                 }
               },
               icon: const Icon(Icons.print),

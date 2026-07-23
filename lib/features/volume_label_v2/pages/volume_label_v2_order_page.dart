@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../core/features/bluetooth_printer/bluetooth_printer.dart';
 import '../../../core/services/bt_printer.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../filter_tags_orders/data/model/filter_tag_load_order_model.dart';
@@ -328,7 +327,7 @@ class VolumeLabelV2OrderPage extends ConsumerWidget {
     final isPrinted = await BluetoothPrinter.printZPL(volume.etiqueta);
     if (!isPrinted) {
       // ignore: use_build_context_synchronously
-      BluetoothPageModal.show(context);
+      await BluetoothPrinter.showPrintErrorFeedback(context);
     }
   }
 }

@@ -10,11 +10,13 @@ class BarcodeScannedCard extends StatelessWidget {
       required this.product,
       required this.barcode,
       required this.notFound,
-      required this.onClose});
+      required this.onClose,
+      this.onPressed});
   final GroupedProducts? product;
   final String? barcode;
   final bool notFound;
   final void Function()? onClose;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -112,6 +114,19 @@ class BarcodeScannedCard extends StatelessWidget {
                               child: ProgressChart(
                                   value: product!.getTotalConferido() /
                                       product!.getTotalNF())),
+                          if (product!.products.any((p) => p.isMudaQtd))
+                            Flexible(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: IconButton(
+                                  onPressed: onPressed,
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(),
+                                  icon: const FaIcon(
+                                      FontAwesomeIcons.penToSquare),
+                                ),
+                              ),
+                            ),
                         ],
                       ),
                     ),

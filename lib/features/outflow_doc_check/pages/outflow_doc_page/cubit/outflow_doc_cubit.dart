@@ -118,6 +118,49 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
     }
   }
 
+  void setNewQuantity(double newQuantity, GroupedProducts grouped) {
+    if (state is OutFlowDocLoaded) {
+      final currentState = state as OutFlowDocLoaded;
+      final doc = currentState.docs;
+
+      final products = doc.produtos
+          .where((element) => element.codigo.trim() == grouped.produto.trim())
+          .toList();
+
+      double saldo = newQuantity;
+      for (var element in products) {
+        element.checked = 0;
+      }
+
+      for (var produto in products) {
+        if (produto.checked < produto.quantidade) {
+          if ((saldo + produto.checked) > produto.quantidade) {
+            double necessario = produto.quantidade - produto.checked;
+            produto.checked = produto.checked + necessario;
+            saldo = saldo - necessario;
+            continue;
+          }
+
+          if (saldo > 0) {
+            produto.checked = produto.checked + saldo;
+            saldo = 0;
+          }
+        }
+      }
+
+      if (saldo > 0 && products.isNotEmpty) {
+        products.last.checked = products.last.checked + saldo;
+      }
+
+      grouped.products = doc.produtos
+          .where((element) => element.codigo.trim() == grouped.produto.trim())
+          .toList();
+
+      emit(OutFlowDocLoading());
+      emit(OutFlowDocLoaded(doc, grouped, false, currentState.barcode));
+    }
+  }
+
   void checkProduct(String code) async {
     if (state is OutFlowDocLoaded) {
       if (code.startsWith("ETIQ/")) {

@@ -87,7 +87,7 @@ class Produtos {
   bool isBlind;
   bool lnoQtd;
   String pedObs;
-
+  bool isMudaQtd;
   Produtos({
     required this.descricao,
     required this.quantidade,
@@ -103,6 +103,7 @@ class Produtos {
     required this.isBlind,
     required this.lnoQtd,
     required this.pedObs,
+    required this.isMudaQtd,
   });
 
   Map<String, dynamic> toMap() {
@@ -121,6 +122,7 @@ class Produtos {
       'isBlind': isBlind,
       'lnoQtd': lnoQtd,
       'pedObs': pedObs,
+      'isMudaQtd': isMudaQtd,
     };
   }
 
@@ -140,6 +142,7 @@ class Produtos {
       isBlind: map['confCega'] ?? false,
       lnoQtd: map['noQtd'] ?? false,
       pedObs: map['obs_pedido'] ?? '',
+      isMudaQtd: map['mudaQtd'] ?? false,
     );
   }
 

@@ -36,11 +36,6 @@ class _EnvironmentConfigPageState extends ConsumerState<EnvironmentConfigPage> {
 
   @override
   Widget build(BuildContext context) {
-/*     final futureProvider =
-        ref.watch(remoteEnvrionmentProvider(urlController.text));
-    final urlFutureProvider = ref.watch(localEnvrionmentProvider);
-    final urlProv = ref.watch(urlProvider);
- */
     return Scaffold(
       appBar: AppBar(
         title: const Text("Configuração"),
@@ -59,24 +54,6 @@ class _EnvironmentConfigPageState extends ConsumerState<EnvironmentConfigPage> {
               const SizedBox(
                 height: 20,
               ),
-
-              /*    futureProvider.when(
-                data: (data) {
-                  return data.isNotEmpty
-                      ? const Text("URL ok!")
-                      : const Text("URL Errada");
-                },
-                error: (error, stack) => Center(child: Text(error.toString())),
-                loading: () => const Center(child: CircularProgressIndicator()),
-              ),
-              urlFutureProvider.when(
-                data: (data) => Text(data),
-                error: (Object error, StackTrace stackTrace) => Text(
-                  error.toString(),
-                ),
-                loading: () => const Center(child: CircularProgressIndicator()),
-              ), */
-              //Text("Provider: $urlProv"),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -84,7 +61,6 @@ class _EnvironmentConfigPageState extends ConsumerState<EnvironmentConfigPage> {
                     flex: 1,
                     child: ElevatedButton(
                       onPressed: () async {
-                        //setState(() {});
                         await LocalStorage.saveURL(urlController.text);
                         // ignore: use_build_context_synchronously
                         context.pop();
@@ -102,18 +78,31 @@ class _EnvironmentConfigPageState extends ConsumerState<EnvironmentConfigPage> {
               const SizedBox(
                 height: 20,
               ),
-
-              ElevatedButton(
+              ElevatedButton.icon(
                 onPressed: () async {
                   await BluetoothPrinter.disconnect();
 
                   // ignore: use_build_context_synchronously
                   BluetoothPageModal.show(context);
                 },
-                child: const Padding(
+                icon: const Icon(Icons.bluetooth),
+                label: const Padding(
                   padding: EdgeInsets.all(12),
                   child: Center(
                     child: Text("Configurar Impressora BT"),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              ElevatedButton.icon(
+                onPressed: () {
+                  context.push('/configuracoes/impressora_rede');
+                },
+                icon: const Icon(Icons.wifi),
+                label: const Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Center(
+                    child: Text("Configurar Impressora Rede"),
                   ),
                 ),
               ),

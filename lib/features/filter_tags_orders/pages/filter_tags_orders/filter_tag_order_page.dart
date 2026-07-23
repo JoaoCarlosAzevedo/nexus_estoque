@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nexus_estoque/core/services/bt_printer.dart';
 
-import '../../../../core/features/bluetooth_printer/bluetooth_printer.dart';
 import '../../data/repositories/filter_tag_order_repository.dart';
 import 'cubit/filter_tag_order_cubit.dart';
 
@@ -82,7 +81,9 @@ class _FilterTagsOrderPageState extends ConsumerState<FilterTagsOrderPage> {
                                                   data[index].etiqueta);
                                           if (!isPrinted) {
                                             // ignore: use_build_context_synchronously
-                                            BluetoothPageModal.show(context);
+                                            await BluetoothPrinter
+                                                .showPrintErrorFeedback(
+                                                    context);
                                           }
                                         },
                                         icon: const Icon(
