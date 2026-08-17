@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
@@ -13,9 +15,14 @@ class AuthCubit extends Cubit<AuthState> {
   void login(String username, String password) async {
     emit(AuthLoading());
 
-    final result = await repository.auth(username, password);
+    try {
+      final result = await repository.auth(username, password);
 
-    result.fold((l) => emit(AuthError(l)), (r) => emit(AuthLoaded(r)));
+      result.fold((l) => emit(AuthError(l)), (r) => emit(AuthLoaded(r)));
+    } catch (e, stack) {
+      log('AuthCubit.login unexpected error', error: e, stackTrace: stack);
+      emit(AuthError(Failure("Erro inesperado: $e", ErrorType.exception)));
+    }
   }
 
   void logout() {

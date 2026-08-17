@@ -39,7 +39,9 @@ class AppInterceptors extends Interceptor {
       options.headers['Authorization'] = 'Bearer $accessToken';
 
       if (group.isNotEmpty && branch.isNotEmpty) {
-        options.headers['tenantId'] = '$group,$branch';
+        if (group != '31' && group != '32') {
+          options.headers['tenantId'] = '$group,$branch';
+        }
       }
 
       options.queryParameters['empresa'] = group.isEmpty ? "01" : group;
@@ -63,8 +65,22 @@ class AppInterceptors extends Interceptor {
 
     if (err.response?.statusCode == 401) {
       if (await _storage.containsKey(key: 'refresh_token')) {
-        await refreshToken();
-        return handler.resolve(await _retry(err.requestOptions));
+        try {
+          await refreshToken();
+
+          if (accessToken == null || accessToken!.isEmpty) {
+            return handler.next(err);
+          }
+
+          final response = await _retry(err.requestOptions);
+          return handler.resolve(response);
+        } on DioException catch (retryErr) {
+          log('RETRY_ERROR[${retryErr.response?.statusCode}] => PATH: ${retryErr.requestOptions.path}');
+          return handler.next(retryErr);
+        } catch (e, stack) {
+          log('RETRY_UNEXPECTED_ERROR', error: e, stackTrace: stack);
+          return handler.next(err);
+        }
       }
     }
 
@@ -72,8 +88,12 @@ class AppInterceptors extends Interceptor {
   }
 
   Future<Response<dynamic>> _retry(RequestOptions requestOptions) async {
-    final options =
-        Options(method: requestOptions.method, headers: requestOptions.headers);
+    final newHeaders = Map<String, dynamic>.from(requestOptions.headers);
+    if (accessToken != null && accessToken!.isNotEmpty) {
+      newHeaders['Authorization'] = 'Bearer $accessToken';
+    }
+
+    final options = Options(method: requestOptions.method, headers: newHeaders);
 
     return _dio.request<dynamic>(requestOptions.path,
         data: requestOptions.data,
@@ -92,26 +112,27 @@ class AppInterceptors extends Interceptor {
         'refresh_token': refreshToken,
       });
       log("REFRESH_TOKEN[POST]");
-      //se atualizou o refreshtoken na api
-      if (response.statusCode == 201) {
-        accessToken = response.data["access_token"]; //talvez pasear aqui
-        final newRefreshToken =
-            response.data["refresh_token"]; //talvez pasear aqui
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        accessToken = response.data["access_token"];
+        final newRefreshToken = response.data["refresh_token"];
+        await _storage.write(key: 'access_token', value: accessToken ?? '');
         await _storage.write(key: 'refresh_token', value: newRefreshToken);
       } else {
-        accessToken = null;
-        await _storage.delete(key: 'refresh_token');
-        _ref.read(loginControllerProvider.notifier).logout();
+        await _forceLogout();
       }
-    } on DioException catch (_) {
-      //se o refreshtoken n deu certo, forca relogar;
-      accessToken = null;
-      await _storage.delete(key: 'refresh_token');
-      _ref.read(loginControllerProvider.notifier).logout();
+    } on DioException catch (e) {
+      log('REFRESH_TOKEN_ERROR[${e.response?.statusCode}]');
+      await _forceLogout();
+    } catch (e, stack) {
+      log('REFRESH_TOKEN_UNEXPECTED_ERROR', error: e, stackTrace: stack);
+      await _forceLogout();
     }
-/* 
-    //refresh token eh invalido e nao funcionou
+  }
+
+  Future<void> _forceLogout() async {
     accessToken = null;
-    _storage.deleteAll(); */
+    await _storage.delete(key: 'refresh_token');
+    await _storage.delete(key: 'access_token');
+    _ref.read(loginControllerProvider.notifier).logout();
   }
 }

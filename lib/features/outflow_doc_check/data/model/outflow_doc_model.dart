@@ -88,6 +88,8 @@ class Produtos {
   bool lnoQtd;
   String pedObs;
   bool isMudaQtd;
+  bool noSku;
+
   Produtos({
     required this.descricao,
     required this.quantidade,
@@ -104,6 +106,7 @@ class Produtos {
     required this.lnoQtd,
     required this.pedObs,
     required this.isMudaQtd,
+    required this.noSku,
   });
 
   Map<String, dynamic> toMap() {
@@ -123,6 +126,7 @@ class Produtos {
       'lnoQtd': lnoQtd,
       'pedObs': pedObs,
       'isMudaQtd': isMudaQtd,
+      'noSku': noSku,
     };
   }
 
@@ -143,6 +147,7 @@ class Produtos {
       lnoQtd: map['noQtd'] ?? false,
       pedObs: map['obs_pedido'] ?? '',
       isMudaQtd: map['mudaQtd'] ?? false,
+      noSku: map['bipaSKU'] ?? false,
     );
   }
 

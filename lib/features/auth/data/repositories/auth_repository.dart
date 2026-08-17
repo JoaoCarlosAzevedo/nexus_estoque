@@ -42,7 +42,13 @@ class AuthRepository {
         await _storage.write(key: 'refresh_token', value: user.refreshToken);
 
         Map<String, dynamic> decodedToken = JwtDecoder.decode(user.accessToken);
-        final String userId = decodedToken['userid'];
+        final userId = decodedToken['userid'];
+
+        if (userId == null || userId is! String || userId.isEmpty) {
+          return const Left(Failure(
+              "Token inválido: usuário não identificado.",
+              ErrorType.exception));
+        }
 
         final data = await getUser(userId);
 
@@ -59,7 +65,8 @@ class AuthRepository {
           return Right(user);
         });
       }
-      return const Left(Failure("Server Error!", ErrorType.exception));
+      return Left(Failure(
+          "Erro no servidor (${response.statusCode}).", ErrorType.exception));
     } on DioException catch (e) {
       log('auth ${e.type.name}');
 
@@ -75,7 +82,20 @@ class AuthRepository {
         return const Left(
             Failure('Usuário ou senha inválido.', ErrorType.validation));
       }
-      return const Left(Failure("Server Error!", ErrorType.exception));
+
+      final serverMessage = _extractServerMessage(e.response?.data);
+      final statusCode = e.response?.statusCode;
+      final detail = serverMessage ??
+          (e.message?.isNotEmpty == true ? e.message! : e.type.name);
+      return Left(Failure(
+          statusCode != null
+              ? "Erro no servidor ($statusCode): $detail"
+              : "Erro no servidor: $detail",
+          ErrorType.exception));
+    } catch (e, stack) {
+      log('auth unexpected error', error: e, stackTrace: stack);
+      return Left(
+          Failure("Erro inesperado: $e", ErrorType.exception));
     }
   }
 
@@ -87,7 +107,15 @@ class AuthRepository {
       response = await dio.get('$url/filial/$userId');
 
       if (response.statusCode != 200) {
-        return const Left(Failure("Server Error!", ErrorType.exception));
+        return Left(Failure(
+            "Erro no servidor (${response.statusCode}).",
+            ErrorType.exception));
+      }
+
+      if (response.data == null || response.data is! Map) {
+        return const Left(Failure(
+            "Resposta inválida do servidor ao buscar usuário.",
+            ErrorType.exception));
       }
 
       return Right({
@@ -96,13 +124,40 @@ class AuthRepository {
         'menus': response.data['menu'] ?? []
       });
     } on DioException catch (e) {
+      log('getUser ${e.type.name}');
+
       if (e.type.name == "connectTimeout") {
         return const Left(Failure("Tempo Excedido", ErrorType.timeout));
       }
       if (e.type.name == "receiveTimeout") {
         return const Left(Failure("Tempo Excedido", ErrorType.timeout));
       }
-      return const Left(Failure("Server Error!", ErrorType.exception));
+
+      final serverMessage = _extractServerMessage(e.response?.data);
+      final statusCode = e.response?.statusCode;
+      final detail = serverMessage ??
+          (e.message?.isNotEmpty == true ? e.message! : e.type.name);
+      return Left(Failure(
+          statusCode != null
+              ? "Erro ao buscar usuário ($statusCode): $detail"
+              : "Erro ao buscar usuário: $detail",
+          ErrorType.exception));
+    } catch (e, stack) {
+      log('getUser unexpected error', error: e, stackTrace: stack);
+      return Left(Failure(
+          "Erro inesperado ao buscar usuário: $e", ErrorType.exception));
     }
+  }
+
+  String? _extractServerMessage(dynamic data) {
+    if (data == null) return null;
+    if (data is String && data.isNotEmpty) return data;
+    if (data is Map) {
+      for (final key in ['message', 'error', 'errorMessage', 'msg', 'detail']) {
+        final value = data[key];
+        if (value is String && value.isNotEmpty) return value;
+      }
+    }
+    return null;
   }
 }

@@ -1,5 +1,7 @@
 // ignore_for_file: unnecessary_const
 
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:nexus_estoque/core/error/failure.dart';
@@ -224,9 +226,12 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
       } else {
         final aux = state as OutFlowDocLoaded;
         int index = aux.docs.produtos.indexWhere((element) {
-          if (element.codigo.trim() == code.trim() &&
-              (element.checked < element.quantidade)) {
-            return true;
+          log('noSku: ${element.noSku}');
+          if (!element.noSku) {
+            if (element.codigo.trim() == code.trim() &&
+                (element.checked < element.quantidade)) {
+              return true;
+            }
           }
 
           if (code.trim().length >= 5) {
@@ -246,8 +251,11 @@ class OutFlowDocCubit extends Cubit<OutFlowDocState> {
 
         if (index == -1) {
           index = aux.docs.produtos.indexWhere((element) {
-            if (element.codigo.trim() == code.trim()) {
-              return true;
+            log('noSku: ${element.noSku}');
+            if (!element.noSku) {
+              if (element.codigo.trim() == code.trim()) {
+                return true;
+              }
             }
 
             if (code.trim().length >= 5) {
