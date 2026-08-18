@@ -40,18 +40,6 @@ class LoginForm extends StatelessWidget {
                           ),
                         ); */
                         await LocalStorage.deleteAll();
-
-                        // ignore: use_build_context_synchronously
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("Registros Deletados"),
-                        ));
-
-                        // ignore: use_build_context_synchronously
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (ctx) {
-                          return const BarcodeScanerPage();
-                        }));
                       },
                       child: Image.asset(
                         "assets/NexusIcon.png",
@@ -123,7 +111,7 @@ class LoginForm extends StatelessWidget {
                         .toList();
                     print(jsonEncode(listMenus)); */
                   },
-                  child: const Text('Versão 1.1.71'),
+                  child: const Text('Versão 1.1.72'),
                 ),
               ],
             ),

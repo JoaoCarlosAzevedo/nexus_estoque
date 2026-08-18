@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -39,6 +40,28 @@ class _EnvironmentConfigPageState extends ConsumerState<EnvironmentConfigPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Configuração"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              AwesomeDialog(
+                context: context,
+                dialogType: DialogType.question,
+                animType: AnimType.rightSlide,
+                title: 'Limpar dados',
+                desc: 'Deseja limpar os dados salvos do aplicativo?',
+                btnCancelText: 'Não',
+                btnOkText: 'Sim',
+                btnCancelOnPress: () {},
+                btnOkOnPress: () async {
+                  await LocalStorage.deleteAll();
+                  setUrl();
+                },
+                btnOkColor: Theme.of(context).primaryColor,
+              ).show();
+            },
+            icon: const Icon(Icons.delete_forever),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
