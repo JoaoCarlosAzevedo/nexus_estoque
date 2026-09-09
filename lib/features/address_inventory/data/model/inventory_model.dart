@@ -19,6 +19,7 @@ class InventoryModel {
   String chave;
   String dataLote;
   int recno;
+  InventoryAutoCompleteModel autoComplete;
   InventoryModel({
     required this.filial,
     required this.codPro,
@@ -37,6 +38,7 @@ class InventoryModel {
     required this.chave,
     required this.dataLote,
     required this.recno,
+    required this.autoComplete,
   });
 
   Map<String, dynamic> toMap() {
@@ -58,6 +60,7 @@ class InventoryModel {
       'chave': chave,
       'dataLote': dataLote,
       'recno': recno,
+      'autoComplete': autoComplete.toMap(),
     };
   }
 
@@ -80,6 +83,11 @@ class InventoryModel {
       lote: map['lote'] ?? '',
       dataLote: map['dataValidade'] ?? '',
       recno: map['recno'] ?? 0,
+      autoComplete: map['autoComplete'] != null
+          ? InventoryAutoCompleteModel.fromMap(
+              Map<String, dynamic>.from(map['autoComplete']),
+            )
+          : InventoryAutoCompleteModel.empty(),
     );
   }
 
@@ -87,4 +95,64 @@ class InventoryModel {
 
   factory InventoryModel.fromJson(String source) =>
       InventoryModel.fromMap(json.decode(source) as Map<String, dynamic>);
+}
+
+class InventoryAutoCompleteModel {
+  String filial;
+  String codPro;
+  String descPro;
+  String doc;
+  String lote;
+  String dataValidade;
+
+  bool get isFilled => codPro.trim().isNotEmpty;
+
+  InventoryAutoCompleteModel({
+    required this.filial,
+    required this.codPro,
+    required this.descPro,
+    required this.doc,
+    required this.lote,
+    required this.dataValidade,
+  });
+
+  factory InventoryAutoCompleteModel.empty() {
+    return InventoryAutoCompleteModel(
+      filial: '',
+      codPro: '',
+      descPro: '',
+      doc: '',
+      lote: '',
+      dataValidade: '',
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'filial': filial,
+      'codPro': codPro,
+      'descPro': descPro,
+      'doc': doc,
+      'lote': lote,
+      'dataValidade': dataValidade,
+    };
+  }
+
+  factory InventoryAutoCompleteModel.fromMap(Map<String, dynamic> map) {
+    return InventoryAutoCompleteModel(
+      filial: map['Filial'] ?? '',
+      codPro: map['CodPro'] ?? '',
+      descPro: map['DescPro'] ?? '',
+      doc: map['Doc'] ?? '',
+      lote: map['lote'] ?? '',
+      dataValidade: map['dataValidade'] ?? '',
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory InventoryAutoCompleteModel.fromJson(String source) =>
+      InventoryAutoCompleteModel.fromMap(
+        json.decode(source) as Map<String, dynamic>,
+      );
 }

@@ -148,11 +148,12 @@ class Pickingv2Repository {
   }
 
   Future<Either<Failure, List<Shippingv2Model>>> fetchPickingLoadList(
-      String dateIni, String dateEnd) async {
+      String dateIni, String dateEnd,
+      {String tipo = "separacaov2"}) async {
     final String url = await Config.baseURL;
     try {
       var response = await dio.get('$url/separacao/rota/', queryParameters: {
-        'tipo': "separacaov2",
+        'tipo': tipo,
         'data_ini': dateIni,
         'data_fim': dateEnd,
         //'tipo':

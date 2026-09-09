@@ -10,7 +10,10 @@ part 'picking_loadv2_state.dart';
 
 class PickingLoadv2Cubit extends Cubit<PickingLoadv2State> {
   final Pickingv2Repository repository;
-  PickingLoadv2Cubit(this.repository, String dateIni, String dateEnd)
+  final String tipo;
+
+  PickingLoadv2Cubit(this.repository, String dateIni, String dateEnd,
+      {this.tipo = "separacaov2"})
       : super(PickingLoadv2Initial()) {
     fetchPickingLoads(dateIni, dateEnd);
   }
@@ -25,7 +28,8 @@ class PickingLoadv2Cubit extends Cubit<PickingLoadv2State> {
   void fetchPickingLoads(String dateIni, String dateEnd) async {
     emit(PickingLoadv2Loading());
 
-    final data = await repository.fetchPickingLoadList(dateIni, dateEnd);
+    final data =
+        await repository.fetchPickingLoadList(dateIni, dateEnd, tipo: tipo);
 
     data.fold((l) => emit(PickingLoadv2Error(error: l)),
         (r) => emit(PickingLoadv2Loaded(loads: r, load: '')));
@@ -35,7 +39,8 @@ class PickingLoadv2Cubit extends Cubit<PickingLoadv2State> {
       String load, String deparment, String dateIni, String dateEnd) async {
     emit(PickingLoadv2Loading());
 
-    final data = await repository.fetchPickingLoadList(dateIni, dateEnd);
+    final data =
+        await repository.fetchPickingLoadList(dateIni, dateEnd, tipo: tipo);
 
     data.fold((l) => emit(PickingLoadv2Error(error: l)), (r) {
       if (deparment.trim() == "03") {

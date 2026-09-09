@@ -49,6 +49,8 @@ class _AddressInventoryFormPageState
   late ProductModel prodInv;
   String vencLote = "";
   bool isValidDateLote = false;
+  bool _autoCompleteApplied = false;
+  bool _formReady = false;
 
   @override
   void initState() {
@@ -59,7 +61,8 @@ class _AddressInventoryFormPageState
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(addressInventoryProvider.notifier).setDoc(widget.doc);
 
-      if (widget.address.prdInvent) {
+      final autoComplete = _filledAutoComplete();
+      if (autoComplete == null && widget.address.prdInvent) {
         if (widget.address.codProd.trim().isNotEmpty) {
           ref.read(addressInventoryProvider.notifier).addProduct(
               ProductModel(
@@ -85,6 +88,8 @@ class _AddressInventoryFormPageState
       ref
           .read(addressInventoryProvider.notifier)
           .setAddress(widget.address.codEndereco);
+      _formReady = true;
+      _tryApplyAutoComplete();
     });
   }
 
@@ -100,6 +105,9 @@ class _AddressInventoryFormPageState
   @override
   Widget build(BuildContext context) {
     AddressInventoryState state = ref.watch(addressInventoryProvider);
+    ref.listen(remoteProductProvider, (previous, next) {
+      next.whenData((_) => _tryApplyAutoComplete());
+    });
     ref.listen(addressInventoryProvider, (previous, current) {
       if (current.status == StateEnum.error) {
         AwesomeDialog(
@@ -214,7 +222,7 @@ class _AddressInventoryFormPageState
                                 const Icon(
                                   Icons.content_paste_search,
                                 ),
-                                Text("(${widget.data.length})")
+                                Text("(${_launchedInventory.length})")
                               ],
                             ),
                           ),
@@ -259,7 +267,7 @@ class _AddressInventoryFormPageState
                                 Expanded(
                                   child: NoKeyboardTextSearchForm(
                                     label: 'Lote',
-                                    autoFocus: true,
+                                    autoFocus: loteController.text.isEmpty,
                                     focusNode: loteFocus,
                                     onSubmitted: (e) {
                                       focus.requestFocus();
@@ -474,49 +482,42 @@ class _AddressInventoryFormPageState
                       Column(
                         children: [
                           const Divider(),
-                          if (widget.data.isNotEmpty)
+                          if (_launchedInventory.isNotEmpty)
                             const Align(
                               alignment: Alignment.topLeft,
                               child: Text("Inventário Lançado"),
                             ),
                           Expanded(
                             child: ListView.builder(
-                              itemCount: widget.data.length,
+                              itemCount: _launchedInventory.length,
                               itemBuilder: (context, index) {
+                                final item = _launchedInventory[index];
                                 return Card(
                                   child: ListTile(
                                     leading: InventoryDeleteIcon(
-                                      recno: widget.data[index].recno,
+                                      recno: item.recno,
                                       onSuccess: () {
                                         ref.invalidate(remoteGetInventoryProvider(
                                             '${widget.address.codEndereco}|${widget.doc}'));
                                       },
                                     ),
                                     title: Text(
-                                      '${widget.data[index].descPro} - ${widget.data[index].codigoBarras}',
+                                      '${item.descPro} - ${item.codigoBarras}',
                                     ),
                                     subtitle: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(widget.data[index].codPro),
-                                        if (widget.data[index].lote
-                                            .trim()
-                                            .isNotEmpty)
-                                          Text(
-                                              'Lote: ${widget.data[index].lote}'),
-                                        if (widget.data[index].dataLote
-                                                .trim()
-                                                .isNotEmpty &&
-                                            widget.data[index].lote
-                                                .trim()
-                                                .isNotEmpty)
-                                          Text(
-                                              'Dt. Venc.: ${widget.data[index].dataLote}'),
+                                        Text(item.codPro),
+                                        if (item.lote.trim().isNotEmpty)
+                                          Text('Lote: ${item.lote}'),
+                                        if (item.dataLote.trim().isNotEmpty &&
+                                            item.lote.trim().isNotEmpty)
+                                          Text('Dt. Venc.: ${item.dataLote}'),
                                       ],
                                     ),
                                     trailing: Text(
-                                      'Qtd: ${widget.data[index].quantInvent}',
+                                      'Qtd: ${item.quantInvent}',
                                       style: const TextStyle(color: Colors.red),
                                     ),
                                   ),
@@ -548,7 +549,61 @@ class _AddressInventoryFormPageState
     );
   }
 
-  void getProduct(String product) {
+  List<InventoryModel> get _launchedInventory => widget.data
+      .where((item) => item.codPro.trim().isNotEmpty)
+      .toList();
+
+  InventoryAutoCompleteModel? _filledAutoComplete() {
+    for (final item in widget.data) {
+      if (item.autoComplete.isFilled) {
+        return item.autoComplete;
+      }
+    }
+    return null;
+  }
+
+  String _dataValidadeToVencLote(String dataValidade) {
+    return dataValidade.replaceAll('/', '').trim();
+  }
+
+  void _tryApplyAutoComplete() {
+    if (_autoCompleteApplied || !_formReady) return;
+
+    final autoComplete = _filledAutoComplete();
+    if (autoComplete == null) return;
+
+    if (listWatch.isEmpty) {
+      listWatch = ref.read(remoteProductProvider).maybeWhen(
+            data: (data) => data,
+            orElse: () => [],
+          );
+    }
+
+    if (listWatch.isEmpty) return;
+
+    _autoCompleteApplied = true;
+    getProduct(autoComplete.codPro, focusLote: false);
+
+    final hasLoteOrDate = autoComplete.lote.trim().isNotEmpty ||
+        autoComplete.dataValidade.trim().isNotEmpty;
+    final convertedDate = _dataValidadeToVencLote(autoComplete.dataValidade);
+
+    setState(() {
+      loteController.text = autoComplete.lote.trim();
+      vencLote = convertedDate;
+      isValidDateLote = convertedDate.isNotEmpty;
+      if (hasLoteOrDate) {
+        isLote = true;
+      }
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      focus.requestFocus();
+    });
+  }
+
+  void getProduct(String product, {bool focusLote = true}) {
     bool isDun = false;
     if (listWatch.isEmpty) {
       listWatch = ref.read(remoteProductProvider).maybeWhen(
@@ -619,7 +674,9 @@ class _AddressInventoryFormPageState
             isLote = true;
             prodInv = selectedProduct;
           });
-          loteFocus.requestFocus();
+          if (focusLote) {
+            loteFocus.requestFocus();
+          }
         } else {
           setState(() {
             isLote = false;

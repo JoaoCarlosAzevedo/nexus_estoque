@@ -34,7 +34,8 @@ class _PickingLoadOrdersListState extends ConsumerState<PickingLoadOrdersList> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => PickingLoadv2Cubit(
-          ref.read(pickingv2RepositoryProvider), dateIni, dateEnd),
+          ref.read(pickingv2RepositoryProvider), dateIni, dateEnd,
+          tipo: "separacaov3"),
       child: BlocBuilder<PickingLoadv2Cubit, PickingLoadv2State>(
         builder: (context, state) {
           return Scaffold(
