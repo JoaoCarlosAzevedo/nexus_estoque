@@ -39,7 +39,7 @@ class AppInterceptors extends Interceptor {
       options.headers['Authorization'] = 'Bearer $accessToken';
 
       if (group.isNotEmpty && branch.isNotEmpty) {
-        if (group != '31' && group != '32') {
+        if (group != '31' && group != '32' && group != '33') {
           options.headers['tenantId'] = '$group,$branch';
         }
       }

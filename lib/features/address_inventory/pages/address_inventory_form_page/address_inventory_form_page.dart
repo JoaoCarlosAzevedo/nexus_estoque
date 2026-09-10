@@ -47,6 +47,7 @@ class _AddressInventoryFormPageState
   late List<InventoryModel> inventoryData = [];
   bool isLote = false;
   late ProductModel prodInv;
+  bool _hasProdInv = false;
   String vencLote = "";
   bool isValidDateLote = false;
   bool _autoCompleteApplied = false;
@@ -241,9 +242,11 @@ class _AddressInventoryFormPageState
                             autoFocus: true,
                             focusNode: focus,
                             onSubmitted: (e) {
-                              getProduct(e);
+                              final keepLoteFocus = getProduct(e);
                               productController.clear();
-                              focus.requestFocus();
+                              if (!keepLoteFocus) {
+                                focus.requestFocus();
+                              }
                             },
                             validator: isNotEmpty,
                             controller: productController,
@@ -253,9 +256,12 @@ class _AddressInventoryFormPageState
                                 productController.text =
                                     await ProductSearchModal.show(
                                         context, false);
-                                getProduct(productController.text);
+                                final keepLoteFocus =
+                                    getProduct(productController.text);
                                 productController.clear();
-                                focus.requestFocus();
+                                if (!keepLoteFocus) {
+                                  focus.requestFocus();
+                                }
                               },
                               icon: const FaIcon(
                                   FontAwesomeIcons.magnifyingGlass),
@@ -603,7 +609,7 @@ class _AddressInventoryFormPageState
     });
   }
 
-  void getProduct(String product, {bool focusLote = true}) {
+  bool getProduct(String product, {bool focusLote = true}) {
     bool isDun = false;
     if (listWatch.isEmpty) {
       listWatch = ref.read(remoteProductProvider).maybeWhen(
@@ -613,7 +619,7 @@ class _AddressInventoryFormPageState
     }
 
     if (product.trim().isEmpty) {
-      return;
+      return false;
     }
 
     if (listWatch.isNotEmpty) {
@@ -669,18 +675,43 @@ class _AddressInventoryFormPageState
               .read(addressInventoryProvider.notifier)
               .setIsDun(selectedProduct, false);
         }
+        final suggested = _filledAutoComplete();
+        final selectedCode = selectedProduct.codigo.toUpperCase().trim();
+        final isDifferentFromSuggestion = suggested != null &&
+            selectedCode != suggested.codPro.toUpperCase().trim();
+        final isDifferentFromCurrent = !_hasProdInv ||
+            prodInv.codigo.toUpperCase().trim() != selectedCode;
+        final shouldResetSuggestion =
+            isDifferentFromSuggestion && isDifferentFromCurrent;
+
+        var keepLoteFocus = false;
         if (selectedProduct.lote.startsWith('L')) {
           setState(() {
             isLote = true;
             prodInv = selectedProduct;
+            _hasProdInv = true;
+            if (shouldResetSuggestion) {
+              loteController.clear();
+              vencLote = "";
+              isValidDateLote = false;
+            }
           });
           if (focusLote) {
-            loteFocus.requestFocus();
+            if (shouldResetSuggestion) {
+              keepLoteFocus = true;
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!mounted) return;
+                loteFocus.requestFocus();
+              });
+            } else {
+              loteFocus.requestFocus();
+            }
           }
         } else {
           setState(() {
             isLote = false;
             prodInv = selectedProduct;
+            _hasProdInv = true;
             loteController.clear();
             vencLote = "";
             isValidDateLote = false;
@@ -690,6 +721,7 @@ class _AddressInventoryFormPageState
         ref
             .read(addressInventoryProvider.notifier)
             .addProduct(selectedProduct, quantity);
+        return keepLoteFocus;
       } else {
         AwesomeDialog(
                 context: context,
@@ -701,5 +733,6 @@ class _AddressInventoryFormPageState
             .show();
       }
     }
+    return false;
   }
 }
