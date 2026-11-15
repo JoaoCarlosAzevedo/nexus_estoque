@@ -20,9 +20,11 @@ class Loadv2CardWidget extends ConsumerWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              "Carga ${load.codCarga}",
-              style: Theme.of(context).textTheme.displaySmall,
+            Flexible(
+              child: Text(
+                "Carga ${load.codCarga}",
+                style: Theme.of(context).textTheme.displaySmall,
+              ),
             ),
             IconButton(onPressed: onSearch, icon: const Icon(Icons.search))
           ],
