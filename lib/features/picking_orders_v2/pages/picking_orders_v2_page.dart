@@ -440,7 +440,7 @@ class _PickingOrdersV2ListWidgetState
                         child: TextField(
                           controller: _searchController,
                           decoration: InputDecoration(
-                            hintText: 'Buscar pedido...',
+                            hintText: 'Buscar pedido ou NF...',
                             prefixIcon: const Icon(Icons.search),
                             suffixIcon: _searchQuery.isNotEmpty
                                 ? IconButton(
@@ -506,20 +506,30 @@ class _PickingOrdersV2ListWidgetState
                                           .contains(order.pedido.trim()))
                                       .toList();
                                 } else {
-                                  orders = data;
+                                  orders = List<Pickingv2Model>.from(data);
                                 }
                               }
 
                               // Aplicar filtro de busca se houver texto na busca
                               if (_searchQuery.isNotEmpty) {
+                                final matchingPedidos = orders
+                                    .where((order) =>
+                                        order.pedido
+                                            .toLowerCase()
+                                            .contains(_searchQuery) ||
+                                        order.nf
+                                            .toLowerCase()
+                                            .contains(_searchQuery))
+                                    .map((order) => order.pedido.trim())
+                                    .toSet();
                                 orders = orders
-                                    .where((order) => order.pedido
-                                        .toLowerCase()
-                                        .contains(_searchQuery))
+                                    .where((order) => matchingPedidos
+                                        .contains(order.pedido.trim()))
                                     .toList();
                               }
 
                               // Ordenar: pedidos com retira preenchido no topo, depois por número do pedido
+                              orders = List<Pickingv2Model>.from(orders);
                               orders.sort((a, b) {
                                 final aRetiraPreenchido =
                                     a.retira.trim().isNotEmpty;
@@ -576,6 +586,18 @@ class _PickingOrdersV2ListWidgetState
                                               (element) =>
                                                   element.status.trim() ==
                                                   "Faturado");
+                                          final nfs = qtdProd
+                                              .map((element) =>
+                                                  element.nf.trim())
+                                              .where((nf) => nf.isNotEmpty)
+                                              .toSet()
+                                              .join(', ');
+                                          final rotas = qtdProd
+                                              .map((element) =>
+                                                  element.rota.trim())
+                                              .where((rota) => rota.isNotEmpty)
+                                              .toSet()
+                                              .join(', ');
                                           return GestureDetector(
                                             onTap: () async {
                                               if (widget.isMonitor &&
@@ -683,6 +705,17 @@ class _PickingOrdersV2ListWidgetState
                                                 title: Wrap(
                                                   children: [
                                                     Text("Pedido $pedido"),
+                                                    if (rotas.isNotEmpty) ...[
+                                                      const SizedBox(width: 8),
+                                                      Text(
+                                                        "Rota $rotas",
+                                                        style: const TextStyle(
+                                                          color: Colors.green,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ],
                                                     if (isFaturado) ...[
                                                       const SizedBox(width: 8),
                                                       Container(
@@ -746,6 +779,8 @@ class _PickingOrdersV2ListWidgetState
                                                     if (qtdProd.isNotEmpty)
                                                       Text(
                                                           qtdProd.first.desCli),
+                                                    if (nfs.isNotEmpty)
+                                                      Text("NF: $nfs"),
                                                     Text(
                                                         "Qtd. Itens ${qtdProd.length}"),
                                                   ],

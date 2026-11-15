@@ -134,7 +134,13 @@ class _AddressInventoryFormPageState
 
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
+      child: Builder(
+        builder: (context) {
+          final tabController = DefaultTabController.of(context);
+          return ListenableBuilder(
+            listenable: tabController,
+            builder: (context, _) {
+              return Scaffold(
         appBar: AppBar(
           title: state.doc.isEmpty
               ? const Text("Contagem")
@@ -541,16 +547,21 @@ class _AddressInventoryFormPageState
             ),
           ),
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          label: const Text("Confirmar"),
-          onPressed: () {
-            ref
-                .read(addressInventoryProvider.notifier)
-                .postInventory(loteController.text, vencLote);
-          },
-          icon: const Icon(Icons.check),
-          backgroundColor: Colors.green,
-        ),
+        floatingActionButton: tabController.index == 0
+            ? FloatingActionButton(
+                onPressed: () {
+                  ref
+                      .read(addressInventoryProvider.notifier)
+                      .postInventory(loteController.text, vencLote);
+                },
+                backgroundColor: Colors.green,
+                child: const Icon(Icons.check),
+              )
+            : null,
+      );
+            },
+          );
+        },
       ),
     );
   }

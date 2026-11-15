@@ -3,6 +3,7 @@ class OrderCheckModel {
   final String cliente;
   final String estado;
   final String municipio;
+  final String rota;
   final List<OrderCheckItemModel> itens;
 
   OrderCheckModel({
@@ -10,6 +11,7 @@ class OrderCheckModel {
     required this.cliente,
     required this.estado,
     required this.municipio,
+    required this.rota,
     required this.itens,
   });
 
@@ -19,6 +21,7 @@ class OrderCheckModel {
       cliente: json['cliente']?.toString() ?? '',
       estado: json['estado']?.toString() ?? '',
       municipio: json['municipio']?.toString() ?? '',
+      rota: json['rota']?.toString() ?? '',
       itens: (json['itens'] as List<dynamic>?)
               ?.map((item) => OrderCheckItemModel.fromJson(
                     item as Map<String, dynamic>,
@@ -33,6 +36,7 @@ class OrderCheckModel {
       'pedido': pedido,
       'cliente': cliente,
       'estado': estado,
+      'rota': rota,
       'municipio': municipio,
       'itens': itens.map((item) => item.toJson()).toList(),
     };

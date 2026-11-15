@@ -33,17 +33,19 @@ class ProductBarcodeUpdateModal extends ConsumerStatefulWidget {
 class _ProductBarcodeUpdateModalState
     extends ConsumerState<ProductBarcodeUpdateModal> {
   final TextEditingController controller = TextEditingController();
+  final FocusNode focusNode = FocusNode();
 
   @override
   void dispose() {
     controller.dispose();
+    focusNode.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
-    controller.text = widget.product.codigoBarras;
     super.initState();
+    controller.text = widget.product.codigoBarras;
   }
 
   @override
@@ -71,10 +73,10 @@ class _ProductBarcodeUpdateModalState
 
     return AlertDialog(
       content: SizedBox(
-        width: 200,
-        height: 200,
-        child: ListView(
-          shrinkWrap: true,
+        width: 280,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
               widget.product.descricao,
@@ -82,16 +84,10 @@ class _ProductBarcodeUpdateModalState
             ),
             const Divider(),
             const Divider(),
-
-            /*    TextField(
-              autofocus: true,
-              style: const TextStyle(fontSize: 20), 
-              textAlign: TextAlign.center,
-              controller: controller,
-            ), */
             NoKeyboardTextForm(
               label: 'Novo Cód. de Barras',
               controller: controller,
+              focusNode: focusNode,
               autoFocus: true,
             ),
             const Divider(),

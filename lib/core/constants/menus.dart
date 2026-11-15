@@ -371,6 +371,12 @@ final List<MenuItemInfo> menuItens = [
     route: 'saldo_endereco',
   ),
   MenuItemInfo(
+    title: "Saldo por Produto",
+    icon: FontAwesomeIcons.boxesStacked,
+    color: Colors.red,
+    route: 'saldo_por_produto',
+  ),
+  MenuItemInfo(
     title: "Consulta Produto",
     icon: FontAwesomeIcons.box,
     color: Colors.red,

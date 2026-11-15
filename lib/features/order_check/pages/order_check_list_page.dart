@@ -99,7 +99,7 @@ class _OrderCheckListPageState extends ConsumerState<OrderCheckListPage> {
                     final pedido = filteredPedidos[index];
                     return Card(
                       child: ListTile(
-                  /* leading: CircleAvatar(
+                        /* leading: CircleAvatar(
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     child: const FaIcon(
                       FontAwesomeIcons.clipboardList,
@@ -107,50 +107,66 @@ class _OrderCheckListPageState extends ConsumerState<OrderCheckListPage> {
                       size: 20,
                     ),
                   ), */
-                  title: Text(
-                    "Pedido ${pedido.pedido}",
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 4),
-                      Text(
-                        pedido.cliente,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                      ),
-                      Text(
-                        "${pedido.municipio} - ${pedido.estado}",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade600,
+                        title: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Text(
+                              "Pedido ${pedido.pedido}",
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            if (pedido.rota.trim().isNotEmpty) ...[
+                              const SizedBox(width: 8),
+                              Text(
+                                'Rota: ${pedido.rota.trim()}',
+                                style: const TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ],
                         ),
-                      ),
-                      Text(
-                        "${pedido.itens.length} itens",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade600,
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 4),
+                            Text(
+                              pedido.cliente,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                            ),
+                            Text(
+                              "${pedido.municipio} - ${pedido.estado}",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey.shade600,
+                              ),
+                            ),
+                            Text(
+                              "${pedido.itens.length} itens",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey.shade600,
+                              ),
+                            ),
+                          ],
                         ),
+                        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                        onTap: () {
+                          context.push(
+                            '/order_check/${pedido.pedido}',
+                            extra: pedido,
+                          );
+                        },
                       ),
-                    ],
-                  ),
-                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                  onTap: () {
-                    context.push(
-                      '/order_check/${pedido.pedido}',
-                      extra: pedido,
                     );
                   },
                 ),
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  },
+              ),
+            ],
+          );
+        },
       ),
     );
   }
