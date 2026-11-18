@@ -10,7 +10,16 @@ import '../../data/repositories/pickingv2_repository.dart';
 import 'widgets/picking_load_v2_list_widget.dart';
 
 class PickingLoadListPagev2 extends ConsumerStatefulWidget {
-  const PickingLoadListPagev2({super.key});
+  const PickingLoadListPagev2({
+    super.key,
+    this.tipo = 'separacaov2',
+    this.openOrdersOnTap = false,
+    this.title = 'Cargas',
+  });
+
+  final String tipo;
+  final bool openOrdersOnTap;
+  final String title;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -33,14 +42,15 @@ class _PickingLoadListPagev2State extends ConsumerState<PickingLoadListPagev2> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => PickingLoadv2Cubit(
-          ref.read(pickingv2RepositoryProvider), dateIni, dateEnd),
+          ref.read(pickingv2RepositoryProvider), dateIni, dateEnd,
+          tipo: widget.tipo),
       child: BlocBuilder<PickingLoadv2Cubit, PickingLoadv2State>(
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
               title: Column(
                 children: [
-                  const Text("Cargas"),
+                  Text(widget.title),
                   Text(
                     "${yyyymmddToDate(dateIni)} - ${yyyymmddToDate(dateEnd)}",
                     style: Theme.of(context).textTheme.bodyMedium,
@@ -97,6 +107,7 @@ class _PickingLoadListPagev2State extends ConsumerState<PickingLoadListPagev2> {
                         load: load,
                         dateIni: dateIni,
                         dateEnd: dateEnd,
+                        openOrdersOnTap: widget.openOrdersOnTap,
                       );
                     }
                     return const Text("Initial");

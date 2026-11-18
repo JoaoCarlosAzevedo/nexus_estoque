@@ -24,6 +24,7 @@ class PickingLoadProductListGroupedPage2 extends ConsumerStatefulWidget {
       required this.dateIni,
       required this.dateEnd,
       required this.department,
+      this.order = '',
       super.key});
   //final List<PickingModel> products;
   final String warehouseStreets;
@@ -31,7 +32,18 @@ class PickingLoadProductListGroupedPage2 extends ConsumerStatefulWidget {
   final String load;
   final String dateIni;
   final String dateEnd;
+  final String order;
   final PickingLoadv2Cubit cubit;
+
+  bool get _filterByOrder => order.trim().isNotEmpty;
+
+  void _reload() {
+    if (_filterByOrder) {
+      cubit.fetchPickingLoads(dateIni, dateEnd);
+      return;
+    }
+    cubit.fetchPickingLoadsDeparment(load, department, dateIni, dateEnd);
+  }
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -48,24 +60,23 @@ class _PickingLoadProductListGroupedPage2State
         title: Column(
           children: [
             Text("Carga: ${widget.load}"),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Dep. ${widget.department} / "),
-                Text("Rua ${widget.warehouseStreets}"),
-              ],
-            ),
+            if (widget._filterByOrder)
+              Text("Pedido ${widget.order}")
+            else
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Dep. ${widget.department} / "),
+                  Text("Rua ${widget.warehouseStreets}"),
+                ],
+              ),
             const Divider()
           ],
         ),
         actions: [
           IconButton(
-              onPressed: () {
-                widget.cubit.fetchPickingLoadsDeparment(widget.load,
-                    widget.department, widget.dateIni, widget.dateEnd);
-              },
-              icon: const Icon(Icons.refresh))
+              onPressed: widget._reload, icon: const Icon(Icons.refresh))
         ],
       ),
       body: BlocProvider.value(
@@ -89,11 +100,13 @@ class _PickingLoadProductListGroupedPage2State
               }
 
               final index2 = state.loads[index].pedidos.indexWhere((element) =>
-                  element.rua2 == widget.warehouseStreets &&
-                  element.deposito == widget.department);
+                  widget._filterByOrder
+                      ? element.pedido.trim() == widget.order.trim()
+                      : element.rua2 == widget.warehouseStreets &&
+                          element.deposito == widget.department);
 
               if (index2 == -1) {
-                log("pop -> product_list -> state.loads sem dep/rua");
+                log("pop -> product_list -> state.loads sem filtro");
                 context.pop();
                 return;
               }
@@ -126,9 +139,10 @@ class _PickingLoadProductListGroupedPage2State
                 final loads = state.loads[index];
 
                 final products = loads.pedidos
-                    .where((element) =>
-                        element.rua2 == widget.warehouseStreets &&
-                        element.deposito == widget.department)
+                    .where((element) => widget._filterByOrder
+                        ? element.pedido.trim() == widget.order.trim()
+                        : element.rua2 == widget.warehouseStreets &&
+                            element.deposito == widget.department)
                     .toList();
 
                 products.sort(
@@ -202,11 +216,7 @@ class _PickingLoadProductListGroupedPage2State
                           final isSuccess = await showProductMultiplierModal(
                               context, element.product);
                           if (isSuccess > 0) {
-                            widget.cubit.fetchPickingLoadsDeparment(
-                                widget.load,
-                                widget.department,
-                                widget.dateIni,
-                                widget.dateEnd);
+                            widget._reload();
                           }
                         },
                         data: element,
@@ -215,11 +225,7 @@ class _PickingLoadProductListGroupedPage2State
                               await PickingFormv2GroupedGroupedModal.show(
                                   context, element);
                           if (result == "ok") {
-                            widget.cubit.fetchPickingLoadsDeparment(
-                                widget.load,
-                                widget.department,
-                                widget.dateIni,
-                                widget.dateEnd);
+                            widget._reload();
                           }
                         },
                       ),

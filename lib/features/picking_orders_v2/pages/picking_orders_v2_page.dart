@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grouped_list/grouped_list.dart';
 
 import '../../../core/error/failure.dart';
@@ -16,6 +15,7 @@ import '../data/repositories/picking_orders_v2_repository.dart';
 import '../data/repositories/picking_user_monitor.dart';
 import 'cubit/picking_orders_v2_cubit.dart';
 import 'picking_orders_v2_products_page.dart';
+import 'widgets/picking_order_summary_card.dart';
 import 'widgets/picking_status_widget.dart';
 
 class _PrintOrderLabelConfirmDialog extends ConsumerStatefulWidget {
@@ -700,95 +700,19 @@ class _PickingOrdersV2ListWidgetState
                                                 );
                                               }
                                             },
-                                            child: Card(
-                                              child: ListTile(
-                                                title: Wrap(
-                                                  children: [
-                                                    Text("Pedido $pedido"),
-                                                    if (rotas.isNotEmpty) ...[
-                                                      const SizedBox(width: 8),
-                                                      Text(
-                                                        "Rota $rotas",
-                                                        style: const TextStyle(
-                                                          color: Colors.green,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                    if (isFaturado) ...[
-                                                      const SizedBox(width: 8),
-                                                      Container(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                          horizontal: 8,
-                                                          vertical: 4,
-                                                        ),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: Colors.green,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(12),
-                                                        ),
-                                                        child: const Text(
-                                                          'FATURADO',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 10,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                    const SizedBox(width: 8),
-                                                    if (qtdProd.first.retira
-                                                        .isNotEmpty)
-                                                      Container(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                          horizontal: 8,
-                                                          vertical: 4,
-                                                        ),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: Colors.red,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(12),
-                                                        ),
-                                                        child: const Text(
-                                                          'RETIRA',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 10,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                  ],
-                                                ),
-                                                subtitle: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    if (qtdProd.isNotEmpty)
-                                                      Text(
-                                                          qtdProd.first.desCli),
-                                                    if (nfs.isNotEmpty)
-                                                      Text("NF: $nfs"),
-                                                    Text(
-                                                        "Qtd. Itens ${qtdProd.length}"),
-                                                  ],
-                                                ),
-                                                trailing: const FaIcon(
-                                                    FontAwesomeIcons
-                                                        .clipboardCheck),
-                                              ),
+                                            child: PickingOrderSummaryCard(
+                                              pedido: pedido,
+                                              rotas: rotas,
+                                              isFaturado: isFaturado,
+                                              isRetira: qtdProd.isNotEmpty &&
+                                                  qtdProd.first.retira
+                                                      .trim()
+                                                      .isNotEmpty,
+                                              cliente: qtdProd.isNotEmpty
+                                                  ? qtdProd.first.desCli
+                                                  : '',
+                                              nfs: nfs,
+                                              qtdItens: qtdProd.length,
                                             ),
                                           );
                                         },

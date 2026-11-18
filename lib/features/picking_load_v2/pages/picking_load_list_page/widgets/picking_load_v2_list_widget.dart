@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../data/model/shippingv2_model.dart';
+import '../../picking_load_faturamento_orders_page/picking_load_faturamento_orders_page.dart';
 import '../../picking_load_streets_list_page/picking_load_v2_streets_page.dart';
 import '../../picking_load_v2_order_page/picking_load_v2_order_page.dart';
 import '../cubit/picking_loadv2_cubit.dart';
@@ -16,11 +17,13 @@ class PickingLoadV2ListWidget extends ConsumerStatefulWidget {
       required this.data,
       required this.load,
       required this.dateIni,
-      required this.dateEnd});
+      required this.dateEnd,
+      this.openOrdersOnTap = false});
   final List<Shippingv2Model> data;
   final String load;
   final String dateIni;
   final String dateEnd;
+  final bool openOrdersOnTap;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _PickingLoadV2ListWidgetState();
@@ -59,37 +62,34 @@ class _PickingLoadV2ListWidgetState
 
   @override
   Widget build(BuildContext context) {
-    List<Shippingv2Model> loads = [];
-
-    if (filterFaturado) {
-      loads = widget.data.where((element) => element.isFaturado()).toList();
-    } else {
-      //data = state.loads;
-      loads = widget.data.where((element) => !element.isFaturado()).toList();
-    }
+    final List<Shippingv2Model> loads = widget.openOrdersOnTap
+        ? List<Shippingv2Model>.from(widget.data)
+        : filterFaturado
+            ? widget.data.where((element) => element.isFaturado()).toList()
+            : widget.data.where((element) => !element.isFaturado()).toList();
 
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text("Filtra Faturados? ${widget.load}"),
-            const SizedBox(
-              width: 15,
-            ),
-            Switch(
-              value: filterFaturado,
-              activeColor: Colors.green,
-              inactiveTrackColor: Colors.grey,
-              onChanged: (bool value) {
-                // This is called when the user toggles the switch.
-                setState(() {
-                  filterFaturado = value;
-                });
-              },
-            ),
-          ],
-        ),
+        if (!widget.openOrdersOnTap)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text("Filtra Faturados? ${widget.load}"),
+              const SizedBox(
+                width: 15,
+              ),
+              Switch(
+                value: filterFaturado,
+                activeColor: Colors.green,
+                inactiveTrackColor: Colors.grey,
+                onChanged: (bool value) {
+                  setState(() {
+                    filterFaturado = value;
+                  });
+                },
+              ),
+            ],
+          ),
         Expanded(
           child: ListView.builder(
             itemCount: loads.length,
@@ -117,12 +117,19 @@ class _PickingLoadV2ListWidgetState
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => PickingLoadStreetsPagev2(
-                        cubit: cubit,
-                        load: loads[index].codCarga,
-                        dateIni: widget.dateIni,
-                        dateEnd: widget.dateEnd,
-                      ),
+                      builder: (context) => widget.openOrdersOnTap
+                          ? PickingLoadFaturamentoOrdersPage(
+                              cubit: cubit,
+                              load: loads[index].codCarga,
+                              dateIni: widget.dateIni,
+                              dateEnd: widget.dateEnd,
+                            )
+                          : PickingLoadStreetsPagev2(
+                              cubit: cubit,
+                              load: loads[index].codCarga,
+                              dateIni: widget.dateIni,
+                              dateEnd: widget.dateEnd,
+                            ),
                     ),
                   );
                 },

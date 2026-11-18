@@ -305,6 +305,12 @@ final List<MenuItemInfo> menuItens = [
     route: 'separacao_carga_v2',
   ),
   MenuItemInfo(
+    title: "Separação por NF",
+    icon: FontAwesomeIcons.fileInvoice,
+    color: Colors.red,
+    route: 'separacao_carga_faturamento',
+  ),
+  MenuItemInfo(
     title: "Separação por Pedido",
     icon: FontAwesomeIcons.dolly,
     color: Colors.red,

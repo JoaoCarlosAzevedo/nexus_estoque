@@ -169,6 +169,13 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: "/separacao_carga_v2",
             builder: ((context, state) => const PickingLoadListPagev2())),
         GoRoute(
+            path: "/separacao_carga_faturamento",
+            builder: ((context, state) => const PickingLoadListPagev2(
+                  tipo: 'separacaovFaturamento',
+                  openOrdersOnTap: true,
+                  title: 'Separação por NF',
+                ))),
+        GoRoute(
             path: "/separacao_carga_v2_pedido",
             builder: ((context, state) => const PickingLoadOrdersList())),
         GoRoute(
