@@ -341,6 +341,12 @@ final List<MenuItemInfo> menuItens = [
     route: 'saidacheck',
   ),
   MenuItemInfo(
+    title: "Conferencia de Saidas",
+    icon: FontAwesomeIcons.clipboardCheck,
+    color: Colors.red,
+    route: 'conferencia_saidas',
+  ),
+  MenuItemInfo(
     title: "Conferencia NFe Entrada",
     icon: FontAwesomeIcons.rightToBracket,
     color: Colors.red,

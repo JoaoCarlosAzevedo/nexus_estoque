@@ -15,7 +15,13 @@ part 'outflow_doc_state.dart';
 
 class OutFlowDocCubit extends Cubit<OutFlowDocState> {
   final OutflowDocRepository repository;
-  OutFlowDocCubit(this.repository) : super(OutFlowDocInitial());
+  OutFlowDocCubit(this.repository, {String? chave})
+      : super(OutFlowDocInitial()) {
+    final search = chave?.trim() ?? '';
+    if (search.isNotEmpty) {
+      fetchOutFlowDoc(search);
+    }
+  }
 
   void fetchOutFlowDoc(String search) async {
     emit(OutFlowDocLoading());

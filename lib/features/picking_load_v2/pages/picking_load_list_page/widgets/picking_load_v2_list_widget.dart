@@ -32,6 +32,14 @@ class PickingLoadV2ListWidget extends ConsumerStatefulWidget {
 class _PickingLoadV2ListWidgetState
     extends ConsumerState<PickingLoadV2ListWidget> {
   bool filterFaturado = false;
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -62,14 +70,58 @@ class _PickingLoadV2ListWidgetState
 
   @override
   Widget build(BuildContext context) {
-    final List<Shippingv2Model> loads = widget.openOrdersOnTap
+    List<Shippingv2Model> loads = widget.openOrdersOnTap
         ? List<Shippingv2Model>.from(widget.data)
         : filterFaturado
             ? widget.data.where((element) => element.isFaturado()).toList()
             : widget.data.where((element) => !element.isFaturado()).toList();
 
+    if (widget.openOrdersOnTap && _searchQuery.isNotEmpty) {
+      loads = loads.where((load) {
+        return load.pedidos.any(
+          (pedido) =>
+              pedido.pedido.toLowerCase().contains(_searchQuery) ||
+              pedido.nf.toLowerCase().contains(_searchQuery),
+        );
+      }).toList();
+    }
+
     return Column(
       children: [
+        if (widget.openOrdersOnTap)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Buscar NF ou pedido...',
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: _searchQuery.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          _searchController.clear();
+                          setState(() {
+                            _searchQuery = '';
+                          });
+                        },
+                      )
+                    : null,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 12.0,
+                ),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value.trim().toLowerCase();
+                });
+              },
+            ),
+          ),
         if (!widget.openOrdersOnTap)
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -91,7 +143,11 @@ class _PickingLoadV2ListWidgetState
             ],
           ),
         Expanded(
-          child: ListView.builder(
+          child: loads.isEmpty
+              ? const Center(
+                  child: Text("Nenhum registro encontrado."),
+                )
+              : ListView.builder(
             itemCount: loads.length,
             itemBuilder: (context, index) {
               return Loadv2CardWidget(

@@ -46,6 +46,7 @@ import '../../features/inventory/pages/inventory_page.dart';
 import '../../features/picking_load/pages/picking_load_list_page/picking_load_list_page.dart';
 import '../../features/picking_load_orders/picking_loads/picking_load_orders_page.dart';
 import '../../features/picking_load_v2/pages/picking_load_list_page/picking_load_v2_list_page.dart';
+import '../../features/conferencia_saidas/pages/conferencia_saidas_list_page.dart';
 import '../../features/etiqueta_nf_saida/pages/etiqueta_nf_saida_list_page.dart';
 import '../../features/etiqueta_pedido_checkout/pages/etiqueta_pedido_checkout_page.dart';
 import '../../features/picking_orders_v2/pages/picking_orders_v2_page.dart';
@@ -156,6 +157,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
             path: "/saidacheck",
             builder: ((context, state) => const OutFlowDocCheckPage())),
+        GoRoute(
+            path: "/conferencia_saidas",
+            builder: ((context, state) => const ConferenciaSaidasListPage())),
         GoRoute(
             path: "/entradacheck",
             builder: ((context, state) => const PurchaseInvoiceListPage())),

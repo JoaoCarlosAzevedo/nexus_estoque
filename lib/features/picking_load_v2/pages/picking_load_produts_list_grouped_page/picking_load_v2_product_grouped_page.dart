@@ -75,8 +75,7 @@ class _PickingLoadProductListGroupedPage2State
           ],
         ),
         actions: [
-          IconButton(
-              onPressed: widget._reload, icon: const Icon(Icons.refresh))
+          IconButton(onPressed: widget._reload, icon: const Icon(Icons.refresh))
         ],
       ),
       body: BlocProvider.value(
@@ -145,8 +144,18 @@ class _PickingLoadProductListGroupedPage2State
                             element.deposito == widget.department)
                     .toList();
 
-                products.sort(
-                    ((a, b) => a.descEndereco2.compareTo(b.descEndereco2)));
+                if (widget._filterByOrder) {
+                  products.sort((a, b) {
+                    final rua = a.rua2.compareTo(b.rua2);
+                    if (rua != 0) return rua;
+                    final predio = a.predio.compareTo(b.predio);
+                    if (predio != 0) return predio;
+                    return a.descEndereco2.compareTo(b.descEndereco2);
+                  });
+                } else {
+                  products.sort(
+                      ((a, b) => a.descEndereco2.compareTo(b.descEndereco2)));
+                }
 
                 if (state.loads.isEmpty) {
                   return const Center(
@@ -190,21 +199,28 @@ class _PickingLoadProductListGroupedPage2State
                   }
                 }
 
+                final groupByStreet = widget._filterByOrder;
+
                 return GroupedListView<LoadGroupProdModel, String>(
                   elements: groupedProducts,
-                  groupBy: (element) => element.predio,
+                  groupBy: (element) =>
+                      groupByStreet ? element.rua2 : element.predio,
                   groupSeparatorBuilder: (String groupByValue) {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Prédio $groupByValue",
+                          groupByStreet
+                              ? "Rua $groupByValue"
+                              : "Prédio $groupByValue",
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         const SizedBox(
                           width: 12,
                         ),
-                        const FaIcon(FontAwesomeIcons.building)
+                        FaIcon(groupByStreet
+                            ? FontAwesomeIcons.road
+                            : FontAwesomeIcons.building)
                       ],
                     );
                   },
@@ -231,8 +247,14 @@ class _PickingLoadProductListGroupedPage2State
                       ),
                     );
                   },
-                  itemComparator: (item1, item2) => item1.addressDescription
-                      .compareTo(item2.addressDescription), // optional
+                  itemComparator: (item1, item2) {
+                    if (groupByStreet) {
+                      final predio = item1.predio.compareTo(item2.predio);
+                      if (predio != 0) return predio;
+                    }
+                    return item1.addressDescription
+                        .compareTo(item2.addressDescription);
+                  },
                   useStickyGroupSeparators: false, // optional
                   floatingHeader: false, // optional
                   order: GroupedListOrder.ASC, // optional

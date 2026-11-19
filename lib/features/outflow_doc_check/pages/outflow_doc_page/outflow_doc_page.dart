@@ -11,7 +11,9 @@ import 'package:nexus_estoque/features/outflow_doc_check/pages/outflow_doc_page/
 import '../../../../core/services/back_buttom_dialog.dart';
 
 class OutFlowDocCheckPage extends ConsumerStatefulWidget {
-  const OutFlowDocCheckPage({super.key});
+  const OutFlowDocCheckPage({super.key, this.chave});
+
+  final String? chave;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -68,7 +70,10 @@ class _OutFlowDocCheckPageState extends ConsumerState<OutFlowDocCheckPage> {
             padding: const EdgeInsets.all(8.0),
             child: BlocProvider(
               create: (context) {
-                _cubit = OutFlowDocCubit(ref.read(outflowDocRepository));
+                _cubit = OutFlowDocCubit(
+                  ref.read(outflowDocRepository),
+                  chave: widget.chave,
+                );
                 return _cubit!;
               },
               child: BlocListener<OutFlowDocCubit, OutFlowDocState>(
@@ -99,6 +104,13 @@ class _OutFlowDocCheckPageState extends ConsumerState<OutFlowDocCheckPage> {
                           .show();
                       return;
                     }
+                  }
+
+                  if (state is OutFlowDocInitial &&
+                      !_isSavingOnExit &&
+                      (widget.chave?.trim().isNotEmpty ?? false)) {
+                    Navigator.pop(context);
+                    return;
                   }
 
                   if (state is OutFlowDocPostError && !_isSavingOnExit) {
